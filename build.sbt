@@ -10,5 +10,7 @@ scalaVersion := "2.11.7"
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
-  javaWs
+  javaWs,
+  "org.webjars" %% "webjars-play" % "2.5.0-3",
+  "org.webjars" % "bootstrap" % "3.3.7-1"
 )
