@@ -1,66 +1,56 @@
 package controllers.api;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import org.junit.After;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Before;
 import org.junit.Test;
-import play.Application;
-import play.Configuration;
-import play.Mode;
-import play.db.Database;
-import play.db.Databases;
-import play.db.evolutions.Evolutions;
-import play.inject.guice.GuiceApplicationBuilder;
-import play.mvc.Http;
+import play.Logger;
+import play.libs.ws.WSResponse;
+import play.libs.Json;
+import play.libs.ws.WSClient;
+import play.libs.ws.WS;
 import play.mvc.Result;
-import play.test.Helpers;
+import play.test.WithServer;
 
-import static junit.framework.TestCase.assertTrue;
+import java.util.concurrent.CompletionStage;
+
+import static org.junit.Assert.assertEquals;
 import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.route;
 
-public class TaskControllerTest {
-
-    protected Application application;
-    Database database;
+/**
+ * @author fabiomazzone
+ */
+public class TaskControllerTest extends WithServer {
+    private WSClient wsClient;
 
     @Before
-    public void startApp() throws Exception {
-        Config config = ConfigFactory.load("test");
-        Configuration configuration = new Configuration(config);
-        String dbDriver = configuration.getString("db.default.driver");
-        String dbUrl = configuration.getString("db.default.url");
-
-        database = Databases.createFrom(dbDriver, dbUrl);
-        Evolutions.cleanupEvolutions(database);
-        Evolutions.applyEvolutions(database);
-
-        application = new GuiceApplicationBuilder()
-                .in(Mode.TEST)
-                .loadConfig(configuration)
-                .build();
-        Helpers.start(application);
+    public void setUp() throws Exception {
+        wsClient = WS.newClient(this.testServer.port());
     }
 
     @Test
     public void TaskControllerCreate() throws Exception {
-
-        JsonNode jsonNode = (new ObjectMapper()).readTree("{ \"someName\": \"sameValue\" }");
-        Http.RequestBuilder request = new Http.RequestBuilder().method("POST")
-                .bodyJson(jsonNode)
-                .uri(routes.TaskController.create().url());
-        Result result = route(request);
-
-        assertTrue(result.status() == OK);
+        ObjectNode task = Json.newObject();
+        task.put("text", "Find Fabio");
+        task.put("referenceStatement", "SELECT * FROM Person WHERE firstname = \"Fabio\";");
+        CompletionStage<WSResponse> completionStage =
+                wsClient.url(routes.TaskController.create().url()).post(task);
+        WSResponse response = completionStage.toCompletableFuture().get();
     }
 
-    @After
-    public void stopApp() throws Exception {
-        Helpers.stop(application);
-        database.shutdown();
+    @Test
+    public void TaskControllerView() throws Exception {
+        CompletionStage<WSResponse> completionStage =
+                wsClient.url(routes.TaskController.view().url()).get();
+        WSResponse response = completionStage.toCompletableFuture().get();
+
+        assertEquals("TaskController#View Should return True", response.getStatus(), OK);
+        Logger.info(response.getBody());
     }
 
+    //@Test
+    public void TaskControllerShow() throws Exception {
+        Result result = route(routes.TaskController.show(1L));
+
+    }
 }

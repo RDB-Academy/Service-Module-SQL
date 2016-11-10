@@ -22,7 +22,7 @@ public class Task extends BaseModel{
 
     @OneToOne
     SchemaDef schema;
-    
+
     public long getId() {
         return id;
     }
@@ -41,5 +41,13 @@ public class Task extends BaseModel{
 
     public void setReferenceStatement(String referenceStatement) {
         this.referenceStatement = referenceStatement;
+    }
+
+    public SchemaDef getSchema() {
+        return schema;
+    }
+
+    public void setSchema(SchemaDef schema) {
+        this.schema = schema;
     }
 }
