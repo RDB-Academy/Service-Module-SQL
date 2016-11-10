@@ -1,15 +1,13 @@
 package models;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
  * @author fabiomazzone
  */
+@Entity
 public class TableDef extends BaseModel {
     @Id
     private long id;

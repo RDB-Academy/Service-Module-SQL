@@ -15,16 +15,14 @@ import java.sql.Date;
  * @author fabiomazzone
  */
 @MappedSuperclass
-public class BaseModel extends Model {
+abstract class BaseModel extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
-    @CreatedTimestamp
     @Column(updatable = false)
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
-    @UpdatedTimestamp
     private Date modifiedAt;
 
     public Date getCreatedAt() {
