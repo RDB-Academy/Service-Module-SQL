@@ -6,6 +6,7 @@
 
 GET     /admin/                     controllers.admin.HomeController.index()
 GET     /admin/login                controllers.admin.HomeController.login()
+POST    /admin/login                controllers.admin.HomeController.getLogin()
 
 # API
 POST    /api/task/                  controllers.api.TaskController.create()
