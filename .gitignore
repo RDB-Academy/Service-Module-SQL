@@ -6,3 +6,5 @@ target
 /.project
 /.settings
 /RUNNING_PID
+test.db.mv.db
+test.db.trace.db
