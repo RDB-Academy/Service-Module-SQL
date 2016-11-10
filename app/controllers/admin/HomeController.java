@@ -1,15 +1,10 @@
 package controllers.admin;
 
-/**
- * Created by nicolenaczk on 03.11.16.
- */
-public class HomeController {
-
 import play.mvc.Controller;
 import play.mvc.Result;
 
 /**
- * @author fabiomazzone
+ * Created by nicolenaczk on 03.11.16.
  */
 public class HomeController extends Controller {
 
