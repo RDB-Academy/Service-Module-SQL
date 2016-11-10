@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  * @author fabiomazzone
@@ -14,4 +15,7 @@ public class Task extends BaseModel{
     private String text;
 
     private String referenceStatement;
+
+    @OneToOne
+    SchemaDef schema;
 }
