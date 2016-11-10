@@ -23,10 +23,4 @@ public class ColumnDef extends BaseModel {
 
     private boolean isPrimary  = false;
     private boolean isNullable = true;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "foreignKey")
-    private List<ColumnDef> referencedColumns;
-
-    @ManyToOne
-    private ColumnDef foreignKey;
 }

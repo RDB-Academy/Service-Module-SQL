@@ -4,6 +4,7 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  * @author fabiomazzone
@@ -19,6 +20,9 @@ public class Task extends BaseModel{
     @Constraints.Required
     private String referenceStatement;
 
+    @OneToOne
+    SchemaDef schema;
+    
     public long getId() {
         return id;
     }

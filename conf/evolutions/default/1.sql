@@ -12,7 +12,6 @@ create table column_def (
   datatype                      varchar(255) not null,
   is_primary                    boolean,
   is_nullable                   boolean,
-  foreign_key_id                bigint,
   constraint pk_column_def primary key (id)
 );
 
@@ -39,17 +38,18 @@ create table task (
   modified_at                   timestamp,
   text                          varchar(255),
   reference_statement           varchar(255),
+  schema_id                     bigint,
+  constraint uq_task_schema_id unique (schema_id),
   constraint pk_task primary key (id)
 );
 
 alter table column_def add constraint fk_column_def_table_def_id foreign key (table_def_id) references table_def (id) on delete restrict on update restrict;
 create index ix_column_def_table_def_id on column_def (table_def_id);
 
-alter table column_def add constraint fk_column_def_foreign_key_id foreign key (foreign_key_id) references column_def (id) on delete restrict on update restrict;
-create index ix_column_def_foreign_key_id on column_def (foreign_key_id);
-
 alter table table_def add constraint fk_table_def_schema_def_id foreign key (schema_def_id) references schema_def (id) on delete restrict on update restrict;
 create index ix_table_def_schema_def_id on table_def (schema_def_id);
+
+alter table task add constraint fk_task_schema_id foreign key (schema_id) references schema_def (id) on delete restrict on update restrict;
 
 
 # --- !Downs
@@ -57,11 +57,10 @@ create index ix_table_def_schema_def_id on table_def (schema_def_id);
 alter table column_def drop constraint if exists fk_column_def_table_def_id;
 drop index if exists ix_column_def_table_def_id;
 
-alter table column_def drop constraint if exists fk_column_def_foreign_key_id;
-drop index if exists ix_column_def_foreign_key_id;
-
 alter table table_def drop constraint if exists fk_table_def_schema_def_id;
 drop index if exists ix_table_def_schema_def_id;
+
+alter table task drop constraint if exists fk_task_schema_id;
 
 drop table if exists column_def;
 
