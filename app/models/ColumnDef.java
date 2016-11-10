@@ -26,4 +26,7 @@ public class ColumnDef extends BaseModel {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "foreignKey")
     private List<ColumnDef> referencedColumns;
+
+    @ManyToOne
+    private ColumnDef foreignKey;
 }
