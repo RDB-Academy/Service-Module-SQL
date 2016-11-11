@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ public class Task extends BaseModel{
     private String text;
 
     @Constraints.Required
+    @JsonIgnore
     private String referenceStatement;
 
     @ManyToOne

@@ -16,14 +16,17 @@ public class TaskTrial extends BaseModel {
     @ManyToOne
     private Task task;
 
+    @JsonIgnore
     private long databaseCreationSeed;
 
     private String userStatement;
 
     private boolean isCorrect;
 
+    @JsonIgnore
     private Date beginDate;
 
+    @JsonIgnore
     private Date submitDate;
 
     public long getId() {

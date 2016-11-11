@@ -41,12 +41,10 @@ public class TaskTrialController extends Controller {
     }
 
     public Result submit(long id) {
-        Form<TaskTrial> taskTrialForm = formFactory.form(TaskTrial.class).bindFromRequest();
-        if (taskTrialForm.hasErrors()) {
-            Logger.error("TaskController - create - FormHasErrors");
-            return badRequest(taskTrialForm.errorsAsJson());
-        }
-        TaskTrial taskTrial = taskTrialForm.get();
+        TaskTrial taskTrial = taskTrialRepository.getById(id);
+        TaskTrial taskTrialSubmitted = Json.fromJson(request().body().asJson(), TaskTrial.class);
+
+        taskTrial.setUserStatement(taskTrialSubmitted.getUserStatement());
         /*
             TODO execute Userstatement and set taskTrial.isCorrect
          */
