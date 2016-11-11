@@ -23,4 +23,48 @@ public class ColumnDef extends BaseModel {
 
     private boolean isPrimary  = false;
     private boolean isNullable = true;
+
+    public long getId() {
+        return id;
+    }
+
+    public TableDef getTableDef() {
+        return tableDef;
+    }
+
+    public void setTableDef(TableDef tableDef) {
+        this.tableDef = tableDef;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDatatype() {
+        return datatype;
+    }
+
+    public void setDatatype(String datatype) {
+        this.datatype = datatype;
+    }
+
+    public boolean isPrimary() {
+        return isPrimary;
+    }
+
+    public void setPrimary(boolean primary) {
+        isPrimary = primary;
+    }
+
+    public boolean isNullable() {
+        return isNullable;
+    }
+
+    public void setNullable(boolean nullable) {
+        isNullable = nullable;
+    }
 }

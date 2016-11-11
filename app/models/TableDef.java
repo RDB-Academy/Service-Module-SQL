@@ -20,4 +20,32 @@ public class TableDef extends BaseModel {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableDef")
     private List<ColumnDef> columnDefList;
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public SchemaDef getSchemaDef() {
+        return schemaDef;
+    }
+
+    public void setSchemaDef(SchemaDef schemaDef) {
+        this.schemaDef = schemaDef;
+    }
+
+    public List<ColumnDef> getColumnDefList() {
+        return columnDefList;
+    }
+
+    public void setColumnDefList(List<ColumnDef> columnDefList) {
+        this.columnDefList = columnDefList;
+    }
 }
