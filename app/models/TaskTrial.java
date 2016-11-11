@@ -11,12 +11,12 @@ import java.util.Date;
  */
 public class TaskTrial extends BaseModel {
     @Id
-    private long id;
+    private Long id;
 
     @ManyToOne
     private Task task;
 
-    private long databaseCreationSeed;
+    private Long databaseCreationSeed;
 
     private String userStatement;
 
@@ -26,7 +26,7 @@ public class TaskTrial extends BaseModel {
 
     private Date submitDate;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -39,11 +39,11 @@ public class TaskTrial extends BaseModel {
         this.task = task;
     }
 
-    public long getDatabaseCreationSeed() {
+    public Long getDatabaseCreationSeed() {
         return databaseCreationSeed;
     }
 
-    public void setDatabaseCreationSeed(long databaseCreationSeed) {
+    public void setDatabaseCreationSeed(Long databaseCreationSeed) {
         this.databaseCreationSeed = databaseCreationSeed;
     }
 

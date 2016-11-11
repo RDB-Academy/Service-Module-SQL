@@ -13,9 +13,11 @@ public class Initializer implements InitializerBase {
         if (environment.isDev()) {
             Logger.info("Initialize Dev Environment");
             Tasks.initDev();
+            SchemaDefs.initDev();
         } else if(environment.isTest()) {
             Logger.info("Initialize Test Environment");
             Tasks.initDev();
+            SchemaDefs.initDev();
         } else {
             Logger.info("Initialize Prod Environment");
         }

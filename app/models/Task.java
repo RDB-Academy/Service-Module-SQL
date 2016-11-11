@@ -24,7 +24,7 @@ public class Task extends BaseModel{
     @ManyToOne
     private SchemaDef schemaDef;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
