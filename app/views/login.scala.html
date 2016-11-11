@@ -9,11 +9,10 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Login with password</h3>
 
-
-                        @helper.form(action = controllers.admin.routes.HomeController.getLogin()) {
-                            @helper.inputPassword(loginForm("password"))
-                            <button class="btn btn-primary" ></button>
-                        }
+                            @helper.form(action = controllers.admin.routes.HomeController.getLogin()) {
+                                @helper.inputPassword(loginForm("password"))
+                                <button class="btn btn-primary">Log In</button>
+                            }
 
                     </div>
                 </div>
