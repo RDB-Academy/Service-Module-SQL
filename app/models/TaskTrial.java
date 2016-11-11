@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class TaskTrial extends BaseModel {
     @Id
-    private long id;
+    private Long id;
 
     @ManyToOne
     private Task task;
@@ -29,7 +29,7 @@ public class TaskTrial extends BaseModel {
     @JsonIgnore
     private Date submitDate;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -42,11 +42,11 @@ public class TaskTrial extends BaseModel {
         this.task = task;
     }
 
-    public long getDatabaseCreationSeed() {
+    public Long getDatabaseCreationSeed() {
         return databaseCreationSeed;
     }
 
-    public void setDatabaseCreationSeed(long databaseCreationSeed) {
+    public void setDatabaseCreationSeed(Long databaseCreationSeed) {
         this.databaseCreationSeed = databaseCreationSeed;
     }
 

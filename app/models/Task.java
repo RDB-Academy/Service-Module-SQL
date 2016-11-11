@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class Task extends BaseModel{
     @Id
-    private long id;
+    private Long id;
 
     @Constraints.Required
     private String text;
@@ -26,7 +26,7 @@ public class Task extends BaseModel{
     @ManyToOne
     private SchemaDef schemaDef;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

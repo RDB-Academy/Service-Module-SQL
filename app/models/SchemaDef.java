@@ -14,14 +14,14 @@ import java.util.List;
 @Entity
 public class SchemaDef extends BaseModel {
     @Id
-    private long id;
+    private Long id;
 
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
     private List<TableDef> tableDefList;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
