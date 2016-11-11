@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
  */
 public class ForeignKeyRelation extends BaseModel {
     @Id
-    long id;
+    Long id;
 
     @ManyToOne
     ForeignKey foreignKey;

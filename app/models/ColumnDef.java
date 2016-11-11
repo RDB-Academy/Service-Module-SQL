@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class ColumnDef extends BaseModel {
     @Id
-    private long id;
+    private Long id;
 
     @ManyToOne(optional = false)
     private TableDef tableDef;

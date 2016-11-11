@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class TableDef extends BaseModel {
     @Id
-    private long id;
+    private Long id;
 
     @NotNull
     private String name;

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ForeignKey extends BaseModel {
     @Id
-    long id;
+    Long id;
 
     @ManyToOne
     SchemaDef schema;
