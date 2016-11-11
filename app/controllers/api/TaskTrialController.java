@@ -35,7 +35,7 @@ public class TaskTrialController extends Controller {
         taskTrial.setTask(task);
         taskTrial.setBeginDate(new Date());
 
-        taskTrial.save();
+        taskTrialRepository.save(taskTrial);
 
         return ok(Json.toJson(taskTrial));
     }

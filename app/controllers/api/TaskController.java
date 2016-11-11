@@ -32,7 +32,7 @@ public class TaskController extends Controller {
             return badRequest(taskForm.errorsAsJson());
         }
         Task task = taskForm.get();
-        task.save();
+        taskRepository.save(task);
         if ((task.getId()==0)) {
             return badRequest("statement cannot saved");
         }
