@@ -12,7 +12,7 @@ loadEmberProject := {
   Seq("sh", "loadEmberProject.sh")!
 }
 
-compile in Compile <<= (compile in Compile).dependsOn(loadEmberProject)
+runMain in Compile <<= (runMain in Compile).dependsOn(loadEmberProject)
 
 libraryDependencies ++= Seq(
   javaJdbc,
