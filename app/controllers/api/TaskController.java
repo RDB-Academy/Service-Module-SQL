@@ -16,8 +16,14 @@ import java.util.List;
  * @author fabiomazzone
  */
 public class TaskController extends Controller {
-    @Inject
     FormFactory formFactory;
+    TaskRepository taskRepository;
+
+    @Inject
+    public TaskController(FormFactory formFactory, TaskRepository taskRepository) {
+        this.formFactory = formFactory;
+        this.taskRepository = taskRepository;
+    }
 
     public Result create() {
         Form<Task> taskForm = formFactory.form(Task.class).bindFromRequest();
@@ -34,12 +40,12 @@ public class TaskController extends Controller {
     }
 
     public Result view() {
-        List<Task> taskList = TaskRepository.getAll();
+        List<Task> taskList = taskRepository.getAll();
         return ok(Json.toJson(taskList));
     }
 
     public Result show(long id) {
-        Task task = TaskRepository.getById(id);
+        Task task = taskRepository.getById(id);
         if(task == null) {
             Logger.warn("TaskController - show(%s) - Not Found", id);
             return notFound();

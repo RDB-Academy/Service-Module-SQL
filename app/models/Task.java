@@ -4,6 +4,7 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 /**
@@ -20,8 +21,8 @@ public class Task extends BaseModel{
     @Constraints.Required
     private String referenceStatement;
 
-    @OneToOne
-    SchemaDef schema;
+    @ManyToOne
+    private SchemaDef schemaDef;
 
     public long getId() {
         return id;
@@ -43,11 +44,11 @@ public class Task extends BaseModel{
         this.referenceStatement = referenceStatement;
     }
 
-    public SchemaDef getSchema() {
-        return schema;
+    public SchemaDef getSchemaDef() {
+        return schemaDef;
     }
 
-    public void setSchema(SchemaDef schema) {
-        this.schema = schema;
+    public void setSchemaDef(SchemaDef schemaDef) {
+        this.schemaDef = schemaDef;
     }
 }
