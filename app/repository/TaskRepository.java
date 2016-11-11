@@ -1,26 +1,26 @@
 package repository;
 
 import com.avaje.ebean.Model;
+import com.google.inject.ImplementedBy;
 import models.Task;
+import repository.implementation.TaskRepositoryImplementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author fabiomazzone
  */
-public class TaskRepository {
-    private static Model.Finder<Long, Task> find = new Model.Finder<Long, Task>(Task.class);
+@ImplementedBy(TaskRepositoryImplementation.class)
+public abstract class TaskRepository implements Repository<Task> {
+    protected static Model.Finder<Long, Task> find = new Model.Finder<Long, Task>(Task.class);
 
-    public static List<Task> getAll() {
-        List<Task> tasks = find.all();
-        if(tasks == null) {
-            tasks = new ArrayList<>();
-        }
-        return tasks;
+    public static Task getRandom() {
+        return find.all().get((new Random()).nextInt(find.all().size()));
     }
 
-    public static Task getById(long id) {
-        return find.byId(id);
+    public void save(Task task) {
+        task.save();
     }
 }

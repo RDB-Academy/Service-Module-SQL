@@ -14,9 +14,17 @@ import javax.inject.Inject;
  */
 
 public class HomeController extends Controller {
+    FormFactory formFactory;
+    TaskRepository taskRepository;
 
     @Inject
-    FormFactory formFactory;
+    public HomeController(FormFactory formFactory, TaskRepository taskRepository) {
+        this.formFactory = formFactory;
+        this.taskRepository = taskRepository;
+    }
+
+
+
     public Result index() {
 
         String user = session("connected");
@@ -73,7 +81,7 @@ public class HomeController extends Controller {
 
         String user = session("connected");
         if (user != null) {
-            return ok(views.html.list_schema.render(TaskRepository.getAll()));
+            return ok(views.html.list_schema.render(taskRepository.getAll()));
         } else {
             return redirect(routes.HomeController.getLogin());
         }
