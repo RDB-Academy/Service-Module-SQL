@@ -38,8 +38,7 @@ create table task (
   modified_at                   timestamp,
   text                          varchar(255),
   reference_statement           varchar(255),
-  schema_id                     bigint,
-  constraint uq_task_schema_id unique (schema_id),
+  schema_def_id                 bigint,
   constraint pk_task primary key (id)
 );
 
@@ -49,7 +48,8 @@ create index ix_column_def_table_def_id on column_def (table_def_id);
 alter table table_def add constraint fk_table_def_schema_def_id foreign key (schema_def_id) references schema_def (id) on delete restrict on update restrict;
 create index ix_table_def_schema_def_id on table_def (schema_def_id);
 
-alter table task add constraint fk_task_schema_id foreign key (schema_id) references schema_def (id) on delete restrict on update restrict;
+alter table task add constraint fk_task_schema_def_id foreign key (schema_def_id) references schema_def (id) on delete restrict on update restrict;
+create index ix_task_schema_def_id on task (schema_def_id);
 
 
 # --- !Downs
@@ -60,7 +60,8 @@ drop index if exists ix_column_def_table_def_id;
 alter table table_def drop constraint if exists fk_table_def_schema_def_id;
 drop index if exists ix_table_def_schema_def_id;
 
-alter table task drop constraint if exists fk_task_schema_id;
+alter table task drop constraint if exists fk_task_schema_def_id;
+drop index if exists ix_task_schema_def_id;
 
 drop table if exists column_def;
 

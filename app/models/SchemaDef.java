@@ -37,4 +37,7 @@ public class SchemaDef extends BaseModel {
         return tableDefList;
     }
 
+    public void setTableDefList(List<TableDef> tableDefList) {
+        this.tableDefList = tableDefList;
+    }
 }

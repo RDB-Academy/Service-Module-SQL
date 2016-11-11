@@ -7,6 +7,8 @@
 GET     /admin/                     controllers.admin.HomeController.index()
 GET     /admin/login                controllers.admin.HomeController.login()
 POST    /admin/login                controllers.admin.HomeController.getLogin()
+GET     /admin/logout               controllers.admin.HomeController.logout()
+GET     /admin/schema               controllers.admin.HomeController.viewSchema()
 
 # API
 POST    /api/task/                  controllers.api.TaskController.create()
@@ -18,5 +20,4 @@ DELETE  /api/task/:id/              controllers.api.TaskController.delete(id: Lo
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /admin/assets/*file         controllers.Assets.versioned(path="/public/assets", file: Asset)
-
 GET     /*file                      controllers.Assets.versioned(path="/public/dist", file: Asset)

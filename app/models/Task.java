@@ -22,7 +22,7 @@ public class Task extends BaseModel{
     private String referenceStatement;
 
     @ManyToOne
-    SchemaDef schema;
+    private SchemaDef schemaDef;
 
     public long getId() {
         return id;
@@ -44,11 +44,11 @@ public class Task extends BaseModel{
         this.referenceStatement = referenceStatement;
     }
 
-    public SchemaDef getSchema() {
-        return schema;
+    public SchemaDef getSchemaDef() {
+        return schemaDef;
     }
 
-    public void setSchema(SchemaDef schema) {
-        this.schema = schema;
+    public void setSchemaDef(SchemaDef schemaDef) {
+        this.schemaDef = schemaDef;
     }
 }
