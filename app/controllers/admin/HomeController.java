@@ -5,6 +5,7 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
+import repository.TaskRepository;
 
 import javax.inject.Inject;
 
@@ -25,7 +26,6 @@ public class HomeController extends Controller {
         } else {
             return redirect(routes.HomeController.login());
         }
-
     }
 
     public Result login() {
@@ -50,9 +50,12 @@ public class HomeController extends Controller {
 
         LoginForm loginForm = requestData.get();
 
-        //TODO: insert here
-
-        return ok();
+        if (loginForm.getPassword().equals("12345")) {
+            session("connected", "userID");
+            return redirect(routes.HomeController.index());
+        } else {
+            return badRequest(views.html.login.render(requestData));
+        }
 
     }
 
@@ -64,6 +67,16 @@ public class HomeController extends Controller {
             return redirect(routes.HomeController.login());
         }
         return ok();
+    }
+
+    public Result viewSchema() {
+
+        String user = session("connected");
+        if (user != null) {
+            return ok(views.html.list_schema.render(TaskRepository.getAll()));
+        } else {
+            return redirect(routes.HomeController.getLogin());
+        }
     }
 
 }
