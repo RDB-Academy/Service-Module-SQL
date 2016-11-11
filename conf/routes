@@ -18,5 +18,11 @@ PATCH   /api/task/:id/              controllers.api.TaskController.update(id: Lo
 DELETE  /api/task/:id/              controllers.api.TaskController.delete(id: Long)
 
 GET     /admin/assets/*file         controllers.Assets.versioned(path="/public/assets", file: Asset)
+GET     /resource/*file             controllers.Assets.versioned(path="/public", file: Asset)
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-GET     /*file                      controllers.Assets.versioned(path="/public/dist", file: Asset)
+GET     /web                        controllers.Assets.at(path= "/public/dist", file="/index.html")
+GET     /web/                       controllers.Assets.at(path= "/public/dist", file="/index.html")
+GET     /web/assets/*file           controllers.Assets.versioned(path="/public/dist/assets", file: Asset)
+GET     /web/*file                  controllers.HomeController.webApp(file: String)
+GET     /                           controllers.HomeController.index()
+GET     /*file                      controllers.HomeController.webAppRedirect(file: String)

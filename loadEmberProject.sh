@@ -14,4 +14,5 @@ bower install
 npm build
 ember build
 cd ..
-mv ${DIRECTORY}/dist public/dist
+rm -rf public/dist
+cp -r ${DIRECTORY}/dist public/dist
