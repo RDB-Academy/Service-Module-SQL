@@ -13,3 +13,5 @@ app-2.11/
 project/project/
 test-2.11/
 test/resources/
+Front-End/
+public/dist
