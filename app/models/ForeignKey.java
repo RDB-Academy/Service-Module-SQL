@@ -1,0 +1,21 @@
+package models;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.List;
+
+/**
+ * Created by invisible on 11/10/16.
+ */
+public class ForeignKey extends BaseModel {
+    @Id
+    long id;
+
+    @ManyToOne
+    SchemaDef schema;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "foreignKey")
+    List<ForeignKeyRelation> foreignKeyRelationList;
+}

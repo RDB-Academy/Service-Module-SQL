@@ -23,9 +23,14 @@ public class TaskController extends Controller {
         Form<Task> taskForm = formFactory.form(Task.class).bindFromRequest();
         if (taskForm.hasErrors()) {
             Logger.error("TaskController - create - FormHasErrors");
-            badRequest(taskForm.errorsAsJson());
+            return badRequest(taskForm.errorsAsJson());
         }
-        return ok("Successfully");
+        Task task = taskForm.get();
+        task.save();
+        if ((task.getId()==0)) {
+            return badRequest("statement cannot saved");
+        }
+        return seeOther(routes.TaskController.show(task.getId()));
     }
 
     public Result view() {

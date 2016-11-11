@@ -1,6 +1,6 @@
 package controllers.admin;
 
-import form.LoginForm;
+import forms.LoginForm;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
