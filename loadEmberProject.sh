@@ -7,6 +7,7 @@ if [ -d "$DIRECTORY" ]; then
     git pull
 else
     git clone https://github.com/RDB-Academy/Interface-Module-SQL.git ${DIRECTORY}
+    cd ${DIRECTORY}
 fi
 
 npm install
