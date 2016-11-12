@@ -21,6 +21,9 @@ public class SchemaDef extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
     private List<TableDef> tableDefList;
 
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
+    private List<ForeignKey> foreignKeyList;
+
     public Long getId() {
         return id;
     }
@@ -39,5 +42,13 @@ public class SchemaDef extends BaseModel {
 
     public void setTableDefList(List<TableDef> tableDefList) {
         this.tableDefList = tableDefList;
+    }
+
+    public List<ForeignKey> getForeignKeyList() {
+        return foreignKeyList;
+    }
+
+    public void setForeignKeyList(List<ForeignKey> foreignKeyList) {
+        this.foreignKeyList = foreignKeyList;
     }
 }

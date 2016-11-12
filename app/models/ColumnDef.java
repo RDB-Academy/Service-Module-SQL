@@ -19,10 +19,18 @@ public class ColumnDef extends BaseModel {
     private String name;
 
     @NotNull
-    private String datatype;
+    private String dataType;
 
+    @NotNull
     private boolean isPrimary  = false;
+    @NotNull
     private boolean isNullable = true;
+
+    private int metaValueSet;
+
+    private static final int META_VALUE_SET_FIRSTNAME = 8;
+    private static final int META_VALUE_SET_LASTNAME = 744;
+
 
     public long getId() {
         return id;
@@ -45,11 +53,11 @@ public class ColumnDef extends BaseModel {
     }
 
     public String getDatatype() {
-        return datatype;
+        return dataType;
     }
 
     public void setDatatype(String datatype) {
-        this.datatype = datatype;
+        this.dataType = datatype;
     }
 
     public boolean isPrimary() {
