@@ -9,9 +9,10 @@ create table column_def (
   modified_at                   timestamp,
   table_def_id                  bigint not null,
   name                          varchar(255) not null,
-  datatype                      varchar(255) not null,
-  is_primary                    boolean,
-  is_nullable                   boolean,
+  data_type                     varchar(255) not null,
+  is_primary                    boolean not null,
+  is_nullable                   boolean not null,
+  meta_value_set                integer,
   constraint pk_column_def primary key (id)
 );
 

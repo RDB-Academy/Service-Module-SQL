@@ -17,6 +17,8 @@ GET     /api/task/:id/              controllers.api.TaskController.show(id :Long
 PATCH   /api/task/:id/              controllers.api.TaskController.update(id: Long)
 DELETE  /api/task/:id/              controllers.api.TaskController.delete(id: Long)
 
+GET     /test/                      controllers.HomeController.testExtensionMaker()
+
 GET     /admin/assets/*file         controllers.Assets.versioned(path="/public/assets", file: Asset)
 GET     /resource/*file             controllers.Assets.versioned(path="/public", file: Asset)
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

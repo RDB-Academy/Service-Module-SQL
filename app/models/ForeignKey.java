@@ -14,8 +14,7 @@ public class ForeignKey extends BaseModel {
     Long id;
 
     @ManyToOne
-    SchemaDef schema;
-
+    SchemaDef schemaDef;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "foreignKey")
     List<ForeignKeyRelation> foreignKeyRelationList;
 
@@ -23,12 +22,12 @@ public class ForeignKey extends BaseModel {
         return id;
     }
 
-    public SchemaDef getSchema() {
-        return schema;
+    public SchemaDef getSchemaDef() {
+        return schemaDef;
     }
 
-    public void setSchema(SchemaDef schema) {
-        this.schema = schema;
+    public void setSchemaDef(SchemaDef schema) {
+        this.schemaDef = schema;
     }
 
     public List<ForeignKeyRelation> getForeignKeyRelationList() {
