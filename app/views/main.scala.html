@@ -15,7 +15,7 @@
         <base href="/admin/">
         @* Here's where we render the page title `String`. *@
         <title>@title</title>
-        <link rel="stylesheet" media="screen" href="assets/lib/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" media="screen" href="/assets/lib/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" media="screen" href="assets/main.css">
     </head>
     <body>
@@ -32,11 +32,10 @@
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="@controllers.admin.routes.HomeController.viewSchema()">Schema<span class="sr-only">(current)</span></a></li>
                         <li><a href="#">Link</a></li>
                     </ul>
 
-                    <a class="btn btn-danger" href="@controllers.admin.routes.HomeController.logout()">Logout</a>
+                    <a class="btn btn-danger" href="@controllers.admin.routes.SessionController.logout()">Logout</a>
 
                 </div><!-- /.navbar-collapse -->
             </div>
@@ -45,7 +44,7 @@
          * the page content. *@
         @content
 
-        <script src="/resources/lib/jquery/jquery.min.js"></script>
-        <script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/assets/lib/jquery/jquery.min.js"></script>
+        <script src="/assets/lib/bootstrap/js/bootstrap.min.js"></script>
     </body>
 </html>

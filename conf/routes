@@ -4,11 +4,13 @@
 
 # Admin
 
+## Login
+GET     /admin/login                controllers.admin.SessionController.login()
+POST    /admin/login                controllers.admin.SessionController.performLogin()
+GET     /admin/logout               controllers.admin.SessionController.logout()
+
+## Home
 GET     /admin/                     controllers.admin.HomeController.index()
-GET     /admin/login                controllers.admin.HomeController.login()
-POST    /admin/login                controllers.admin.HomeController.getLogin()
-GET     /admin/logout               controllers.admin.HomeController.logout()
-GET     /admin/schema               controllers.admin.HomeController.viewSchema()
 
 # API
 # model.Task
@@ -28,8 +30,7 @@ DELETE  /api/tasktrials/:id         controllers.api.TaskTrialController.delete(i
 GET     /test/                      controllers.HomeController.testExtensionMaker()
 
 GET     /admin/assets/*file         controllers.Assets.versioned(path="/public/assets", file: Asset)
-GET     /resource/*file             controllers.Assets.versioned(path="/public", file: Asset)
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/lib/*file           controllers.Assets.versioned(path="/public/lib", file: Asset)
 GET     /web                        controllers.Assets.at(path= "/public/dist", file="/index.html")
 GET     /web/                       controllers.Assets.at(path= "/public/dist", file="/index.html")
 GET     /web/*file                  controllers.HomeController.webApp(file: String)

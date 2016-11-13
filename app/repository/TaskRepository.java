@@ -16,10 +16,6 @@ import java.util.Random;
 public abstract class TaskRepository implements Repository<Task> {
     protected Model.Finder<Long, Task> find = new Model.Finder<Long, Task>(Task.class);
 
-    public Task getRandom() {
-        return find.all().get((new Random()).nextInt(find.all().size()));
-    }
-
     public void save(Task task) {
         task.save();
     }
