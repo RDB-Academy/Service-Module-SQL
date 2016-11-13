@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Model;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -9,6 +10,7 @@ import javax.persistence.OneToOne;
 /**
  * Created by invisible on 11/10/16.
  */
+@Entity
 public class ForeignKeyRelation extends BaseModel {
     @Id
     Long id;

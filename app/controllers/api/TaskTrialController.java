@@ -13,6 +13,7 @@ import repository.TaskTrialRepository;
 
 import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by invisible on 11/11/16.
@@ -21,21 +22,42 @@ public class TaskTrialController extends Controller {
 
     FormFactory formFactory;
     TaskTrialRepository taskTrialRepository;
+    TaskRepository taskRepository;
 
     @Inject
-    public TaskTrialController(FormFactory formFactory, TaskTrialRepository taskTrialRepository){
+    public TaskTrialController(FormFactory formFactory, TaskTrialRepository taskTrialRepository, TaskRepository taskRepository){
         this.formFactory = formFactory;
         this.taskTrialRepository = taskTrialRepository;
+        this.taskRepository = taskRepository;
     }
 
     public Result create() {
-        Task task = TaskRepository.getRandom();
+        Task task = taskRepository.getRandom();
+
+        Logger.debug("Here");
 
         TaskTrial taskTrial = new TaskTrial();
         taskTrial.setTask(task);
         taskTrial.setBeginDate(new Date());
+        taskTrial.setCreatedAt(new java.sql.Date(new Date().getTime()));
 
         taskTrialRepository.save(taskTrial);
+
+        return ok(Json.toJson(taskTrial));
+    }
+
+    public Result view() {
+        List<TaskTrial> taskTrialList = taskTrialRepository.getAll();
+
+        return ok(Json.toJson(taskTrialList));
+    }
+
+    public Result show(long id) {
+        TaskTrial taskTrial = taskTrialRepository.getById(id);
+
+        if (taskTrial == null) {
+            return badRequest("No such taskTrialObject");
+        }
 
         return ok(Json.toJson(taskTrial));
     }
@@ -51,6 +73,10 @@ public class TaskTrialController extends Controller {
         taskTrialRepository.save(taskTrial);
 
         return ok(Json.toJson(taskTrial));
+    }
+
+    public Result delete(long id) {
+        return TODO;
     }
 
 

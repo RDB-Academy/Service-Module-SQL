@@ -14,9 +14,9 @@ import java.util.Random;
  */
 @ImplementedBy(TaskRepositoryImplementation.class)
 public abstract class TaskRepository implements Repository<Task> {
-    protected static Model.Finder<Long, Task> find = new Model.Finder<Long, Task>(Task.class);
+    protected Model.Finder<Long, Task> find = new Model.Finder<Long, Task>(Task.class);
 
-    public static Task getRandom() {
+    public Task getRandom() {
         return find.all().get((new Random()).nextInt(find.all().size()));
     }
 

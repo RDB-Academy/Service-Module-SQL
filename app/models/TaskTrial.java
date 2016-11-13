@@ -1,7 +1,9 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.Date;
 /**
  * Created by invisible on 11/11/16.
  */
+@Entity
 public class TaskTrial extends BaseModel {
     @Id
     private Long id;
@@ -36,6 +39,11 @@ public class TaskTrial extends BaseModel {
     @JsonIgnore
     public Task getTask() {
         return task;
+    }
+
+    @JsonGetter("task")
+    public long getTaskId() {
+        return this.getTask().getId();
     }
 
     public void setTask(Task task) {

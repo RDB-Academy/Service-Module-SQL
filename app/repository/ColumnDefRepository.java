@@ -12,11 +12,7 @@ import java.util.Random;
  */
 @ImplementedBy(ColumnDefRepositoryImplementation.class)
 public abstract class ColumnDefRepository implements Repository<ColumnDef> {
-    protected static Model.Finder<Long, ColumnDef> find = new Model.Finder<Long, ColumnDef>(ColumnDef.class);
-
-    public static ColumnDef getRandom() {
-        return find.all().get((new Random()).nextInt(find.all().size()));
-    }
+    protected Model.Finder<Long, ColumnDef> find = new Model.Finder<Long, ColumnDef>(ColumnDef.class);
 
     public void save(ColumnDef columnDef) {
         columnDef.save();

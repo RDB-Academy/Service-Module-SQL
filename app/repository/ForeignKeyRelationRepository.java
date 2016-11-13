@@ -12,11 +12,7 @@ import java.util.Random;
  */
 @ImplementedBy(ForeignKeyRelationRepositoryImplementation.class)
 public abstract class ForeignKeyRelationRepository implements Repository<ForeignKeyRelation> {
-    protected static Model.Finder<Long, ForeignKeyRelation> find = new Model.Finder<Long, ForeignKeyRelation>(ForeignKeyRelation.class);
-
-    public static ForeignKeyRelation getRandom() {
-        return find.all().get((new Random()).nextInt(find.all().size()));
-    }
+    protected Model.Finder<Long, ForeignKeyRelation> find = new Model.Finder<Long, ForeignKeyRelation>(ForeignKeyRelation.class);
 
     public void save(ForeignKeyRelation foreignKeyRelation) {
         foreignKeyRelation.save();

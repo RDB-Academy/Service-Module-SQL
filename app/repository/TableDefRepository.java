@@ -12,11 +12,7 @@ import java.util.Random;
  */
 @ImplementedBy(TableDefRepositoryImplementation.class)
 public abstract class TableDefRepository implements Repository<TableDef> {
-    protected static Model.Finder<Long, TableDef> find = new Model.Finder<Long, TableDef>(TableDef.class);
-
-    public static TableDef getRandom() {
-        return find.all().get((new Random()).nextInt(find.all().size()));
-    }
+    protected Model.Finder<Long, TableDef> find = new Model.Finder<Long, TableDef>(TableDef.class);
 
     public void save(TableDef tableDef) {
         tableDef.save();

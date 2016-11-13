@@ -13,7 +13,7 @@ import java.util.List;
  */
 @ImplementedBy(TaskTrialRepositoryImplementation.class)
 public abstract class TaskTrialRepository implements Repository<TaskTrial> {
-    protected static Model.Finder<Long, TaskTrial> find = new Model.Finder<Long, TaskTrial>(TaskTrial.class);
+    protected Model.Finder<Long, TaskTrial> find = new Model.Finder<Long, TaskTrial>(TaskTrial.class);
 
     @Override
     public void save(TaskTrial model) {

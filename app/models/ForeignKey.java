@@ -1,14 +1,12 @@
 package models;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 /**
  * Created by invisible on 11/10/16.
  */
+@Entity
 public class ForeignKey extends BaseModel {
     @Id
     Long id;
