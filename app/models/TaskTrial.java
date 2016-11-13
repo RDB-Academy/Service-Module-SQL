@@ -70,8 +70,12 @@ public class TaskTrial extends BaseModel {
         return isCorrect;
     }
 
-    public void setCorrect(boolean correct) {
+    public void setIsCorrect(boolean correct) {
         isCorrect = correct;
+    }
+
+    public boolean getIsCorrect() {
+        return isCorrect;
     }
 
     public Date getBeginDate() {

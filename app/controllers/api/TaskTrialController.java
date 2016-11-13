@@ -34,8 +34,6 @@ public class TaskTrialController extends Controller {
     public Result create() {
         Task task = taskRepository.getRandom();
 
-        Logger.debug("Here");
-
         TaskTrial taskTrial = new TaskTrial();
         taskTrial.setTask(task);
         taskTrial.setBeginDate(new Date());
@@ -56,7 +54,7 @@ public class TaskTrialController extends Controller {
         TaskTrial taskTrial = taskTrialRepository.getById(id);
 
         if (taskTrial == null) {
-            return badRequest("No such taskTrialObject");
+            return notFound("No such object available!");
         }
 
         return ok(Json.toJson(taskTrial));
