@@ -1,6 +1,7 @@
 package authenticators;
 
 import models.Session;
+import play.Logger;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -22,12 +23,13 @@ public class SessionAuthenticators extends Security.Authenticator {
     @Override
     public String getUsername(Http.Context ctx) {
         Session session = this.sessionService.getSession(ctx);
-        return null;
+        return (session != null ) ? session.getId() : null;
     }
 
     @Override
     public Result onUnauthorized(Http.Context ctx) {
         ctx.flash().put("forbidden", "error");
+        Logger.info("Unauthorized Action");
         return redirect(controllers.admin.routes.SessionController.login());
     }
 }

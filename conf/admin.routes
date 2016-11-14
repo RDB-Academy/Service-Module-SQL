@@ -8,5 +8,9 @@ GET     /login                  controllers.admin.SessionController.login()
 GET     /logout                 controllers.admin.SessionController.logout()
 
 
+GET     /schemadef              controllers.admin.SchemaDefController.index()
+GET     /schemadef/:id          controllers.admin.SchemaDefController.show(id: Long)
+
+
 GET     /assets/lib/*file       controllers.Assets.at(path="/public/lib", file)
 GET     /assets/*file           controllers.Assets.versioned(path="/public/admin", file: Asset)

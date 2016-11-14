@@ -1,0 +1,33 @@
+@import java.util
+@(schemaDefList: util.List[SchemaDef])
+
+@main("SchemaDefs") {
+    @if(schemaDefList.isEmpty) {
+
+    } else {
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        bla
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(schemaDef <- schemaDefList) {
+                    <tr class="clickable-row" data-href="@admin.routes.SchemaDefController.show(schemaDef.getId())">
+                        <td>@schemaDef.getId</td>
+                        <td>@schemaDef.getName</td>
+                        <td>@schemaDef.getName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

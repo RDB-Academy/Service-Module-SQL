@@ -9,9 +9,9 @@ import java.util.List;
  * Created by invisible on 11/11/16.
  */
 interface Repository<T extends Model> {
-    public List<T> getAll();
+    List<T> getAll();
 
-    public T getById(Long id);
+    T getById(Long id);
 
-    public void save(T model);
+    void save(T model);
 }

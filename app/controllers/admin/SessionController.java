@@ -1,6 +1,7 @@
 package controllers.admin;
 
 import forms.LoginForm;
+import models.Session;
 import play.Configuration;
 import play.Logger;
 import play.data.Form;
@@ -15,35 +16,32 @@ import javax.inject.Inject;
  * @author fabiomazzone
  */
 public class SessionController extends Controller{
-    private FormFactory formFactory;
+    private final SessionService sessionService;
+    private final FormFactory formFactory;
 
     @Inject
     public SessionController(
-            FormFactory formFactory) {
+            FormFactory formFactory,
+            SessionService sessionService) {
         this.formFactory = formFactory;
+        this.sessionService = sessionService;
     }
 
 
     public Result login() {
         Form<LoginForm> loginForm = formFactory.form(LoginForm.class);
 
-        Logger.info(flash("forbidden"));
-
-        String user = session("");
-        if (user != null) {
+        Session session = sessionService.getSession(ctx());
+        if (session != null) {
             return redirect(routes.HomeController.index());
         } else {
-            return ok(views.html.login.render(loginForm));
+            return ok(views.html.sessionController.login.render(loginForm));
         }
 
     }
 
     public Result logout() {
-        String user = session("connected");
-        if (user != null) {
-            session().clear();
-            return redirect(routes.SessionController.login());
-        }
-        return ok();
+        this.sessionService.clear(ctx());
+        return redirect(routes.SessionController.login());
     }
 }

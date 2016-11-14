@@ -1,43 +1,33 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.avaje.ebean.annotation.CreatedTimestamp;
-import com.avaje.ebean.annotation.UpdatedTimestamp;
+import com.avaje.ebean.annotation.WhenCreated;
+import com.avaje.ebean.annotation.WhenModified;
 import play.data.format.Formats;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * @author fabiomazzone
  */
 @MappedSuperclass
 abstract class BaseModel extends Model {
-    @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(updatable = false)
-    private Date createdAt;
+    @WhenCreated
+    private Timestamp createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date modifiedAt;
+    @WhenModified
+    private Timestamp modifiedAt;
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getModifiedAt() {
+    public Timestamp getModifiedAt() {
         return modifiedAt;
-    }
-
-    public void setModifiedAt(Date modifiedAt) {
-        this.modifiedAt = modifiedAt;
     }
 }

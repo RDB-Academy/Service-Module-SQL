@@ -19,10 +19,9 @@ import java.util.List;
  * Created by invisible on 11/11/16.
  */
 public class TaskTrialController extends Controller {
-
-    FormFactory formFactory;
-    TaskTrialRepository taskTrialRepository;
-    TaskRepository taskRepository;
+    private FormFactory formFactory;
+    private TaskTrialRepository taskTrialRepository;
+    private TaskRepository taskRepository;
 
     @Inject
     public TaskTrialController(FormFactory formFactory, TaskTrialRepository taskTrialRepository, TaskRepository taskRepository){
@@ -37,7 +36,6 @@ public class TaskTrialController extends Controller {
         TaskTrial taskTrial = new TaskTrial();
         taskTrial.setTask(task);
         taskTrial.setBeginDate(new Date());
-        taskTrial.setCreatedAt(new java.sql.Date(new Date().getTime()));
 
         taskTrialRepository.save(taskTrial);
 

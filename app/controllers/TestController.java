@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import java.util.Arrays;
 
 /**
- * Created by fabiomazzone on 14.11.16.
+ * @author fabiomazzone
  */
 public class TestController extends Controller {
     private SchemaDefRepository schemaDefRepository;
@@ -21,6 +21,7 @@ public class TestController extends Controller {
     }
 
     public Result test() {
+        session().clear();
         ExtensionMaker extensionMaker = new ExtensionMaker(12345L);
         SchemaDef schemaDef = this.schemaDefRepository.getById(1L);
 

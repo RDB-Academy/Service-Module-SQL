@@ -29,10 +29,9 @@ public class SessionController extends Controller {
     public Result authenticate() {
         Form<LoginForm> loginData = formFactory.form(LoginForm.class).bindFromRequest();
         String adminPassword = configuration.getString("sqlModule.adminPassword");
-
         if (loginData.hasErrors()) {
             if (request().accepts(Http.MimeTypes.TEXT)) {
-                return badRequest(views.html.login.render(loginData));
+                return badRequest(views.html.sessionController.login.render(loginData));
             }
             return badRequest(loginData.errorsAsJson());
         }
@@ -46,12 +45,20 @@ public class SessionController extends Controller {
             }
             return ok("Ok");
         } else {
-            if(request().accepts(Http.MimeTypes.TEXT)) {
-                return badRequest(views.html.login.render(loginData));
-            }
             loginData.reject("Wrong E-Mail or Password");
+            if(request().accepts(Http.MimeTypes.TEXT)) {
+                return badRequest(views.html.sessionController.login.render(loginData));
+            }
             return badRequest(loginData.errorsAsJson());
 
         }
+    }
+
+    public Result logout() {
+        this.sessionService.clear(ctx());
+        if(request().accepts(Http.MimeTypes.TEXT)) {
+            redirect(controllers.admin.routes.SessionController.login());
+        }
+        return ok();
     }
 }

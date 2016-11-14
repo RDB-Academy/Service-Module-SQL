@@ -1,0 +1,23 @@
+@(schemaDefForm: Form[SchemaDef])
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+@main("Schema Detail") {
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">View Schema</h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal">
+                        @b3.text( schemaDefForm("id"), '_label -> "ID: ", 'disabled -> "")
+                        @b3.text( schemaDefForm("name"), '_label -> "Name: ", 'disabled -> "")
+                        @b3.text( schemaDefForm("createdAt"), '_label -> "createdAt: ", 'disabled -> "")
+                        @b3.text( schemaDefForm("modifiedAt"), '_label -> "modifiedAt: ", 'disabled -> "")
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}

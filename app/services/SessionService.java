@@ -11,7 +11,11 @@ import services.implementation.SessionServiceImplementation;
  */
 @ImplementedBy(SessionServiceImplementation.class)
 public interface SessionService {
+    String SESSION_FIELD_NAME = "SessionID";
+
     void setSession(LoginForm loginForm, Http.Context ctx);
 
     Session getSession(Http.Context ctx);
+
+    void clear(Http.Context ctx);
 }

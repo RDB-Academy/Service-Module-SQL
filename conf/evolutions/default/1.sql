@@ -5,79 +5,79 @@
 
 create table column_def (
   id                            bigint auto_increment not null,
-  created_at                    timestamp,
-  modified_at                   timestamp,
   table_def_id                  bigint not null,
   name                          varchar(255) not null,
   data_type                     varchar(255) not null,
   is_primary                    boolean not null,
   is_nullable                   boolean not null,
   meta_value_set                integer,
+  created_at                    timestamp not null,
+  modified_at                   timestamp not null,
   constraint pk_column_def primary key (id)
 );
 
 create table foreign_key (
   id                            bigint auto_increment not null,
-  created_at                    timestamp,
-  modified_at                   timestamp,
   schema_def_id                 bigint,
+  created_at                    timestamp not null,
+  modified_at                   timestamp not null,
   constraint pk_foreign_key primary key (id)
 );
 
 create table foreign_key_relation (
   id                            bigint auto_increment not null,
-  created_at                    timestamp,
-  modified_at                   timestamp,
   foreign_key_id                bigint,
   source_column_id              bigint,
   target_column_id              bigint,
+  created_at                    timestamp not null,
+  modified_at                   timestamp not null,
   constraint pk_foreign_key_relation primary key (id)
 );
 
 create table schema_def (
   id                            bigint auto_increment not null,
-  created_at                    timestamp,
-  modified_at                   timestamp,
   name                          varchar(255),
+  created_at                    timestamp not null,
+  modified_at                   timestamp not null,
   constraint pk_schema_def primary key (id)
 );
 
 create table session (
   id                            varchar(255) not null,
-  created_at                    timestamp,
-  modified_at                   timestamp,
+  created_at                    timestamp not null,
+  modified_at                   timestamp not null,
   constraint pk_session primary key (id)
 );
 
 create table table_def (
   id                            bigint auto_increment not null,
-  created_at                    timestamp,
-  modified_at                   timestamp,
   name                          varchar(255) not null,
   schema_def_id                 bigint not null,
+  created_at                    timestamp not null,
+  modified_at                   timestamp not null,
   constraint pk_table_def primary key (id)
 );
 
 create table task (
   id                            bigint auto_increment not null,
-  created_at                    timestamp,
-  modified_at                   timestamp,
   text                          varchar(255),
   reference_statement           varchar(255),
   schema_def_id                 bigint,
+  created_at                    timestamp not null,
+  modified_at                   timestamp not null,
   constraint pk_task primary key (id)
 );
 
 create table task_trial (
   id                            bigint auto_increment not null,
-  created_at                    timestamp,
-  modified_at                   timestamp,
   task_id                       bigint,
   database_creation_seed        bigint,
   user_statement                varchar(255),
   is_correct                    boolean,
   begin_date                    timestamp,
   submit_date                   timestamp,
+  created_at                    timestamp not null,
+  modified_at                   timestamp not null,
   constraint pk_task_trial primary key (id)
 );
 
