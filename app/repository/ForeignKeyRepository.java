@@ -12,7 +12,7 @@ import java.util.Random;
  */
 @ImplementedBy(ForeignKeyRepositoryImplementation.class)
 public abstract class ForeignKeyRepository implements Repository<ForeignKey> {
-    protected Model.Finder<Long, ForeignKey> find = new Model.Finder<Long, ForeignKey>(ForeignKey.class);
+    protected Model.Finder<Long, ForeignKey> find = new Model.Finder<>(ForeignKey.class);
 
     public void save(ForeignKey foreignKey) {
         foreignKey.save();

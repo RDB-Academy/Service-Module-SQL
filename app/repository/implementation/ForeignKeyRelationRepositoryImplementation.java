@@ -17,7 +17,7 @@ public class ForeignKeyRelationRepositoryImplementation extends ForeignKeyRelati
     }
 
     @Override
-    public ForeignKeyRelation getById(long id) {
+    public ForeignKeyRelation getById(Long id) {
         return this.find.byId(id);
     }
 }

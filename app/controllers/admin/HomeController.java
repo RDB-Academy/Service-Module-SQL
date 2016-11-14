@@ -10,7 +10,6 @@ import play.mvc.Security;
  */
 @Security.Authenticated(SessionAuthenticators.class)
 public class HomeController extends Controller {
-
     public Result index() {
         String user = session("connected");
 

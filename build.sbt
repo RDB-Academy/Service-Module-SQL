@@ -18,6 +18,5 @@ libraryDependencies ++= Seq(
   javaJdbc,
   cache,
   javaWs,
-  "org.webjars" %% "webjars-play" % "2.5.0-3",
-  "org.webjars" % "bootstrap" % "3.3.7-1"
+  "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3"
 )

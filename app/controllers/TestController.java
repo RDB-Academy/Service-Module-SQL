@@ -22,7 +22,7 @@ public class TestController extends Controller {
 
     public Result test() {
         ExtensionMaker extensionMaker = new ExtensionMaker(12345L);
-        SchemaDef schemaDef = this.schemaDefRepository.getById(1);
+        SchemaDef schemaDef = this.schemaDefRepository.getById(1L);
 
         String[][] statements = extensionMaker.buildStatements(schemaDef);
 

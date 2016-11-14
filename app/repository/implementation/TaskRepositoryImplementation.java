@@ -17,7 +17,7 @@ public class TaskRepositoryImplementation extends TaskRepository {
     }
 
     @Override
-    public Task getById(long id) {
+    public Task getById(Long id) {
         return this.find.byId(id);
     }
 }

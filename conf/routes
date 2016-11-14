@@ -8,6 +8,7 @@ GET     /test/                      controllers.TestController.test()
 
 # Admin
 ->      /admin                      admin.Routes
+->      /admin/                     admin.Routes
 
 # API
 ->      /api                        api.Routes

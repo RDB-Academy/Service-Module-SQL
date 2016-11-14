@@ -17,7 +17,7 @@ public class TableDefRepositoryImplementation extends TableDefRepository {
     }
 
     @Override
-    public TableDef getById(long id) {
+    public TableDef getById(Long id) {
         return this.find.byId(id);
     }
 }

@@ -8,10 +8,10 @@ import java.util.List;
 /**
  * Created by invisible on 11/11/16.
  */
-public interface Repository<T extends Model> {
+interface Repository<T extends Model> {
     public List<T> getAll();
 
-    public T getById(long id);
+    public T getById(Long id);
 
     public void save(T model);
 }

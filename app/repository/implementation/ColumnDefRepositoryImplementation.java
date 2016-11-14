@@ -17,7 +17,7 @@ public class ColumnDefRepositoryImplementation extends ColumnDefRepository {
     }
 
     @Override
-    public ColumnDef getById(long id) {
+    public ColumnDef getById(Long id) {
         return this.find.byId(id);
     }
 }

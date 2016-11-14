@@ -17,7 +17,7 @@ public class TaskTrialRepositoryImplementation extends TaskTrialRepository {
     }
 
     @Override
-    public TaskTrial getById(long id) {
+    public TaskTrial getById(Long id) {
         return this.find.byId(id);
     }
 }

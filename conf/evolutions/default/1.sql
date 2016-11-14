@@ -42,6 +42,13 @@ create table schema_def (
   constraint pk_schema_def primary key (id)
 );
 
+create table session (
+  id                            varchar(255) not null,
+  created_at                    timestamp,
+  modified_at                   timestamp,
+  constraint pk_session primary key (id)
+);
+
 create table table_def (
   id                            bigint auto_increment not null,
   created_at                    timestamp,
@@ -132,6 +139,8 @@ drop table if exists foreign_key;
 drop table if exists foreign_key_relation;
 
 drop table if exists schema_def;
+
+drop table if exists session;
 
 drop table if exists table_def;
 

@@ -17,7 +17,7 @@ public class SchemaDefRepositoryImplementation extends SchemaDefRepository {
     }
 
     @Override
-    public SchemaDef getById(long id) {
+    public SchemaDef getById(Long id) {
         return this.find.byId(id);
     }
 }

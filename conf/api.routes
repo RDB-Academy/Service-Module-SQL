@@ -1,4 +1,5 @@
 # /api
+POST    /login                      controllers.api.SessionController.authenticate()
 
 ## model.Task
 POST    /tasks                      controllers.api.TaskController.create()

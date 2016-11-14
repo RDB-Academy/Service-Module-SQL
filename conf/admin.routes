@@ -5,7 +5,6 @@ GET     /                       controllers.admin.HomeController.index()
 
 ## Login
 GET     /login                  controllers.admin.SessionController.login()
-POST    /login                  controllers.admin.SessionController.performLogin()
 GET     /logout                 controllers.admin.SessionController.logout()
 
 

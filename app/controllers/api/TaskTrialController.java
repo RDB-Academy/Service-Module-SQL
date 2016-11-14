@@ -32,7 +32,7 @@ public class TaskTrialController extends Controller {
     }
 
     public Result create() {
-        Task task = taskRepository.getById(1);
+        Task task = taskRepository.getById(1L);
 
         TaskTrial taskTrial = new TaskTrial();
         taskTrial.setTask(task);
