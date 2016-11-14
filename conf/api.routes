@@ -1,15 +1,15 @@
 # /api
 
 ## model.Task
-POST    /api/tasks                  controllers.api.TaskController.create()
-GET     /api/tasks                  controllers.api.TaskController.view()
-GET     /api/tasks/:id              controllers.api.TaskController.show(id :Long)
-PATCH   /api/tasks/:id              controllers.api.TaskController.update(id: Long)
-DELETE  /api/tasks/:id              controllers.api.TaskController.delete(id: Long)
+POST    /tasks                      controllers.api.TaskController.create()
+GET     /tasks                      controllers.api.TaskController.view()
+GET     /tasks/:id                  controllers.api.TaskController.show(id :Long)
+PATCH   /tasks/:id                  controllers.api.TaskController.update(id: Long)
+DELETE  /tasks/:id                  controllers.api.TaskController.delete(id: Long)
 
 ## model.TaskTrial
-POST    /api/tasktrials             controllers.api.TaskTrialController.create()
-GET     /api/tasktrials             controllers.api.TaskTrialController.view()
-GET     /api/tasktrials/:id         controllers.api.TaskTrialController.show(id: Long)
-PATCH   /api/tasktrials/:id         controllers.api.TaskTrialController.submit(id: Long)
-DELETE  /api/tasktrials/:id         controllers.api.TaskTrialController.delete(id: Long)
+POST    /tasktrials                 controllers.api.TaskTrialController.create()
+GET     /tasktrials                 controllers.api.TaskTrialController.view()
+GET     /tasktrials/:id             controllers.api.TaskTrialController.show(id: Long)
+PATCH   /tasktrials/:id             controllers.api.TaskTrialController.submit(id: Long)
+DELETE  /tasktrials/:id             controllers.api.TaskTrialController.delete(id: Long)
