@@ -4,7 +4,7 @@
 
 
 # Test Routes
-GET     /test/                      controllers.HomeController.testExtensionMaker()
+GET     /test/                      controllers.TestController.test()
 
 # Admin
 ->      /admin                      admin.Routes
@@ -12,9 +12,7 @@ GET     /test/                      controllers.HomeController.testExtensionMake
 # API
 ->      /api                        api.Routes
 
+
 # Web
-# GET     /assets/lib/*file           controllers.Assets.versioned(path="/public/lib", file: Asset)
-# GET     /                           controllers.Assets.at(path= "/public/dist", file="/index.html")
-# GET     /web/*file                  controllers.HomeController.webApp(file: String)
-# GET     /                           controllers.HomeController.index()
-# GET     /*file                      controllers.HomeController.webAppRedirect(file: String)
+GET     /                           controllers.Assets.at(path= "/public/dist", file="/index.html")
+GET     /*file                      controllers.HomeController.webApp(file: String)
