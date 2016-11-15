@@ -18,6 +18,7 @@ create table column_def (
 
 create table foreign_key (
   id                            bigint auto_increment not null,
+  name                          varchar(255),
   schema_def_id                 bigint,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,

@@ -30,7 +30,6 @@ public class SessionController extends Controller{
 
     public Result login() {
         Form<LoginForm> loginForm = formFactory.form(LoginForm.class);
-
         Session session = sessionService.getSession(ctx());
         if (session != null) {
             return redirect(routes.HomeController.index());

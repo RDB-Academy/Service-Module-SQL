@@ -1,6 +1,7 @@
 package controllers.admin;
 
 import models.SchemaDef;
+import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -34,5 +35,25 @@ public class SchemaDefController extends Controller {
         }
         flash("status", "cannot find Schema with id " + id);
         return redirect(routes.SchemaDefController.index());
+    }
+
+    public Result edit(Long id) {
+        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
+        if(schemaDef != null) {
+            return ok(views.html.schemaDefController.edit.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
+        }
+        flash("status", "cannot find Schema with id " + id);
+        return redirect(routes.SchemaDefController.index());
+    }
+
+    public Result update(Long id) {
+        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
+        Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class).bindFromRequest();
+
+        if(schemaDefForm.hasErrors()) {
+            return badRequest(views.html.schemaDefController.edit.render(schemaDefForm));
+        }
+
+        return redirect(routes.SchemaDefController.show(2L));
     }
 }
