@@ -1,11 +1,13 @@
 package controllers.admin;
 
+import authenticators.SessionAuthenticators;
 import models.SchemaDef;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import repository.SchemaDefRepository;
 
 import javax.inject.Inject;
@@ -14,6 +16,7 @@ import java.util.List;
 /**
  * @author fabiomazzone
  */
+@Security.Authenticated(SessionAuthenticators.class)
 public class SchemaDefController extends Controller {
     private final SchemaDefRepository schemaDefRepository;
     private final FormFactory formFactory;
