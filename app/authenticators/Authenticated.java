@@ -12,18 +12,18 @@ import javax.inject.Inject;
 /**
  * @author fabiomazzone
  */
-public class SessionAuthenticators extends Security.Authenticator {
+public class Authenticated extends Security.Authenticator {
     private SessionService sessionService;
 
     @Inject
-    public SessionAuthenticators(SessionService sessionService) {
+    public Authenticated(SessionService sessionService) {
         this.sessionService = sessionService;
     }
 
     @Override
     public String getUsername(Http.Context ctx) {
         Session session = this.sessionService.getSession(ctx);
-        return (session != null ) ? session.getId() : null;
+        return (session != null ) ? session.getUserName() : null;
     }
 
     @Override

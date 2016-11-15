@@ -5,12 +5,16 @@ import javax.persistence.Id;
 import java.util.UUID;
 
 /**
- * @author fabiomazzone 
+ * @author fabiomazzone
  */
 @Entity
 public class Session extends BaseModel {
     @Id
-    String id;
+    private String id;
+
+    private Long userId;
+
+    private String userName;
 
     public Session() {
         this.id = UUID.randomUUID().toString();
@@ -18,5 +22,21 @@ public class Session extends BaseModel {
 
     public String getId() {
         return id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

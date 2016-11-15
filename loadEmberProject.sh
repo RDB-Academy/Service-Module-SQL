@@ -11,8 +11,7 @@ else
 fi
 
 npm install
-bower install
-npm build
+./node_modules/.bin/bower install
 ember build --environment=production
 cd ..
 rm -rf public/dist

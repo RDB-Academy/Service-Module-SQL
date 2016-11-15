@@ -1,6 +1,6 @@
 package controllers.admin;
 
-import authenticators.SessionAuthenticators;
+import authenticators.Authenticated;
 import models.SchemaDef;
 import play.Logger;
 import play.data.Form;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author fabiomazzone
  */
-@Security.Authenticated(SessionAuthenticators.class)
+@Security.Authenticated(Authenticated.class)
 public class SchemaDefController extends Controller {
     private final SchemaDefRepository schemaDefRepository;
     private final FormFactory formFactory;

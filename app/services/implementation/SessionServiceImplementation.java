@@ -25,6 +25,7 @@ public class SessionServiceImplementation implements SessionService {
     @Override
     public void setSession(LoginForm loginForm, Http.Context ctx) {
         Session session = new Session();
+        session.setUserName("admin");
         session.save();
 
         ctx.session().put(SESSION_FIELD_NAME, session.getId());

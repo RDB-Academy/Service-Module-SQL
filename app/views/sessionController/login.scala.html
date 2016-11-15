@@ -27,6 +27,7 @@
 
                         }
                         @b3.form(controllers.api.routes.SessionController.authenticate()) {
+                            @b3.email( loginForm("email"), '_label -> "Email", 'placeholder -> "Email")
                             @b3.password( loginForm("password"), '_label -> "Password", 'placeholder -> "Password")
                             @b3.submit('class -> "btn btn-success pull-right") { Sign In }
                         }
