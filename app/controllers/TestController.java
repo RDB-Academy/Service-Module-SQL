@@ -31,4 +31,11 @@ public class TestController extends Controller {
 
         return ok(Arrays.deepToString(statements));
     }
+
+    public Result parserTest() {
+        SchemaDef schemaDef = schemaDefRepository.getById(1L);
+
+
+        return TODO;
+    }
 }

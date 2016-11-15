@@ -2,32 +2,41 @@
 @(schemaDefList: util.List[SchemaDef])
 
 @main("SchemaDefs") {
-    @if(schemaDefList.isEmpty) {
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Schemata</h4>
+        </div>
+        @if(schemaDefList.isEmpty) {
 
-    } else {
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        #
-                    </th>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        bla
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
+        } else {
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th style="width: 15%">
+                            Created At
+                        </th>
+                        <th style="width: 15%">
+                            Modified At
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
                 @for(schemaDef <- schemaDefList) {
                     <tr class="clickable-row" data-href="@admin.routes.SchemaDefController.show(schemaDef.getId())">
                         <td>@schemaDef.getId</td>
                         <td>@schemaDef.getName</td>
-                        <td>@schemaDef.getName</td>
+                        <td>@schemaDef.getCreatedAt</td>
+                        <td>@schemaDef.getModifiedAt</td>
                     </tr>
                 }
-            </tbody>
-        </table>
-    }
+                </tbody>
+            </table>
+        }
+    </div>
 }

@@ -16,8 +16,8 @@ import java.util.List;
  * @author fabiomazzone
  */
 public class TaskController extends Controller {
-    FormFactory formFactory;
-    TaskRepository taskRepository;
+    private final FormFactory formFactory;
+    private final TaskRepository taskRepository;
 
     @Inject
     public TaskController(FormFactory formFactory, TaskRepository taskRepository) {

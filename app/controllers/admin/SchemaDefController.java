@@ -1,6 +1,7 @@
 package controllers.admin;
 
 import models.SchemaDef;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -14,8 +15,8 @@ import java.util.List;
  * @author fabiomazzone
  */
 public class SchemaDefController extends Controller {
-    private SchemaDefRepository schemaDefRepository;
-    private FormFactory formFactory;
+    private final SchemaDefRepository schemaDefRepository;
+    private final FormFactory formFactory;
 
     @Inject
     public SchemaDefController(FormFactory formFactory, SchemaDefRepository schemaDefRepository) {
@@ -30,7 +31,9 @@ public class SchemaDefController extends Controller {
 
     public Result show(Long id) {
         SchemaDef schemaDef = this.schemaDefRepository.getById(id);
+
         if(schemaDef != null) {
+            Logger.info(String.format("%"));
             return ok(views.html.schemaDefController.view.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
         }
         flash("status", "cannot find Schema with id " + id);

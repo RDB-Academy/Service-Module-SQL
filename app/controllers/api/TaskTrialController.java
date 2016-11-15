@@ -19,9 +19,9 @@ import java.util.List;
  * Created by invisible on 11/11/16.
  */
 public class TaskTrialController extends Controller {
-    private FormFactory formFactory;
-    private TaskTrialRepository taskTrialRepository;
-    private TaskRepository taskRepository;
+    private final FormFactory formFactory;
+    private final TaskTrialRepository taskTrialRepository;
+    private final TaskRepository taskRepository;
 
     @Inject
     public TaskTrialController(FormFactory formFactory, TaskTrialRepository taskTrialRepository, TaskRepository taskRepository){
