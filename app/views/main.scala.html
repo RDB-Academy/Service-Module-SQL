@@ -64,6 +64,18 @@
                     $(".clickable-row").click(function() {
                         window.location = $(this).data("href");
                     });
+                    $('a[data-method="delete"]').click( function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $.ajax({
+                            url: $(this).attr("href"),
+                            type: 'DELETE'
+                        }).done(function() {
+                            console.log('success');
+                        }).fail(function() {
+                            console.log('failed');
+                        });
+                    })
                 });
         </script>
     </body>

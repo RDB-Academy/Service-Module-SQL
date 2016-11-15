@@ -33,10 +33,10 @@ public class SchemaDefController extends Controller {
         SchemaDef schemaDef = this.schemaDefRepository.getById(id);
 
         if(schemaDef != null) {
-            Logger.info(String.format("%"));
             return ok(views.html.schemaDefController.view.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
         }
-        flash("status", "cannot find Schema with id " + id);
+
+        flash("notFound", "Schema with id " + id + " not found!");
         return redirect(routes.SchemaDefController.index());
     }
 
@@ -45,7 +45,7 @@ public class SchemaDefController extends Controller {
         if(schemaDef != null) {
             return ok(views.html.schemaDefController.edit.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
         }
-        flash("status", "cannot find Schema with id " + id);
+        flash("notFound", "Schema with id " + id + " not found!");
         return redirect(routes.SchemaDefController.index());
     }
 
@@ -58,5 +58,14 @@ public class SchemaDefController extends Controller {
         }
 
         return redirect(routes.SchemaDefController.show(2L));
+    }
+
+    public Result delete(Long id) {
+        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
+        Logger.info("Delete");
+        if(schemaDef == null) {
+            flash("notFound", "Schema with ID " + id + " not found!");
+        }
+        return redirect(routes.SchemaDefController.index());
     }
 }

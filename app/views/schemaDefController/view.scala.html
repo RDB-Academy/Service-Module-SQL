@@ -7,7 +7,12 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 5.5px;">View Schema</h4>
+                    <div class="pull-left">
+                        <h4 class="panel-title" style="padding-top: 5.5px;">
+                            <a href="@admin.routes.SchemaDefController.index()"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-right: 50px; color: dodgerblue"></span></a>
+                            View Schema
+                        </h4>
+                    </div>
                     <div class="btn-group pull-right">
                         <a href="@admin.routes.SchemaDefController.edit(schemaDefForm.get().getId)" type="button" class="btn btn-default btn-sm">Edit</a>
                     </div>
