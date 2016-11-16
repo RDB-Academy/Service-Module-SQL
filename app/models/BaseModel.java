@@ -34,7 +34,7 @@ abstract class BaseModel extends Model {
         return modifiedAt;
     }
 
-
+    @JsonIgnore
     public String getModifiedAtFromNow() {
         return formatter.DateFormatter.fromNow(this.modifiedAt);
     }
