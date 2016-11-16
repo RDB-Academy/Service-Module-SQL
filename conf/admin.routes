@@ -9,10 +9,13 @@ GET     /logout                 controllers.admin.SessionController.logout()
 
 
 GET     /schemadef              controllers.admin.SchemaDefController.index()
-GET     /schemadef/:id          controllers.admin.SchemaDefController.show(id: Long)
+GET     /schemadef/:id          controllers.admin.SchemaDefController.view(id: Long)
 GET     /schemadef/:id/edit     controllers.admin.SchemaDefController.edit(id: Long)
 POST    /schemadef/:id          controllers.admin.SchemaDefController.update(id: Long)
 DELETE  /schemadef/:id          controllers.admin.SchemaDefController.delete(id: Long)
+
+GET     /tabledef/:id           controllers.admin.TableDefController.view(id: Long)
+GET     /tabledef/:id/edit      controllers.admin.TableDefController.edit(id: Long)
 
 
 GET     /assets/lib/*file       controllers.Assets.at(path="/public/lib", file)

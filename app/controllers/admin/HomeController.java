@@ -11,6 +11,6 @@ import play.mvc.Security;
 @Security.Authenticated(Authenticated.class)
 public class HomeController extends Controller {
     public Result index() {
-        return ok(views.html.homeController.index.render());
+        return ok(views.html.admin.homeViews.index.render());
     }
 }

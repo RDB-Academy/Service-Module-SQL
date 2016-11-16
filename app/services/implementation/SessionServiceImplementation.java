@@ -1,5 +1,8 @@
 package services.implementation;
 
+import eu.bitwalker.useragentutils.Browser;
+import eu.bitwalker.useragentutils.OperatingSystem;
+import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
 import play.Logger;
@@ -9,6 +12,7 @@ import services.SessionService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Arrays;
 
 /**
  * @author fabiomazzone
@@ -38,6 +42,21 @@ public class SessionServiceImplementation implements SessionService {
         if(ctx.session().isDirty) {
             return null;
         }
+
+        UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
+        OperatingSystem os = userAgent.getOperatingSystem();
+        Browser browser = userAgent.getBrowser();
+        Logger.info(userAgent.toString());
+        Logger.info(os.getName());
+        Logger.info(browser.getName());
+        Logger.info(userAgent.getBrowserVersion().getVersion());
+
+        Logger.info(ctx.request().remoteAddress());
+        ctx.request().headers().forEach((k, v) -> {
+            Arrays.asList(v).forEach((value) -> {
+                Logger.info(k + " - " + value);
+            });
+        });
 
         String sessionId = ctx.session().get(SESSION_FIELD_NAME);
 

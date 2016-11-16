@@ -38,7 +38,7 @@ public class SessionController extends Controller{
             anyData.put("email", "test1@test.de");
             anyData.put("password", "password");
             loginForm = loginForm.bind(anyData);
-            return ok(views.html.sessionController.login.render(loginForm));
+            return ok(views.html.admin.sessionViews.login.render(loginForm));
         }
 
     }

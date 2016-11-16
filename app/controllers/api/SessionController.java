@@ -28,15 +28,16 @@ public class SessionController extends Controller {
 
     public Result authenticate() {
         Form<LoginForm> loginData = formFactory.form(LoginForm.class).bindFromRequest();
-        String adminPassword = configuration.getString("sqlModule.adminPassword");
+
         if (loginData.hasErrors()) {
             if (request().accepts(Http.MimeTypes.TEXT)) {
-                return badRequest(views.html.sessionController.login.render(loginData));
+                return badRequest(views.html.admin.sessionViews.login.render(loginData));
             }
             return badRequest(loginData.errorsAsJson());
         }
 
         LoginForm loginForm = loginData.get();
+        String adminPassword = configuration.getString("sqlModule.adminPassword");
 
         if (loginForm.getPassword().equals(adminPassword)) {
             sessionService.setSession(loginForm, ctx());
@@ -47,7 +48,7 @@ public class SessionController extends Controller {
         } else {
             loginData.reject("Wrong E-Mail or Password");
             if(request().accepts(Http.MimeTypes.TEXT)) {
-                return badRequest(views.html.sessionController.login.render(loginData));
+                return badRequest(views.html.admin.sessionViews.login.render(loginData));
             }
             return badRequest(loginData.errorsAsJson());
 

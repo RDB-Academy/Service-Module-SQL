@@ -15,7 +15,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <base href="/admin/">
         @* Here's where we render the page title `String`. *@
-        <title>@title</title>
+        <title>@title | SQL-Module </title>
         <link rel="stylesheet" media="screen" href="assets/lib/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" media="screen" href="assets/main.css">
     </head>
@@ -31,22 +31,22 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="@admin.routes.HomeController.index()">SQL Module</a>
+                        <a class="navbar-brand" href="@controllers.admin.routes.HomeController.index()">SQL Module</a>
                     } else {
-                        <a class="navbar-brand" href="@admin.routes.SessionController.login()">SQL Module</a>
+                        <a class="navbar-brand" href="@controllers.admin.routes.SessionController.login()">SQL Module</a>
                     }
                 </div>
                 @if(request.username()) {
                         <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li><a href="@admin.routes.SchemaDefController.index()">SchemaDef</a></li>
+                            <li><a href="@controllers.admin.routes.SchemaDefController.index()">SchemaDef</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><p class="navbar-text">Signed in as @request().username()</p></li>
                             <li>
                                 <div class="btn-nav">
-                                    <a href="@admin.routes.SessionController.logout()" class="btn btn-default navbar-btn btn-sm">Logout</a>
+                                    <a href="@controllers.admin.routes.SessionController.logout()" class="btn btn-danger navbar-btn btn-sm">Logout</a>
                                 </div>
                             </li>
                         </ul>

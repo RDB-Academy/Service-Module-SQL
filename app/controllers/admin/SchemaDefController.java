@@ -29,14 +29,14 @@ public class SchemaDefController extends Controller {
 
     public Result index() {
         List<SchemaDef> schemaDefList = this.schemaDefRepository.getAll();
-        return ok(views.html.schemaDefController.index.render(schemaDefList));
+        return ok(views.html.admin.schemaDefViews.index.render(schemaDefList));
     }
 
-    public Result show(Long id) {
+    public Result view(Long id) {
         SchemaDef schemaDef = this.schemaDefRepository.getById(id);
 
         if(schemaDef != null) {
-            return ok(views.html.schemaDefController.view.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
+            return ok(views.html.admin.schemaDefViews.view.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
         }
 
         flash("notFound", "Schema with id " + id + " not found!");
@@ -46,7 +46,7 @@ public class SchemaDefController extends Controller {
     public Result edit(Long id) {
         SchemaDef schemaDef = this.schemaDefRepository.getById(id);
         if(schemaDef != null) {
-            return ok(views.html.schemaDefController.edit.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
+            return ok(views.html.admin.schemaDefViews.edit.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
         }
         flash("notFound", "Schema with id " + id + " not found!");
         return redirect(routes.SchemaDefController.index());
@@ -57,10 +57,10 @@ public class SchemaDefController extends Controller {
         Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class).bindFromRequest();
 
         if(schemaDefForm.hasErrors()) {
-            return badRequest(views.html.schemaDefController.edit.render(schemaDefForm));
+            return badRequest(views.html.admin.schemaDefViews.edit.render(schemaDefForm));
         }
 
-        return redirect(routes.SchemaDefController.show(2L));
+        return redirect(routes.SchemaDefController.view(id));
     }
 
     public Result delete(Long id) {

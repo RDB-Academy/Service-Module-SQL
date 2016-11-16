@@ -3,31 +3,39 @@ package models;
 import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.WhenCreated;
 import com.avaje.ebean.annotation.WhenModified;
-import play.data.format.Formats;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * @author fabiomazzone
  */
 @MappedSuperclass
 abstract class BaseModel extends Model {
-    @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(updatable = false)
     @WhenCreated
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
-    @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
     @WhenModified
-    private Timestamp modifiedAt;
+    private LocalDateTime modifiedAt;
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public Timestamp getModifiedAt() {
+    @JsonIgnore
+    public String getCreatedAtFromNow() {
+        return formatter.DateFormatter.fromNow(this.createdAt);
+    }
+
+    public LocalDateTime getModifiedAt() {
         return modifiedAt;
+    }
+
+
+    public String getModifiedAtFromNow() {
+        return formatter.DateFormatter.fromNow(this.modifiedAt);
     }
 }

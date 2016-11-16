@@ -18,5 +18,6 @@ libraryDependencies ++= Seq(
   javaJdbc,
   cache,
   javaWs,
-  "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3"
+  "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3",
+  "eu.bitwalker" % "UserAgentUtils" % "1.20"
 )
