@@ -60,7 +60,7 @@ public class ColumnDef extends BaseModel {
         this.dataType = datatype;
     }
 
-    public boolean isPrimary() {
+    public boolean getIsPrimary() {
         return isPrimary;
     }
 
@@ -68,7 +68,7 @@ public class ColumnDef extends BaseModel {
         isPrimary = primary;
     }
 
-    public boolean isNullable() {
+    public boolean getIsNullable() {
         return isNullable;
     }
 

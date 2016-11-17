@@ -3,13 +3,26 @@
 
 @main("View Schemata") {
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                Schemata
-            </h4>
+        <div class="panel-heading clearfix">
+            <div class="pull-left">
+                <h4 class="panel-title" style="padding-top: 5.5px;">
+                    Schemata
+                </h4>
+            </div>
+
+            <div class="btn-toolbar pull-right">
+                <div class="btn-group">
+                    <a href="@controllers.admin.routes.SchemaDefController.createViaJSON()" class="btn btn-default btn-sm">Create new via JSON</a>
+                </div>
+                <div class="btn-group">
+                    <a href="@controllers.admin.routes.SchemaDefController.createStepByStep()" class="btn btn-default btn-sm">Create new step-by-step</a>
+                </div>
+            </div>
+
+                <!--(at)controllers.admin.routes.SessionController.logout()-->
         </div>
         @if(schemaDefList.isEmpty) {
-
+            <div>There are no schemas, yet.</div>
         } else {
             <table class="table table-striped table-hover">
                 <thead>

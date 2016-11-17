@@ -3,7 +3,9 @@ package initializers;
 import models.ColumnDef;
 import models.SchemaDef;
 import models.TableDef;
+import repository.TaskRepository;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +14,12 @@ import java.util.List;
  */
 class SchemaDefs {
 
-    static void initDev() {
+    static void initDev(TaskRepository taskRepository) {
 
         /**
          * Schema with User and Location
          * */
+
 
         SchemaDef users_schema = new SchemaDef();
         users_schema.setName("Users");
@@ -63,7 +66,13 @@ class SchemaDefs {
         description.setPrimary(false);
         description.setNullable(true);
         description.save();
-        
+
+
+        taskRepository.getAll().forEach(task -> {
+            task.setSchemaDef(users_schema);
+            taskRepository.save(task);
+        });
+
         /**
          * Schema Bookstore
          *

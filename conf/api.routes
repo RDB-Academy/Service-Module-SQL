@@ -15,5 +15,23 @@ GET     /tasktrials/:id             controllers.api.TaskTrialController.show(id:
 PATCH   /tasktrials/:id             controllers.api.TaskTrialController.submit(id: Long)
 DELETE  /tasktrials/:id             controllers.api.TaskTrialController.delete(id: Long)
 
+## model.SchemaDef
+POST    /schemas                 controllers.api.SchemaDefController.create()
+GET     /schemas                 controllers.api.SchemaDefController.view()
+GET     /schemas/:id             controllers.api.SchemaDefController.show(id: Long)
+PATCH   /schemas/:id             controllers.api.SchemaDefController.patch(id: Long)
+DELETE  /schemas/:id             controllers.api.SchemaDefController.delete(id: Long)
 
+## model.TableDef
+POST    /tables                 controllers.api.TableDefController.create()
+GET     /tables                 controllers.api.TableDefController.view()
+GET     /tables/:id             controllers.api.TableDefController.show(id: Long)
+PATCH   /tables/:id             controllers.api.TableDefController.patch(id: Long)
+DELETE  /tables/:id             controllers.api.TableDefController.delete(id: Long)
+
+## model.ColumnDef
+GET     /columns/:id             controllers.api.ColumnDefController.show(id: Long)
+
+## Stop from General Redirecting
 GET     /*file                      controllers.HomeController.notFoundView(file: String)
+

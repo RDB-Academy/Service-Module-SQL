@@ -17,6 +17,7 @@ public class TaskTrial extends BaseModel {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     private Task task;
 
     @JsonIgnore
@@ -26,17 +27,14 @@ public class TaskTrial extends BaseModel {
 
     private boolean isCorrect;
 
-    @JsonIgnore
     private Date beginDate;
 
-    @JsonIgnore
     private Date submitDate;
 
     public Long getId() {
         return id;
     }
 
-    @JsonIgnore
     public Task getTask() {
         return task;
     }
@@ -66,10 +64,6 @@ public class TaskTrial extends BaseModel {
         this.userStatement = userStatement;
     }
 
-    public boolean isCorrect() {
-        return isCorrect;
-    }
-
     public void setIsCorrect(boolean correct) {
         isCorrect = correct;
     }
@@ -93,4 +87,5 @@ public class TaskTrial extends BaseModel {
     public void setSubmitDate(Date submitDate) {
         this.submitDate = submitDate;
     }
+
 }
