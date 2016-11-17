@@ -1,12 +1,15 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author fabiomazzone
@@ -19,6 +22,7 @@ public class SchemaDef extends BaseModel {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
+    @JsonIgnore
     private List<TableDef> tableDefList;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
@@ -50,5 +54,10 @@ public class SchemaDef extends BaseModel {
 
     public void setForeignKeyList(List<ForeignKey> foreignKeyList) {
         this.foreignKeyList = foreignKeyList;
+    }
+
+    @JsonGetter("tables")
+    public List<Long> getTableIds() {
+        return this.getTableDefList().stream().map(tableDef -> tableDef.getId()).collect(Collectors.toList());
     }
 }

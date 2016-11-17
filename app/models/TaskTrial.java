@@ -66,10 +66,6 @@ public class TaskTrial extends BaseModel {
         this.userStatement = userStatement;
     }
 
-    public boolean isCorrect() {
-        return isCorrect;
-    }
-
     public void setIsCorrect(boolean correct) {
         isCorrect = correct;
     }
@@ -93,4 +89,5 @@ public class TaskTrial extends BaseModel {
     public void setSubmitDate(Date submitDate) {
         this.submitDate = submitDate;
     }
+
 }

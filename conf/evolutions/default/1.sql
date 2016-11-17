@@ -64,6 +64,7 @@ create table table_def (
 create table task (
   id                            bigint auto_increment not null,
   text                          varchar(255),
+  name                          varchar(255),
   reference_statement           varchar(255),
   schema_def_id                 bigint,
   created_at                    timestamp not null,

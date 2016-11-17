@@ -1,22 +1,25 @@
 package controllers.api;
 
 import models.SchemaDef;
+import models.TableDef;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import repository.SchemaDefRepository;
+import repository.TableDefRepository;
 
 import javax.inject.Inject;
 
 /**
- * @author fabiomazzone
+ * Created by invisible on 11/17/16.
  */
-public class SchemaDefController extends Controller {
-    private SchemaDefRepository schemaDefRepository;
+public class TableDefController extends Controller {
+
+    private TableDefRepository tableDefRepository;
 
     @Inject
-    public SchemaDefController(SchemaDefRepository schemaDefRepository) {
-        this.schemaDefRepository = schemaDefRepository;
+    public TableDefController(TableDefRepository tableDefRepository) {
+        this.tableDefRepository = tableDefRepository;
     }
 
     public Result create() {
@@ -28,11 +31,11 @@ public class SchemaDefController extends Controller {
     }
 
     public Result show(long id) {
-        SchemaDef schemaDef = schemaDefRepository.getById(id);
-        if(schemaDef == null) {
+        TableDef tableDef = tableDefRepository.getById(id);
+        if(tableDef == null) {
             return notFound();
         }
-        return ok(Json.toJson(schemaDef));
+        return ok(Json.toJson(tableDef));
     }
 
     public Result patch(long id) {
@@ -42,5 +45,4 @@ public class SchemaDefController extends Controller {
     public Result delete(long id) {
         return TODO;
     }
-
 }

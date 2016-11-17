@@ -1,8 +1,12 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author fabiomazzone
@@ -16,9 +20,11 @@ public class TableDef extends BaseModel {
     private String name;
 
     @ManyToOne(optional = false)
+    @JsonIgnore
     private SchemaDef schemaDef;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableDef")
+    @JsonIgnore
     private List<ColumnDef> columnDefList;
 
     public long getId() {
@@ -47,5 +53,15 @@ public class TableDef extends BaseModel {
 
     public void setColumnDefList(List<ColumnDef> columnDefList) {
         this.columnDefList = columnDefList;
+    }
+
+    @JsonGetter("schema")
+    public long getSchemaDefId(){
+        return this.getSchemaDef().getId();
+    }
+
+    @JsonGetter("columns")
+    public List<Long> getColumnDefIds() {
+        return this.getColumnDefList().stream().map(col -> col.getId()).collect(Collectors.toList());
     }
 }
