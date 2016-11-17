@@ -1,0 +1,20 @@
+@main("Create Schema Via JSON") {
+  <div class="panel panel-default">
+      <div class="panel-heading clearfix">
+          <div class="pull-left">
+              <h4 class="panel-title">
+                  <a href="@controllers.admin.routes.SchemaDefController.index"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-right: 50px; color: dodgerblue"></span></a>
+                  Create new Schema
+              </h4>
+          </div>
+      </div>
+      <div class="panel-body">
+          <form action="@controllers.admin.routes.SchemaDefController.submitJSON" method="post">
+              <textarea class="form-control" rows="20" cols="200" placeholder="Insert JSON-schema here!"></textarea>
+              <div class="btn-group pull-right" style="padding-top: 10px;">
+                  <button type="submit" class="btn btn-success btn-md">Create</button>
+              </div>
+          </form>
+      </div>
+  </div>
+}

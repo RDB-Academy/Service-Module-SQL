@@ -71,4 +71,21 @@ public class SchemaDefController extends Controller {
         }
         return redirect(routes.SchemaDefController.index());
     }
+
+    public Result createViaJSON() {
+        Logger.info("Create SchemaViaJSON view");
+        return ok(views.html.admin.schemaDefViews.createviaJSON.render());
+    }
+
+    public Result submitJSON() {
+        Logger.info("submit JSON");
+        return redirect(routes.SchemaDefController.index());
+    }
+
+    public Result createStepByStep() {
+        Logger.info("Create StepByStep view");
+        return ok(views.html.admin.schemaDefViews.createStepByStep.render());
+    }
+
+
 }
