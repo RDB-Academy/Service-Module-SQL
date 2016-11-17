@@ -31,3 +31,7 @@ DELETE  /tables/:id             controllers.api.TableDefController.delete(id: Lo
 
 ## model.ColumnDef
 GET     /columns/:id             controllers.api.ColumnDefController.show(id: Long)
+
+## Stop from General Redirecting
+GET     /*file                      controllers.HomeController.notFoundView(file: String)
+

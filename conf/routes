@@ -5,6 +5,8 @@
 
 # Test Routes
 GET     /test/                      controllers.TestController.test()
+GET     /parserCreate/              controllers.TestController.parserCreate()
+GET     /parserDelete/              controllers.TestController.parserDelete()
 
 # Admin
 ->      /admin                      admin.Routes

@@ -18,4 +18,8 @@ public class HomeController extends Controller {
         }
         return ok(new File("public/dist/index.html"));
     }
+
+    public Result notFoundView(String file) {
+        return notFound();
+    }
 }
