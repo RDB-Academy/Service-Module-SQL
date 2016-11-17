@@ -12,7 +12,13 @@ loadEmberProject := {
   Seq("sh", "loadEmberProject.sh")!
 }
 
-run in Compile <<= (run in Compile).dependsOn(loadEmberProject)
+lazy val dev = taskKey[Unit]("Bla")
+
+dev := {
+  println("Run Activator with FrontEnd")
+  loadEmberProject.value
+}
+
 
 libraryDependencies ++= Seq(
   javaJdbc,

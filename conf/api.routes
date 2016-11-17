@@ -14,3 +14,6 @@ GET     /tasktrials                 controllers.api.TaskTrialController.view()
 GET     /tasktrials/:id             controllers.api.TaskTrialController.show(id: Long)
 PATCH   /tasktrials/:id             controllers.api.TaskTrialController.submit(id: Long)
 DELETE  /tasktrials/:id             controllers.api.TaskTrialController.delete(id: Long)
+
+
+GET     /*file                      controllers.HomeController.notFoundView(file: String)
