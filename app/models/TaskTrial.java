@@ -17,6 +17,7 @@ public class TaskTrial extends BaseModel {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     private Task task;
 
     @JsonIgnore
@@ -26,17 +27,14 @@ public class TaskTrial extends BaseModel {
 
     private boolean isCorrect;
 
-    @JsonIgnore
     private Date beginDate;
 
-    @JsonIgnore
     private Date submitDate;
 
     public Long getId() {
         return id;
     }
 
-    @JsonIgnore
     public Task getTask() {
         return task;
     }

@@ -59,6 +59,7 @@ public class TaskTrialController extends Controller {
     }
 
     public Result submit(long id) {
+        Logger.info(request().body().asJson().toString());
         TaskTrial taskTrial = taskTrialRepository.getById(id);
         TaskTrial taskTrialSubmitted = Json.fromJson(request().body().asJson(), TaskTrial.class);
 
