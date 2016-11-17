@@ -1,7 +1,5 @@
 package services.implementation;
 
-import eu.bitwalker.useragentutils.Browser;
-import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
@@ -12,7 +10,6 @@ import services.SessionService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Arrays;
 
 /**
  * @author fabiomazzone
@@ -30,37 +27,39 @@ public class SessionServiceImplementation implements SessionService {
     public void setSession(LoginForm loginForm, Http.Context ctx) {
         Session session = new Session();
         session.setUserName("admin");
+
+        UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
+        String connectedData = userAgent.toString() + ctx.request().remoteAddress();
+
+        session.setConnectionInfo(connectedData.hashCode());
+
         session.save();
 
+        Logger.info("SessionID: " + session.getId());
         ctx.session().put(SESSION_FIELD_NAME, session.getId());
-
-        Logger.info("SessionID" + session.getId());
     }
 
     @Override
     public Session getSession(Http.Context ctx) {
-        if(ctx.session().isDirty) {
+        String sessionId = ctx.session().get(SESSION_FIELD_NAME);
+
+        if (sessionId == null || sessionId.isEmpty()) {
+            return null;
+        }
+
+        Session session = sessionRepository.getById(sessionId);
+
+        if (session == null) {
             return null;
         }
 
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
-        OperatingSystem os = userAgent.getOperatingSystem();
-        Browser browser = userAgent.getBrowser();
-        Logger.info(userAgent.toString());
-        Logger.info(os.getName());
-        Logger.info(browser.getName());
-        Logger.info(userAgent.getBrowserVersion().getVersion());
+        String connectedData = userAgent.toString() + ctx.request().remoteAddress();
+        if( session.getConnectionInfo() == connectedData.hashCode() ) {
+            return session;
+        }
 
-        Logger.info(ctx.request().remoteAddress());
-        ctx.request().headers().forEach((k, v) -> {
-            Arrays.asList(v).forEach((value) -> {
-                Logger.info(k + " - " + value);
-            });
-        });
-
-        String sessionId = ctx.session().get(SESSION_FIELD_NAME);
-
-        return (sessionId != null && !sessionId.isEmpty()) ? sessionRepository.getById(sessionId) : null;
+        return null;
     }
 
     @Override

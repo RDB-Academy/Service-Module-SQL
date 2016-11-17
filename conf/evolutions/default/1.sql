@@ -47,6 +47,7 @@ create table session (
   id                            varchar(255) not null,
   user_id                       bigint,
   user_name                     varchar(255),
+  connection_info               integer,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_session primary key (id)

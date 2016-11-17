@@ -15,6 +15,7 @@ public class Session extends BaseModel {
     private Long userId;
 
     private String userName;
+    private int connectionInfo;
 
     public Session() {
         this.id = UUID.randomUUID().toString();
@@ -38,5 +39,13 @@ public class Session extends BaseModel {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public void setConnectionInfo(int connectionInfo) {
+        this.connectionInfo = connectionInfo;
+    }
+
+    public int getConnectionInfo() {
+        return connectionInfo;
     }
 }
