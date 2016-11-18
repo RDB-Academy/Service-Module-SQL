@@ -9,13 +9,13 @@ GET     /logout                 controllers.admin.SessionController.logout()
 
 
 GET     /schemadef              controllers.admin.SchemaDefController.index()
-GET     /schemadef/createjson   controllers.admin.SchemaDefController.createViaJSON()
-POST    /schemadef/createjson   controllers.admin.SchemaDefController.submitJSON()
-GET     /schemadef/createsteps  controllers.admin.SchemaDefController.createStepByStep()
+POST    /schemadef              controllers.admin.SchemaDefController.newSchema()
+GET     /schemadef/new/form     controllers.admin.SchemaDefController.createForm()
+GET     /schemadef/new/json     controllers.admin.SchemaDefController.createJson()
 
 GET     /schemadef/:id          controllers.admin.SchemaDefController.view(id: Long)
 GET     /schemadef/:id/edit     controllers.admin.SchemaDefController.edit(id: Long)
-POST    /schemadef/:id          controllers.admin.SchemaDefController.update(id: Long)
+PATCH   /schemadef/:id          controllers.admin.SchemaDefController.update(id: Long)
 DELETE  /schemadef/:id          controllers.admin.SchemaDefController.delete(id: Long)
 
 

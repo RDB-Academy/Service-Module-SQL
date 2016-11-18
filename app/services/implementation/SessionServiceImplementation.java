@@ -35,7 +35,6 @@ public class SessionServiceImplementation implements SessionService {
 
         session.save();
 
-        Logger.info("SessionID: " + session.getId());
         ctx.session().put(SESSION_FIELD_NAME, session.getId());
     }
 

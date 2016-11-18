@@ -16,12 +16,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by invisible on 11/11/16.
+ * @author invisible
  */
 public class TaskTrialController extends Controller {
     private final FormFactory formFactory;
     private final TaskTrialRepository taskTrialRepository;
     private final TaskRepository taskRepository;
+    //private final
 
     @Inject
     public TaskTrialController(FormFactory formFactory, TaskTrialRepository taskTrialRepository, TaskRepository taskRepository){
@@ -58,7 +59,7 @@ public class TaskTrialController extends Controller {
         return ok(Json.toJson(taskTrial));
     }
 
-    public Result submit(long id) {
+    public Result update(long id) {
         Logger.info(request().body().asJson().toString());
         TaskTrial taskTrial = taskTrialRepository.getById(id);
         TaskTrial taskTrialSubmitted = Json.fromJson(request().body().asJson(), TaskTrial.class);

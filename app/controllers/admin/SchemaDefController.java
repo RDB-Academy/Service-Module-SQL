@@ -27,6 +27,21 @@ public class SchemaDefController extends Controller {
         this.formFactory = formFactory;
     }
 
+    public Result createJson() {
+        Logger.info("Create SchemaViaJSON view");
+        return ok(views.html.admin.schemaDefViews.createJson.render());
+    }
+
+    public Result createForm() {
+        Logger.info("Create SchemaViaJSON view");
+        return ok(views.html.admin.schemaDefViews.createForm.render(formFactory.form(SchemaDef.class)));
+    }
+
+    public Result newSchema() {
+        Logger.info("submit JSON");
+        return redirect(routes.SchemaDefController.index());
+    }
+
     public Result index() {
         List<SchemaDef> schemaDefList = this.schemaDefRepository.getAll();
         return ok(views.html.admin.schemaDefViews.index.render(schemaDefList));
@@ -52,6 +67,7 @@ public class SchemaDefController extends Controller {
         return redirect(routes.SchemaDefController.index());
     }
 
+
     public Result update(Long id) {
         SchemaDef schemaDef = this.schemaDefRepository.getById(id);
         Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class).bindFromRequest();
@@ -71,21 +87,4 @@ public class SchemaDefController extends Controller {
         }
         return redirect(routes.SchemaDefController.index());
     }
-
-    public Result createViaJSON() {
-        Logger.info("Create SchemaViaJSON view");
-        return ok(views.html.admin.schemaDefViews.createviaJSON.render());
-    }
-
-    public Result submitJSON() {
-        Logger.info("submit JSON");
-        return redirect(routes.SchemaDefController.index());
-    }
-
-    public Result createStepByStep() {
-        Logger.info("Create StepByStep view");
-        return ok(views.html.admin.schemaDefViews.createStepByStep.render());
-    }
-
-
 }
