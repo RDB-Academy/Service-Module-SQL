@@ -10,8 +10,8 @@ GET     /logout                 controllers.admin.SessionController.logout()
 
 GET     /schemadef              controllers.admin.SchemaDefController.index()
 POST    /schemadef              controllers.admin.SchemaDefController.newSchema()
-GET     /schemadef/new/form     controllers.admin.SchemaDefController.createForm()
-GET     /schemadef/new/json     controllers.admin.SchemaDefController.createJson()
+GET     /schemadef/new.form     controllers.admin.SchemaDefController.createForm()
+GET     /schemadef/new.json     controllers.admin.SchemaDefController.createJson()
 
 GET     /schemadef/:id          controllers.admin.SchemaDefController.view(id: Long)
 GET     /schemadef/:id/edit     controllers.admin.SchemaDefController.edit(id: Long)
