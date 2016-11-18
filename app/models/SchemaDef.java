@@ -1,13 +1,10 @@
 package models;
 
-import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,14 +16,20 @@ public class SchemaDef extends BaseModel {
     @Id
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
     @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
     private List<TableDef> tableDefList;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
     private List<ForeignKey> foreignKeyList;
+
+// *********************************************************************************************************************
+// * Getter & Setter
+// *********************************************************************************************************************
 
     public Long getId() {
         return id;
@@ -48,6 +51,15 @@ public class SchemaDef extends BaseModel {
         this.tableDefList = tableDefList;
     }
 
+    public void addTableDef(TableDef tableDef) {
+        if (this.tableDefList == null) {
+            this.tableDefList = new ArrayList<>();
+        }
+        if(!tableDefList.contains(tableDef)) {
+            this.tableDefList.add(tableDef);
+        }
+    }
+
     public List<ForeignKey> getForeignKeyList() {
         return foreignKeyList;
     }
@@ -56,8 +68,17 @@ public class SchemaDef extends BaseModel {
         this.foreignKeyList = foreignKeyList;
     }
 
-    @JsonGetter("tables")
+    public void addForeignKey(ForeignKey foreignKey) {
+        if (this.foreignKeyList == null) {
+            this.foreignKeyList = new ArrayList<>();
+        }
+        if (!this.foreignKeyList.contains(foreignKey)) {
+            this.foreignKeyList.add(foreignKey);
+        }
+    }
+
+    @JsonGetter("tableDef")
     public List<Long> getTableIds() {
-        return this.getTableDefList().stream().map(tableDef -> tableDef.getId()).collect(Collectors.toList());
+        return this.getTableDefList().stream().map(TableDef::getId).collect(Collectors.toList());
     }
 }

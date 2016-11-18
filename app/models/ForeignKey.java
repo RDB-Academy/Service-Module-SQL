@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,5 +48,15 @@ public class ForeignKey extends BaseModel {
 
     public void setForeignKeyRelationList(List<ForeignKeyRelation> foreignKeyRelationList) {
         this.foreignKeyRelationList = foreignKeyRelationList;
+    }
+
+    public void addForeignKeyRelation(ForeignKeyRelation foreignKeyRelation) {
+        if (this.foreignKeyRelationList == null) {
+            this.foreignKeyRelationList = new ArrayList<>();
+        }
+
+        if(!this.foreignKeyRelationList.contains(foreignKeyRelation)) {
+            this.foreignKeyRelationList.add(foreignKeyRelation);
+        }
     }
 }

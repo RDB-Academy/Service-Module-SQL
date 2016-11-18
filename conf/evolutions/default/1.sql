@@ -40,6 +40,7 @@ create table schema_def (
   name                          varchar(255),
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
+  constraint uq_schema_def_name unique (name),
   constraint pk_schema_def primary key (id)
 );
 

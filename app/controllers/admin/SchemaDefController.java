@@ -76,6 +76,8 @@ public class SchemaDefController extends Controller {
             return badRequest(views.html.admin.schemaDefViews.edit.render(schemaDefForm));
         }
 
+        System.out.println(ctx().request().queryString());
+
         return redirect(routes.SchemaDefController.view(id));
     }
 

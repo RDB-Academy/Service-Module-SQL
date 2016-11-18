@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,16 @@ public class TableDef extends BaseModel {
         this.columnDefList = columnDefList;
     }
 
+    public void addColumnDef(ColumnDef columnDef) {
+        if (this.columnDefList == null) {
+            this.columnDefList = new ArrayList<>();
+        }
+
+        if(!this.columnDefList.contains(columnDef)) {
+            this.columnDefList.add(columnDef);
+        }
+    }
+
     @JsonGetter("schema")
     public long getSchemaDefId(){
         return this.getSchemaDef().getId();
@@ -62,6 +73,6 @@ public class TableDef extends BaseModel {
 
     @JsonGetter("columns")
     public List<Long> getColumnDefIds() {
-        return this.getColumnDefList().stream().map(col -> col.getId()).collect(Collectors.toList());
+        return this.getColumnDefList().stream().map(ColumnDef::getId).collect(Collectors.toList());
     }
 }

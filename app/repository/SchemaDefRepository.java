@@ -15,4 +15,6 @@ public abstract class SchemaDefRepository implements Repository<SchemaDef> {
     public void save(SchemaDef schemaDef) {
         schemaDef.save();
     }
+
+    public abstract SchemaDef getByName(String name);
 }

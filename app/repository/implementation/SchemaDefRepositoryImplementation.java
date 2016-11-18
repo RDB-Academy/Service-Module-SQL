@@ -20,4 +20,9 @@ public class SchemaDefRepositoryImplementation extends SchemaDefRepository {
     public SchemaDef getById(Long id) {
         return this.find.byId(id);
     }
+
+    @Override
+    public SchemaDef getByName(String name) {
+        return this.find.where().eq("name", name).findUnique();
+    }
 }

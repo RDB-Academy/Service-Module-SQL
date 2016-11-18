@@ -22,6 +22,7 @@ GET     /schemas/:id             controllers.api.SchemaDefController.show(id: Lo
 PATCH   /schemas/:id             controllers.api.SchemaDefController.patch(id: Long)
 DELETE  /schemas/:id             controllers.api.SchemaDefController.delete(id: Long)
 
+
 ## model.TableDef
 POST    /tables                 controllers.api.TableDefController.create()
 GET     /tables                 controllers.api.TableDefController.view()
