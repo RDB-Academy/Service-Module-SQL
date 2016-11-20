@@ -26,6 +26,12 @@ public class ColumnDef extends BaseModel {
     @NotNull
     private boolean isNullable = true;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sourceColumn")
+    private List<ForeignKeyRelation> foreignKeyRelationsSource;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "targetColumn")
+    private List<ForeignKeyRelation> foreignKeyRelationsTarget;
+
     private int metaValueSet;
 
     private static final int META_VALUE_SET_FIRSTNAME = 8;
@@ -65,6 +71,9 @@ public class ColumnDef extends BaseModel {
     }
 
     public void setPrimary(boolean primary) {
+        if(primary) {
+            this.setNullable(false);
+        }
         isPrimary = primary;
     }
 

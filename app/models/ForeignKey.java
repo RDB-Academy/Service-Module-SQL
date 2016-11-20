@@ -5,22 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by invisible on 11/10/16.
+ * @author invisible
  */
 @Entity
 public class ForeignKey extends BaseModel {
     @Id
-    private
-    Long id;
+    private Long id;
 
     private String name;
 
     @ManyToOne
-    private
-    SchemaDef schemaDef;
+    private SchemaDef schemaDef;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "foreignKey")
-    private
-    List<ForeignKeyRelation> foreignKeyRelationList;
+    private List<ForeignKeyRelation> foreignKeyRelationList;
 
     public long getId() {
         return id;

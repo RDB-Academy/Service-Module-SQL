@@ -27,6 +27,10 @@ public class SchemaDef extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
     private List<ForeignKey> foreignKeyList;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
+    private List<Task> taskList;
+
 // *********************************************************************************************************************
 // * Getter & Setter
 // *********************************************************************************************************************
@@ -47,10 +51,6 @@ public class SchemaDef extends BaseModel {
         return tableDefList;
     }
 
-    public void setTableDefList(List<TableDef> tableDefList) {
-        this.tableDefList = tableDefList;
-    }
-
     public void addTableDef(TableDef tableDef) {
         if (this.tableDefList == null) {
             this.tableDefList = new ArrayList<>();
@@ -62,10 +62,6 @@ public class SchemaDef extends BaseModel {
 
     public List<ForeignKey> getForeignKeyList() {
         return foreignKeyList;
-    }
-
-    public void setForeignKeyList(List<ForeignKey> foreignKeyList) {
-        this.foreignKeyList = foreignKeyList;
     }
 
     public void addForeignKey(ForeignKey foreignKey) {
@@ -80,5 +76,16 @@ public class SchemaDef extends BaseModel {
     @JsonGetter("tableDef")
     public List<Long> getTableIds() {
         return this.getTableDefList().stream().map(TableDef::getId).collect(Collectors.toList());
+    }
+
+    public List<Task> getTaskList() {
+        return taskList;
+    }
+
+    public void addTask(List<Task> tasks) {
+        if(this.taskList == null) {
+            this.taskList = new ArrayList<>();
+        }
+        this.taskList.addAll(tasks);
     }
 }

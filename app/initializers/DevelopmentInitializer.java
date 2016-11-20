@@ -1,39 +1,39 @@
 package initializers;
 
-import com.avaje.ebean.Model;
+import initializers.schemaBuilders.HeroSchemaBuilder;
 import models.*;
 import repository.SchemaDefRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Singleton
-public class DevelopmentInitializer {
+class DevelopmentInitializer {
     private SchemaDefRepository schemaDefRepository;
-    private List<SchemaDef> schemaDefList;
+    private List<SchemaDef> storedSchemaDefList;
 
     @Inject
     public DevelopmentInitializer(SchemaDefRepository schemaDefRepository) {
         this.schemaDefRepository = schemaDefRepository;
-        this.schemaDefList = this.schemaDefRepository.getAll();
+        this.storedSchemaDefList = this.schemaDefRepository.getAll();
         this.init();
     }
-
-
+    
     private void init() {
-        List<SchemaDef> schemaDefs = new ArrayList<>();
-        List<SchemaBuilder> schemaBuilders = new ArrayList<>();
+        List<SchemaBuilder> schemaBuilders = Collections.singletonList(
+                new HeroSchemaBuilder()
+        );
 
-        schemaBuilders.parallelStream().forEach(schemaBuilder -> {
-            if (!schemaBuilder.schemaExist(schemaDefs)) {
-                schemaDefList.add(schemaBuilder.buildSchema());
-            }
-        });
+        List<SchemaDef> schemaDefList = schemaBuilders.parallelStream()
+                .filter(x -> !x.schemaExist(this.storedSchemaDefList))
+                .map(SchemaBuilder::buildSchema)
+                .collect(Collectors.toList());
 
-
-        schemaDefs.forEach(Model::save);
+        schemaDefList.parallelStream()
+                .forEach(this.schemaDefRepository::save);
     }
 }
 

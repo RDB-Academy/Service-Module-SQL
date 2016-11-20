@@ -21,20 +21,20 @@ abstract class BaseModel extends Model {
     @WhenModified
     private LocalDateTime modifiedAt;
 
+    @JsonIgnore
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    @JsonIgnore
     public String getCreatedAtFromNow() {
         return formatter.DateFormatter.fromNow(this.createdAt);
     }
 
+    @JsonIgnore
     public LocalDateTime getModifiedAt() {
         return modifiedAt;
     }
 
-    @JsonIgnore
     public String getModifiedAtFromNow() {
         return formatter.DateFormatter.fromNow(this.modifiedAt);
     }

@@ -20,12 +20,12 @@ public class TableDef extends BaseModel {
     @NotNull
     private String name;
 
-    @ManyToOne(optional = false)
     @JsonIgnore
+    @ManyToOne(optional = false)
     private SchemaDef schemaDef;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableDef")
     @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableDef")
     private List<ColumnDef> columnDefList;
 
     public long getId() {

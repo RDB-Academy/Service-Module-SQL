@@ -65,10 +65,10 @@ create table table_def (
 
 create table task (
   id                            bigint auto_increment not null,
-  text                          varchar(255),
+  schema_def_id                 bigint not null,
   name                          varchar(255),
+  text                          varchar(255),
   reference_statement           varchar(255),
-  schema_def_id                 bigint,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_task primary key (id)

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import play.data.validation.Constraints;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 /**
  * @author fabiomazzone
@@ -17,18 +17,19 @@ public class Task extends BaseModel{
     @Id
     private Long id;
 
-    @Constraints.Required
-    private String text;
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    private SchemaDef schemaDef;
 
+    @Constraints.Required
     private String name;
 
     @Constraints.Required
-    @JsonIgnore
-    private String referenceStatement;
+    private String text;
 
-    @ManyToOne
     @JsonIgnore
-    private SchemaDef schemaDef;
+    @Constraints.Required
+    private String referenceStatement;
 
     public Long getId() {
         return id;
