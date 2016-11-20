@@ -40,7 +40,7 @@
                         <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li><a href="@controllers.admin.routes.SchemaDefController.index()">SchemaDef</a></li>
+                            <li><a href="@controllers.admin.routes.SchemaDefController.list()">SchemaDef</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><p class="navbar-text">Signed in as @request().username()</p></li>
@@ -69,14 +69,16 @@
                     $('a[data-method="delete"]').click( function (e) {
                         e.preventDefault();
                         e.stopPropagation();
-                        $.ajax({
-                            url: $(this).attr("href"),
-                            type: 'DELETE'
-                        }).done(function() {
-                            console.log('success');
-                        }).fail(function() {
-                            console.log('failed');
-                        });
+                        if(confirm($(this).attr("date-confirm"))) {
+                            $.ajax({
+                                url: $(this).attr("href"),
+                                type: 'DELETE'
+                            }).done(function(data) {
+                                window.location.reload();
+                            }).fail(function() {
+                                console.log('failed');
+                            });
+                        }
                     })
                 });
         </script>

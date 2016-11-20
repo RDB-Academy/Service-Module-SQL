@@ -2,13 +2,14 @@ package controllers.admin;
 
 import authenticators.Authenticated;
 import models.SchemaDef;
-import play.Logger;
+import models.TableDef;
 import play.data.Form;
-import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import repository.SchemaDefRepository;
+import services.SchemaDefService;
+import services.tools.ServiceError;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -18,75 +19,91 @@ import java.util.List;
  */
 @Security.Authenticated(Authenticated.class)
 public class SchemaDefController extends Controller {
-    private final SchemaDefRepository schemaDefRepository;
-    private final FormFactory formFactory;
+    private final SchemaDefService schemaDefService;
 
     @Inject
-    public SchemaDefController(FormFactory formFactory, SchemaDefRepository schemaDefRepository) {
-        this.schemaDefRepository = schemaDefRepository;
-        this.formFactory = formFactory;
+    public SchemaDefController(
+            SchemaDefService schemaDefService,
+            SchemaDefRepository schemaDefRepository) {
+
+        this.schemaDefService = schemaDefService;
     }
 
-    public Result createJson() {
-        Logger.info("Create SchemaViaJSON view");
-        return ok(views.html.admin.schemaDefViews.createJson.render());
+
+    public Result list() {
+        List<SchemaDef> schemaDefList = this.schemaDefService.getSchemaDefList();
+        return ok(views.html.admin.schemaDefViews.list.render(schemaDefList));
     }
 
     public Result createForm() {
-        Logger.info("Create SchemaViaJSON view");
-        return ok(views.html.admin.schemaDefViews.createForm.render(formFactory.form(SchemaDef.class)));
+        return ok(views.html.admin.schemaDefViews.createForm.render(this.schemaDefService.getCreateForm()));
     }
 
-    public Result newSchema() {
-        Logger.info("submit JSON");
-        return redirect(routes.SchemaDefController.index());
+    public Result createJson() {
+        return ok(views.html.admin.schemaDefViews.createJson.render());
     }
 
-    public Result index() {
-        List<SchemaDef> schemaDefList = this.schemaDefRepository.getAll();
-        return ok(views.html.admin.schemaDefViews.index.render(schemaDefList));
-    }
-
-    public Result view(Long id) {
-        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
-
-        if(schemaDef != null) {
-            return ok(views.html.admin.schemaDefViews.view.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
-        }
-
-        flash("notFound", "Schema with id " + id + " not found!");
-        return redirect(routes.SchemaDefController.index());
-    }
-
-    public Result edit(Long id) {
-        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
-        if(schemaDef != null) {
-            return ok(views.html.admin.schemaDefViews.edit.render(formFactory.form(SchemaDef.class).fill(schemaDef)));
-        }
-        flash("notFound", "Schema with id " + id + " not found!");
-        return redirect(routes.SchemaDefController.index());
-    }
-
-
-    public Result update(Long id) {
-        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
-        Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class).bindFromRequest();
+    public Result newSchemaDef() {
+        Form<SchemaDef> schemaDefForm = this.schemaDefService.getNewSchemaDef(request());
 
         if(schemaDefForm.hasErrors()) {
-            return badRequest(views.html.admin.schemaDefViews.edit.render(schemaDefForm));
+            if(request().body().asJson() == null) {
+                flash("flash", "Error");
+                return redirect(routes.SchemaDefController.createJson());
+            }
+            return badRequest(views.html.admin.schemaDefViews.createForm.render(schemaDefForm));
         }
 
-        System.out.println(ctx().request().queryString());
-
+        Long id = schemaDefForm.get().getId();
         return redirect(routes.SchemaDefController.view(id));
     }
 
-    public Result delete(Long id) {
-        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
-        Logger.info("Delete");
-        if(schemaDef == null) {
-            flash("notFound", "Schema with ID " + id + " not found!");
+    public Result view(Long id) {
+        Form<SchemaDef> schemaDefForm = this.schemaDefService.getSchemaDefForm(id);
+
+        if(schemaDefForm == null) {
+            flash("notFound", "Schema with id " + id + " not found!");
+            return redirect(routes.SchemaDefController.list());
         }
-        return redirect(routes.SchemaDefController.index());
+
+        return ok(views.html.admin.schemaDefViews.view.render(schemaDefForm));
+    }
+
+    public Result edit(Long id) {
+        Form<SchemaDef> schemaDefForm = this.schemaDefService.getSchemaDefForm(id);
+
+        if(schemaDefForm == null) {
+            flash("notFound", "Schema with id " + id + " not found!");
+            return redirect(routes.SchemaDefController.list());
+        }
+
+        return ok(views.html.admin.schemaDefViews.edit.render(schemaDefForm));
+    }
+
+    public Result update(Long id) {
+
+
+
+        return redirect(routes.SchemaDefController.edit(id));
+    }
+
+    public Result delete(Long id) {
+        ServiceError serviceError = this.schemaDefService.deleteSchemaDef(id);
+
+        if(serviceError != null) {
+            serviceError.flash(ctx());
+        }
+
+        return redirect(routes.SchemaDefController.list());
+    }
+
+    public Result createTableDef(long id) {
+        Form<TableDef> tableDefForm = this.schemaDefService.getCreateTableDefForm(id);
+
+        if(tableDefForm == null) {
+            return notFound();
+        }
+
+        return ok(views.html.admin.schemaDefViews.createTableDef.render(tableDefForm));
     }
 }

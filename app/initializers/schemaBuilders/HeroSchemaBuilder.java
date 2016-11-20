@@ -1,38 +1,35 @@
-package initializers.implementation;
+package initializers.schemaBuilders;
 
-import initializers.Initializer;
+import initializers.SchemaBuilder;
 import models.*;
-import repository.SchemaDefRepository;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import java.util.List;
 
-@Singleton
-public class DevelopmentInitializer implements Initializer {
-    private SchemaDefRepository schemaDefRepository;
+/**
+ * @author fabiomazzone
+ */
+public class HeroSchemaBuilder implements SchemaBuilder {
 
 
-    @Inject
-    public DevelopmentInitializer(SchemaDefRepository schemaDefRepository) {
-        this.schemaDefRepository = schemaDefRepository;
-        if(this.schemaDefRepository.getByName("HeroTeamSchema") == null) {
-            this.heroSchema();
-        }
+    @Override
+    public boolean schemaExist(List<SchemaDef> schemaDefList) {
+        return true;
     }
 
-    private void heroSchema() {
+    @Override
+    public SchemaDef buildSchema() {
         SchemaDef   heroTeamSchema  = new SchemaDef();
-        TableDef    hero            = new TableDef();
+        TableDef hero            = new TableDef();
         TableDef    team            = new TableDef();
         TableDef    heroTeam        = new TableDef();
-        ColumnDef   hero_hero_id    = new ColumnDef();
+        ColumnDef hero_hero_id    = new ColumnDef();
         ColumnDef   hero_hero_name  = new ColumnDef();
         ColumnDef   team_team_id    = new ColumnDef();
         ColumnDef   team_team_name  = new ColumnDef();
         ColumnDef   heroTeam_hero_id    = new ColumnDef();
         ColumnDef   heroTeam_team_id    = new ColumnDef();
         ColumnDef   heroTeam_join_year  = new ColumnDef();
-        ForeignKey  heroTeam_hero   = new ForeignKey();
+        ForeignKey heroTeam_hero   = new ForeignKey();
         ForeignKey  heroTeam_team   = new ForeignKey();
         ForeignKeyRelation heroTeam_hero_rel = new ForeignKeyRelation();
         ForeignKeyRelation heroTeam_team_rel = new ForeignKeyRelation();
@@ -95,8 +92,6 @@ public class DevelopmentInitializer implements Initializer {
         heroTeamSchema.addForeignKey(heroTeam_hero);
         heroTeamSchema.addForeignKey(heroTeam_team);
 
-        System.out.println("save");
-        this.schemaDefRepository.save(heroTeamSchema);
+        return heroTeamSchema;
     }
 }
-

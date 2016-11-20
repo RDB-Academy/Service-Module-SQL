@@ -1,6 +1,5 @@
 package initializers;
 
-import initializers.implementation.DevelopmentInitializer;
 import play.api.Configuration;
 import play.api.Environment;
 import play.api.Mode;
@@ -15,10 +14,9 @@ public class InitializerModule extends Module {
     @Override
     public Seq<Binding<?>> bindings(Environment environment, Configuration configuration) {
         Seq<Binding<?>> bindingSeq;
-
         if (environment.mode() == Mode.Dev()) {
             bindingSeq = seq(
-                bind(Initializer.class).to(DevelopmentInitializer.class).eagerly()
+                    bind(DevelopmentInitializer.class).toSelf().eagerly()
             );
         } else if(environment.mode() == Mode.Test()) {
             bindingSeq = seq();
