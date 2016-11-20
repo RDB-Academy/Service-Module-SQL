@@ -3,11 +3,14 @@ package services;
 import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
+import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Http;
 import repository.SessionRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.HashMap;
 
 /**
  * @author fabiomazzone
@@ -16,10 +19,12 @@ import javax.inject.Singleton;
 public class SessionService {
     private static final String SESSION_FIELD_NAME = "SessionID";
     private SessionRepository sessionRepository;
+    private FormFactory formFactory;
 
     @Inject
-    public SessionService(SessionRepository sessionRepository) {
+    public SessionService(SessionRepository sessionRepository, FormFactory formFactory) {
         this.sessionRepository = sessionRepository;
+        this.formFactory = formFactory;
     }
 
     public void setSession(LoginForm loginForm, Http.Context ctx) {
@@ -60,5 +65,13 @@ public class SessionService {
 
     public void clear(Http.Context ctx) {
         ctx.session().clear();
+    }
+
+    public Form<LoginForm> getLoginForm() {
+        Form<LoginForm> loginForm = this.formFactory.form(LoginForm.class);
+        HashMap<String, String> anyData = new HashMap<>();
+        anyData.put("email", "test1@test.de");
+        anyData.put("password", "password");
+        return loginForm.bind(anyData);
     }
 }

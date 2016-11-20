@@ -49,7 +49,7 @@
                                 </thead>
                                 <tbody>
                                 @for((tableDef, index) <- schemaDefForm.get().getTableDefList.zipWithIndex) {
-                                    <tr class="clickable-row" data-href="@controllers.admin.routes.TableDefController.view(tableDef.getId())">
+                                    <tr class="clickable-row" data-href="@controllers.admin.routes.TableDefController.view(tableDef.getId)">
                                         <td style="width: 10%;">
                                         @{index + 1}
                                         </td>

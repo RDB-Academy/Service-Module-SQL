@@ -1,13 +1,18 @@
 package repository;
 
-import com.google.inject.ImplementedBy;
+import com.avaje.ebean.Model;
 import models.Session;
-import repository.implementation.SessionRepositoryImplementation;
+
+import javax.inject.Singleton;
 
 /**
  * @author fabiomazzone
  */
-@ImplementedBy(SessionRepositoryImplementation.class)
-public interface SessionRepository {
-    Session getById(String sessionId);
+@Singleton
+public class SessionRepository {
+    private Model.Finder<String, Session> find = new Model.Finder<>(Session.class);
+
+    public Session getById(String sessionId) {
+        return find.byId(sessionId);
+    }
 }

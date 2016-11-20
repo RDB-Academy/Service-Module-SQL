@@ -1,12 +1,10 @@
 package controllers.api;
 
 import models.ColumnDef;
-import models.SchemaDef;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import repository.ColumnDefRepository;
-import repository.SchemaDefRepository;
 
 import javax.inject.Inject;
 

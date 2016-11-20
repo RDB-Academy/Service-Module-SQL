@@ -1,22 +1,27 @@
 package repository;
 
 import com.avaje.ebean.Model;
-import com.google.inject.ImplementedBy;
-import models.Task;
+import com.google.inject.Singleton;
 import models.TaskTrial;
-import repository.implementation.TaskTrialRepositoryImplementation;
 
 import java.util.List;
 
 /**
- * Created by invisible on 11/11/16.
+ * @author fabiomazzone
  */
-@ImplementedBy(TaskTrialRepositoryImplementation.class)
-public abstract class TaskTrialRepository implements Repository<TaskTrial> {
-    protected Model.Finder<Long, TaskTrial> find = new Model.Finder<Long, TaskTrial>(TaskTrial.class);
+@Singleton
+public class TaskTrialRepository {
+    private Model.Finder<Long, TaskTrial> find = new Model.Finder<>(TaskTrial.class);
 
-    @Override
-    public void save(TaskTrial model) {
-        model.save();
+    public List<TaskTrial> getAll() {
+        return this.find.all();
+    }
+
+    public TaskTrial getById(Long id) {
+        return this.find.byId(id);
+    }
+
+    public void save(TaskTrial taskTrial) {
+        taskTrial.save();
     }
 }

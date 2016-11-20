@@ -5,10 +5,6 @@ import models.SchemaDef;
 import models.TableDef;
 import repository.TaskRepository;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by nicolenaczk on 11.11.16.
  */

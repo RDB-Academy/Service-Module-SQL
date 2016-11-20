@@ -3,7 +3,6 @@ package controllers.api;
 import models.Task;
 import models.TaskTrial;
 import play.Logger;
-import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;

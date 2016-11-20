@@ -99,7 +99,6 @@ public class SchemaDefController extends Controller {
 
     public Result createTableDef(long id) {
         Form<TableDef> tableDefForm = this.schemaDefService.getCreateTableDefForm(id);
-
         if(tableDefForm == null) {
             return notFound();
         }

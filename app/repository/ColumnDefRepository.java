@@ -1,20 +1,22 @@
 package repository;
 
 import com.avaje.ebean.Model;
-import com.google.inject.ImplementedBy;
+import com.google.inject.Singleton;
 import models.ColumnDef;
-import repository.implementation.ColumnDefRepositoryImplementation;
 
-import java.util.Random;
+import java.util.List;
 
 /**
  * @author fabiomazzone
  */
-@ImplementedBy(ColumnDefRepositoryImplementation.class)
-public abstract class ColumnDefRepository implements Repository<ColumnDef> {
-    protected Model.Finder<Long, ColumnDef> find = new Model.Finder<Long, ColumnDef>(ColumnDef.class);
+@Singleton
+public class ColumnDefRepository {
+    private Model.Finder<Long, ColumnDef> find = new Model.Finder<>(ColumnDef.class);
+    public List<ColumnDef> getAll() {
+        return this.find.all();
+    }
 
-    public void save(ColumnDef columnDef) {
-        columnDef.save();
+    public ColumnDef getById(Long id) {
+        return this.find.byId(id);
     }
 }

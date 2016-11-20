@@ -1,20 +1,23 @@
 package repository;
 
 import com.avaje.ebean.Model;
-import com.google.inject.ImplementedBy;
+import com.google.inject.Singleton;
 import models.ForeignKey;
-import repository.implementation.ForeignKeyRepositoryImplementation;
 
-import java.util.Random;
+import java.util.List;
 
 /**
  * @author fabiomazzone
  */
-@ImplementedBy(ForeignKeyRepositoryImplementation.class)
-public abstract class ForeignKeyRepository implements Repository<ForeignKey> {
-    protected Model.Finder<Long, ForeignKey> find = new Model.Finder<>(ForeignKey.class);
+@Singleton
+public class ForeignKeyRepository {
+    private Model.Finder<Long, ForeignKey> find = new Model.Finder<>(ForeignKey.class);
 
-    public void save(ForeignKey foreignKey) {
-        foreignKey.save();
+    public List<ForeignKey> getAll() {
+        return this.find.all();
+    }
+
+    public ForeignKey getById(Long id) {
+        return this.find.byId(id);
     }
 }

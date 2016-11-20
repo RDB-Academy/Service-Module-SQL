@@ -1,11 +1,9 @@
 package controllers.api;
 
-import models.SchemaDef;
 import models.TableDef;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import repository.SchemaDefRepository;
 import repository.TableDefRepository;
 
 import javax.inject.Inject;

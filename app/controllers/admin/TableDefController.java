@@ -1,15 +1,11 @@
 package controllers.admin;
 
 import authenticators.Authenticated;
-import models.SchemaDef;
 import models.TableDef;
 import play.data.Form;
-import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.SchemaDefRepository;
-import repository.TableDefRepository;
 import services.TableDefService;
 
 import javax.inject.Inject;
