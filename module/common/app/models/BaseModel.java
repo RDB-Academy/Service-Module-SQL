@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @author fabiomazzone
  */
 @MappedSuperclass
-abstract class BaseModel extends Model {
+public abstract class BaseModel extends Model {
     @Column(updatable = false)
     @WhenCreated
     private LocalDateTime createdAt;

@@ -1,7 +1,7 @@
 package initializers;
 
 import initializers.schemaBuilders.HeroSchemaBuilder;
-import models.*;
+import models.SchemaDef;
 import repository.SchemaDefRepository;
 
 import javax.inject.Inject;
