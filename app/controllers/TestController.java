@@ -35,7 +35,7 @@ public class TestController extends Controller {
     public Result parserCreate() {
         SchemaDef schemaDef = schemaDefRepository.getById(1L);
 
-
+        schemaDef.save();
 
         return TODO;
     }
