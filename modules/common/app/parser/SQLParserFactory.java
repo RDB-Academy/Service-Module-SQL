@@ -2,11 +2,13 @@ package parser;
 
 import com.google.inject.Inject;
 import models.TaskTrial;
-import parser.utils.extensionMaker.ExtensionMaker;
+import parser.utils.ExtensionMaker;
+import parser.utils.TableMaker;
 import play.Configuration;
 
 import javax.inject.Singleton;
-import java.sql.Connection;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.concurrent.*;
 
 /**
@@ -24,13 +26,35 @@ public class SQLParserFactory {
     public void createParser(TaskTrial taskTrial) {
         String databaseDriver           = this.configuration.getString("sqlParser.driver");
         String databaseUrl              = this.getDatabaseUrl(taskTrial);
-        Connection connection           = null;
-        ExtensionMaker extensionMaker   = new ExtensionMaker(taskTrial.getDatabaseExtensionSeed());
 
-        CompletableFuture<String[][]> extensions = CompletableFuture.completedFuture(extensionMaker
-                .buildStatements(taskTrial.getTask().getSchemaDef()));
+        TableMaker tableMaker           = new TableMaker(taskTrial.getTask().getSchemaDef());
+        ExtensionMaker extensionMaker   = new ExtensionMaker(taskTrial.getDatabaseExtensionSeed(), taskTrial.getTask().getSchemaDef());
+
+        LocalDateTime startTime = LocalDateTime.now();
+        CompletableFuture<String[][]> extensions = CompletableFuture
+                .completedFuture(
+                        extensionMaker.buildStatements()
+                );
+
+        CompletableFuture<String[]> tableMakerStatements = CompletableFuture
+                .completedFuture(
+                        tableMaker.buildStatements()
+                );
+
 
         try {
+            extensions.get();
+            tableMakerStatements.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        LocalDateTime endTime = LocalDateTime.now();
+
+        Duration differenceTime = Duration.between(startTime, endTime);
+        System.out.println("Time Needed: " + differenceTime.toMillis() + " Millis");
+
+        /*try {
             Class.forName(databaseDriver);
 
             System.out.println(databaseUrl);

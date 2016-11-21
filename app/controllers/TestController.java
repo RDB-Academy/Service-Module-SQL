@@ -3,7 +3,7 @@ package controllers;
 import models.TaskTrial;
 import parser.SQLParser;
 import parser.SQLParserFactory;
-import parser.utils.extensionMaker.ExtensionMaker;
+import parser.utils.ExtensionMaker;
 import models.SchemaDef;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -36,10 +36,10 @@ public class TestController extends Controller {
 
     public Result test() {
         session().clear();
-        ExtensionMaker extensionMaker = new ExtensionMaker(12345L);
         SchemaDef schemaDef = this.schemaDefRepository.getById(1L);
+        ExtensionMaker extensionMaker = new ExtensionMaker(12345L, schemaDef);
 
-        String[][] statements = extensionMaker.buildStatements(schemaDef);
+        String[][] statements = extensionMaker.buildStatements();
 
         return ok(Arrays.deepToString(statements));
     }
@@ -62,11 +62,7 @@ public class TestController extends Controller {
             return notFound();
         }
 
-        System.out.println("Test");
-
         SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial).get();
-
-        System.out.println("Test");
 
         return ok();
     }

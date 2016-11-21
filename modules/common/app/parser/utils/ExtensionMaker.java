@@ -1,4 +1,4 @@
-package parser.utils.extensionMaker;
+package parser.utils;
 
 import models.SchemaDef;
 import models.TableDef;
@@ -7,19 +7,21 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by carl on 12.11.16.
+ * @author carl
  */
 public class ExtensionMaker {
-    private Long seed;
-    private Random rand;
+    private final Long      seed;
+    private final SchemaDef schemaDef;
+    private final Random    rand;
 
-    public ExtensionMaker(Long seed) {
+    public ExtensionMaker(Long seed, SchemaDef schemaDef) {
         this.seed = seed;
+        this.schemaDef = schemaDef;
         this.rand = new Random(this.seed);
     }
 
 
-    public String[][] buildStatements(SchemaDef schemaDef) {
+    public String[][] buildStatements() {
         String[][] insertStatements = new String[20][20];
 
         for(int i = 0; i < insertStatements.length; i++) {
