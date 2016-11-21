@@ -28,7 +28,7 @@ public class TableDef extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableDef")
     private List<ColumnDef> columnDefList;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -67,7 +67,7 @@ public class TableDef extends BaseModel {
     }
 
     @JsonGetter("schemaDef")
-    public long getSchemaDefId(){
+    public Long getSchemaDefId(){
         return this.getSchemaDef().getId();
     }
 

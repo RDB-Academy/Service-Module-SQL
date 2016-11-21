@@ -43,7 +43,7 @@ public class ColumnDef extends BaseModel {
     public static final int META_VALUE_SET_LASTNAME = 744;
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

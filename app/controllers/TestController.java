@@ -1,6 +1,6 @@
 package controllers;
 
-import extensionMaker.ExtensionMaker;
+import parser.utils.extensionMaker.ExtensionMaker;
 import models.SchemaDef;
 import play.mvc.Controller;
 import play.mvc.Result;

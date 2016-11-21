@@ -21,11 +21,9 @@ public class TaskTrial extends BaseModel {
 
     @JsonIgnore
     @ManyToOne(optional = false)
-    @Column(updatable = false)
     private Task task;
 
     @JsonIgnore
-    @Column(updatable = false)
     private long databaseExtensionSeed;
 
     private String userStatement;
@@ -52,7 +50,7 @@ public class TaskTrial extends BaseModel {
     }
 
     @JsonGetter("task")
-    public long getTaskId() {
+    public Long getTaskId() {
         return this.getTask().getId();
     }
 
@@ -90,6 +88,10 @@ public class TaskTrial extends BaseModel {
 
     public void setTries(int tries) {
         this.tries = tries;
+    }
+
+    public void addTry() {
+        this.tries++;
     }
 
     public LocalDateTime getBeginDate() {

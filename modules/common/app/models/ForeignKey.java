@@ -26,7 +26,7 @@ public class ForeignKey extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "foreignKey")
     private List<ForeignKeyRelation> foreignKeyRelationList;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

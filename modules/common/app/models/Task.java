@@ -75,7 +75,7 @@ public class Task extends BaseModel{
     }
 
     @JsonGetter("schemaDef")
-    public long getSchemaDefId() {
+    public Long getSchemaDefId() {
         return this.getSchemaDef().getId();
     }
 

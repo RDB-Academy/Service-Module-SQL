@@ -20,7 +20,7 @@ public class ForeignKeyRelation extends BaseModel {
     private ColumnDef targetColumn;
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
