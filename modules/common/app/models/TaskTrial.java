@@ -1,35 +1,47 @@
 package models;
 
+import com.avaje.ebean.annotation.WhenCreated;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 /**
- * Created by invisible on 11/11/16.
+ * @author invisible
  */
 @Entity
 public class TaskTrial extends BaseModel {
     @Id
     private Long id;
 
-    @ManyToOne
     @JsonIgnore
+    @ManyToOne(optional = false)
+    @Column(updatable = false)
     private Task task;
 
     @JsonIgnore
-    private long databaseCreationSeed;
+    @Column(updatable = false)
+    private long databaseExtensionSeed;
 
     private String userStatement;
 
-    private boolean isCorrect;
+    private boolean isCorrect = false;
 
-    private Date beginDate;
+    private int tries = 0;
 
-    private Date submitDate;
+    @NotNull
+    @WhenCreated
+    @Column(updatable = false)
+    private LocalDateTime beginDate;
+
+    private LocalDateTime submitDate;
+
+
 
     public Long getId() {
         return id;
@@ -48,12 +60,12 @@ public class TaskTrial extends BaseModel {
         this.task = task;
     }
 
-    public Long getDatabaseCreationSeed() {
-        return databaseCreationSeed;
+    public long getDatabaseExtensionSeed() {
+        return databaseExtensionSeed;
     }
 
-    public void setDatabaseCreationSeed(Long databaseCreationSeed) {
-        this.databaseCreationSeed = databaseCreationSeed;
+    public void setDatabaseExtensionSeed(long databaseExtensionSeed) {
+        this.databaseExtensionSeed = databaseExtensionSeed;
     }
 
     public String getUserStatement() {
@@ -64,27 +76,35 @@ public class TaskTrial extends BaseModel {
         this.userStatement = userStatement;
     }
 
-    public void setIsCorrect(boolean correct) {
-        isCorrect = correct;
-    }
-
-    public boolean getIsCorrect() {
+    public boolean isCorrect() {
         return isCorrect;
     }
 
-    public Date getBeginDate() {
+    public void setCorrect(boolean correct) {
+        isCorrect = correct;
+    }
+
+    public int getTries() {
+        return tries;
+    }
+
+    public void setTries(int tries) {
+        this.tries = tries;
+    }
+
+    public LocalDateTime getBeginDate() {
         return beginDate;
     }
 
-    public void setBeginDate(Date beginDate) {
+    public void setBeginDate(LocalDateTime beginDate) {
         this.beginDate = beginDate;
     }
 
-    public Date getSubmitDate() {
+    public LocalDateTime getSubmitDate() {
         return submitDate;
     }
 
-    public void setSubmitDate(Date submitDate) {
+    public void setSubmitDate(LocalDateTime submitDate) {
         this.submitDate = submitDate;
     }
 

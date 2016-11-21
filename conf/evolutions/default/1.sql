@@ -77,14 +77,15 @@ create table task (
 
 create table task_trial (
   id                            bigint auto_increment not null,
-  task_id                       bigint,
-  database_creation_seed        bigint,
+  task_id                       bigint not null,
+  database_extension_seed       bigint,
   user_statement                varchar(255),
   is_correct                    boolean,
-  begin_date                    timestamp,
+  tries                         integer,
   submit_date                   timestamp,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
+  begin_date                    timestamp not null,
   constraint pk_task_trial primary key (id)
 );
 

@@ -7,7 +7,6 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.SchemaDefRepository;
 import services.SchemaDefService;
 import services.tools.ServiceError;
 
@@ -23,8 +22,7 @@ public class SchemaDefController extends Controller {
 
     @Inject
     public SchemaDefController(
-            SchemaDefService schemaDefService,
-            SchemaDefRepository schemaDefRepository) {
+            SchemaDefService schemaDefService) {
 
         this.schemaDefService = schemaDefService;
     }

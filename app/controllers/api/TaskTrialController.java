@@ -1,43 +1,38 @@
 package controllers.api;
 
-import models.Task;
 import models.TaskTrial;
 import play.Logger;
-import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import repository.TaskRepository;
 import repository.TaskTrialRepository;
+import services.TaskTrialService;
 
 import javax.inject.Inject;
-import java.util.Date;
 import java.util.List;
 
 /**
  * @author invisible
  */
 public class TaskTrialController extends Controller {
-    private final FormFactory formFactory;
+    private final TaskTrialService taskTrialService;
     private final TaskTrialRepository taskTrialRepository;
-    private final TaskRepository taskRepository;
-    //private final
 
     @Inject
-    public TaskTrialController(FormFactory formFactory, TaskTrialRepository taskTrialRepository, TaskRepository taskRepository){
-        this.formFactory = formFactory;
+    public TaskTrialController(
+            TaskTrialService taskTrialService,
+            TaskTrialRepository taskTrialRepository){
+
+        this.taskTrialService = taskTrialService;
         this.taskTrialRepository = taskTrialRepository;
-        this.taskRepository = taskRepository;
     }
 
     public Result create() {
-        Task task = taskRepository.getById(1L);
+        TaskTrial taskTrial = this.taskTrialService.getNewTaskTrial(ctx());
 
-        TaskTrial taskTrial = new TaskTrial();
-        taskTrial.setTask(task);
-        taskTrial.setBeginDate(new Date());
-
-        taskTrialRepository.save(taskTrial);
+        if(taskTrial == null) {
+            return internalServerError();
+        }
 
         return ok(Json.toJson(taskTrial));
     }
