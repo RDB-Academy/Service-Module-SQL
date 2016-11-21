@@ -6,6 +6,7 @@ import models.Task;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author fabiomazzone
@@ -33,6 +34,12 @@ public class TaskRepository {
     }
 
     public Task getRandomTask() {
-        return find.all().parallelStream().findFirst().orElse(null);
+        List<Task> taskList = find.all();
+
+        Random random = new Random();
+
+        int pos = random.nextInt(taskList.size());
+
+        return taskList.get(pos);
     }
 }

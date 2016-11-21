@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author invisible
@@ -98,12 +99,20 @@ public class TaskTrial extends BaseModel {
         return beginDate;
     }
 
+    public String getBeginDateFormat() {
+        return beginDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm"));
+    }
+
     public void setBeginDate(LocalDateTime beginDate) {
         this.beginDate = beginDate;
     }
 
     public LocalDateTime getSubmitDate() {
         return submitDate;
+    }
+
+    public String getSubmitDateFormat() {
+        return submitDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm"));
     }
 
     public void setSubmitDate(LocalDateTime submitDate) {

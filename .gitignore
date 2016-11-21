@@ -18,6 +18,9 @@ project/project/
 test-2.11/
 test/resources/
 
+# SQL Parser
+/tmp
+
 # Front-End
 Front-End/
 public/dist
