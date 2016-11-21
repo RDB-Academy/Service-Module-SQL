@@ -12,13 +12,13 @@ import java.util.List;
  */
 public class HeroSchemaBuilder extends SchemaBuilder {
     @Override
-    public String getSchemaName() {
+    protected String getSchemaName() {
         return "HeroTeamSchema";
     }
 
     @Override
-    public SchemaDef buildSchema() {
-        SchemaDef           heroTeamSchema      = this.createNewSchemaDef(getSchemaName());
+    protected SchemaDef buildSchema() {
+        SchemaDef           heroTeamSchema      = this.createNewSchemaDef();
         TableDef            hero                = this.createNewTableDef("hero");
         TableDef            team                = this.createNewTableDef("team");
         TableDef            heroTeam            = this.createNewTableDef("hero_team");
@@ -64,12 +64,11 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         heroTeamSchema.addForeignKey(heroTeam_hero);
         heroTeamSchema.addForeignKey(heroTeam_team);
 
-        heroTeamSchema.addTask(getTasks());
-
         return heroTeamSchema;
     }
 
-    private List<Task> getTasks() {
+    @Override
+    protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
         Task ironManTask = new Task();

@@ -75,7 +75,7 @@ public class SchemaDef extends BaseModel {
         }
     }
 
-    @JsonGetter("tableDefs")
+    @JsonGetter("tableDefList")
     public List<Long> getTableIds() {
         return this.getTableDefList().stream().map(TableDef::getId).collect(Collectors.toList());
     }

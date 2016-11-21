@@ -8,9 +8,21 @@ import java.util.List;
  * @author fabiomazzone
  */
 public abstract class SchemaBuilder {
-    public abstract String getSchemaName();
+    private SchemaDef schemaDef;
 
-    public abstract SchemaDef buildSchema();
+    protected abstract String getSchemaName();
+
+    protected abstract SchemaDef buildSchema();
+
+    protected abstract List<Task> buildTasks();
+
+    public SchemaDef getSchemaDef() {
+        if(schemaDef == null) {
+            this.schemaDef = this.buildSchema();
+            this.schemaDef.addTask(buildTasks());
+        }
+        return schemaDef;
+    }
 
     boolean schemaExist(List<SchemaDef> schemaDefList) {
         SchemaDef schemaDef = schemaDefList.parallelStream()
@@ -28,9 +40,9 @@ public abstract class SchemaBuilder {
         return tableDef;
     }
 
-    protected SchemaDef createNewSchemaDef(String name) {
+    protected SchemaDef createNewSchemaDef() {
         SchemaDef schemaDef = new SchemaDef();
-        schemaDef.setName(name);
+        schemaDef.setName(this.getSchemaName());
 
         return schemaDef;
     }
@@ -38,7 +50,7 @@ public abstract class SchemaBuilder {
     protected ColumnDef createNewColumnDef(String name, String dataType) {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName(name);
-        columnDef.setDatatype(dataType);
+        columnDef.setDataType(dataType);
 
         return columnDef;
     }

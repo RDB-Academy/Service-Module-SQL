@@ -1,12 +1,13 @@
 package initializers;
 
 import initializers.schemaBuilders.HeroSchemaBuilder;
+import initializers.schemaBuilders.UsersSchemaBuilder;
 import models.SchemaDef;
 import repository.SchemaDefRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,13 +24,14 @@ class DevelopmentInitializer {
     }
     
     private void init() {
-        List<SchemaBuilder> schemaBuilders = Collections.singletonList(
-                new HeroSchemaBuilder()
+        List<SchemaBuilder> schemaBuilders = Arrays.asList(
+                new HeroSchemaBuilder(),
+                new UsersSchemaBuilder()
         );
 
         List<SchemaDef> schemaDefList = schemaBuilders.parallelStream()
                 .filter(x -> !x.schemaExist(this.storedSchemaDefList))
-                .map(SchemaBuilder::buildSchema)
+                .map(SchemaBuilder::getSchemaDef)
                 .collect(Collectors.toList());
 
         schemaDefList.parallelStream()

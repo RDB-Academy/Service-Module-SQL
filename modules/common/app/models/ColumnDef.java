@@ -63,12 +63,12 @@ public class ColumnDef extends BaseModel {
         this.name = name;
     }
 
-    public String getDatatype() {
+    public String getDataType() {
         return dataType;
     }
 
-    public void setDatatype(String datatype) {
-        this.dataType = datatype;
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
     public boolean isPrimary() {
