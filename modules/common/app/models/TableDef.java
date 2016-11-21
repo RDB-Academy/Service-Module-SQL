@@ -66,12 +66,12 @@ public class TableDef extends BaseModel {
         }
     }
 
-    @JsonGetter("schema")
+    @JsonGetter("schemaDef")
     public long getSchemaDefId(){
         return this.getSchemaDef().getId();
     }
 
-    @JsonGetter("columns")
+    @JsonGetter("columnDefs")
     public List<Long> getColumnDefIds() {
         return this.getColumnDefList().stream().map(ColumnDef::getId).collect(Collectors.toList());
     }

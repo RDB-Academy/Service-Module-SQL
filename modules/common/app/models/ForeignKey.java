@@ -1,6 +1,9 @@
 package models;
 
+import play.data.validation.Constraints;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +15,12 @@ public class ForeignKey extends BaseModel {
     @Id
     private Long id;
 
+    @NotNull
+    @Constraints.Required
     private String name;
 
-    @ManyToOne
+    @Constraints.Required
+    @ManyToOne(optional = false)
     private SchemaDef schemaDef;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "foreignKey")

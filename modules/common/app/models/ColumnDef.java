@@ -1,5 +1,7 @@
 package models;
 
+import play.data.validation.Constraints;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -16,9 +18,11 @@ public class ColumnDef extends BaseModel {
     private TableDef tableDef;
 
     @NotNull
+    @Constraints.Required
     private String name;
 
     @NotNull
+    @Constraints.Required
     private String dataType;
 
     @NotNull
@@ -32,10 +36,11 @@ public class ColumnDef extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "targetColumn")
     private List<ForeignKeyRelation> foreignKeyRelationsTarget;
 
+
     private int metaValueSet;
 
-    private static final int META_VALUE_SET_FIRSTNAME = 8;
-    private static final int META_VALUE_SET_LASTNAME = 744;
+    public static final int META_VALUE_SET_FIRSTNAME = 8;
+    public static final int META_VALUE_SET_LASTNAME = 744;
 
 
     public long getId() {
@@ -66,7 +71,7 @@ public class ColumnDef extends BaseModel {
         this.dataType = datatype;
     }
 
-    public boolean getIsPrimary() {
+    public boolean isPrimary() {
         return isPrimary;
     }
 
@@ -77,11 +82,27 @@ public class ColumnDef extends BaseModel {
         isPrimary = primary;
     }
 
-    public boolean getIsNullable() {
+    public boolean isNullable() {
         return isNullable;
     }
 
     public void setNullable(boolean nullable) {
         isNullable = nullable;
+    }
+
+    public List<ForeignKeyRelation> getForeignKeyRelationsSource() {
+        return foreignKeyRelationsSource;
+    }
+
+    public List<ForeignKeyRelation> getForeignKeyRelationsTarget() {
+        return foreignKeyRelationsTarget;
+    }
+
+    public int getMetaValueSet() {
+        return metaValueSet;
+    }
+
+    public void setMetaValueSet(int metaValueSet) {
+        this.metaValueSet = metaValueSet;
     }
 }

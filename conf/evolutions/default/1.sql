@@ -18,8 +18,8 @@ create table column_def (
 
 create table foreign_key (
   id                            bigint auto_increment not null,
-  name                          varchar(255),
-  schema_def_id                 bigint,
+  name                          varchar(255) not null,
+  schema_def_id                 bigint not null,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_foreign_key primary key (id)
@@ -27,9 +27,9 @@ create table foreign_key (
 
 create table foreign_key_relation (
   id                            bigint auto_increment not null,
-  foreign_key_id                bigint,
-  source_column_id              bigint,
-  target_column_id              bigint,
+  foreign_key_id                bigint not null,
+  source_column_id              bigint not null,
+  target_column_id              bigint not null,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_foreign_key_relation primary key (id)
@@ -37,7 +37,7 @@ create table foreign_key_relation (
 
 create table schema_def (
   id                            bigint auto_increment not null,
-  name                          varchar(255),
+  name                          varchar(255) not null,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint uq_schema_def_name unique (name),
@@ -66,9 +66,10 @@ create table table_def (
 create table task (
   id                            bigint auto_increment not null,
   schema_def_id                 bigint not null,
-  name                          varchar(255),
-  text                          varchar(255),
-  reference_statement           varchar(255),
+  name                          varchar(255) not null,
+  text                          varchar(255) not null,
+  reference_statement           varchar(255) not null,
+  difficulty                    integer not null,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_task primary key (id)

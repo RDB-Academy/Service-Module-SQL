@@ -2,7 +2,7 @@ name := """Service-Module-SQL"""
 
 version := "0.1"
 
-lazy val common = (project in file("module/common")).enablePlugins(PlayJava, PlayEbean)
+lazy val common = (project in file("modules/common")).enablePlugins(PlayJava, PlayEbean)
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayJava)

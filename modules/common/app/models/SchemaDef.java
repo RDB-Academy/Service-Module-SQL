@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ public class SchemaDef extends BaseModel {
     @Id
     private Long id;
 
+    @NotNull
     @Column(unique = true)
     private String name;
 
@@ -73,7 +75,7 @@ public class SchemaDef extends BaseModel {
         }
     }
 
-    @JsonGetter("tableDef")
+    @JsonGetter("tableDefs")
     public List<Long> getTableIds() {
         return this.getTableDefList().stream().map(TableDef::getId).collect(Collectors.toList());
     }

@@ -10,13 +10,13 @@ public class ForeignKeyRelation extends BaseModel {
     @Id
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private ForeignKey foreignKey;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private ColumnDef sourceColumn;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private ColumnDef targetColumn;
 
 

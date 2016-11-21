@@ -7,6 +7,7 @@ import play.data.validation.Constraints;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author fabiomazzone
@@ -20,15 +21,22 @@ public class Task extends BaseModel{
     @ManyToOne(optional = false)
     private SchemaDef schemaDef;
 
+   @NotNull
     @Constraints.Required
     private String name;
 
+    @NotNull
     @Constraints.Required
     private String text;
 
+    @NotNull
     @JsonIgnore
     @Constraints.Required
     private String referenceStatement;
+
+    @NotNull
+    @Constraints.Required
+    private int difficulty;
 
     public Long getId() {
         return id;
@@ -66,8 +74,16 @@ public class Task extends BaseModel{
         this.schemaDef = schemaDef;
     }
 
-    @JsonGetter("schema")
+    @JsonGetter("schemaDef")
     public long getSchemaDefId() {
         return this.getSchemaDef().getId();
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
 }
