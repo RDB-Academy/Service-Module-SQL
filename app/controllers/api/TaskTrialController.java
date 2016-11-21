@@ -67,9 +67,5 @@ public class TaskTrialController extends Controller {
         return ok(Json.toJson(taskTrial));
     }
 
-    public Result delete(long id) {
-        return TODO;
-    }
-
 
 }

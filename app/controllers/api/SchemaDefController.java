@@ -19,14 +19,6 @@ public class SchemaDefController extends Controller {
         this.schemaDefRepository = schemaDefRepository;
     }
 
-    public Result create() {
-        return TODO;
-    }
-
-    public Result view() {
-        return TODO;
-    }
-
     public Result show(long id) {
         SchemaDef schemaDef = schemaDefRepository.getById(id);
         if(schemaDef == null) {
@@ -34,13 +26,4 @@ public class SchemaDefController extends Controller {
         }
         return ok(Json.toJson(schemaDef));
     }
-
-    public Result patch(long id) {
-        return TODO;
-    }
-
-    public Result delete(long id) {
-        return TODO;
-    }
-
 }
