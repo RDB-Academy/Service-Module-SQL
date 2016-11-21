@@ -1,4 +1,4 @@
-package parser.TableMaker;
+package parser.tableMaker;
 
 import models.SchemaDef;
 

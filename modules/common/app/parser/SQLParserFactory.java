@@ -2,14 +2,15 @@ package parser;
 
 import com.google.inject.Inject;
 import models.TaskTrial;
-import parser.utils.ExtensionMaker;
-import parser.utils.TableMaker;
+import parser.extensionMaker.ExtensionMaker;
+import parser.tableMaker.TableMaker;
 import play.Configuration;
 
 import javax.inject.Singleton;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author fabiomazzone

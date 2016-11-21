@@ -3,7 +3,7 @@ package controllers;
 import models.TaskTrial;
 import parser.SQLParser;
 import parser.SQLParserFactory;
-import parser.utils.ExtensionMaker;
+import parser.extensionMaker.ExtensionMaker;
 import models.SchemaDef;
 import play.libs.Json;
 import play.mvc.Controller;
