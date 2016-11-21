@@ -1,4 +1,4 @@
-package parser.utils;
+package parser.ExtensionMaker;
 
 import models.SchemaDef;
 import models.TableDef;
