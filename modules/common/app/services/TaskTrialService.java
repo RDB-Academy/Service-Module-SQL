@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -54,8 +55,6 @@ public class TaskTrialService {
 
         this.taskTrialRepository.save(taskTrial);
 
-
-
         return taskTrial;
     }
 
@@ -65,7 +64,7 @@ public class TaskTrialService {
 
     public TaskTrial validateStatement(Long id, Http.Context context) {
         TaskTrial taskTrial = this.getById(id);
-        Future<SQLParser> sqlParserFuture = this.sqlParserFactory.getParser(taskTrial);
+        CompletableFuture<SQLParser> sqlParserFuture = this.sqlParserFactory.getParser(taskTrial);
         SQLParser sqlParser;
 
         Logger.info(context.request().body().asJson().toString());

@@ -40,8 +40,6 @@ public class TaskTrial extends BaseModel {
 
     private LocalDateTime submitDate;
 
-
-
     public Long getId() {
         return id;
     }
@@ -99,6 +97,7 @@ public class TaskTrial extends BaseModel {
         return beginDate;
     }
 
+    @JsonIgnore
     public String getBeginDateFormat() {
         return beginDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm"));
     }
@@ -111,6 +110,7 @@ public class TaskTrial extends BaseModel {
         return submitDate;
     }
 
+    @JsonIgnore
     public String getSubmitDateFormat() {
         return submitDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm"));
     }
