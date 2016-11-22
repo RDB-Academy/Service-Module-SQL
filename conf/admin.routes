@@ -8,17 +8,17 @@ GET     /login                      controllers.admin.SessionController.login()
 GET     /logout                     controllers.admin.SessionController.logout()
 
 
-GET     /schemaDef                  controllers.admin.SchemaDefController.list()
+GET     /schemaDef                  controllers.admin.SchemaDefController.index()
 GET     /schemaDef/new.form         controllers.admin.SchemaDefController.createForm()
 GET     /schemaDef/new.json         controllers.admin.SchemaDefController.createJson()
 POST    /schemaDef                  controllers.admin.SchemaDefController.newSchemaDef()
-GET     /schemaDef/:id              controllers.admin.SchemaDefController.view(id: Long)
+GET     /schemaDef/:id              controllers.admin.SchemaDefController.read(id: Long)
 GET     /schemaDef/:id/edit         controllers.admin.SchemaDefController.edit(id: Long)
 POST    /schemaDef/:id/update       controllers.admin.SchemaDefController.update(id: Long)
 DELETE  /schemaDef/:id              controllers.admin.SchemaDefController.delete(id: Long)
 GET     /schemaDef/:id/newTableDef  controllers.admin.SchemaDefController.createTableDef(id: Long)
 
-GET     /tableDef/:id               controllers.admin.TableDefController.view(id: Long)
+GET     /tableDef/:id               controllers.admin.TableDefController.read(id: Long)
 GET     /tableDef/:id/edit          controllers.admin.TableDefController.edit(id: Long)
 
 

@@ -22,14 +22,14 @@ public class TableDefController extends Controller {
         this.tableDefService = tableDefService;
     }
 
-    public Result view(Long id) {
+    public Result read(Long id) {
         Form<TableDef> tableDefForm = this.tableDefService.getViewForm(id);
 
         if(tableDefForm == null) {
             return notFound();
         }
 
-        return ok(views.html.admin.tableDefViews.view.render(tableDefForm));
+        return ok(views.html.admin.tableDefViews.read.render(tableDefForm));
     }
 
     public Result edit(Long id) {

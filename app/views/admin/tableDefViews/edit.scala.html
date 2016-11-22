@@ -5,12 +5,12 @@
         <div class="panel-heading clearfix">
             <div class="pull-left">
                 <h4 class="panel-title" style="padding-top: 5.5px">
-                    <a href="@controllers.admin.routes.SchemaDefController.view(tableDefForm.get().getSchemaDef.getId)"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-right: 50px; color: dodgerblue"></span></a>
+                    <a href="@controllers.admin.routes.SchemaDefController.read(tableDefForm.get().getSchemaDef.getId)"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-right: 50px; color: dodgerblue"></span></a>
                     Edit Table
                 </h4>
             </div>
             <div class="btn-group btn-group-sm pull-right">
-                <a href="@controllers.admin.routes.TableDefController.view(tableDefForm.get().getId)" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red"></span></a>
+                <a href="@controllers.admin.routes.TableDefController.read(tableDefForm.get().getId)" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red"></span></a>
             </div>
         </div>
     </div>

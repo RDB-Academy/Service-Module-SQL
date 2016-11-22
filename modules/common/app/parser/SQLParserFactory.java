@@ -1,6 +1,7 @@
 package parser;
 
 import com.google.inject.Inject;
+import models.SchemaDef;
 import models.TaskTrial;
 import parser.extensionMaker.ExtensionMaker;
 import parser.tableMaker.TableMaker;
@@ -10,7 +11,7 @@ import javax.inject.Singleton;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author fabiomazzone
@@ -28,27 +29,14 @@ public class SQLParserFactory {
         String databaseDriver           = this.configuration.getString("sqlParser.driver");
         String databaseUrl              = this.getDatabaseUrl(taskTrial);
 
-        TableMaker tableMaker           = new TableMaker(taskTrial.getTask().getSchemaDef());
-        ExtensionMaker extensionMaker   = new ExtensionMaker(taskTrial.getDatabaseExtensionSeed(), taskTrial.getTask().getSchemaDef());
+        SchemaDef schemaDef             = taskTrial.getTask().getSchemaDef();
+        TableMaker tableMaker           = new TableMaker(schemaDef);
+        ExtensionMaker extensionMaker   = new ExtensionMaker(taskTrial.getDatabaseExtensionSeed(), schemaDef);
 
         LocalDateTime startTime = LocalDateTime.now();
-        CompletableFuture<String[][]> extensions = CompletableFuture
-                .completedFuture(
-                        extensionMaker.buildStatements()
-                );
+        CompletionStage<String[][]> extensions = CompletableFuture.supplyAsync(extensionMaker::buildStatements);
+        CompletionStage<String[]> tableMakerStatements = CompletableFuture.supplyAsync(tableMaker::buildStatements);
 
-        CompletableFuture<String[]> tableMakerStatements = CompletableFuture
-                .completedFuture(
-                        tableMaker.buildStatements()
-                );
-
-
-        try {
-            extensions.get();
-            tableMakerStatements.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
 
         LocalDateTime endTime = LocalDateTime.now();
 

@@ -47,7 +47,7 @@
                 </thead>
                 <tbody>
                 @for((schemaDef, index) <- schemaDefList.zipWithIndex) {
-                    <tr class="clickable-row" data-href="@controllers.admin.routes.SchemaDefController.view(schemaDef.getId())">
+                    <tr class="clickable-row" data-href="@controllers.admin.routes.SchemaDefController.read(schemaDef.getId)">
                         <td>@{index + 1}</td>
                         <td>@schemaDef.getId</td>
                         <td>@schemaDef.getName</td>
