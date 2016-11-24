@@ -1,6 +1,7 @@
 package controllers;
 
 import extensionMaker.ExtensionMaker;
+import insertParser.InsertParser;
 import models.SchemaDef;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -23,13 +24,16 @@ public class TestController extends Controller {
     public Result test() {
         session().clear();
         ExtensionMaker extensionMaker = new ExtensionMaker(12345L);
+        InsertParser insertParser = new InsertParser(23456L);
         SchemaDef schemaDef = this.schemaDefRepository.getById(1L);
 
         String[][] statements = extensionMaker.buildStatements(schemaDef);
 
+        String out = insertParser.parseStatement(statements);
 
 
-        return ok(Arrays.deepToString(statements));
+
+        return ok(out);
     }
 
     public Result parserTest() {
