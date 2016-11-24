@@ -10,13 +10,13 @@ GET     /tasktrials/:id             controllers.api.TaskTrialController.show(id:
 PATCH   /tasktrials/:id             controllers.api.TaskTrialController.update(id: Long)
 
 ## model.SchemaDef
-GET     /schemas/:id             controllers.api.SchemaDefController.show(id: Long)
+GET     /schemas/:id                controllers.api.SchemaDefController.show(id: Long)
 
 ## model.TableDef
-GET     /tables/:id             controllers.api.TableDefController.show(id: Long)
+GET     /tables/:id                 controllers.api.TableDefController.show(id: Long)
 
 ## model.ColumnDef
-GET     /columns/:id             controllers.api.ColumnDefController.show(id: Long)
+GET     /columns/:id                controllers.api.ColumnDefController.show(id: Long)
 
 ## Stop from General Redirecting
 GET     /*file                      controllers.HomeController.notFoundView(file: String)
