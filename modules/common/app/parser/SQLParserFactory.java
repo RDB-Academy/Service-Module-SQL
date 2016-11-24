@@ -10,6 +10,7 @@ import play.Configuration;
 import javax.inject.Singleton;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -35,7 +36,7 @@ public class SQLParserFactory {
 
         LocalDateTime startTime = LocalDateTime.now();
         CompletionStage<String[][]> extensions = CompletableFuture.supplyAsync(extensionMaker::buildStatements);
-        CompletionStage<String[]> tableMakerStatements = CompletableFuture.supplyAsync(tableMaker::buildStatements);
+        CompletionStage<List<String>> tableMakerStatements = CompletableFuture.supplyAsync(tableMaker::buildStatements);
 
 
         LocalDateTime endTime = LocalDateTime.now();
