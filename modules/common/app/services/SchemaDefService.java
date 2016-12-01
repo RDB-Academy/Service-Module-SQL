@@ -4,12 +4,15 @@ import models.SchemaDef;
 import models.TableDef;
 import play.data.Form;
 import play.data.FormFactory;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Http;
 import repository.SchemaDefRepository;
 import services.tools.ServiceError;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.xml.ws.spi.http.HttpContext;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -80,5 +83,9 @@ public class SchemaDefService {
 
     public List<SchemaDef> getSchemaDefList() {
         return this.schemaDefRepository.getAll();
+    }
+
+    public Form<SchemaDef> updateSchemaDef(Long id) {
+        Form<SchemaDef> schemaDefForm = this.formFactory
     }
 }

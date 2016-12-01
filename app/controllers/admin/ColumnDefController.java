@@ -24,30 +24,4 @@ public class ColumnDefController extends Controller {
 
     }
 
-
-    public Result read(Long id) {
-
-        Form<ColumnDef> columnDefForm = this.columnDefService.getViewForm(id);
-
-        if(columnDefForm == null) {
-            return notFound();
-        }
-
-        return ok(views.html.admin.columnDefViews.read.render(columnDefForm));
-    }
-
-
-    public Result edit(Long id) {
-        Form<ColumnDef> columnDefForm = this.columnDefService.getViewForm(id);
-
-        if(columnDefForm == null) {
-            return notFound();
-        }
-
-        return ok(views.html.admin.columnDefViews.edit.render(columnDefForm));
-    }
-
-
-
-
 }
