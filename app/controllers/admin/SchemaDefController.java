@@ -86,9 +86,7 @@ public class SchemaDefController extends Controller {
     }
 
     public Result update(Long id) {
-
-
-
+        
         return redirect(routes.SchemaDefController.edit(id));
     }
 
