@@ -7,6 +7,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import services.TableDefService;
+import services.tools.ServiceError;
 
 import javax.inject.Inject;
 
@@ -25,8 +26,11 @@ public class TableDefController extends Controller {
     public Result read(Long id) {
         Form<TableDef> tableDefForm = this.tableDefService.getViewForm(id);
 
+        System.out.println("Test");
+
+        // TODO:
         if(tableDefForm == null) {
-            return notFound();
+            return redirect(routes.SchemaDefController.index());
         }
 
         return ok(views.html.admin.tableDefViews.read.render(tableDefForm));
@@ -40,6 +44,16 @@ public class TableDefController extends Controller {
         }
 
         return ok(views.html.admin.tableDefViews.edit.render(tableDefForm));
+    }
+
+    public Result delete(Long id) {
+
+        TableDef tableDef = this.tableDefService.getById(id);
+        Long schemaID = tableDef.getSchemaDefId();
+        ServiceError serviceError = this.tableDefService.deleteTableDef(id);
+        // ToDO
+
+        return ok();
     }
 
 }

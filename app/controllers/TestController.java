@@ -1,10 +1,14 @@
 package controllers;
 
+import initializers.schemaBuilders.HeroSchemaBuilder;
+import insertParser.InsertParser;
 import models.TaskTrial;
 import parser.SQLParser;
 import parser.SQLParserFactory;
 import parser.extensionMaker.ExtensionMaker;
+
 import models.SchemaDef;
+import parser.tableMaker.TableMaker;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -36,16 +40,25 @@ public class TestController extends Controller {
 
     public Result test() {
         session().clear();
-        SchemaDef schemaDef = this.schemaDefRepository.getById(1L);
+
+        SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
         ExtensionMaker extensionMaker = new ExtensionMaker(12345L, schemaDef);
 
-        String[][] statements = extensionMaker.buildStatements();
+        String[][][] v = extensionMaker.buildStatements();
 
-        return ok(Arrays.deepToString(statements));
+        return ok(Json.toJson(v));
+    }
+
+    public Result testTableMaker() {
+        SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
+
+        TableMaker tableMaker = new TableMaker(schemaDef);
+
+        return ok(Json.toJson(tableMaker.buildStatement()));
     }
 
     public Result parserCreate() {
-        SchemaDef schemaDef = schemaDefRepository.getById(1L);
+        SchemaDef schemaDef = schemaDefRepository.getByName("HeroTeamSchema");
         schemaDef.save();
 
         TaskTrial taskTrial = this.taskTrialService.getNewTaskTrial(null);
