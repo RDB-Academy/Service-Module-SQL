@@ -64,6 +64,12 @@ public class ExtensionMaker {
 
         String[][][] out = new String[tables][row][maxSize];
 
+
+        System.out.println("META: " + tableDefs.get(0).getColumnDefList().get(0).getMetaValueSet());
+
+        //tableDefs.get(0).getColumnDefList().get(0).setName("id");
+        //tableDefs.get(1).getColumnDefList().get(0).setName("id");
+
         //tableDefs.forEach(tableDef -> tableDef.getColumnDefList().forEach(columnDef -> System.out.println(columnDef.getName())));
 
         for(int t = 0; t< tables; t++){
@@ -72,8 +78,8 @@ public class ExtensionMaker {
 
             for(int i = 0; i < row; i++) {
                 for(int j = 0; j < columm; j++) {
-                    switch (tableDefs.get(t).getColumnDefList().get(j).getName()) {
-                        case "mail":
+                    switch (tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet()) {
+                        case 1:
                             for ( int b = 0; b <= j; b ++){
                                 if( tableDefs.get(t).getColumnDefList().get(b).getName().equals("firstname") || tableDefs.get(t).getColumnDefList().get(b).getName().equals("lastname")){
                                     if(out[t][i][j] == null ){
@@ -83,46 +89,46 @@ public class ExtensionMaker {
                             }
                             out[t][i][j] = out[t][i][j] + (int) (Math.random() * 100) +"@"+ mail[(int)(Math.random() * mail.length)];
                             break;
-                        case "firstname":
+                        case 8:
                             out[t][i][j] = "" + firstname[(int) (Math.random() * firstname.length)];
                             break;
-                        case "id":
+                        case 485:
                             out[t][i][j] = "" + i;
                             break;
-                        case "animal":
+                        case 2:
                             out[t][i][j] = "" + animal[(int) (Math.random() * animal.length)];
                             break;
-                        case "city":
+                        case 3:
                             out[t][i][j] = "" + city[(int) (Math.random() * city.length)];
                             break;
-                        case "title":
+                        case 4:
                             out[t][i][j] = "" + title[(int) (Math.random() * title.length)];
                             break;
-                        case "fullname":
+                        case 5:
                             out[t][i][j] = "" + firstname[(int) (Math.random() * firstname.length)] + " " + lastname[(int) (Math.random() * lastname.length)];
                             break;
-                        case "metal":
+                        case 6:
                             out[t][i][j] = "" + metal[(int) (Math.random() * metal.length)];
                             break;
-                        case "day":
+                        case 7:
                             out[t][i][j] = "" + (int) (Math.random() * 30);
                             break;
-                        case "month":
+                        case 9:
                             out[t][i][j] = "" + (int) (Math.random() * 13);
                             break;
-                        case "year":
+                        case 154:
                             out[t][i][j] = "" + (1930 + (int) (Math.random() * 87));
                             break;
-                        case "word":
+                        case 672:
                             out[t][i][j] = word[(int) (Math.random() * word.length)] + " " + word[(int) (Math.random() * word.length)];
                             break;
-                        case "lastname":
+                        case 744:
                             out[t][i][j] = "" + lastname[(int) (Math.random() * lastname.length)];
                             break;
-                        case "colour":
+                        case 10:
                             out[t][i][j] = "" + colour[(int) (Math.random() * colour.length)];
                             break;
-                        case "country":
+                        case 952:
                             out[t][i][j] = "" + country[(int) (Math.random() * country.length)];
                             break;
                         default:

@@ -47,6 +47,19 @@ public class ColumnDef extends BaseModel {
     public static final int META_VALUE_SET_NAME = 768;
     public static final int META_VALUE_SET_FIRSTNAME = 8;
     public static final int META_VALUE_SET_LASTNAME = 744;
+    public static final int META_VALUE_SET_FULLNAME = 5;
+
+    public static final int META_VALUE_SET_CITY = 3;
+    public static final int META_VALUE_SET_TITLE = 4;
+    public static final int META_VALUE_SET_DAY = 7;
+    public static final int META_VALUE_SET_MONTH = 9;
+    public static final int META_VALUE_SET_MAIL = 1;
+    public static final int META_VALUE_SET_ANIMAL = 2;
+    public static final int META_VALUE_SET_METAL = 6;
+    public static final int META_VALUE_SET_COLOUR = 10;
+
+
+
 
     public static final int META_VALUE_SET_GRADE = 361;
 
