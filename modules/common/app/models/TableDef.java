@@ -71,7 +71,7 @@ public class TableDef extends BaseModel {
         return this.getSchemaDef().getId();
     }
 
-    @JsonGetter("columnDefList")
+    @JsonGetter("columnDefs")
     public List<Long> getColumnDefIds() {
         return this.getColumnDefList().stream().map(ColumnDef::getId).collect(Collectors.toList());
     }

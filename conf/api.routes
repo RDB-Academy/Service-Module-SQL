@@ -5,18 +5,19 @@ POST    /login                      controllers.api.SessionController.authentica
 GET     /tasks/:id                  controllers.api.TaskController.show(id :Long)
 
 ## model.TaskTrial
-POST    /tasktrials                 controllers.api.TaskTrialController.create()
-GET     /tasktrials/:id             controllers.api.TaskTrialController.show(id: Long)
-PATCH   /tasktrials/:id             controllers.api.TaskTrialController.update(id: Long)
+POST    /task-trials                 controllers.api.TaskTrialController.create()
+GET     /task-trials/:id             controllers.api.TaskTrialController.show(id: Long)
+PATCH   /task-trials/:id             controllers.api.TaskTrialController.update(id: Long)
 
 ## model.SchemaDef
-GET     /schemas/:id                controllers.api.SchemaDefController.show(id: Long)
+GET     /schema-defs/:id             controllers.api.SchemaDefController.show(id: Long)
 
 ## model.TableDef
-GET     /tables/:id                 controllers.api.TableDefController.show(id: Long)
+GET     /table-defs/:id             controllers.api.TableDefController.show(id: Long)
 
 ## model.ColumnDef
-GET     /columns/:id                controllers.api.ColumnDefController.show(id: Long)
+GET     /column-defs/:id             controllers.api.ColumnDefController.show(id: Long)
+
 
 ## Stop from General Redirecting
 GET     /*file                      controllers.HomeController.notFoundView(file: String)
