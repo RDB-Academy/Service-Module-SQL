@@ -2,11 +2,11 @@ package controllers.admin;
 
 import authenticators.Authenticated;
 import models.TableDef;
-import play.data.FormFactory;
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.TableDefRepository;
+import services.TableDefService;
 
 import javax.inject.Inject;
 
@@ -15,33 +15,31 @@ import javax.inject.Inject;
  */
 @Security.Authenticated(Authenticated.class)
 public class TableDefController extends Controller {
-    private TableDefRepository tableDefRepository;
-    private FormFactory formFactory;
+    private final TableDefService tableDefService;
 
     @Inject
-    public TableDefController(TableDefRepository tableDefRepository, FormFactory formFactory) {
-        this.tableDefRepository = tableDefRepository;
-        this.formFactory = formFactory;
+    public TableDefController(TableDefService tableDefService) {
+        this.tableDefService = tableDefService;
     }
 
-    public Result view(Long id) {
-        TableDef tableDef = tableDefRepository.getById(id);
+    public Result read(Long id) {
+        Form<TableDef> tableDefForm = this.tableDefService.getViewForm(id);
 
-        if(tableDef == null) {
+        if(tableDefForm == null) {
             return notFound();
         }
 
-        return ok(views.html.admin.tableDefViews.view.render(this.formFactory.form(TableDef.class).fill(tableDef)));
+        return ok(views.html.admin.tableDefViews.read.render(tableDefForm));
     }
 
     public Result edit(Long id) {
-        TableDef tableDef = tableDefRepository.getById(id);
+        Form<TableDef> tableDefForm = this.tableDefService.getViewForm(id);
 
-        if (tableDef == null) {
+        if (tableDefForm == null) {
             return notFound();
         }
 
-        return ok(views.html.admin.tableDefViews.edit.render(this.formFactory.form(TableDef.class).fill(tableDef)));
+        return ok(views.html.admin.tableDefViews.edit.render(tableDefForm));
     }
 
 }

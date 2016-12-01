@@ -2,15 +2,22 @@
 POST    /login                      controllers.api.SessionController.authenticate()
 
 ## model.Task
-POST    /tasks                      controllers.api.TaskController.create()
-GET     /tasks                      controllers.api.TaskController.view()
 GET     /tasks/:id                  controllers.api.TaskController.show(id :Long)
-PATCH   /tasks/:id                  controllers.api.TaskController.update(id: Long)
-DELETE  /tasks/:id                  controllers.api.TaskController.delete(id: Long)
 
 ## model.TaskTrial
 POST    /tasktrials                 controllers.api.TaskTrialController.create()
-GET     /tasktrials                 controllers.api.TaskTrialController.view()
 GET     /tasktrials/:id             controllers.api.TaskTrialController.show(id: Long)
-PATCH   /tasktrials/:id             controllers.api.TaskTrialController.submit(id: Long)
-DELETE  /tasktrials/:id             controllers.api.TaskTrialController.delete(id: Long)
+PATCH   /tasktrials/:id             controllers.api.TaskTrialController.update(id: Long)
+
+## model.SchemaDef
+GET     /schemas/:id             controllers.api.SchemaDefController.show(id: Long)
+
+## model.TableDef
+GET     /tables/:id             controllers.api.TableDefController.show(id: Long)
+
+## model.ColumnDef
+GET     /columns/:id             controllers.api.ColumnDefController.show(id: Long)
+
+## Stop from General Redirecting
+GET     /*file                      controllers.HomeController.notFoundView(file: String)
+

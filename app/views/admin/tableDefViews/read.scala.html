@@ -1,0 +1,17 @@
+@(tableDefForm: Form[TableDef])
+
+@main("TableDef") {
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <div class="pull-left">
+                <h4 class="panel-title" style="padding-top: 5.5px;">
+                    <a href="@controllers.admin.routes.SchemaDefController.read(tableDefForm.get().getSchemaDef.getId)"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-right: 50px; color: dodgerblue"></span></a>
+                    View Table
+                </h4>
+            </div>
+            <div class="btn-group pull-right">
+                <a href="@controllers.admin.routes.TableDefController.edit(tableDefForm.get().getId)" type="button" class="btn btn-default btn-sm">Edit</a>
+            </div>
+        </div>
+    </div>
+}

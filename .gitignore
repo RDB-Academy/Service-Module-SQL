@@ -1,8 +1,12 @@
+# OS
+.DS_Store
+
+# IDE
+/.idea
+/.idea_modules
+
 logs
 target
-/.idea
-*.iml
-/.idea_modules
 /.classpath
 /.project
 /.settings
@@ -13,5 +17,11 @@ app-2.11/
 project/project/
 test-2.11/
 test/resources/
+
+# SQL Parser
+/tmp
+
+# Front-End
 Front-End/
 public/dist
+Service-Module-SQL.iml

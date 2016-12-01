@@ -51,6 +51,10 @@ body {
     /* fallback */
 }
 
+.table > thead > tr > th,
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
 
 .table-list-box tbody td, .table-list-box thead th {
     width: 19.2%;

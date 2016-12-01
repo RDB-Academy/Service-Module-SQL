@@ -2,7 +2,13 @@ name := """Service-Module-SQL"""
 
 version := "0.1"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
+lazy val common = (project in file("modules/common")).enablePlugins(PlayJava, PlayEbean)
+
+lazy val root = (project in file("."))
+  .enablePlugins(PlayJava)
+  .dependsOn(common)
+  .aggregate(common)
+
 
 scalaVersion := "2.11.8"
 
@@ -12,12 +18,17 @@ loadEmberProject := {
   Seq("sh", "loadEmberProject.sh")!
 }
 
-run in Compile <<= (run in Compile).dependsOn(loadEmberProject)
+lazy val dev = taskKey[Unit]("Deploy FrontEnt to this Project")
+
+dev := {
+  println("Run Activator with FrontEnd")
+  loadEmberProject.value
+}
+
 
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
   javaWs,
-  "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3",
-  "eu.bitwalker" % "UserAgentUtils" % "1.20"
+  "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3"
 )
