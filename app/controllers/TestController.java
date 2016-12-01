@@ -1,5 +1,6 @@
 package controllers;
 
+import initializers.schemaBuilders.HeroSchemaBuilder;
 import insertParser.InsertParser;
 import models.TaskTrial;
 import parser.SQLParser;
@@ -38,11 +39,11 @@ public class TestController extends Controller {
 
     public Result test() {
         session().clear();
-        SchemaDef schemaDef = this.schemaDefRepository.getById(1L);
+
+        SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
         ExtensionMaker extensionMaker = new ExtensionMaker(12345L, schemaDef);
 
         String[][][] v = extensionMaker.buildStatements();
-
 
         return ok(Json.toJson(v));
     }

@@ -24,7 +24,7 @@ public class ExtensionMaker {
     String[] lastname = {"Medina","Arnold","Chase","Blake","Blackburn","Chan","Adkins","Pacheco","Barry","Jordan","Bowers","Pitts","Duarte","Dean","Wilkinson","Mcintyre","Joseph","Melton","Summers","Mcintosh","Moody","Pollard","Tran","Delacruz","Cox","Tucker","Wilkerson","Lindsey","Boone","Goodwin","Doyle","Hanson","Velazquez","Camacho","Moss","Tanner","Clark","Bautista","Glenn","Mccormick","Blackwell","Orozco","Clay","Perez","Cervantes","Vance","Lynn","Berry","Perkins","Cherry","Mejia","Rocha","Rosales","Simmons","Calhoun","Mcconnell","Mckee","Davis","Horne","Skinner","Galloway","Cardenas","Villa","Woods","Arroyo","Galvan","Castillo","Sanders","Flowers","Barr","Montes","Briggs","Maynard","Bradshaw","Higgins","Hart","Duke","Alvarez","Hill","Davenport","Douglas","Olsen","Noble","Mason","Parks","Allison","Braun","Bean","Curry","Cummings","Kent","Dodson","Best","Jacobson","Guzman","Hale","Mccarty","Meza","Maxwell","Mcneil","Abraham","Allan","Alsop","Anderson","Arnold","Avery","Bailey","Baker","Ball","Bell","Berry","Black","Blake","Bond","Bower","Brown","Buckland","Burgess","Butler","Cameron","Campbell","Carr","Chapman","Churchill","Clark","Clarkson","Coleman","Cornish","Davidson","Davies","Dickens","Dowd","Duncan","Dyer","Edmunds","Ellison","Ferguson","Fisher","Forsyth","Fraser","Gibson","Gill","Glover","Graham","Grant","Gray","Greene","Hamilton","Hardacre","Harris","Hart","Hemmings","Henderson","Hill","Hodges","Howard","Hudson","Hughes","Hunter","Ince","Jackson","James","Johnston","Jones","Kelly","Kerr","King","Knox","Lambert","Langdon","Lawrence","Lee","Lewis","Lyman","MacDonald","Mackay","Mackenzie","MacLeod","Manning","Marshall","Martin","Mathis","May","McDonald","McLean","McGrath","Metcalfe","Miller","Mills","Mitchell","Morgan","Morrison","Murray","Nash","Newman","Nolan","North","Ogden","Oliver","Paige","Parr","Parsons","Paterson","Payne","Peake","Peters","Piper","Poole","Powell","Pullman","Quinn","Rampling","Randall","Rees","Reid","Roberts","Robertson","Ross","Russell","Rutherford","Sanderson","Scott","Sharp","Short","Simpson","Skinner","Slater","Smith","Springer","Stewart","Sutherland","Taylor","Terry","Thomson","Tucker","Turner","Underwood","Vance","Vaughan","Walker","Wallace","Walsh","Watson","Welch","White","Wilkins","Wilson","Wright","Young"};
     String[] colour = {"IndianRed","LightCoral","Salmon","DarkSalmon","LightSalmon","Crimson","Red","FireBrick","DarkRed","Pink","LightPink","HotPink","DeepPink","MediumVioletRed","PaleVioletRed","LightSalmon","Coral","Tomato","OrangeRed","DarkOrange","Orange","Gold","Yellow","LightYellow","LemonChiffon","LightGoldenRodYellow","PapayaWhip","Moccasin","PeachPuff","PaleGoldenrod","Khaki","DarkKhaki","Lavender","Thistle","Plum","Violet","Orchid","Fuchsia","Magenta","MediumOrchid","MediumPurple","BlueViolet","DarkViolet","DarkOrchid","DarkMagenta","Purple","Indigo","SlateBlue","DarkSlateBlue","MediumSlateBlue","GreenYellow","Chartreuse","LawnGreen","Lime","LimeGreen","PaleGreen","LightGreen","MediumSpringGreen","SpringGreen","MediumSeaGreen","SeaGreen","ForestGreen","Green","DarkGreen","YellowGreen","OliveDrab","Olive","DarkOliveGreen","MediumAquamarine","DarkSeaGreen","LightSeaGreen","DarkCyan","Teal","Aqua","Cyan","LightCyan","PaleTurquoise","Aquamarine","Turquoise","MediumTurquoise","DarkTurquoise","CadetBlue","SteelBlue","LightSteelBlue","PowderBlue","LightBlue","SkyBlue","LightSkyBlue","DeepSkyBlue","DodgerBlue","CornflowerBlue","MediumSlateBlue","RoyalBlue","Blue","MediumBlue","DarkBlue","Navy","MidnightBlue","Cornsilk","BlanchedAlmond","Bisque","NavajoWhite","Wheat","BurlyWood","Tan","RosyBrown","SandyBrown","Goldenrod","DarkGoldenrod","Peru","Chocolate","SaddleBrown","Sienna","Brown","Maroon","White","Snow","Honeydew","MintCream","Azure","AliceBlue","GhostWhite","WhiteSmoke","Seashell","Beige","OldLace","FloralWhite","Ivory","AntiqueWhite","Linen","LavenderBlush","MistyRose","Gainsboro","LightGray","Silver","DarkGray","Gray","DimGray","LightSlateGray","SlateGray","DarkSlateGray","Black"};
     String[] country = {"Qatar","Luxembourg","Singapore","Brunei Darussalam","Kuwait","Norway","United Arab Emirates","Hong Kong","United States","Switzerland","Saudi Arabia","Bahrain","Netherlands","Ireland","Australia","Austria","Sweden","Germany","Taiwan","Canada","Denmark","Oman","Iceland","Belgium","France","Finland","United Kingdom","Japan","Republic Of Korea","New Zealand","Italy","Spain","Israel","Malta","Trinidad And Tobago","Slovenia","Equatorial Guinea","Czech Republic","Slovak Republic","Cyprus","Lithuania","Estonia","Portugal","Greece","Malaysia","Bahamas","Poland","Seychelles","Hungary","Kazakhstan","Russian Federation","Latvia","Chile","Antigua And Barbuda","Gabon","Argentina","Panama","Uruguay","Saint Kitts And Nevis","Croatia","Romania","Turkey","Libyan Arab Jamahiriya","Azerbaijan","Belarus","Mauritius","Mexico","Lebanon","Bulgaria","Bolivarian Republic Of Venezuela","Suriname","Iran","Botswana","Barbados","Montenegro","Palau","Turkmenistan","Costa Rica","Brazil","Thailand","Algeria","Colombia","China","Macedonia","Iraq","Dominican Republic","South Africa","Maldives","Serbia","Peru","Jordan","Grenada","Tunisia","Ecuador","Albania","Egypt","Saint Lucia","Saint Vincent And The Grenadines","Namibia","Sri Lanka","Mongolia","Dominica","Indonesia","Bosnia And Herzegovina","Jamaica","Paraguay","Angola","Fiji","Ukraine","Belize","El Salvador","Bhutan","Georgia","Morocco","Swaziland","Armenia","Guatemala","Philippines","Timor Leste","Guyana","Rep.Congo","Cape Verde","Bolivia","Nigeria","India","Viet Nam","Uzbekistan","Lao People S Democratic Republic","Samoa","Tonga","Myanmar","Moldova","Nicaragua","Pakistan","Honduras","Sudan","Zambia","Ghana","Yemen","Bangladesh","Mauritania","Kyrgyz Republic","Cambodia","Sao Tome And Principe","Kenya","Marshall Islands","Micronesia","Djibouti","Cameroon","Lesotho","Côte D Ivoir"};
-    String[] sound = {"AN","AU","BE","CH","DA","DE","DI","EI","EL","EN","ER","ES","GE","HE","HT","IC","IE","IN","IT","LE","LI","ND","NE","NG","RE","SC","SE","SI","ST","TE","UN","EN","ER","CH","DE","EI","IE","IN","TE","GE","UN","ND","IC","ES","BE","HE","ST","NE","AN","RE","SE","DI","SC","AU","NG","SI","LE","DA","IT","HT","EL","LI",};
+    String[] sound = {"an","au","be","ch","da","de","di","ei","el","en","er","es","ge","he","ht","ic","ie","in","it","le","li","nd","ne","ng","re","sc","se","si","st","te","un","en","er","ch","de","ei","ie","in","te","ge","un","nd","ic","es","be","he","st","ne","an","re","se","di","sc","au","ng","si","le","da","it","ht","el","li"};
 
     public ExtensionMaker(Long seed, SchemaDef schemaDef) {
         this.seed = seed;
@@ -35,10 +35,19 @@ public class ExtensionMaker {
     public String[][][] buildStatements() {
 
         List<TableDef> tableDefs = schemaDef.getTableDefList();
-        schemaDef.getTableDefList().forEach(System.out::println);
+        schemaDef.getTableDefList().forEach((tabledef) -> {
+            System.out.println(tabledef.getName());
+            tabledef.getColumnDefList().forEach(columnDef -> {
+                System.out.println("  - " + columnDef.getName() + " " + columnDef.getDataType());
+            });
+        });
 
-        //tableDefs.get(0).getColumnDefList().get(0).setName("firstname");
-        //tableDefs.get(0).getColumnDefList().get(1).setName("mail");
+        schemaDef.getForeignKeyList().forEach(foreignKey -> {
+            System.out.println(foreignKey.getName());
+            foreignKey.getForeignKeyRelationList().forEach(foreignKeyRelation -> {
+                System.out.println("  - " + foreignKeyRelation.getSourceColumn().getName() + " -> " + foreignKeyRelation.getTargetColumn().getName());
+            });
+        });
 
         int tables = schemaDef.getTableDefList().size();
         int maxSize = 0;
@@ -50,7 +59,7 @@ public class ExtensionMaker {
             System.out.println("maxSize: " + maxSize);
         }
 
-        int row = 1;
+        int row = 5;
 
 
         String[][][] out = new String[tables][row][maxSize];
@@ -76,6 +85,9 @@ public class ExtensionMaker {
                             break;
                         case "firstname":
                             out[t][i][j] = "" + firstname[(int) (Math.random() * firstname.length)];
+                            break;
+                        case "id":
+                            out[t][i][j] = "" + i;
                             break;
                         case "animal":
                             out[t][i][j] = "" + animal[(int) (Math.random() * animal.length)];
@@ -115,11 +127,10 @@ public class ExtensionMaker {
                             break;
                         default:
                             switch (tableDefs.get(t).getColumnDefList().get(j).getDataType()) {
-                                case "INT":
-                                case "int":
+                                case "INT":case "int":
                                     out[t][i][j] = "" + (int) (Math.random() * 1111);
                                     break;
-                                case "VARCHAR":
+                                case "VARCHAR(255)":case "VARCHAR":
                                     int num = 2 + (int) (Math.random() * 4);
                                     out[t][i][j] = "";
                                     while ( num > 0 ){
@@ -128,7 +139,7 @@ public class ExtensionMaker {
                                     }
                                     break;
                                 default:
-                                    out[t][i][j] = "" + tableDefs.get(t).getColumnDefList().get(j).getName();
+                                    out[t][i][j] = "" + tableDefs.get(t).getColumnDefList().get(j).getName() + tableDefs.get(t).getColumnDefList().get(j).getDataType();
                                     break;
                             }
                             break;
