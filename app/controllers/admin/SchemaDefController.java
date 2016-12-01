@@ -48,46 +48,62 @@ public class SchemaDefController extends Controller {
         return ok(views.html.admin.schemaDefViews.createJson.render());
     }
 
-    public Result newSchemaDef() {
-        Form<SchemaDef> schemaDefForm = this.schemaDefService.getNewSchemaDef(request());
-
-        if(schemaDefForm.hasErrors()) {
-            if(request().body().asJson() == null) {
-                flash("flash", "Error");
-                return redirect(routes.SchemaDefController.createJson());
-            }
-            return badRequest(views.html.admin.schemaDefViews.createForm.render(schemaDefForm));
-        }
-
-        Long id = schemaDefForm.get().getId();
-        return redirect(routes.SchemaDefController.read(id));
+    public CompletionStage<Result> newSchemaDef() {
+        return CompletableFuture
+                .supplyAsync(() ->
+                        this.schemaDefService.getNewSchemaDef(request()), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                        if (schemaDefForm.hasErrors()) {
+                            if (request().body().asJson() == null) {
+                                flash("flash", "Error");
+                                return redirect(routes.SchemaDefController.createJson());
+                            }
+                            return badRequest(views.html.admin.schemaDefViews.createForm.render(schemaDefForm));
+                        }
+                        Long id = schemaDefForm.get().getId();
+                        return redirect(routes.SchemaDefController.read(id));
+                    }
+                );
     }
 
-    public Result read(Long id) {
-        Form<SchemaDef> schemaDefForm = this.schemaDefService.getSchemaDefForm(id);
+    public CompletionStage<Result> read(Long id) {
+        return CompletableFuture
+                .supplyAsync(
+                        () -> this.schemaDefService.getSchemaDefForm(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                        if (schemaDefForm == null) {
+                            flash("notFound", "Schema with id " + id + " not found!");
+                            return redirect(routes.SchemaDefController.index());
+                        }
 
-        if(schemaDefForm == null) {
-            flash("notFound", "Schema with id " + id + " not found!");
-            return redirect(routes.SchemaDefController.index());
-        }
-
-        return ok(views.html.admin.schemaDefViews.read.render(schemaDefForm));
+                        return ok(views.html.admin.schemaDefViews.read.render(schemaDefForm));
+                    }
+                );
     }
 
-    public Result edit(Long id) {
-        Form<SchemaDef> schemaDefForm = this.schemaDefService.getSchemaDefForm(id);
+    public CompletionStage<Result> edit(Long id) {
+        return CompletableFuture.supplyAsync(
+                () -> this.schemaDefService.getSchemaDefForm(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                    if(schemaDefForm == null) {
+                        flash("notFound", "Schema with id " + id + " not found!");
+                        return redirect(routes.SchemaDefController.index());
+                    }
 
-        if(schemaDefForm == null) {
-            flash("notFound", "Schema with id " + id + " not found!");
-            return redirect(routes.SchemaDefController.index());
-        }
-
-        return ok(views.html.admin.schemaDefViews.edit.render(schemaDefForm));
+                    return ok(views.html.admin.schemaDefViews.edit.render(schemaDefForm));
+                    }
+                );
     }
 
-    public Result update(Long id) {
-        
-        return redirect(routes.SchemaDefController.edit(id));
+    public CompletionStage<Result> update(Long id) {
+        return CompletableFuture
+                .supplyAsync(() ->
+                        this.schemaDefService.updateSchemaDef(id), this.httpExecutionContext.current())
+                .thenApply((test) -> {
+                    System.out.println("Update");
+                    return redirect(routes.SchemaDefController.edit(id));
+                    }
+                );
     }
 
     public Result delete(Long id) {
