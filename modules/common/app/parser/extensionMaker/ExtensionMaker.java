@@ -128,6 +128,9 @@ public class ExtensionMaker {
                         case 10:
                             out[t][i][j] = "" + colour[(int) (Math.random() * colour.length)];
                             break;
+                        case 11:
+                            out[t][i][j] = "" + (int) (Math.random() * 30) + (int) (Math.random() * 13) + (1930 + (int) (Math.random() * 87));
+                            break;
                         case 952:
                             out[t][i][j] = "" + country[(int) (Math.random() * country.length)];
                             break;

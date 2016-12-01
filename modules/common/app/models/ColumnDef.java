@@ -61,6 +61,7 @@ public class ColumnDef extends BaseModel {
     public static final int META_VALUE_SET_ANIMAL = 2;
     public static final int META_VALUE_SET_METAL = 6;
     public static final int META_VALUE_SET_COLOUR = 10;
+    public static final int META_VALUE_SET_DATE = 11;
 
 
 
