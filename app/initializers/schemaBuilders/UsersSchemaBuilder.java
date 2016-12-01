@@ -31,13 +31,17 @@ public class UsersSchemaBuilder extends SchemaBuilder{
 
         user_firstname.setPrimary(true);
         user_firstname.setNullable(false);
+        user_firstname.setMetaValueSet(ColumnDef.META_VALUE_SET_FIRSTNAME);
 
         user_lastname.setNullable(true);
+        user_firstname.setMetaValueSet(ColumnDef.META_VALUE_SET_LASTNAME);
 
         location_name.setPrimary(true);
         location_name.setNullable(false);
+        location_name.setMetaValueSet(ColumnDef.META_VALUE_SET_LOCATION);
 
         location_description.setNullable(true);
+        location_name.setMetaValueSet(ColumnDef.META_VALUE_SET_LOREM_IPSUM);
 
         user.addColumnDef(user_firstname);
         user.addColumnDef(user_lastname);

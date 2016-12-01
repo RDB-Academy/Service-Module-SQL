@@ -12,6 +12,7 @@ import java.util.List;
  */
 @Entity
 public class ColumnDef extends BaseModel {
+
     @Id
     private Long id;
 
@@ -41,11 +42,23 @@ public class ColumnDef extends BaseModel {
     private List<ForeignKeyRelation> foreignKeyRelationsTarget;
 
 
+    @Column(nullable = false)
     private int metaValueSet;
 
+    public static final int META_VALUE_SET_ID = 485;
+    public static final int META_VALUE_SET_FOREIGN_KEY = 358;
+
+    public static final int META_VALUE_SET_NAME = 768;
     public static final int META_VALUE_SET_FIRSTNAME = 8;
     public static final int META_VALUE_SET_LASTNAME = 744;
 
+    public static final int META_VALUE_SET_GRADE = 361;
+
+    public static final int META_VALUE_SET_LOCATION = 952;
+
+    public static final int META_VALUE_SET_YEAR = 154;
+
+    public static final int META_VALUE_SET_LOREM_IPSUM = 672;
 
     public Long getId() {
         return id;
