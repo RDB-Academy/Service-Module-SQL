@@ -1,7 +1,6 @@
 package controllers.admin;
 
 import authenticators.Authenticated;
-import models.SchemaDef;
 import models.TableDef;
 import play.data.Form;
 import play.libs.concurrent.HttpExecutionContext;
@@ -9,7 +8,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import services.SchemaDefService;
-import services.tools.ServiceError;
+import services.Service;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
@@ -32,23 +31,17 @@ public class SchemaDefController extends Controller {
     }
 
 
-    public CompletionStage<Result> index() {
+    public CompletionStage<Result> createViewForm() {
         return CompletableFuture
-                .supplyAsync(this.schemaDefService::getSchemaDefList, this.httpExecutionContext.current())
-                .thenApply(schemaDefList -> ok(views.html.admin.schemaDefViews.index.render(schemaDefList)));
-    }
-
-    public CompletionStage<Result> createForm() {
-        return CompletableFuture
-                .supplyAsync(this.schemaDefService::getCreateForm, this.httpExecutionContext.current())
+                .supplyAsync(this.schemaDefService::createForm, this.httpExecutionContext.current())
                 .thenApply(createForm -> ok(views.html.admin.schemaDefViews.createForm.render(createForm)));
     }
 
-    public Result createJson() {
+    public Result createViewJson() {
         return ok(views.html.admin.schemaDefViews.createJson.render());
     }
 
-    public CompletionStage<Result> newSchemaDef() {
+    public CompletionStage<Result> create() {
         return CompletableFuture
                 .supplyAsync(() ->
                         this.schemaDefService.getNewSchemaDef(request()), this.httpExecutionContext.current())
@@ -56,7 +49,7 @@ public class SchemaDefController extends Controller {
                         if (schemaDefForm.hasErrors()) {
                             if (request().body().asJson() == null) {
                                 flash("flash", "Error");
-                                return redirect(routes.SchemaDefController.createJson());
+                                return redirect(routes.SchemaDefController.createViewJson());
                             }
                             return badRequest(views.html.admin.schemaDefViews.createForm.render(schemaDefForm));
                         }
@@ -66,6 +59,12 @@ public class SchemaDefController extends Controller {
                 );
     }
 
+    public CompletionStage<Result> readAll() {
+        return CompletableFuture
+                .supplyAsync(this.schemaDefService::getSchemaDefList, this.httpExecutionContext.current())
+                .thenApply(schemaDefList -> ok(views.html.admin.schemaDefViews.index.render(schemaDefList)));
+    }
+
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(
@@ -73,7 +72,7 @@ public class SchemaDefController extends Controller {
                 .thenApply(schemaDefForm -> {
                         if (schemaDefForm == null) {
                             flash("notFound", "Schema with id " + id + " not found!");
-                            return redirect(routes.SchemaDefController.index());
+                            return redirect(routes.SchemaDefController.readAll());
                         }
 
                         return ok(views.html.admin.schemaDefViews.read.render(schemaDefForm));
@@ -81,13 +80,13 @@ public class SchemaDefController extends Controller {
                 );
     }
 
-    public CompletionStage<Result> edit(Long id) {
+    public CompletionStage<Result> updateView(Long id) {
         return CompletableFuture.supplyAsync(
                 () -> this.schemaDefService.getSchemaDefForm(id), this.httpExecutionContext.current())
                 .thenApply(schemaDefForm -> {
                     if(schemaDefForm == null) {
                         flash("notFound", "Schema with id " + id + " not found!");
-                        return redirect(routes.SchemaDefController.index());
+                        return redirect(routes.SchemaDefController.readAll());
                     }
 
                     return ok(views.html.admin.schemaDefViews.edit.render(schemaDefForm));
@@ -101,27 +100,37 @@ public class SchemaDefController extends Controller {
                         this.schemaDefService.updateSchemaDef(id), this.httpExecutionContext.current())
                 .thenApply((test) -> {
                     System.out.println("Update");
-                    return redirect(routes.SchemaDefController.edit(id));
+                    return redirect(routes.SchemaDefController.updateView(id));
                     }
                 );
     }
 
-    public Result delete(Long id) {
-        ServiceError serviceError = this.schemaDefService.deleteSchemaDef(id);
-
-        if(serviceError != null) {
-            serviceError.flash(ctx());
-        }
-
-        return redirect(routes.SchemaDefController.index());
+    public CompletionStage<Result> delete(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.schemaDefService.deleteSchemaDef(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                    if(schemaDefForm.hasErrors()) {
+                        return badRequest(schemaDefForm.errorsAsJson());
+                    }
+                    return redirect(routes.SchemaDefController.readAll());
+                });
     }
 
-    public Result createTableDef(long id) {
-        Form<TableDef> tableDefForm = this.schemaDefService.getCreateTableDefForm(id);
-        if(tableDefForm == null) {
-            return notFound();
-        }
 
-        return ok(views.html.admin.schemaDefViews.createTableDef.render(tableDefForm));
+
+/* ****************************************************************************************************************** *\
+|  --- Not SchemaDef Related Stuff
+\* ****************************************************************************************************************** */
+
+    public CompletionStage<Result> createTableDef(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.schemaDefService.getCreateTableDefForm(id))
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm == null) {
+                        return notFound();
+                    }
+                    return ok(views.html.admin.schemaDefViews.createTableDef.render(tableDefForm));
+                });
+
     }
 }

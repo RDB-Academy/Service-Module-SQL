@@ -7,13 +7,13 @@
         <div class="panel-heading clearfix">
             <div class="pull-left">
                 <h4 class="panel-title" style="padding-top: 5.5px;">
-                    <a href="@controllers.admin.routes.SchemaDefController.index()"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-right: 50px; color: dodgerblue"></span></a>
+                    <a href="@controllers.admin.routes.SchemaDefController.readAll()"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-right: 50px; color: dodgerblue"></span></a>
                     View Schema
                 </h4>
             </div>
             <div class="btn-group pull-right">
                 <a href="@controllers.admin.routes.SchemaDefController.delete(schemaDefForm.get().getId)" class="btn btn-default btn-sm" data-confirm="Are you sure?" data-method="delete"><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color: red"></span></a>
-                <a href="@controllers.admin.routes.SchemaDefController.edit(schemaDefForm.get().getId)" type="button" class="btn btn-default btn-sm">Edit</a>
+                <a href="@controllers.admin.routes.SchemaDefController.updateView(schemaDefForm.get().getId)" type="button" class="btn btn-default btn-sm">Edit</a>
             </div>
         </div>
         <div class="panel-body">

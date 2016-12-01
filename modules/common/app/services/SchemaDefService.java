@@ -4,22 +4,18 @@ import models.SchemaDef;
 import models.TableDef;
 import play.data.Form;
 import play.data.FormFactory;
-import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Http;
 import repository.SchemaDefRepository;
-import services.tools.ServiceError;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.xml.ws.spi.http.HttpContext;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * @author fabiomazzone
  */
 @Singleton
-public class SchemaDefService {
+public class SchemaDefService extends Service {
     private SchemaDefRepository schemaDefRepository;
     private FormFactory formFactory;
 
@@ -29,22 +25,15 @@ public class SchemaDefService {
         this.formFactory = formFactory;
     }
 
-    public Form<SchemaDef> getCreateForm() {
+
+    /**
+     * This function returns a new Creation Form for a new schemaDef
+     * @return a new Creation Form for a new schemaDef
+     */
+    public Form<SchemaDef> createForm() {
         return this.formFactory.form(SchemaDef.class);
     }
 
-    public Form<TableDef> getCreateTableDefForm(long id) {
-        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
-        TableDef tableDef = new TableDef();
-
-        if(schemaDef == null) {
-            return null;
-        }
-
-        tableDef.setSchemaDef(schemaDef);
-
-        return this.formFactory.form(TableDef.class).fill(tableDef);
-    }
 
     public Form<SchemaDef> getSchemaDefForm(Long id) {
         SchemaDef schemaDef = this.schemaDefRepository.getById(id);
@@ -69,11 +58,13 @@ public class SchemaDefService {
         return schemaDefForm.fill(schemaDef);
     }
 
-    public ServiceError deleteSchemaDef(Long id) {
+    public Form<SchemaDef> deleteSchemaDef(Long id) {
         SchemaDef schemaDef = this.schemaDefRepository.getById(id);
+        Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class);
 
         if(schemaDef == null) {
-            return new ServiceError(ServiceError.NotFound, "SchemaDef", id);
+            schemaDefForm.reject(Service.formErrorNotFound, "Schema Not Found");
+            return schemaDefForm;
         }
 
         schemaDef.delete();
@@ -86,6 +77,31 @@ public class SchemaDefService {
     }
 
     public Form<SchemaDef> updateSchemaDef(Long id) {
-        Form<SchemaDef> schemaDefForm = this.formFactory
+        Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class);
+
+        return schemaDefForm;
+    }
+
+/* ****************************************************************************************************************** *\
+|  --- Not SchemaDef Related Stuff
+\* ****************************************************************************************************************** */
+
+    /**
+     * This action returns a new Form for an TableDef;
+     * @param id the id of the schemaDef object
+     *
+     * @return returns a new Form
+     */
+    public Form<TableDef> getCreateTableDefForm(long id) {
+        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
+        TableDef tableDef = new TableDef();
+
+        if(schemaDef == null) {
+            return null;
+        }
+
+        tableDef.setSchemaDef(schemaDef);
+
+        return this.formFactory.form(TableDef.class).fill(tableDef);
     }
 }

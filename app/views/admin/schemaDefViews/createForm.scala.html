@@ -7,13 +7,13 @@
         <div class="panel-heading clearfix">
             <div class="pull-left">
                 <h4 class="panel-title">
-                    <a href="@controllers.admin.routes.SchemaDefController.index()"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-right: 50px; color: dodgerblue"></span></a>
+                    <a href="@controllers.admin.routes.SchemaDefController.readAll()"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-right: 50px; color: dodgerblue"></span></a>
                     Create new Schema
                 </h4>
             </div>
         </div>
         <div class="panel-body">
-            <form action="@controllers.admin.routes.SchemaDefController.newSchemaDef()" method="post">
+            <form action="@controllers.admin.routes.SchemaDefController.create()" method="post">
                 @b3.text(schemaDefForm("name"), '_label -> "name")
                 <div class="btn-group pull-right" style="padding-top: 10px;">
                     <button type="submit" class="btn btn-success btn-md">Create</button>

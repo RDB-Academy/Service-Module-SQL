@@ -7,7 +7,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import services.TableDefService;
-import services.tools.ServiceError;
 
 import javax.inject.Inject;
 
@@ -28,7 +27,7 @@ public class TableDefController extends Controller {
 
         // TODO:
         if(tableDefForm == null) {
-            return redirect(routes.SchemaDefController.index());
+            return redirect(routes.SchemaDefController.readAll());
         }
 
         return ok(views.html.admin.tableDefViews.read.render(tableDefForm));
@@ -53,7 +52,6 @@ public class TableDefController extends Controller {
 
         TableDef tableDef = this.tableDefService.getById(id);
         Long schemaID = tableDef.getSchemaDefId();
-        ServiceError serviceError = this.tableDefService.deleteTableDef(id);
         // ToDO
 
         return ok();

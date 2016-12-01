@@ -1,11 +1,9 @@
 package services;
 
-import models.SchemaDef;
 import models.TableDef;
 import play.data.Form;
 import play.data.FormFactory;
 import repository.TableDefRepository;
-import services.tools.ServiceError;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,7 +12,7 @@ import javax.inject.Singleton;
  * @author fabiomazzone
  */
 @Singleton
-public class TableDefService {
+public class TableDefService extends Service {
     private TableDefRepository tableDefRepository;
     private FormFactory formFactory;
 
@@ -44,15 +42,17 @@ public class TableDefService {
 
     }
 
-    public ServiceError deleteTableDef(Long id) {
+    public Form<TableDef> deleteTableDef(Long id) {
         TableDef tableDef = this.tableDefRepository.getById(id);
+        Form<TableDef> tableDefForm = this.formFactory.form(TableDef.class);
 
         if(tableDef == null) {
-            return new ServiceError(ServiceError.NotFound, "TableDef", id);
+            tableDefForm.reject(Service.formErrorNotFound, "Table not Found");
+            return tableDefForm;
         }
 
         tableDef.delete();
 
-        return null;
+        return tableDefForm;
     }
 }
