@@ -26,8 +26,6 @@ public class TableDefController extends Controller {
     public Result read(Long id) {
         Form<TableDef> tableDefForm = this.tableDefService.getViewForm(id);
 
-        System.out.println("Test");
-
         // TODO:
         if(tableDefForm == null) {
             return redirect(routes.SchemaDefController.index());
