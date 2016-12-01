@@ -5,6 +5,7 @@
 
 # Test Routes
 GET     /test/                      controllers.TestController.test()
+GET     /table/                     controllers.TestController.testTableMaker()
 GET     /parserCreate               controllers.TestController.parserCreate()
 
 GET     /parserGet/:id              controllers.TestController.parserGet(id :Long)
