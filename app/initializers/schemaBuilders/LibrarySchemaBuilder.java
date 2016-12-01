@@ -48,7 +48,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         book_book_id.setNullable(false);
         book_book_name.setNullable(false);
         book_book_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        //book_book_name.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
+        //book_book_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
 
         customerBook_book_id.setPrimary(true);
         customerBook_customer_id.setPrimary(true);
