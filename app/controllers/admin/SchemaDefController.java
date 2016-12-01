@@ -1,14 +1,13 @@
 package controllers.admin;
 
 import authenticators.Authenticated;
-import models.TableDef;
-import play.data.Form;
+import play.Logger;
+import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import services.SchemaDefService;
-import services.Service;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
@@ -21,11 +20,11 @@ import java.util.concurrent.CompletionStage;
 public class SchemaDefController extends Controller {
     private final SchemaDefService schemaDefService;
     private final HttpExecutionContext httpExecutionContext;
-
     @Inject
     public SchemaDefController(
             SchemaDefService schemaDefService,
             HttpExecutionContext httpExecutionContext) {
+
         this.schemaDefService = schemaDefService;
         this.httpExecutionContext = httpExecutionContext;
     }
@@ -33,7 +32,7 @@ public class SchemaDefController extends Controller {
 
     public CompletionStage<Result> createViewForm() {
         return CompletableFuture
-                .supplyAsync(this.schemaDefService::createForm, this.httpExecutionContext.current())
+                .supplyAsync(this.schemaDefService::createAsForm, this.httpExecutionContext.current())
                 .thenApply(createForm -> ok(views.html.admin.schemaDefViews.createForm.render(createForm)));
     }
 
@@ -44,7 +43,7 @@ public class SchemaDefController extends Controller {
     public CompletionStage<Result> create() {
         return CompletableFuture
                 .supplyAsync(() ->
-                        this.schemaDefService.getNewSchemaDef(request()), this.httpExecutionContext.current())
+                        this.schemaDefService.create(request()), this.httpExecutionContext.current())
                 .thenApply(schemaDefForm -> {
                         if (schemaDefForm.hasErrors()) {
                             if (request().body().asJson() == null) {
@@ -61,14 +60,14 @@ public class SchemaDefController extends Controller {
 
     public CompletionStage<Result> readAll() {
         return CompletableFuture
-                .supplyAsync(this.schemaDefService::getSchemaDefList, this.httpExecutionContext.current())
+                .supplyAsync(this.schemaDefService::readAll, this.httpExecutionContext.current())
                 .thenApply(schemaDefList -> ok(views.html.admin.schemaDefViews.index.render(schemaDefList)));
     }
 
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(
-                        () -> this.schemaDefService.getSchemaDefForm(id), this.httpExecutionContext.current())
+                        () -> this.schemaDefService.readAsForm(id), this.httpExecutionContext.current())
                 .thenApply(schemaDefForm -> {
                         if (schemaDefForm == null) {
                             flash("notFound", "Schema with id " + id + " not found!");
@@ -82,7 +81,7 @@ public class SchemaDefController extends Controller {
 
     public CompletionStage<Result> updateView(Long id) {
         return CompletableFuture.supplyAsync(
-                () -> this.schemaDefService.getSchemaDefForm(id), this.httpExecutionContext.current())
+                () -> this.schemaDefService.readAsForm(id), this.httpExecutionContext.current())
                 .thenApply(schemaDefForm -> {
                     if(schemaDefForm == null) {
                         flash("notFound", "Schema with id " + id + " not found!");
@@ -97,17 +96,21 @@ public class SchemaDefController extends Controller {
     public CompletionStage<Result> update(Long id) {
         return CompletableFuture
                 .supplyAsync(() ->
-                        this.schemaDefService.updateSchemaDef(id), this.httpExecutionContext.current())
-                .thenApply((test) -> {
-                    System.out.println("Update");
-                    return redirect(routes.SchemaDefController.updateView(id));
+                        this.schemaDefService.update(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                    if(schemaDefForm.hasErrors())  {
+                        Logger.warn(schemaDefForm.errorsAsJson().toString());
+                        return badRequest(schemaDefForm.errorsAsJson());
+                    }
+                    Logger.debug("Successfully updated");
+                    return redirect(routes.SchemaDefController.read(id));
                     }
                 );
     }
 
     public CompletionStage<Result> delete(Long id) {
         return CompletableFuture
-                .supplyAsync(() -> this.schemaDefService.deleteSchemaDef(id), this.httpExecutionContext.current())
+                .supplyAsync(() -> this.schemaDefService.delete(id), this.httpExecutionContext.current())
                 .thenApply(schemaDefForm -> {
                     if(schemaDefForm.hasErrors()) {
                         return badRequest(schemaDefForm.errorsAsJson());

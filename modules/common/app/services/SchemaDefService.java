@@ -2,8 +2,10 @@ package services;
 
 import models.SchemaDef;
 import models.TableDef;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
+import play.libs.Json;
 import play.mvc.Http;
 import repository.SchemaDefRepository;
 
@@ -30,22 +32,11 @@ public class SchemaDefService extends Service {
      * This function returns a new Creation Form for a new schemaDef
      * @return a new Creation Form for a new schemaDef
      */
-    public Form<SchemaDef> createForm() {
+    public Form<SchemaDef> createAsForm() {
         return this.formFactory.form(SchemaDef.class);
     }
 
-
-    public Form<SchemaDef> getSchemaDefForm(Long id) {
-        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
-
-        if(schemaDef == null) {
-            return null;
-        }
-
-        return this.formFactory.form(SchemaDef.class).fill(schemaDef);
-    }
-
-    public Form<SchemaDef> getNewSchemaDef(Http.Request request) {
+    public Form<SchemaDef> create(Http.Request request) {
         Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class).bindFromRequest(request);
 
         if (schemaDefForm.hasErrors()) {
@@ -58,7 +49,46 @@ public class SchemaDefService extends Service {
         return schemaDefForm.fill(schemaDef);
     }
 
-    public Form<SchemaDef> deleteSchemaDef(Long id) {
+    public List<SchemaDef> readAll() {
+        return this.schemaDefRepository.getAll();
+    }
+
+    public Form<SchemaDef> readAsForm(Long id) {
+        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
+
+        if(schemaDef == null) {
+            return null;
+        }
+
+        return this.formFactory.form(SchemaDef.class).fill(schemaDef);
+    }
+
+    public Form<SchemaDef> update(Long id) {
+        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
+        Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class).bindFromRequest();
+
+        if(schemaDef == null) {
+            schemaDefForm.reject(Service.formErrorNotFound, "Schema Not Found");
+            return schemaDefForm;
+        }
+
+        if(schemaDefForm.hasErrors()) {
+            return schemaDefForm;
+        }
+
+        if(schemaDefForm.get().getName() == null || schemaDefForm.get().getName().isEmpty()) {
+            schemaDefForm.reject("Name", "SchemaDef must be named");
+            return schemaDefForm;
+        }
+
+        schemaDef.setName(schemaDefForm.get().getName());
+
+        this.schemaDefRepository.save(schemaDef);
+
+        return schemaDefForm;
+    }
+
+    public Form<SchemaDef> delete(Long id) {
         SchemaDef schemaDef = this.schemaDefRepository.getById(id);
         Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class);
 
@@ -68,16 +98,6 @@ public class SchemaDefService extends Service {
         }
 
         schemaDef.delete();
-
-        return null;
-    }
-
-    public List<SchemaDef> getSchemaDefList() {
-        return this.schemaDefRepository.getAll();
-    }
-
-    public Form<SchemaDef> updateSchemaDef(Long id) {
-        Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class);
 
         return schemaDefForm;
     }
