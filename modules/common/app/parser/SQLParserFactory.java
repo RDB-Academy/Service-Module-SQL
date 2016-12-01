@@ -35,8 +35,10 @@ public class SQLParserFactory {
         ExtensionMaker extensionMaker   = new ExtensionMaker(taskTrial.getDatabaseExtensionSeed(), schemaDef);
 
         LocalDateTime startTime = LocalDateTime.now();
-        CompletionStage<String[][]> extensions = CompletableFuture.supplyAsync(extensionMaker::buildStatements);
+
+        CompletionStage<String[][][]> extensions = CompletableFuture.supplyAsync(extensionMaker::buildStatements);
         CompletionStage<List<String>> tableMakerStatements = CompletableFuture.supplyAsync(tableMaker::buildStatement);
+
 
 
         LocalDateTime endTime = LocalDateTime.now();
