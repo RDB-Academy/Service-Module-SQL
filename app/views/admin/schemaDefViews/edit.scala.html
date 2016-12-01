@@ -19,7 +19,7 @@
         @b3.form(controllers.admin.routes.SchemaDefController.update(schemaDefForm.get().getId)) {
             @b3.text(schemaDefForm("id"), '_label -> "ID: ", 'disabled -> "")
             @b3.text(schemaDefForm("name"), '_label -> "Name: ")
-            <div class="form-group" id="tableDefList_field">
+            <div class="form-group">
                 <label class="control-label col-md-2">TableDef:</label>
                 <div class="col-md-10">
                     <div class="table-list-box">

@@ -55,14 +55,14 @@
                                 </thead>
                                 <tbody>
                                     @for((columnDef, index) <- tableDefForm.get().getColumnDefList.zipWithIndex) {
-                                    <tr class="clickable-row" data-href="@controllers.admin.routes.ColumnDefController.read(columnDef.getId)">
+                                    <tr class="">
                                         <td style="width: 5%;">
                                             @{index + 1}
                                         </td>
                                         <td style="width: 10%;">
                                             @columnDef.getId
                                         </td>
-                                        <td style="width: 10%;"c>
+                                        <td style="width: 10%;">
                                             @columnDef.getName
                                         </td>
                                         <td style="width: 15%;">
@@ -81,7 +81,7 @@
                                             @columnDef.getModifiedAtFromNow
                                         </td>
                                     </tr>
-                                }
+                                    }
                                 </tbody>
                             </table>
                         </div>

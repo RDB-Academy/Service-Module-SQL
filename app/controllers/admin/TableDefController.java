@@ -46,6 +46,11 @@ public class TableDefController extends Controller {
         return ok(views.html.admin.tableDefViews.edit.render(tableDefForm));
     }
 
+    public Result update(Long id) {
+
+        return redirect(routes.TableDefController.edit(id));
+    }
+
     public Result delete(Long id) {
 
         TableDef tableDef = this.tableDefService.getById(id);
