@@ -1,14 +1,19 @@
 package controllers.admin;
 
 import authenticators.Authenticated;
+import com.google.common.collect.ImmutableMap;
 import models.TableDef;
-import play.data.Form;
+import play.Logger;
+import play.libs.Json;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import services.TableDefService;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author fabiomazzone
@@ -16,45 +21,60 @@ import javax.inject.Inject;
 @Security.Authenticated(Authenticated.class)
 public class TableDefController extends Controller {
     private final TableDefService tableDefService;
+    private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public TableDefController(TableDefService tableDefService) {
+    public TableDefController(TableDefService tableDefService,
+                              HttpExecutionContext httpExecutionContext) {
+
         this.tableDefService = tableDefService;
+        this.httpExecutionContext = httpExecutionContext;
     }
 
-    public Result read(Long id) {
-        Form<TableDef> tableDefForm = this.tableDefService.getViewForm(id);
-
-        // TODO:
-        if(tableDefForm == null) {
-            return redirect(routes.SchemaDefController.readAll());
-        }
-
-        return ok(views.html.admin.tableDefViews.read.render(tableDefForm));
+    public CompletionStage<Result> read(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.tableDefService.readAsForm(id), this.httpExecutionContext.current())
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm.hasErrors()) {
+                        return redirect(routes.SchemaDefController.readAll());
+                    }
+                    return ok(views.html.admin.tableDefViews.read.render(tableDefForm));
+                });
     }
 
-    public Result edit(Long id) {
-        Form<TableDef> tableDefForm = this.tableDefService.getViewForm(id);
-
-        if (tableDefForm == null) {
-            return notFound();
-        }
-
-        return ok(views.html.admin.tableDefViews.edit.render(tableDefForm));
+    public CompletionStage<Result> updateView(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.tableDefService.readAsForm(id), this.httpExecutionContext.current())
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm.hasErrors()) {
+                        return notFound();
+                    }
+                    return ok(views.html.admin.tableDefViews.edit.render(tableDefForm));
+                });
     }
 
-    public Result update(Long id) {
-
-        return redirect(routes.TableDefController.edit(id));
+    public CompletionStage<Result> update(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.tableDefService.update(id), this.httpExecutionContext.current())
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm.hasErrors()) {
+                        Logger.warn(tableDefForm.errorsAsJson().toString());
+                        return badRequest(tableDefForm.errorsAsJson());
+                    }
+                    return redirect(routes.TableDefController.read(id));
+                });
     }
 
-    public Result delete(Long id) {
-
-        TableDef tableDef = this.tableDefService.getById(id);
-        Long schemaID = tableDef.getSchemaDefId();
-        // ToDO
-
-        return ok();
+    public CompletionStage<Result> delete(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.tableDefService.delete(id), this.httpExecutionContext.current())
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm.hasErrors()) {
+                        Logger.warn(tableDefForm.errorsAsJson().toString());
+                        return badRequest(tableDefForm.errorsAsJson());
+                    }
+                    return ok();
+                });
     }
 
 }

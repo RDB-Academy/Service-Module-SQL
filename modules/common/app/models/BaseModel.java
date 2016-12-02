@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * @author fabiomazzone
  */
 @MappedSuperclass
-abstract class BaseModel extends Model {
+public abstract class BaseModel extends Model {
     @JsonIgnore
     @WhenCreated
     @Column(updatable = false)

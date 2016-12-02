@@ -1,5 +1,6 @@
 package services;
 
+import com.google.common.collect.ImmutableMap;
 import models.TableDef;
 import play.data.Form;
 import play.data.FormFactory;
@@ -7,6 +8,7 @@ import repository.TableDefRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Map;
 
 /**
  * @author fabiomazzone
@@ -24,27 +26,50 @@ public class TableDefService extends Service {
         this.formFactory = formFactory;
     }
 
-    public Form<TableDef> getViewForm(Long id) {
-        TableDef tableDef = this.tableDefRepository.getById(id);
+    public TableDef read(Long id) {
+        return this.tableDefRepository.getById(id);
+    }
 
-            if (tableDef == null) {
-            return null;
+    public Form<TableDef> readAsForm(Long id) {
+        TableDef tableDef = this.read(id);
+        Form<TableDef> tableDefForm = getForm();
+
+        if (tableDef == null) {
+            tableDefForm.reject(Service.formErrorNotFound, "TableDef not found");
+            return tableDefForm;
         }
 
-        Form<TableDef> tableDefForm = this.formFactory.form(TableDef.class).fill(tableDef);
+        return this.formFactory.form(TableDef.class).fill(tableDef);
+    }
+
+    public Form<TableDef> update(Long id) {
+        TableDef tableDef = this.read(id);
+        Form<TableDef> tableDefForm = this.getForm().bindFromRequest();
+
+        if(tableDef == null) {
+            tableDefForm.reject(Service.formErrorNotFound, "TableDef not found");
+            return tableDefForm;
+        }
+
+        if(tableDefForm.hasErrors()) {
+            return tableDefForm;
+        }
+
+        if(tableDefForm.get().getName() == null || tableDefForm.get().getName().isEmpty()) {
+            tableDefForm.reject("Name", "TableDef must be named");
+            return tableDefForm;
+        }
+
+        tableDef.setName(tableDefForm.get().getName());
+
+        this.tableDefRepository.save(tableDef);
 
         return tableDefForm;
     }
 
-    public TableDef getById(Long id) {
-
-        return this.tableDefRepository.getById(id);
-
-    }
-
-    public Form<TableDef> deleteTableDef(Long id) {
-        TableDef tableDef = this.tableDefRepository.getById(id);
-        Form<TableDef> tableDefForm = this.formFactory.form(TableDef.class);
+    public Form<TableDef> delete(Long id) {
+        TableDef tableDef = this.read(id);
+        Form<TableDef> tableDefForm = getForm();
 
         if(tableDef == null) {
             tableDefForm.reject(Service.formErrorNotFound, "Table not Found");
@@ -54,5 +79,14 @@ public class TableDefService extends Service {
         tableDef.delete();
 
         return tableDefForm;
+    }
+
+
+    /**
+     * A Helper Function to create new TableDef Forms
+     * @return a new TableDef Form
+     */
+    private Form<TableDef> getForm() {
+        return this.formFactory.form(TableDef.class);
     }
 }

@@ -19,7 +19,7 @@ DELETE  /schemaDef/:id              controllers.admin.SchemaDefController.delete
 GET     /schemaDef/:id/newTableDef  controllers.admin.SchemaDefController.createTableDef(id: Long)
 
 GET     /tableDef/:id               controllers.admin.TableDefController.read(id: Long)
-GET     /tableDef/:id/edit          controllers.admin.TableDefController.edit(id: Long)
+GET     /tableDef/:id/edit          controllers.admin.TableDefController.updateView(id: Long)
 POST    /tableDef/:id/update        controllers.admin.TableDefController.update(id: Long)
 DELETE  /tableDef/:id               controllers.admin.TableDefController.delete(id: Long)
 

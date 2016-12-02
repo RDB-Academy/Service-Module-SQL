@@ -4,8 +4,19 @@
  * two arguments, a `String` for the title of the page and an `Html`
  * object to insert into the body of the page.
  *@
-@import services.SessionService
 @(title: String)(content: Html)
+
+@activeLink(currentPath:String) = @{
+    if(request.path.equals(currentPath)) "active"
+}
+
+@navLink(path: String, name: String) = @{
+    if(request().path().equals(path)) {
+        <li class="active"><a href={path}>{name}</a></li>
+    } else {
+        <li><a href={path}>{name}</a></li>
+    }
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +51,7 @@
                         <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li><a href="@controllers.admin.routes.SchemaDefController.readAll()">SchemaDef</a></li>
+                            @navLink(controllers.admin.routes.SchemaDefController.readAll().url, "SchemaDef")
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><p class="navbar-text">Signed in as @request().username()</p></li>
