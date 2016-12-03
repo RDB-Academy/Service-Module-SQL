@@ -160,4 +160,12 @@ public class ExtensionMaker {
 
         return out;
     }
+
+    public Long getSeed() {
+        return seed;
+    }
+
+    public SchemaDef getSchemaDef() {
+        return schemaDef;
+    }
 }

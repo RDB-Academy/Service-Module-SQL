@@ -78,6 +78,7 @@ create table task (
 create table task_trial (
   id                            bigint auto_increment not null,
   task_id                       bigint not null,
+  database_url                  varchar(255),
   database_extension_seed       bigint,
   user_statement                varchar(255),
   is_correct                    boolean,

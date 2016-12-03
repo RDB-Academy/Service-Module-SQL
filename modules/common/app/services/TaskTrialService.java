@@ -66,18 +66,10 @@ public class TaskTrialService {
 
     public TaskTrial validateStatement(Long id, Http.Context context) {
         TaskTrial taskTrial = this.getById(id);
-        CompletableFuture<SQLParser> sqlParserFuture = this.sqlParserFactory.getParser(taskTrial);
-        SQLParser sqlParser;
+        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
 
         Logger.info(context.request().body().asJson().toString());
         TaskTrial taskTrialSubmitted = Json.fromJson(context.request().body().asJson(), TaskTrial.class);
-
-        try {
-            sqlParser = sqlParserFuture.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            return null;
-        }
 
         Future<SQLResult> sqlResultFuture = sqlParser.submit(taskTrialSubmitted.getUserStatement());
         SQLResult sqlResult;
@@ -99,5 +91,9 @@ public class TaskTrialService {
     private void setTaskTrialWithSQLResult(TaskTrial taskTrial, SQLResult sqlResult) {
         taskTrial.setCorrect(sqlResult.isCorrect());
         // Set Result Set
+    }
+
+    public void save(TaskTrial taskTrial) {
+        taskTrial.save();
     }
 }

@@ -1,10 +1,7 @@
 package controllers.admin;
 
 import authenticators.Authenticated;
-import com.google.common.collect.ImmutableMap;
-import models.TableDef;
 import play.Logger;
-import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;

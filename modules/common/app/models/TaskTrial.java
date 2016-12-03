@@ -25,6 +25,9 @@ public class TaskTrial extends BaseModel {
     private Task task;
 
     @JsonIgnore
+    private String databaseUrl;
+
+    @JsonIgnore
     private long databaseExtensionSeed;
 
     private String userStatement;
@@ -39,6 +42,7 @@ public class TaskTrial extends BaseModel {
     private LocalDateTime beginDate;
 
     private LocalDateTime submitDate;
+
 
     public Long getId() {
         return id;
@@ -119,4 +123,11 @@ public class TaskTrial extends BaseModel {
         this.submitDate = submitDate;
     }
 
+    public void setDatabaseUrl(String databaseUrl) {
+        this.databaseUrl = databaseUrl;
+    }
+
+    public String getDatabaseUrl() {
+        return databaseUrl;
+    }
 }
