@@ -36,19 +36,19 @@ public class HeroSchemaBuilder extends SchemaBuilder {
 
         hero_hero_id.setPrimary(true);
         hero_hero_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        hero_hero_name.setNullable(false);
+        hero_hero_name.setNotNull(true);
         hero_hero_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
 
         team_team_id.setPrimary(true);
         team_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        team_team_name.setNullable(false);
+        team_team_name.setNotNull(true);
         team_team_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
 
         heroTeam_hero_id.setPrimary(true);
         heroTeam_hero_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         heroTeam_team_id.setPrimary(true);
         heroTeam_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
-        heroTeam_join_year.setNullable(false);
+        heroTeam_join_year.setNotNull(true);
         heroTeam_join_year.setMetaValueSet(ColumnDef.META_VALUE_SET_YEAR);
 
         hero.addColumnDef(hero_hero_id);

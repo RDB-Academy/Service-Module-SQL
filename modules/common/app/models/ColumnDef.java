@@ -30,8 +30,9 @@ public class ColumnDef extends BaseModel {
 
     @NotNull
     private boolean isPrimary  = false;
+
     @NotNull
-    private boolean isNullable = true;
+    private boolean isNotNull = true;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sourceColumn")
@@ -108,17 +109,17 @@ public class ColumnDef extends BaseModel {
 
     public void setPrimary(boolean primary) {
         if(primary) {
-            this.setNullable(false);
+            this.setNotNull(true);
         }
         isPrimary = primary;
     }
 
-    public boolean isNullable() {
-        return isNullable;
+    public boolean isNotNull() {
+        return isNotNull;
     }
 
-    public void setNullable(boolean nullable) {
-        isNullable = nullable;
+    public void setNotNull(boolean notNull) {
+        isNotNull = notNull;
     }
 
     public List<ForeignKeyRelation> getForeignKeyRelationsSource() {

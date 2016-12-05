@@ -30,17 +30,17 @@ public class UsersSchemaBuilder extends SchemaBuilder{
         ColumnDef   location_description    = this.createNewColumnDef("description","VARCHAR(255)");
 
         user_firstname.setPrimary(true);
-        user_firstname.setNullable(false);
+        user_firstname.setNotNull(true);
         user_firstname.setMetaValueSet(ColumnDef.META_VALUE_SET_FIRSTNAME);
 
-        user_lastname.setNullable(true);
+        user_lastname.setNotNull(true);
         user_firstname.setMetaValueSet(ColumnDef.META_VALUE_SET_LASTNAME);
 
         location_name.setPrimary(true);
-        location_name.setNullable(false);
+        location_name.setNotNull(true);
         location_name.setMetaValueSet(ColumnDef.META_VALUE_SET_LOCATION);
 
-        location_description.setNullable(true);
+        location_description.setNotNull(true);
         location_name.setMetaValueSet(ColumnDef.META_VALUE_SET_LOREM_IPSUM);
 
         user.addColumnDef(user_firstname);

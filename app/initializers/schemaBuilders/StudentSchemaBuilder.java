@@ -35,13 +35,13 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         ForeignKeyRelation  studentExam_exam_rel       = this.createForeignKeyRelation(studentExam_exam_id, exam_exam_id);
 
         student_student_id.setPrimary(true);
-        student_student_id.setNullable(false);
+        student_student_id.setNotNull(true);
         student_student_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         student_student_firstname.setMetaValueSet(ColumnDef.META_VALUE_SET_FIRSTNAME);
         student_student_lastname.setMetaValueSet(ColumnDef.META_VALUE_SET_LASTNAME);
 
         exam_exam_id.setPrimary(true);
-        exam_exam_id.setNullable(false);
+        exam_exam_id.setNotNull(true);
         exam_exam_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         exam_exam_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
 
@@ -49,7 +49,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         studentExam_student_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         studentExam_exam_id.setPrimary(true);
         studentExam_exam_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
-        studentExam_grade.setNullable(false);
+        studentExam_grade.setNotNull(true);
         studentExam_grade.setMetaValueSet(ColumnDef.META_VALUE_SET_GRADE);
 
         student.addColumnDef(student_student_id);

@@ -37,25 +37,25 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         ForeignKeyRelation  customerBook_book_rel        = this.createForeignKeyRelation(customerBook_book_id, book_book_id);
 
         customer_customer_id.setPrimary(true);
-        customer_customer_id.setNullable(false);
-        customer_customer_firstname.setNullable(false);
-        customer_customer_lastname.setNullable(false);
+        customer_customer_id.setNotNull(true);
+        customer_customer_firstname.setNotNull(true);
+        customer_customer_lastname.setNotNull(true);
         customer_customer_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         customer_customer_firstname.setMetaValueSet(ColumnDef.META_VALUE_SET_FIRSTNAME);
         customer_customer_lastname.setMetaValueSet(ColumnDef.META_VALUE_SET_LASTNAME);
 
         book_book_id.setPrimary(true);
-        book_book_id.setNullable(false);
-        book_book_name.setNullable(false);
+        book_book_id.setNotNull(true);
+        book_book_name.setNotNull(true);
         book_book_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         //book_book_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
 
         customerBook_book_id.setPrimary(true);
         customerBook_customer_id.setPrimary(true);
-        customerBook_book_id.setNullable(false);
-        customerBook_customer_id.setNullable(false);
-        customerBook_lend_date.setNullable(false);
-        customerBook_return_date.setNullable(false);
+        customerBook_book_id.setNotNull(true);
+        customerBook_customer_id.setNotNull(true);
+        customerBook_lend_date.setNotNull(true);
+        customerBook_return_date.setNotNull(true);
         customerBook_book_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         customerBook_customer_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         //customerBook_lend_date.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
