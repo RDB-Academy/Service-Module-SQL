@@ -14,6 +14,8 @@ GET     /api/tableDef/:id           controllers.admin.api.TableDefController.rea
 
 GET     /api/columnDef/:id          controllers.admin.api.ColumnDefController.read(id: Long)
 
+GET     /api/foreignKey/:id         controllers.admin.api.ForeignKeyController.read(id: Long)
+
 GET     /api/*file                  controllers.admin.api.ApplicationController.notFoundView(file: String)
 
 
