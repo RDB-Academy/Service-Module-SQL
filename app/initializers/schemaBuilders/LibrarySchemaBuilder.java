@@ -48,7 +48,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         book_book_id.setNotNull(true);
         book_book_name.setNotNull(true);
         book_book_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        //book_book_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
+        book_book_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
 
         customerBook_book_id.setPrimary(true);
         customerBook_customer_id.setPrimary(true);
@@ -58,8 +58,8 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         customerBook_return_date.setNotNull(true);
         customerBook_book_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         customerBook_customer_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
-        //customerBook_lend_date.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
-        //customerBook_return_date.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
+        customerBook_lend_date.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
+        customerBook_return_date.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
 
         customer.addColumnDef(customer_customer_id);
         customer.addColumnDef(customer_customer_firstname);
