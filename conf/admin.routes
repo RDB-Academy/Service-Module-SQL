@@ -11,7 +11,8 @@ GET     /api/schemaDef              controllers.admin.api.SchemaDefController.re
 GET     /api/schemaDef/:id          controllers.admin.api.SchemaDefController.read(id: Long)
 
 GET     /api/tableDef/:id           controllers.admin.api.TableDefController.read(id: Long)
-GET     /api/columnDef/:id           controllers.admin.api.ColumnDefController.read(id: Long)
+
+GET     /api/columnDef/:id          controllers.admin.api.ColumnDefController.read(id: Long)
 
 GET     /api/*file                  controllers.admin.api.ApplicationController.notFoundView(file: String)
 

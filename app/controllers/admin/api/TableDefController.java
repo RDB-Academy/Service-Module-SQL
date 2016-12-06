@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import models.ColumnDef;
 import models.TableDef;
+import play.Logger;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -39,7 +40,7 @@ public class TableDefController extends Controller{
                 });
     }
 
-    public ObjectNode transform(TableDef tableDef) {
+    private ObjectNode transform(TableDef tableDef) {
         ObjectNode tableDefNode = Json.newObject();
 
         ArrayNode columnIds = Json.newArray();
@@ -54,7 +55,6 @@ public class TableDefController extends Controller{
 
         tableDefNode.put("createdAt", tableDef.getCreatedAt());
         tableDefNode.put("modifiedAt", tableDef.getModifiedAt());
-
 
         return tableDefNode;
     }

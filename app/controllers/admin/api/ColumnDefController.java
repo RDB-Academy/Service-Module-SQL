@@ -46,7 +46,7 @@ public class ColumnDefController extends Controller {
         columnDefNode.put("dataType", columnDef.getDataType());
         columnDefNode.put("isPrimaryKey", columnDef.isPrimary());
         columnDefNode.put("isNotNull", columnDef.isNotNull());
-        columnDefNode.put("MetaValueSet", columnDef.getMetaValueSet());
+        columnDefNode.put("MetaValueSet", columnDef.getMetaValueSetName());
 
         columnDefNode.put("createdAt", columnDef.getCreatedAt());
         columnDefNode.put("modifiedAt", columnDef.getModifiedAt());

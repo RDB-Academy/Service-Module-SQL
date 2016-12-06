@@ -61,11 +61,8 @@ public class ColumnDef extends BaseModel {
     public static final int META_VALUE_SET_MAIL = 1;
     public static final int META_VALUE_SET_ANIMAL = 2;
     public static final int META_VALUE_SET_METAL = 6;
-    public static final int META_VALUE_SET_COLOUR = 10;
+    public static final int META_VALUE_SET_COLOR = 10;
     public static final int META_VALUE_SET_DATE = 11;
-
-
-
 
     public static final int META_VALUE_SET_GRADE = 361;
 
@@ -136,5 +133,52 @@ public class ColumnDef extends BaseModel {
 
     public void setMetaValueSet(int metaValueSet) {
         this.metaValueSet = metaValueSet;
+    }
+
+    public String getMetaValueSetName() {
+        switch (this.getMetaValueSet()) {
+            case META_VALUE_SET_ID:
+                return "ID";
+            case META_VALUE_SET_FOREIGN_KEY:
+                return "FK_ID";
+
+            case META_VALUE_SET_NAME:
+                return "Name";
+            case META_VALUE_SET_FIRSTNAME:
+                return "First Name";
+            case META_VALUE_SET_LASTNAME:
+                return "Last Name";
+            case META_VALUE_SET_FULLNAME:
+                return "Full Name";
+
+            case META_VALUE_SET_CITY:
+                return "City";
+            case META_VALUE_SET_TITLE:
+                return "Title";
+            case META_VALUE_SET_DAY:
+                return "Day";
+            case META_VALUE_SET_MONTH:
+                return "Month";
+            case META_VALUE_SET_MAIL:
+                return "Mail";
+            case META_VALUE_SET_ANIMAL:
+                return "Animal";
+            case META_VALUE_SET_METAL:
+                return "Metal";
+            case META_VALUE_SET_COLOR:
+                return "Color";
+            case META_VALUE_SET_DATE:
+                return "Date";
+            case META_VALUE_SET_GRADE:
+                return "Grade";
+            case META_VALUE_SET_LOCATION:
+                return "Location";
+            case META_VALUE_SET_YEAR:
+                return "Year";
+            case META_VALUE_SET_LOREM_IPSUM:
+                return "Lorem Ipsum";
+            default:
+                return "NaN";
+        }
     }
 }
