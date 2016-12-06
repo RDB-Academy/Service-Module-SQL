@@ -7,6 +7,9 @@ GET     /                           controllers.admin.HomeController.index()
 GET     /login                      controllers.admin.SessionController.login()
 GET     /logout                     controllers.admin.SessionController.logout()
 
+GET     /api/schemaDef              controllers.admin.api.SchemaDefController.readAll()
+GET     /api/schemaDef/:id          controllers.admin.api.SchemaDefController.read(id: Long)
+
 
 GET     /schemaDef                  controllers.admin.SchemaDefController.readAll()
 GET     /schemaDef/new.form         controllers.admin.SchemaDefController.createViewForm()

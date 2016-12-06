@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author fabiomazzone
@@ -24,8 +25,8 @@ public abstract class BaseModel extends Model {
     @WhenModified
     private LocalDateTime modifiedAt;
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getCreatedAt() {
+        return createdAt.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @JsonProperty("createdAt")
@@ -33,8 +34,8 @@ public abstract class BaseModel extends Model {
         return formatter.DateFormatter.fromNow(this.createdAt);
     }
 
-    public LocalDateTime getModifiedAt() {
-        return modifiedAt;
+    public String getModifiedAt() {
+        return modifiedAt.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @JsonProperty("modifiedAt")

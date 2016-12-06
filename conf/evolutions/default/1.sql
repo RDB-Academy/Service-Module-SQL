@@ -9,7 +9,7 @@ create table column_def (
   name                          varchar(255) not null,
   data_type                     varchar(255) not null,
   is_primary                    boolean not null,
-  is_nullable                   boolean not null,
+  is_not_null                   boolean not null,
   meta_value_set                integer not null,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
