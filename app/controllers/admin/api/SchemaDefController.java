@@ -1,6 +1,5 @@
 package controllers.admin.api;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.ForeignKey;
@@ -36,7 +35,7 @@ public class SchemaDefController extends Controller {
                 .supplyAsync(this.schemaDefService::readAll)
                 .thenApply(schemaDefList ->
                     ok(Json.toJson(schemaDefList.parallelStream()
-                            .map(SchemaDefTransformer::small)
+                            .map(this::transform)
                             .collect(Collectors.toList())))
                 );
     }
@@ -44,27 +43,17 @@ public class SchemaDefController extends Controller {
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.schemaDefService.read(id))
-                .thenApply(schemaDef ->
-                    ok(SchemaDefTransformer.full(schemaDef)));
+                .thenApply(schemaDef -> {
+                    if(schemaDef == null) {
+                        return notFound();
+                    }
+                    return ok(this.transform(schemaDef));
+                });
+
     }
-}
 
-
-class SchemaDefTransformer {
-    public static ObjectNode small(SchemaDef schemaDef) {
+    public ObjectNode transform(SchemaDef schemaDef) {
         ObjectNode schemaDefNode = Json.newObject();
-
-        schemaDefNode.put("id", schemaDef.getId());
-        schemaDefNode.put("name", schemaDef.getName());
-
-        schemaDefNode.put("createdAt", schemaDef.getCreatedAt());
-        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt());
-
-        return schemaDefNode;
-    }
-
-    public static ObjectNode full(SchemaDef schemaDef) {
-        ObjectNode schemaDefNode = small(schemaDef);
 
         ArrayNode tableDefIds = Json.newArray();
         ArrayNode foreignKeyIds = Json.newArray();
@@ -74,9 +63,15 @@ class SchemaDefTransformer {
         schemaDef.getForeignKeyList().parallelStream().map(ForeignKey::getId).forEach(foreignKeyIds::add);
         schemaDef.getTaskList().parallelStream().map(Task::getId).forEach(taskIds::add);
 
+        schemaDefNode.put("id", schemaDef.getId());
+        schemaDefNode.put("name", schemaDef.getName());
+
         schemaDefNode.set("tableDefList", tableDefIds);
         schemaDefNode.set("foreignKeyList", foreignKeyIds);
         schemaDefNode.set("taskList", taskIds);
+
+        schemaDefNode.put("createdAt", schemaDef.getCreatedAt());
+        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt());
 
         return schemaDefNode;
     }
