@@ -44,7 +44,9 @@ public class TaskController extends Controller {
 
         taskNode.put("schemaDefId", task.getSchemaDefId());
 
-        //tableDefNode.set("columnDefList", columnIds);
+        taskNode.put("text", task.getText());
+        taskNode.put("referenceStatement", task.getReferenceStatement());
+        taskNode.put("difficulty", task.getDifficulty());
 
         taskNode.put("createdAt", task.getCreatedAt());
         taskNode.put("modifiedAt", task.getModifiedAt());
