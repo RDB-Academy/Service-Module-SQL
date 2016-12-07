@@ -40,11 +40,11 @@ public class ForeignKeyRelationController extends Controller {
 
         foreignKeyRelNode.put("id", foreignKeyRelation.getId());
 
-        foreignKeyRelNode.put("sourceColumnId", foreignKeyRelation.getSourceColumn().getId());
-        foreignKeyRelNode.put("sourceColumnName", foreignKeyRelation.getSourceColumn().getName());
+        foreignKeyRelNode.put("foreignKey", foreignKeyRelation.getForeignKey().getId());
 
-        foreignKeyRelNode.put("targetColumnId", foreignKeyRelation.getTargetColumn().getId());
-        foreignKeyRelNode.put("targetColumnName", foreignKeyRelation.getTargetColumn().getName());
+        foreignKeyRelNode.put("sourceColumn", foreignKeyRelation.getSourceColumn().getId());
+
+        foreignKeyRelNode.put("targetColumn", foreignKeyRelation.getTargetColumn().getId());
 
         foreignKeyRelNode.put("createdAt", foreignKeyRelation.getCreatedAt());
         foreignKeyRelNode.put("modifiedAt", foreignKeyRelation.getModifiedAt());
