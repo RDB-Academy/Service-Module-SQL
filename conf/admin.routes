@@ -16,6 +16,10 @@ GET     /api/columnDef/:id          controllers.admin.api.ColumnDefController.re
 
 GET     /api/foreignKey/:id         controllers.admin.api.ForeignKeyController.read(id: Long)
 
+GET     /api/foreignKeyRelation/:id controllers.admin.api.ForeignKeyRelationController.read(id: Long)
+
+GET     /api/task/:id               controllers.admin.api.TaskController.read(id: Long)
+
 GET     /api/*file                  controllers.admin.api.ApplicationController.notFoundView(file: String)
 
 

@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import models.ColumnDef;
 import models.TableDef;
-import play.Logger;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -49,7 +48,8 @@ public class TableDefController extends Controller{
 
         tableDefNode.put("id", tableDef.getId());
         tableDefNode.put("name", tableDef.getName());
-        tableDefNode.put("schemaDef", tableDef.getSchemaDefId());
+
+        tableDefNode.put("schemaDefId", tableDef.getSchemaDefId());
 
         tableDefNode.set("columnDefList", columnIds);
 

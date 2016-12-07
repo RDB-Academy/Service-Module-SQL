@@ -43,6 +43,8 @@ public class ColumnDefController extends Controller {
         columnDefNode.put("id", columnDef.getId());
         columnDefNode.put("name", columnDef.getName());
 
+        columnDefNode.put("tableDefId", columnDef.getTableDef().getId());
+
         columnDefNode.put("dataType", columnDef.getDataType());
         columnDefNode.put("isPrimaryKey", columnDef.isPrimary());
         columnDefNode.put("isNotNull", columnDef.isNotNull());
