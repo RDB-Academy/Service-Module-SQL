@@ -2,6 +2,7 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import play.data.validation.Constraints;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,8 @@ public class SchemaDef extends BaseModel {
 
     @NotNull
     @Column(unique = true)
+    @Constraints.Required()
+    @Constraints.MinLength(1)
     private String name;
 
     @JsonIgnore
@@ -46,7 +49,7 @@ public class SchemaDef extends BaseModel {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public List<TableDef> getTableDefList() {

@@ -6,7 +6,9 @@ import models.ForeignKey;
 import models.SchemaDef;
 import models.TableDef;
 import models.Task;
+import play.Logger;
 import play.libs.Json;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.SchemaDefService;
@@ -23,16 +25,31 @@ import java.util.stream.Collectors;
 @Singleton
 public class SchemaDefController extends Controller {
     private final SchemaDefService schemaDefService;
+    private final HttpExecutionContext httpExecutionContext;
 
     @Inject
     public SchemaDefController(
-            SchemaDefService schemaDefService) {
+            SchemaDefService schemaDefService, HttpExecutionContext httpExecutionContext) {
         this.schemaDefService = schemaDefService;
+        this.httpExecutionContext = httpExecutionContext;
+    }
+
+    public CompletionStage<Result> create() {
+        return CompletableFuture
+                .supplyAsync(this.schemaDefService::create, this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                    if(schemaDefForm.hasErrors()) {
+                        Logger.warn(schemaDefForm.errorsAsJson().toString());
+                        return badRequest(schemaDefForm.errorsAsJson());
+                    }
+                    SchemaDef schemaDef = this.schemaDefService.read(schemaDefForm.get().getId());
+                    return ok(transform(schemaDef));
+                });
     }
 
     public CompletionStage<Result> readAll() {
         return CompletableFuture
-                .supplyAsync(this.schemaDefService::readAll)
+                .supplyAsync(this.schemaDefService::readAll, this.httpExecutionContext.current())
                 .thenApply(schemaDefList ->
                     ok(Json.toJson(schemaDefList.parallelStream()
                             .map(this::transform)
@@ -42,7 +59,7 @@ public class SchemaDefController extends Controller {
 
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
-                .supplyAsync(() -> this.schemaDefService.read(id))
+                .supplyAsync(() -> this.schemaDefService.read(id), this.httpExecutionContext.current())
                 .thenApply(schemaDef -> {
                     if(schemaDef == null) {
                         return notFound();
@@ -52,6 +69,23 @@ public class SchemaDefController extends Controller {
 
     }
 
+
+    public CompletionStage<Result> delete(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.schemaDefService.delete(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                    if(schemaDefForm.hasErrors()) {
+                        return badRequest(schemaDefForm.errorsAsJson());
+                    }
+                    return ok();
+                });
+    }
+
+    /**
+     *
+     * @param schemaDef
+     * @return
+     */
     public ObjectNode transform(SchemaDef schemaDef) {
         ObjectNode schemaDefNode = Json.newObject();
 

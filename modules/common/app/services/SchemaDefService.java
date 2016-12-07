@@ -4,7 +4,6 @@ import models.SchemaDef;
 import models.TableDef;
 import play.data.Form;
 import play.data.FormFactory;
-import play.mvc.Http;
 import repository.SchemaDefRepository;
 
 import javax.inject.Inject;
@@ -34,14 +33,20 @@ public class SchemaDefService extends Service {
         return this.formFactory.form(SchemaDef.class);
     }
 
-    public Form<SchemaDef> create(Http.Request request) {
-        Form<SchemaDef> schemaDefForm = this.getForm().bindFromRequest(request);
+    public Form<SchemaDef> create() {
+        Form<SchemaDef> schemaDefForm = this.getForm().bindFromRequest();
 
         if (schemaDefForm.hasErrors()) {
             return schemaDefForm;
         }
 
         SchemaDef schemaDef = schemaDefForm.get();
+
+        if(schemaDefRepository.getByName(schemaDef.getName()) != null) {
+            schemaDefForm.reject("name", "name already taken");
+            return schemaDefForm;
+        }
+
         this.schemaDefRepository.save(schemaDef);
 
         return schemaDefForm.fill(schemaDef);

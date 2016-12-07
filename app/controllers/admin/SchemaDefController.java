@@ -41,8 +41,7 @@ public class SchemaDefController extends Controller {
 
     public CompletionStage<Result> create() {
         return CompletableFuture
-                .supplyAsync(() ->
-                        this.schemaDefService.create(request()), this.httpExecutionContext.current())
+                .supplyAsync(this.schemaDefService::create, this.httpExecutionContext.current())
                 .thenApply(schemaDefForm -> {
                         if (schemaDefForm.hasErrors()) {
                             if (request().body().asJson() == null) {

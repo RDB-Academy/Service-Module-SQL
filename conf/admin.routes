@@ -7,8 +7,10 @@ GET     /                           controllers.admin.HomeController.index()
 GET     /login                      controllers.admin.SessionController.login()
 GET     /logout                     controllers.admin.SessionController.logout()
 
+POST    /api/schemaDef              controllers.admin.api.SchemaDefController.create()
 GET     /api/schemaDef              controllers.admin.api.SchemaDefController.readAll()
 GET     /api/schemaDef/:id          controllers.admin.api.SchemaDefController.read(id: Long)
+DELETE  /api/schemaDef/:id          controllers.admin.api.SchemaDefController.delete(id: Long)
 
 GET     /api/tableDef/:id           controllers.admin.api.TableDefController.read(id: Long)
 
