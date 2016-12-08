@@ -74,6 +74,7 @@ public class ColumnDef extends BaseModel {
 
     public static final int META_VALUE_SET_LOCATION = 952;
     public static final int META_VALUE_SET_CITY = 3;
+    public static final int META_VALUE_SET_POSITION = 33;
 
     public static final int META_VALUE_SET_DAY = 7;
     public static final int META_VALUE_SET_MONTH = 9;
