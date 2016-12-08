@@ -1,32 +1,39 @@
 package controllers.api;
 
-import models.Task;
-import play.Logger;
+import com.google.inject.Singleton;
 import play.libs.Json;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-import repository.TaskRepository;
+import services.TaskService;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author fabiomazzone
  */
+@Singleton
 public class TaskController extends Controller {
-    private final TaskRepository taskRepository;
+    private final TaskService taskService;
+    private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public TaskController(
-            TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public TaskController(TaskService taskService, HttpExecutionContext httpExecutionContext) {
+        this.taskService = taskService;
+        this.httpExecutionContext = httpExecutionContext;
     }
 
-    public Result show(long id) {
-        Task task = taskRepository.getById(id);
-        if(task == null) {
-            Logger.warn("TaskController - show(%s) - Not Found", id);
-            return notFound();
-        }
-        return ok(Json.toJson(task));
+
+    public CompletionStage<Result> show(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.taskService.read(id), this.httpExecutionContext.current())
+                .thenApply(task -> {
+                    if(task == null) {
+                        return notFound();
+                    }
+                    return ok(Json.toJson(task));
+                });
     }
 }

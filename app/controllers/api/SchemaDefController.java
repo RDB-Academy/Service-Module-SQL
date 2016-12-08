@@ -1,29 +1,39 @@
 package controllers.api;
 
-import models.SchemaDef;
 import play.libs.Json;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-import repository.SchemaDefRepository;
+import services.SchemaDefService;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author fabiomazzone
  */
+@Singleton
 public class SchemaDefController extends Controller {
-    private SchemaDefRepository schemaDefRepository;
+    private final SchemaDefService schemaDefService;
+    private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public SchemaDefController(SchemaDefRepository schemaDefRepository) {
-        this.schemaDefRepository = schemaDefRepository;
+    public SchemaDefController(SchemaDefService schemaDefService, HttpExecutionContext httpExecutionContext) {
+        this.schemaDefService = schemaDefService;
+        this.httpExecutionContext = httpExecutionContext;
     }
 
-    public Result show(long id) {
-        SchemaDef schemaDef = schemaDefRepository.getById(id);
-        if(schemaDef == null) {
-            return notFound();
-        }
-        return ok(Json.toJson(schemaDef));
+
+    public CompletionStage<Result> show(long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.schemaDefService.read(id), this.httpExecutionContext.current())
+                .thenApply(schemaDef -> {
+                    if(schemaDef == null) {
+                        return notFound();
+                    }
+                    return ok(Json.toJson(schemaDef));
+                });
     }
 }

@@ -1,30 +1,40 @@
 package controllers.api;
 
+import com.google.inject.Singleton;
 import models.TableDef;
 import play.libs.Json;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-import repository.TableDefRepository;
+import services.TableDefService;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author invisible
  */
+@Singleton
 public class TableDefController extends Controller {
-
-    private TableDefRepository tableDefRepository;
+    private final TableDefService tableDefService;
+    private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public TableDefController(TableDefRepository tableDefRepository) {
-        this.tableDefRepository = tableDefRepository;
+    public TableDefController(TableDefService tableDefService, HttpExecutionContext httpExecutionContext) {
+        this.tableDefService = tableDefService;
+        this.httpExecutionContext = httpExecutionContext;
     }
 
-    public Result show(long id) {
-        TableDef tableDef = tableDefRepository.getById(id);
-        if(tableDef == null) {
-            return notFound();
-        }
-        return ok(Json.toJson(tableDef));
+
+    public CompletionStage<Result> show(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.tableDefService.read(id), this.httpExecutionContext.current())
+                .thenApply(tableDef -> {
+                    if(tableDef == null) {
+                        return notFound();
+                    }
+                    return ok(Json.toJson(tableDef));
+                });
     }
 }

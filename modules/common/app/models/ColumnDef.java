@@ -32,7 +32,7 @@ public class ColumnDef extends BaseModel {
     private boolean isPrimary  = false;
 
     @NotNull
-    private boolean isNotNull = true;
+    private boolean isNotNull = false;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sourceColumn")
