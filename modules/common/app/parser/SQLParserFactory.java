@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.ArrayList;
 
 /**
  * @author fabiomazzone
@@ -36,7 +37,7 @@ public class SQLParserFactory {
 
         LocalDateTime startTime = LocalDateTime.now();
 
-        CompletionStage<String[][][]> extensions = CompletableFuture.supplyAsync(extensionMaker::buildStatements);
+        CompletionStage<ArrayList<String[][]>> extensions = CompletableFuture.supplyAsync(extensionMaker::buildStatements);
         CompletionStage<List<String>> tableMakerStatements = CompletableFuture.supplyAsync(tableMaker::buildStatement);
 
 

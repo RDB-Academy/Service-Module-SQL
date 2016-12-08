@@ -6,6 +6,9 @@ import models.TableDef;
 import java.util.List;
 import java.util.Random;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author carl
  */
@@ -24,7 +27,7 @@ public class ExtensionMaker {
     String[] lastname = {"Medina","Arnold","Chase","Blake","Blackburn","Chan","Adkins","Pacheco","Barry","Jordan","Bowers","Pitts","Duarte","Dean","Wilkinson","Mcintyre","Joseph","Melton","Summers","Mcintosh","Moody","Pollard","Tran","Delacruz","Cox","Tucker","Wilkerson","Lindsey","Boone","Goodwin","Doyle","Hanson","Velazquez","Camacho","Moss","Tanner","Clark","Bautista","Glenn","Mccormick","Blackwell","Orozco","Clay","Perez","Cervantes","Vance","Lynn","Berry","Perkins","Cherry","Mejia","Rocha","Rosales","Simmons","Calhoun","Mcconnell","Mckee","Davis","Horne","Skinner","Galloway","Cardenas","Villa","Woods","Arroyo","Galvan","Castillo","Sanders","Flowers","Barr","Montes","Briggs","Maynard","Bradshaw","Higgins","Hart","Duke","Alvarez","Hill","Davenport","Douglas","Olsen","Noble","Mason","Parks","Allison","Braun","Bean","Curry","Cummings","Kent","Dodson","Best","Jacobson","Guzman","Hale","Mccarty","Meza","Maxwell","Mcneil","Abraham","Allan","Alsop","Anderson","Arnold","Avery","Bailey","Baker","Ball","Bell","Berry","Black","Blake","Bond","Bower","Brown","Buckland","Burgess","Butler","Cameron","Campbell","Carr","Chapman","Churchill","Clark","Clarkson","Coleman","Cornish","Davidson","Davies","Dickens","Dowd","Duncan","Dyer","Edmunds","Ellison","Ferguson","Fisher","Forsyth","Fraser","Gibson","Gill","Glover","Graham","Grant","Gray","Greene","Hamilton","Hardacre","Harris","Hart","Hemmings","Henderson","Hill","Hodges","Howard","Hudson","Hughes","Hunter","Ince","Jackson","James","Johnston","Jones","Kelly","Kerr","King","Knox","Lambert","Langdon","Lawrence","Lee","Lewis","Lyman","MacDonald","Mackay","Mackenzie","MacLeod","Manning","Marshall","Martin","Mathis","May","McDonald","McLean","McGrath","Metcalfe","Miller","Mills","Mitchell","Morgan","Morrison","Murray","Nash","Newman","Nolan","North","Ogden","Oliver","Paige","Parr","Parsons","Paterson","Payne","Peake","Peters","Piper","Poole","Powell","Pullman","Quinn","Rampling","Randall","Rees","Reid","Roberts","Robertson","Ross","Russell","Rutherford","Sanderson","Scott","Sharp","Short","Simpson","Skinner","Slater","Smith","Springer","Stewart","Sutherland","Taylor","Terry","Thomson","Tucker","Turner","Underwood","Vance","Vaughan","Walker","Wallace","Walsh","Watson","Welch","White","Wilkins","Wilson","Wright","Young"};
     String[] colour = {"IndianRed","LightCoral","Salmon","DarkSalmon","LightSalmon","Crimson","Red","FireBrick","DarkRed","Pink","LightPink","HotPink","DeepPink","MediumVioletRed","PaleVioletRed","LightSalmon","Coral","Tomato","OrangeRed","DarkOrange","Orange","Gold","Yellow","LightYellow","LemonChiffon","LightGoldenRodYellow","PapayaWhip","Moccasin","PeachPuff","PaleGoldenrod","Khaki","DarkKhaki","Lavender","Thistle","Plum","Violet","Orchid","Fuchsia","Magenta","MediumOrchid","MediumPurple","BlueViolet","DarkViolet","DarkOrchid","DarkMagenta","Purple","Indigo","SlateBlue","DarkSlateBlue","MediumSlateBlue","GreenYellow","Chartreuse","LawnGreen","Lime","LimeGreen","PaleGreen","LightGreen","MediumSpringGreen","SpringGreen","MediumSeaGreen","SeaGreen","ForestGreen","Green","DarkGreen","YellowGreen","OliveDrab","Olive","DarkOliveGreen","MediumAquamarine","DarkSeaGreen","LightSeaGreen","DarkCyan","Teal","Aqua","Cyan","LightCyan","PaleTurquoise","Aquamarine","Turquoise","MediumTurquoise","DarkTurquoise","CadetBlue","SteelBlue","LightSteelBlue","PowderBlue","LightBlue","SkyBlue","LightSkyBlue","DeepSkyBlue","DodgerBlue","CornflowerBlue","MediumSlateBlue","RoyalBlue","Blue","MediumBlue","DarkBlue","Navy","MidnightBlue","Cornsilk","BlanchedAlmond","Bisque","NavajoWhite","Wheat","BurlyWood","Tan","RosyBrown","SandyBrown","Goldenrod","DarkGoldenrod","Peru","Chocolate","SaddleBrown","Sienna","Brown","Maroon","White","Snow","Honeydew","MintCream","Azure","AliceBlue","GhostWhite","WhiteSmoke","Seashell","Beige","OldLace","FloralWhite","Ivory","AntiqueWhite","Linen","LavenderBlush","MistyRose","Gainsboro","LightGray","Silver","DarkGray","Gray","DimGray","LightSlateGray","SlateGray","DarkSlateGray","Black"};
     String[] country = {"Qatar","Luxembourg","Singapore","Brunei Darussalam","Kuwait","Norway","United Arab Emirates","Hong Kong","United States","Switzerland","Saudi Arabia","Bahrain","Netherlands","Ireland","Australia","Austria","Sweden","Germany","Taiwan","Canada","Denmark","Oman","Iceland","Belgium","France","Finland","United Kingdom","Japan","Republic Of Korea","New Zealand","Italy","Spain","Israel","Malta","Trinidad And Tobago","Slovenia","Equatorial Guinea","Czech Republic","Slovak Republic","Cyprus","Lithuania","Estonia","Portugal","Greece","Malaysia","Bahamas","Poland","Seychelles","Hungary","Kazakhstan","Russian Federation","Latvia","Chile","Antigua And Barbuda","Gabon","Argentina","Panama","Uruguay","Saint Kitts And Nevis","Croatia","Romania","Turkey","Libyan Arab Jamahiriya","Azerbaijan","Belarus","Mauritius","Mexico","Lebanon","Bulgaria","Bolivarian Republic Of Venezuela","Suriname","Iran","Botswana","Barbados","Montenegro","Palau","Turkmenistan","Costa Rica","Brazil","Thailand","Algeria","Colombia","China","Macedonia","Iraq","Dominican Republic","South Africa","Maldives","Serbia","Peru","Jordan","Grenada","Tunisia","Ecuador","Albania","Egypt","Saint Lucia","Saint Vincent And The Grenadines","Namibia","Sri Lanka","Mongolia","Dominica","Indonesia","Bosnia And Herzegovina","Jamaica","Paraguay","Angola","Fiji","Ukraine","Belize","El Salvador","Bhutan","Georgia","Morocco","Swaziland","Armenia","Guatemala","Philippines","Timor Leste","Guyana","Rep.Congo","Cape Verde","Bolivia","Nigeria","India","Viet Nam","Uzbekistan","Lao People S Democratic Republic","Samoa","Tonga","Myanmar","Moldova","Nicaragua","Pakistan","Honduras","Sudan","Zambia","Ghana","Yemen","Bangladesh","Mauritania","Kyrgyz Republic","Cambodia","Sao Tome And Principe","Kenya","Marshall Islands","Micronesia","Djibouti","Cameroon","Lesotho","Côte D Ivoir"};
-    String[] sound = {"an","au","be","ch","da","de","di","ei","el","en","er","es","ge","he","ht","ic","ie","in","it","le","li","nd","ne","ng","re","sc","se","si","st","te","un","en","er","ch","de","ei","ie","in","te","ge","un","nd","ic","es","be","he","st","ne","an","re","se","di","sc","au","ng","si","le","da","it","ht","el","li"};
+    String[] sound = {"an","au","be","ch","da","de","di","ei","el","en","er","es","ge","he","ht","ic","ie","in","it","le","li","nd","ne","ng","re","sc","se","si","st","te","un","en","er","ch","de","ei","ie","in","te","ge","un","en","er","sch","de","ei","ie","in","wi","te","ge","un","wo","ko","ir","re","ni","il"};
 
     public ExtensionMaker(Long seed, SchemaDef schemaDef) {
         this.seed = seed;
@@ -32,7 +35,9 @@ public class ExtensionMaker {
         this.rand = new Random(this.seed);
     }
 
-    public String[][][] buildStatements() {
+    public ArrayList<String[][]> buildStatements() {
+
+        ArrayList<String[][]> Extensionlist = new ArrayList<String[][]>();
 
         List<TableDef> tableDefs = schemaDef.getTableDefList();
         schemaDef.getTableDefList().forEach((tabledef) -> {
@@ -59,10 +64,7 @@ public class ExtensionMaker {
             System.out.println("maxSize: " + maxSize);
         }
 
-        int row = 5;
-
-
-        String[][][] out = new String[tables][row][maxSize];
+        int row = 10;
 
 
         System.out.println("META: " + tableDefs.get(0).getColumnDefList().get(0).getMetaValueSet());
@@ -74,6 +76,9 @@ public class ExtensionMaker {
 
         for(int t = 0; t< tables; t++){
             System.out.println(tableDefs.get(t));
+
+            String[][] out = new String[row][tableDefs.get(t).getColumnDefList().size()];
+
             int columm = tableDefs.get(t).getColumnDefList().size();
 
             for(int i = 0; i < row; i++) {
@@ -81,83 +86,91 @@ public class ExtensionMaker {
                     switch (tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet()) {
                         case 1:
                             for ( int b = 0; b <= j; b ++){
-                                if( tableDefs.get(t).getColumnDefList().get(b).getName().equals("firstname") || tableDefs.get(t).getColumnDefList().get(b).getName().equals("lastname")){
-                                    if(out[t][i][j] == null ){
-                                        out[t][i][j] = out[t][i][b];
-                                    }else{out[t][i][j] = out[t][i][j] + "." + out[t][i][b];}
+                                if( (tableDefs.get(t).getColumnDefList().get(b).getMetaValueSet() == 8 ) || (tableDefs.get(t).getColumnDefList().get(b).getMetaValueSet() == 744)){
+                                    if(out[i][j] == null ){
+                                        out[i][j] = out[i][b];
+                                    }else{out[i][j] = out[i][j] + "." + out[i][b];}
                                 }
                             }
-                            out[t][i][j] = out[t][i][j] + (int) (Math.random() * 100) +"@"+ mail[(int)(Math.random() * mail.length)];
+                            out[i][j] = out[i][j] + rand.nextInt(100) +"@"+ mail[rand.nextInt(mail.length)];
                             break;
                         case 8:
-                            out[t][i][j] = "" + firstname[(int) (Math.random() * firstname.length)];
+                            out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
+                            break;
+                        case 358:
+                            out[i][j] = "" + rand.nextInt(row);
                             break;
                         case 485:
-                            out[t][i][j] = "" + i;
+                            out[i][j] = "" + i;
                             break;
                         case 2:
-                            out[t][i][j] = "" + animal[(int) (Math.random() * animal.length)];
+                            out[i][j] = "" + animal[rand.nextInt(animal.length)];
                             break;
                         case 3:
-                            out[t][i][j] = "" + city[(int) (Math.random() * city.length)];
+                            out[i][j] = "" + city[rand.nextInt(city.length)];
                             break;
                         case 4:
-                            out[t][i][j] = "" + title[(int) (Math.random() * title.length)];
+                            out[i][j] = "" + title[rand.nextInt(title.length)];
                             break;
                         case 5:
-                            out[t][i][j] = "" + firstname[(int) (Math.random() * firstname.length)] + " " + lastname[(int) (Math.random() * lastname.length)];
+                            out[i][j] = "" + firstname[rand.nextInt(firstname.length)] + " " + lastname[rand.nextInt(lastname.length)];
                             break;
                         case 6:
-                            out[t][i][j] = "" + metal[(int) (Math.random() * metal.length)];
+                            out[i][j] = "" + metal[rand.nextInt(metal.length)];
                             break;
                         case 7:
-                            out[t][i][j] = "" + (int) (Math.random() * 30);
+                            out[i][j] = "" + rand.nextInt(30);
+                            break;
+                        case 7768:
+                            out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
                             break;
                         case 9:
-                            out[t][i][j] = "" + (int) (Math.random() * 13);
+                            out[i][j] = "" + rand.nextInt(13);
                             break;
                         case 154:
-                            out[t][i][j] = "" + (1930 + (int) (Math.random() * 87));
+                            out[i][j] = "" + (1930 + rand.nextInt(87));
                             break;
                         case 672:
-                            out[t][i][j] = word[(int) (Math.random() * word.length)] + " " + word[(int) (Math.random() * word.length)];
+                            out[i][j] = word[rand.nextInt(word.length)] + " " + word[rand.nextInt(word.length)];
                             break;
                         case 744:
-                            out[t][i][j] = "" + lastname[(int) (Math.random() * lastname.length)];
+                            out[i][j] = "" + lastname[rand.nextInt(lastname.length)];
                             break;
                         case 10:
-                            out[t][i][j] = "" + colour[(int) (Math.random() * colour.length)];
+                            out[i][j] = "" + colour[rand.nextInt(colour.length)];
                             break;
                         case 11:
-                            out[t][i][j] = "" + (int) (Math.random() * 30) + (int) (Math.random() * 13) + (1930 + (int) (Math.random() * 87));
+                            out[i][j] = rand.nextInt(30) +"."+ rand.nextInt(13) +"."+ (1930 + rand.nextInt(87));
                             break;
                         case 952:
-                            out[t][i][j] = "" + country[(int) (Math.random() * country.length)];
+                            out[i][j] = "" + country[rand.nextInt(country.length)];
                             break;
                         default:
                             switch (tableDefs.get(t).getColumnDefList().get(j).getDataType()) {
                                 case "INT":case "int":
-                                    out[t][i][j] = "" + (int) (Math.random() * 1111);
+
+                                    out[i][j] = "" + ( tableDefs.get(t).getColumnDefList().get(j).getMinValueSet() + rand.nextInt(tableDefs.get(t).getColumnDefList().get(j).getMaxValueSet() - tableDefs.get(t).getColumnDefList().get(j).getMinValueSet()));
                                     break;
                                 case "VARCHAR(255)":case "VARCHAR":
-                                    int num = 2 + (int) (Math.random() * 4);
-                                    out[t][i][j] = "";
+                                    int num = 2 + rand.nextInt(4);
+                                    out[i][j] = "";
                                     while ( num > 0 ){
-                                        out[t][i][j] += sound[(int) (Math.random() * sound.length)];
+                                        out[i][j] += sound[rand.nextInt(sound.length)];
                                         num--;
                                     }
                                     break;
                                 default:
-                                    out[t][i][j] = "" + tableDefs.get(t).getColumnDefList().get(j).getName() + tableDefs.get(t).getColumnDefList().get(j).getDataType();
+                                    out[i][j] = "" + tableDefs.get(t).getColumnDefList().get(j).getName() + tableDefs.get(t).getColumnDefList().get(j).getDataType();
                                     break;
                             }
                             break;
                     }
                 }
             }
+            Extensionlist.add(out);
 
         }
 
-        return out;
+        return Extensionlist;
     }
 }

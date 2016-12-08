@@ -49,7 +49,9 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         heroTeam_team_id.setPrimary(true);
         heroTeam_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         heroTeam_join_year.setNullable(false);
-        heroTeam_join_year.setMetaValueSet(ColumnDef.META_VALUE_SET_YEAR);
+        //heroTeam_join_year.setMetaValueSet(ColumnDef.META_VALUE_SET_YEAR);
+        heroTeam_join_year.setMinValueSet(1900);
+        heroTeam_join_year.setMaxValueSet(2017);
 
         hero.addColumnDef(hero_hero_id);
         hero.addColumnDef(hero_hero_name);
