@@ -1,5 +1,6 @@
 package services;
 
+import models.Task;
 import repository.TaskRepository;
 
 import javax.inject.Inject;
@@ -15,5 +16,9 @@ public class TaskService {
     @Inject
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
+    }
+
+    public Task read(Long id) {
+        return this.taskRepository.getById(id);
     }
 }

@@ -7,24 +7,44 @@ GET     /                           controllers.admin.HomeController.index()
 GET     /login                      controllers.admin.SessionController.login()
 GET     /logout                     controllers.admin.SessionController.logout()
 
+POST    /api/schemaDef              controllers.admin.api.SchemaDefController.create()
+GET     /api/schemaDef              controllers.admin.api.SchemaDefController.readAll()
+GET     /api/schemaDef/:id          controllers.admin.api.SchemaDefController.read(id: Long)
+DELETE  /api/schemaDef/:id          controllers.admin.api.SchemaDefController.delete(id: Long)
 
-GET     /schemaDef                  controllers.admin.SchemaDefController.index()
-GET     /schemaDef/new.form         controllers.admin.SchemaDefController.createForm()
-GET     /schemaDef/new.json         controllers.admin.SchemaDefController.createJson()
-POST    /schemaDef                  controllers.admin.SchemaDefController.newSchemaDef()
+GET     /api/tableDef/:id           controllers.admin.api.TableDefController.read(id: Long)
+
+GET     /api/columnDef/:id          controllers.admin.api.ColumnDefController.read(id: Long)
+
+GET     /api/foreignKey/:id         controllers.admin.api.ForeignKeyController.read(id: Long)
+
+GET     /api/foreignKeyRelation/:id controllers.admin.api.ForeignKeyRelationController.read(id: Long)
+
+GET     /api/task/:id               controllers.admin.api.TaskController.read(id: Long)
+
+GET     /api/*file                  controllers.admin.api.ApplicationController.notFoundView(file: String)
+
+
+GET     /schemaDef                  controllers.admin.SchemaDefController.readAll()
+GET     /schemaDef/new.form         controllers.admin.SchemaDefController.createViewForm()
+GET     /schemaDef/new.json         controllers.admin.SchemaDefController.createViewJson()
+POST    /schemaDef                  controllers.admin.SchemaDefController.create()
 GET     /schemaDef/:id              controllers.admin.SchemaDefController.read(id: Long)
-GET     /schemaDef/:id/edit         controllers.admin.SchemaDefController.edit(id: Long)
+GET     /schemaDef/:id/edit         controllers.admin.SchemaDefController.updateView(id: Long)
 POST    /schemaDef/:id/update       controllers.admin.SchemaDefController.update(id: Long)
 DELETE  /schemaDef/:id              controllers.admin.SchemaDefController.delete(id: Long)
 GET     /schemaDef/:id/newTableDef  controllers.admin.SchemaDefController.createTableDef(id: Long)
 
 GET     /tableDef/:id               controllers.admin.TableDefController.read(id: Long)
-GET     /tableDef/:id/edit          controllers.admin.TableDefController.edit(id: Long)
+GET     /tableDef/:id/edit          controllers.admin.TableDefController.updateView(id: Long)
+POST    /tableDef/:id/update        controllers.admin.TableDefController.update(id: Long)
 DELETE  /tableDef/:id               controllers.admin.TableDefController.delete(id: Long)
 
-GET     /columnDef/:id              controllers.admin.ColumnDefController.read(id: Long)
-GET     /columnDef/:id/edit         controllers.admin.ColumnDefController.edit(id: Long)
+#GET     /columnDef/:id              controllers.admin.ColumnDefController.read(id: Long)
+#GET     /columnDef/:id/edit         controllers.admin.ColumnDefController.edit(id: Long)
 
 GET     /assets/lib/*file           controllers.Assets.at(path="/public/lib", file)
 GET     /assets/*file               controllers.Assets.versioned(path="/public/admin", file: Asset)
+
+
 

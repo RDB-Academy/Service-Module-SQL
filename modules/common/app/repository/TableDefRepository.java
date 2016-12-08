@@ -20,4 +20,8 @@ public class TableDefRepository {
     public TableDef getById(Long id) {
         return this.find.byId(id);
     }
+
+    public void save(TableDef tableDef) {
+        tableDef.save();
+    }
 }

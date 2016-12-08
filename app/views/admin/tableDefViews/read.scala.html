@@ -13,7 +13,7 @@
             </div>
             <div class="btn-group pull-right">
                 <a href="@controllers.admin.routes.TableDefController.delete(tableDefForm.get().getId)" class="btn btn-default btn-sm" data-confirm="Are you sure?" data-method="delete"><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color: red"></span></a>
-                <a href="@controllers.admin.routes.TableDefController.edit(tableDefForm.get().getId)" type="button" class="btn btn-default btn-sm">Edit</a>
+                <a href="@controllers.admin.routes.TableDefController.updateView(tableDefForm.get().getId)" type="button" class="btn btn-default btn-sm">Edit</a>
             </div>
         </div>
         <div class="panel-body">
@@ -55,14 +55,14 @@
                                 </thead>
                                 <tbody>
                                     @for((columnDef, index) <- tableDefForm.get().getColumnDefList.zipWithIndex) {
-                                    <tr class="clickable-row" data-href="@controllers.admin.routes.ColumnDefController.read(columnDef.getId)">
+                                    <tr class="">
                                         <td style="width: 5%;">
                                             @{index + 1}
                                         </td>
                                         <td style="width: 10%;">
                                             @columnDef.getId
                                         </td>
-                                        <td style="width: 10%;"c>
+                                        <td style="width: 10%;">
                                             @columnDef.getName
                                         </td>
                                         <td style="width: 15%;">
@@ -72,7 +72,7 @@
                                             @columnDef.isPrimary()
                                         </td>
                                         <td style="width: 10%;">
-                                            @columnDef.isNullable()
+                                            @columnDef.isNotNull()
                                         </td>
                                         <td style="width: 20%;">
                                             @columnDef.getCreatedAtFromNow
@@ -81,7 +81,7 @@
                                             @columnDef.getModifiedAtFromNow
                                         </td>
                                     </tr>
-                                }
+                                    }
                                 </tbody>
                             </table>
                         </div>

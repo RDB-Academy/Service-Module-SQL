@@ -1,15 +1,12 @@
 package controllers.admin;
 
 import authenticators.Authenticated;
-import models.SchemaDef;
-import models.TableDef;
-import play.data.Form;
+import play.Logger;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import services.SchemaDefService;
-import services.tools.ServiceError;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
@@ -22,90 +19,119 @@ import java.util.concurrent.CompletionStage;
 public class SchemaDefController extends Controller {
     private final SchemaDefService schemaDefService;
     private final HttpExecutionContext httpExecutionContext;
-
     @Inject
     public SchemaDefController(
             SchemaDefService schemaDefService,
             HttpExecutionContext httpExecutionContext) {
+
         this.schemaDefService = schemaDefService;
         this.httpExecutionContext = httpExecutionContext;
     }
 
 
-    public CompletionStage<Result> index() {
+    public CompletionStage<Result> createViewForm() {
         return CompletableFuture
-                .supplyAsync(this.schemaDefService::getSchemaDefList, this.httpExecutionContext.current())
-                .thenApply(schemaDefList -> ok(views.html.admin.schemaDefViews.index.render(schemaDefList)));
-    }
-
-    public CompletionStage<Result> createForm() {
-        return CompletableFuture
-                .supplyAsync(this.schemaDefService::getCreateForm, this.httpExecutionContext.current())
+                .supplyAsync(this.schemaDefService::createAsForm, this.httpExecutionContext.current())
                 .thenApply(createForm -> ok(views.html.admin.schemaDefViews.createForm.render(createForm)));
     }
 
-    public Result createJson() {
+    public Result createViewJson() {
         return ok(views.html.admin.schemaDefViews.createJson.render());
     }
 
-    public Result newSchemaDef() {
-        Form<SchemaDef> schemaDefForm = this.schemaDefService.getNewSchemaDef(request());
-
-        if(schemaDefForm.hasErrors()) {
-            if(request().body().asJson() == null) {
-                flash("flash", "Error");
-                return redirect(routes.SchemaDefController.createJson());
-            }
-            return badRequest(views.html.admin.schemaDefViews.createForm.render(schemaDefForm));
-        }
-
-        Long id = schemaDefForm.get().getId();
-        return redirect(routes.SchemaDefController.read(id));
+    public CompletionStage<Result> create() {
+        return CompletableFuture
+                .supplyAsync(this.schemaDefService::create, this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                        if (schemaDefForm.hasErrors()) {
+                            if (request().body().asJson() == null) {
+                                flash("flash", "Error");
+                                return redirect(routes.SchemaDefController.createViewJson());
+                            }
+                            return badRequest(views.html.admin.schemaDefViews.createForm.render(schemaDefForm));
+                        }
+                        Long id = schemaDefForm.get().getId();
+                        return redirect(routes.SchemaDefController.read(id));
+                    }
+                );
     }
 
-    public Result read(Long id) {
-        Form<SchemaDef> schemaDefForm = this.schemaDefService.getSchemaDefForm(id);
-
-        if(schemaDefForm == null) {
-            flash("notFound", "Schema with id " + id + " not found!");
-            return redirect(routes.SchemaDefController.index());
-        }
-
-        return ok(views.html.admin.schemaDefViews.read.render(schemaDefForm));
+    public CompletionStage<Result> readAll() {
+        return CompletableFuture
+                .supplyAsync(this.schemaDefService::readAll, this.httpExecutionContext.current())
+                .thenApply(schemaDefList -> ok(views.html.admin.schemaDefViews.index.render(schemaDefList)));
     }
 
-    public Result edit(Long id) {
-        Form<SchemaDef> schemaDefForm = this.schemaDefService.getSchemaDefForm(id);
+    public CompletionStage<Result> read(Long id) {
+        return CompletableFuture
+                .supplyAsync(
+                        () -> this.schemaDefService.readAsForm(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                        if (schemaDefForm == null) {
+                            flash("notFound", "Schema with id " + id + " not found!");
+                            return redirect(routes.SchemaDefController.readAll());
+                        }
 
-        if(schemaDefForm == null) {
-            flash("notFound", "Schema with id " + id + " not found!");
-            return redirect(routes.SchemaDefController.index());
-        }
-
-        return ok(views.html.admin.schemaDefViews.edit.render(schemaDefForm));
+                        return ok(views.html.admin.schemaDefViews.read.render(schemaDefForm));
+                    }
+                );
     }
 
-    public Result update(Long id) {
-        
-        return redirect(routes.SchemaDefController.edit(id));
+    public CompletionStage<Result> updateView(Long id) {
+        return CompletableFuture.supplyAsync(
+                () -> this.schemaDefService.readAsForm(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                    if(schemaDefForm == null) {
+                        flash("notFound", "Schema with id " + id + " not found!");
+                        return redirect(routes.SchemaDefController.readAll());
+                    }
+
+                    return ok(views.html.admin.schemaDefViews.edit.render(schemaDefForm));
+                    }
+                );
     }
 
-    public Result delete(Long id) {
-        ServiceError serviceError = this.schemaDefService.deleteSchemaDef(id);
-
-        if(serviceError != null) {
-            serviceError.flash(ctx());
-        }
-
-        return redirect(routes.SchemaDefController.index());
+    public CompletionStage<Result> update(Long id) {
+        return CompletableFuture
+                .supplyAsync(() ->
+                        this.schemaDefService.update(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                    if(schemaDefForm.hasErrors())  {
+                        Logger.warn(schemaDefForm.errorsAsJson().toString());
+                        return badRequest(schemaDefForm.errorsAsJson());
+                    }
+                    Logger.debug("Successfully updated");
+                    return redirect(routes.SchemaDefController.read(id));
+                    }
+                );
     }
 
-    public Result createTableDef(long id) {
-        Form<TableDef> tableDefForm = this.schemaDefService.getCreateTableDefForm(id);
-        if(tableDefForm == null) {
-            return notFound();
-        }
+    public CompletionStage<Result> delete(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.schemaDefService.delete(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                    if(schemaDefForm.hasErrors()) {
+                        return badRequest(schemaDefForm.errorsAsJson());
+                    }
+                    return redirect(routes.SchemaDefController.readAll());
+                });
+    }
 
-        return ok(views.html.admin.schemaDefViews.createTableDef.render(tableDefForm));
+
+
+/* ****************************************************************************************************************** *\
+|  --- Not SchemaDef Related Stuff
+\* ****************************************************************************************************************** */
+
+    public CompletionStage<Result> createTableDef(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.schemaDefService.getCreateTableDefForm(id))
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm == null) {
+                        return notFound();
+                    }
+                    return ok(views.html.admin.schemaDefViews.createTableDef.render(tableDefForm));
+                });
+
     }
 }

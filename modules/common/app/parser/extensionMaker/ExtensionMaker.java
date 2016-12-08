@@ -173,4 +173,12 @@ public class ExtensionMaker {
 
         return Extensionlist;
     }
+
+    public Long getSeed() {
+        return seed;
+    }
+
+    public SchemaDef getSchemaDef() {
+        return schemaDef;
+    }
 }

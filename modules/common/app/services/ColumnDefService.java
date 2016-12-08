@@ -24,7 +24,7 @@ public class ColumnDefService {
     }
 
     public Form<ColumnDef> getViewForm(Long id) {
-        ColumnDef columnDef = this.columnDefRepository.getById(id);
+        ColumnDef columnDef = read(id);
 
         Form<ColumnDef> columnDefForm = this.formFactory.form(ColumnDef.class).fill(columnDef);
 
@@ -32,5 +32,7 @@ public class ColumnDefService {
     }
 
 
-
+    public ColumnDef read(Long id) {
+        return this.columnDefRepository.getById(id);
+    }
 }

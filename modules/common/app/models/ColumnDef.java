@@ -30,8 +30,9 @@ public class ColumnDef extends BaseModel {
 
     @NotNull
     private boolean isPrimary  = false;
+
     @NotNull
-    private boolean isNullable = true;
+    private boolean isNotNull = true;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sourceColumn")
@@ -67,7 +68,7 @@ public class ColumnDef extends BaseModel {
     public static final int META_VALUE_SET_TITLE = 4;
     public static final int META_VALUE_SET_ANIMAL = 2;
     public static final int META_VALUE_SET_METAL = 6;
-    public static final int META_VALUE_SET_COLOUR = 10;
+    public static final int META_VALUE_SET_COLOR = 10;
 
     public static final int META_VALUE_SET_GRADE = 361;
 
@@ -115,17 +116,17 @@ public class ColumnDef extends BaseModel {
 
     public void setPrimary(boolean primary) {
         if(primary) {
-            this.setNullable(false);
+            this.setNotNull(true);
         }
         isPrimary = primary;
     }
 
-    public boolean isNullable() {
-        return isNullable;
+    public boolean isNotNull() {
+        return isNotNull;
     }
 
-    public void setNullable(boolean nullable) {
-        isNullable = nullable;
+    public void setNotNull(boolean notNull) {
+        isNotNull = notNull;
     }
 
     public List<ForeignKeyRelation> getForeignKeyRelationsSource() {
@@ -160,4 +161,50 @@ public class ColumnDef extends BaseModel {
         this.maxValueSet = maxValueSet;
     }
 
+    public String getMetaValueSetName() {
+        switch (this.getMetaValueSet()) {
+            case META_VALUE_SET_ID:
+                return "ID";
+            case META_VALUE_SET_FOREIGN_KEY:
+                return "FK_ID";
+
+            case META_VALUE_SET_NAME:
+                return "Name";
+            case META_VALUE_SET_FIRSTNAME:
+                return "First Name";
+            case META_VALUE_SET_LASTNAME:
+                return "Last Name";
+            case META_VALUE_SET_FULLNAME:
+                return "Full Name";
+
+            case META_VALUE_SET_CITY:
+                return "City";
+            case META_VALUE_SET_TITLE:
+                return "Title";
+            case META_VALUE_SET_DAY:
+                return "Day";
+            case META_VALUE_SET_MONTH:
+                return "Month";
+            case META_VALUE_SET_MAIL:
+                return "Mail";
+            case META_VALUE_SET_ANIMAL:
+                return "Animal";
+            case META_VALUE_SET_METAL:
+                return "Metal";
+            case META_VALUE_SET_COLOR:
+                return "Color";
+            case META_VALUE_SET_DATE:
+                return "Date";
+            case META_VALUE_SET_GRADE:
+                return "Grade";
+            case META_VALUE_SET_LOCATION:
+                return "Location";
+            case META_VALUE_SET_YEAR:
+                return "Year";
+            case META_VALUE_SET_LOREM_IPSUM:
+                return "Lorem Ipsum";
+            default:
+                return "NaN";
+        }
+    }
 }

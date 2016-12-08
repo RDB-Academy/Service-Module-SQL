@@ -1,6 +1,8 @@
 package initializers;
 
 import initializers.schemaBuilders.HeroSchemaBuilder;
+import initializers.schemaBuilders.LibrarySchemaBuilder;
+import initializers.schemaBuilders.StudentSchemaBuilder;
 import initializers.schemaBuilders.UsersSchemaBuilder;
 import models.SchemaDef;
 import repository.SchemaDefRepository;
@@ -26,7 +28,9 @@ class DevelopmentInitializer {
     private void init() {
         List<SchemaBuilder> schemaBuilders = Arrays.asList(
                 new HeroSchemaBuilder(),
-                new UsersSchemaBuilder()
+                new UsersSchemaBuilder(),
+                new StudentSchemaBuilder(),
+                new LibrarySchemaBuilder()
         );
 
         List<SchemaDef> schemaDefList = schemaBuilders.parallelStream()

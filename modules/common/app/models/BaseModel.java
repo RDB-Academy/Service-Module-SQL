@@ -9,12 +9,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author fabiomazzone
  */
 @MappedSuperclass
-abstract class BaseModel extends Model {
+public abstract class BaseModel extends Model {
     @JsonIgnore
     @WhenCreated
     @Column(updatable = false)
@@ -24,8 +25,8 @@ abstract class BaseModel extends Model {
     @WhenModified
     private LocalDateTime modifiedAt;
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getCreatedAt() {
+        return createdAt.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @JsonProperty("createdAt")
@@ -33,8 +34,8 @@ abstract class BaseModel extends Model {
         return formatter.DateFormatter.fromNow(this.createdAt);
     }
 
-    public LocalDateTime getModifiedAt() {
-        return modifiedAt;
+    public String getModifiedAt() {
+        return modifiedAt.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @JsonProperty("modifiedAt")

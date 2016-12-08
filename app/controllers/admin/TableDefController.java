@@ -1,15 +1,16 @@
 package controllers.admin;
 
 import authenticators.Authenticated;
-import models.TableDef;
-import play.data.Form;
+import play.Logger;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import services.TableDefService;
-import services.tools.ServiceError;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author fabiomazzone
@@ -17,43 +18,60 @@ import javax.inject.Inject;
 @Security.Authenticated(Authenticated.class)
 public class TableDefController extends Controller {
     private final TableDefService tableDefService;
+    private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public TableDefController(TableDefService tableDefService) {
+    public TableDefController(TableDefService tableDefService,
+                              HttpExecutionContext httpExecutionContext) {
+
         this.tableDefService = tableDefService;
+        this.httpExecutionContext = httpExecutionContext;
     }
 
-    public Result read(Long id) {
-        Form<TableDef> tableDefForm = this.tableDefService.getViewForm(id);
-
-        System.out.println("Test");
-
-        // TODO:
-        if(tableDefForm == null) {
-            return redirect(routes.SchemaDefController.index());
-        }
-
-        return ok(views.html.admin.tableDefViews.read.render(tableDefForm));
+    public CompletionStage<Result> read(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.tableDefService.readAsForm(id), this.httpExecutionContext.current())
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm.hasErrors()) {
+                        return redirect(routes.SchemaDefController.readAll());
+                    }
+                    return ok(views.html.admin.tableDefViews.read.render(tableDefForm));
+                });
     }
 
-    public Result edit(Long id) {
-        Form<TableDef> tableDefForm = this.tableDefService.getViewForm(id);
-
-        if (tableDefForm == null) {
-            return notFound();
-        }
-
-        return ok(views.html.admin.tableDefViews.edit.render(tableDefForm));
+    public CompletionStage<Result> updateView(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.tableDefService.readAsForm(id), this.httpExecutionContext.current())
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm.hasErrors()) {
+                        return notFound();
+                    }
+                    return ok(views.html.admin.tableDefViews.edit.render(tableDefForm));
+                });
     }
 
-    public Result delete(Long id) {
+    public CompletionStage<Result> update(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.tableDefService.update(id), this.httpExecutionContext.current())
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm.hasErrors()) {
+                        Logger.warn(tableDefForm.errorsAsJson().toString());
+                        return badRequest(tableDefForm.errorsAsJson());
+                    }
+                    return redirect(routes.TableDefController.read(id));
+                });
+    }
 
-        TableDef tableDef = this.tableDefService.getById(id);
-        Long schemaID = tableDef.getSchemaDefId();
-        ServiceError serviceError = this.tableDefService.deleteTableDef(id);
-        // ToDO
-
-        return ok();
+    public CompletionStage<Result> delete(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.tableDefService.delete(id), this.httpExecutionContext.current())
+                .thenApply(tableDefForm -> {
+                    if(tableDefForm.hasErrors()) {
+                        Logger.warn(tableDefForm.errorsAsJson().toString());
+                        return badRequest(tableDefForm.errorsAsJson());
+                    }
+                    return ok();
+                });
     }
 
 }
