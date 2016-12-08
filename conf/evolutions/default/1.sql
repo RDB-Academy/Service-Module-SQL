@@ -11,6 +11,8 @@ create table column_def (
   is_primary                    boolean not null,
   is_not_null                   boolean not null,
   meta_value_set                integer not null,
+  min_value_set                 integer,
+  max_value_set                 integer,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_column_def primary key (id)
