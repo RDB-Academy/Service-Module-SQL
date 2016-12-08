@@ -42,7 +42,7 @@ public class ColumnDef extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "targetColumn")
     private List<ForeignKeyRelation> foreignKeyRelationsTarget;
 
-
+    @JsonIgnore
     @Column(nullable = false)
     private int metaValueSet;
 
@@ -135,6 +135,7 @@ public class ColumnDef extends BaseModel {
         this.metaValueSet = metaValueSet;
     }
 
+    @JsonIgnore
     public String getMetaValueSetName() {
         switch (this.getMetaValueSet()) {
             case META_VALUE_SET_ID:
