@@ -26,7 +26,7 @@ public class TaskController extends Controller {
     }
 
 
-    public CompletionStage<Result> show(Long id) {
+    public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.taskService.read(id), this.httpExecutionContext.current())
                 .thenApply(task -> {

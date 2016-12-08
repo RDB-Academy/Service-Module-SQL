@@ -1,7 +1,6 @@
 package controllers.api;
 
 import com.google.inject.Singleton;
-import models.TableDef;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
@@ -27,7 +26,7 @@ public class TableDefController extends Controller {
     }
 
 
-    public CompletionStage<Result> show(Long id) {
+    public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.tableDefService.read(id), this.httpExecutionContext.current())
                 .thenApply(tableDef -> {

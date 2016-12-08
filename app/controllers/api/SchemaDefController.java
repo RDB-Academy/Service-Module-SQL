@@ -26,7 +26,7 @@ public class SchemaDefController extends Controller {
     }
 
 
-    public CompletionStage<Result> show(long id) {
+    public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.schemaDefService.read(id), this.httpExecutionContext.current())
                 .thenApply(schemaDef -> {

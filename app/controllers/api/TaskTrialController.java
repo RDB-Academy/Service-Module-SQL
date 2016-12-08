@@ -31,7 +31,7 @@ public class TaskTrialController extends Controller {
         return ok(Json.toJson(taskTrial));
     }
 
-    public Result show(Long id) {
+    public Result read(Long id) {
         TaskTrial taskTrial = this.taskTrialService.getById(id);
 
         if (taskTrial == null) {

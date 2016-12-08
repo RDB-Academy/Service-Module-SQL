@@ -29,7 +29,7 @@ public class ColumnDefController extends Controller {
     }
 
 
-    public CompletionStage<Result> show(Long id) {
+    public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.columnDefService.read(id), this.httpExecutionContext.current())
                 .thenApply(columnDef -> {
