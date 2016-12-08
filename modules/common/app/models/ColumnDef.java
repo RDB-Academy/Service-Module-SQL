@@ -46,29 +46,39 @@ public class ColumnDef extends BaseModel {
     @Column(nullable = false)
     private int metaValueSet;
 
+    @JsonIgnore
+    private int minValueSet;
+
+    @JsonIgnore
+    private int maxValueSet;
+
     public static final int META_VALUE_SET_ID = 485;
     public static final int META_VALUE_SET_FOREIGN_KEY = 358;
+
+    public static final int MIN_VALUE_SET = 398;
+    public static final int MAX_VALUE_SET = 158;
 
     public static final int META_VALUE_SET_NAME = 768;
     public static final int META_VALUE_SET_FIRSTNAME = 8;
     public static final int META_VALUE_SET_LASTNAME = 744;
     public static final int META_VALUE_SET_FULLNAME = 5;
 
-    public static final int META_VALUE_SET_CITY = 3;
-    public static final int META_VALUE_SET_TITLE = 4;
-    public static final int META_VALUE_SET_DAY = 7;
-    public static final int META_VALUE_SET_MONTH = 9;
     public static final int META_VALUE_SET_MAIL = 1;
+
+    public static final int META_VALUE_SET_TITLE = 4;
     public static final int META_VALUE_SET_ANIMAL = 2;
     public static final int META_VALUE_SET_METAL = 6;
     public static final int META_VALUE_SET_COLOR = 10;
-    public static final int META_VALUE_SET_DATE = 11;
 
     public static final int META_VALUE_SET_GRADE = 361;
 
     public static final int META_VALUE_SET_LOCATION = 952;
+    public static final int META_VALUE_SET_CITY = 3;
 
+    public static final int META_VALUE_SET_DAY = 7;
+    public static final int META_VALUE_SET_MONTH = 9;
     public static final int META_VALUE_SET_YEAR = 154;
+    public static final int META_VALUE_SET_DATE = 11;
 
     public static final int META_VALUE_SET_LOREM_IPSUM = 672;
 
@@ -133,6 +143,22 @@ public class ColumnDef extends BaseModel {
 
     public void setMetaValueSet(int metaValueSet) {
         this.metaValueSet = metaValueSet;
+    }
+
+    public int getMinValueSet() {
+        return minValueSet;
+    }
+
+    public void setMinValueSet(int minValueSet) {
+        this.minValueSet = minValueSet;
+    }
+
+    public int getMaxValueSet() {
+        return maxValueSet;
+    }
+
+    public void setMaxValueSet(int maxValueSet) {
+        this.maxValueSet = maxValueSet;
     }
 
     @JsonIgnore

@@ -16,6 +16,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -58,7 +60,7 @@ public class SQLParserFactory {
 
         LocalDateTime startTime = LocalDateTime.now();
 
-        CompletableFuture<String[][][]> extensionMakerExtension =
+        CompletableFuture<ArrayList<String[][]>> extensionMakerExtension =
                 CompletableFuture.supplyAsync(extensionMaker::buildStatements);
         CompletableFuture<List<String>> tableMakerStatements =
                 CompletableFuture.supplyAsync(tableMaker::buildStatement);
@@ -66,7 +68,7 @@ public class SQLParserFactory {
 
         try {
             List<String> createTableStatements = tableMakerStatements.get();
-            String[][][] extension = extensionMakerExtension.get();
+            ArrayList<String[][]> extension = extensionMakerExtension.get();
 
             LocalDateTime endTime = LocalDateTime.now();
             Duration differenceTime = Duration.between(startTime, endTime);
