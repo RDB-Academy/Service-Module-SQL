@@ -1,7 +1,5 @@
 package controllers;
 
-import initializers.schemaBuilders.HeroSchemaBuilder;
-import insertParser.InsertParser;
 import models.TaskTrial;
 import parser.SQLParser;
 import parser.SQLParserFactory;
@@ -10,6 +8,8 @@ import parser.extensionMaker.ExtensionMaker;
 import models.SchemaDef;
 import parser.tableMaker.TableMaker;
 import play.Logger;
+import play.data.Form;
+import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -27,16 +27,19 @@ public class TestController extends Controller {
     private final SchemaDefRepository   schemaDefRepository;
     private final SQLParserFactory      sqlParserFactory;
     private final TaskTrialService      taskTrialService;
+    private final FormFactory formFactory;
 
     @Inject
     public TestController(
             SchemaDefRepository schemaDefRepository,
             SQLParserFactory sqlParserFactory,
-            TaskTrialService taskTrialService) {
+            TaskTrialService taskTrialService,
+            FormFactory formFactory) {
 
         this.schemaDefRepository = schemaDefRepository;
         this.sqlParserFactory = sqlParserFactory;
         this.taskTrialService = taskTrialService;
+        this.formFactory = formFactory;
     }
 
     public Result test() {
@@ -85,6 +88,8 @@ public class TestController extends Controller {
             Logger.error("Cannot create SQL Parser");
             return internalServerError();
         }
+
+        sqlParser.submit("SELECT H2VERSION() AS Test");
 
         sqlParser.closeConnection();
 

@@ -1,5 +1,8 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -10,12 +13,15 @@ public class ForeignKeyRelation extends BaseModel {
     @Id
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     private ForeignKey foreignKey;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     private ColumnDef sourceColumn;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     private ColumnDef targetColumn;
 
@@ -46,5 +52,20 @@ public class ForeignKeyRelation extends BaseModel {
 
     public void setTargetColumn(ColumnDef targetColumn) {
         this.targetColumn = targetColumn;
+    }
+
+    @JsonGetter("foreignKey")
+    public long getForeignKeyId() {
+        return foreignKey.getId();
+    }
+
+    @JsonGetter("sourceColumn")
+    public long getSourceColumnId() {
+        return sourceColumn.getId();
+    }
+
+    @JsonGetter("targetColumn")
+    public long getTargetColumnId() {
+        return targetColumn.getId();
     }
 }

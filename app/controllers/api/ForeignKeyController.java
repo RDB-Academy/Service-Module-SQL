@@ -4,7 +4,7 @@ import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.SchemaDefService;
+import services.ForeignKeyService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -12,28 +12,30 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 /**
- * @author fabiomazzone
+ * Created by invisible on 12/8/16.
  */
 @Singleton
-public class SchemaDefController extends Controller {
-    private final SchemaDefService schemaDefService;
+public class ForeignKeyController extends Controller {
+    private final ForeignKeyService foreignKeyService;
     private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public SchemaDefController(SchemaDefService schemaDefService, HttpExecutionContext httpExecutionContext) {
-        this.schemaDefService = schemaDefService;
+    public ForeignKeyController(
+            ForeignKeyService foreignKeyService,
+            HttpExecutionContext httpExecutionContext
+    ) {
+        this.foreignKeyService = foreignKeyService;
         this.httpExecutionContext = httpExecutionContext;
     }
 
-
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
-                .supplyAsync(() -> this.schemaDefService.read(id), this.httpExecutionContext.current())
-                .thenApply(schemaDef -> {
-                    if(schemaDef == null) {
+                .supplyAsync(() -> this.foreignKeyService.read(id), this.httpExecutionContext.current())
+                .thenApply(foreignKey -> {
+                    if(foreignKey == null) {
                         return notFound();
                     }
-                    return ok(Json.toJson(schemaDef));
+                    return ok(Json.toJson(foreignKey));
                 });
     }
 }

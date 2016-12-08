@@ -2,22 +2,27 @@
 POST    /login                      controllers.api.SessionController.authenticate()
 
 ## model.Task
-GET     /tasks/:id                  controllers.api.TaskController.show(id :Long)
+GET     /tasks/:id                  controllers.api.TaskController.read(id :Long)
 
 ## model.TaskTrial
-POST    /task-trials                 controllers.api.TaskTrialController.create()
-GET     /task-trials/:id             controllers.api.TaskTrialController.show(id: Long)
-PATCH   /task-trials/:id             controllers.api.TaskTrialController.update(id: Long)
+POST    /task-trials                controllers.api.TaskTrialController.create()
+GET     /task-trials/:id            controllers.api.TaskTrialController.read(id: Long)
+PATCH   /task-trials/:id            controllers.api.TaskTrialController.update(id: Long)
 
 ## model.SchemaDef
-GET     /schema-defs/:id             controllers.api.SchemaDefController.show(id: Long)
+GET     /schema-defs/:id            controllers.api.SchemaDefController.read(id: Long)
 
 ## model.TableDef
-GET     /table-defs/:id             controllers.api.TableDefController.show(id: Long)
+GET     /table-defs/:id             controllers.api.TableDefController.read(id: Long)
 
 ## model.ColumnDef
-GET     /column-defs/:id             controllers.api.ColumnDefController.show(id: Long)
+GET     /column-defs/:id            controllers.api.ColumnDefController.read(id: Long)
 
+## model.ForeignKey
+GET     /foreign-keys/:id           controllers.api.ForeignKeyController.read(id: Long)
+
+## model.ForeignKeyRelation
+GET     /foreign-key-relations/:id  controllers.api.ForeignKeyRelationController.read(id: Long)
 
 ## Stop from General Redirecting
 GET     /*file                      controllers.HomeController.notFoundView(file: String)

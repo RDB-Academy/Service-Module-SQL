@@ -83,7 +83,7 @@ public class SchemaDef extends BaseModel {
         return this.getTableDefList().stream().map(TableDef::getId).collect(Collectors.toList());
     }
 
-    @JsonGetter("ForeignKeys")
+    @JsonGetter("foreignKeys")
     public List<Long> getForeignKeyIds() {
         return this.getForeignKeyList().stream().map(ForeignKey::getId).collect(Collectors.toList());
     }
