@@ -28,6 +28,10 @@ public class TableDef extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableDef")
     private List<ColumnDef> columnDefList;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableDef")
+    private List<ExtensionDef> extensionList;
+
     public Long getId() {
         return id;
     }

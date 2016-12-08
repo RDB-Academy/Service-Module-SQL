@@ -16,6 +16,15 @@ create table column_def (
   constraint pk_column_def primary key (id)
 );
 
+create table extension_def (
+  id                            bigint auto_increment not null,
+  insert_statement              varchar(255) not null,
+  table_def_id                  bigint not null,
+  created_at                    timestamp not null,
+  modified_at                   timestamp not null,
+  constraint pk_extension_def primary key (id)
+);
+
 create table foreign_key (
   id                            bigint auto_increment not null,
   name                          varchar(255) not null,
@@ -93,6 +102,9 @@ create table task_trial (
 alter table column_def add constraint fk_column_def_table_def_id foreign key (table_def_id) references table_def (id) on delete restrict on update restrict;
 create index ix_column_def_table_def_id on column_def (table_def_id);
 
+alter table extension_def add constraint fk_extension_def_table_def_id foreign key (table_def_id) references table_def (id) on delete restrict on update restrict;
+create index ix_extension_def_table_def_id on extension_def (table_def_id);
+
 alter table foreign_key add constraint fk_foreign_key_schema_def_id foreign key (schema_def_id) references schema_def (id) on delete restrict on update restrict;
 create index ix_foreign_key_schema_def_id on foreign_key (schema_def_id);
 
@@ -120,6 +132,9 @@ create index ix_task_trial_task_id on task_trial (task_id);
 alter table column_def drop constraint if exists fk_column_def_table_def_id;
 drop index if exists ix_column_def_table_def_id;
 
+alter table extension_def drop constraint if exists fk_extension_def_table_def_id;
+drop index if exists ix_extension_def_table_def_id;
+
 alter table foreign_key drop constraint if exists fk_foreign_key_schema_def_id;
 drop index if exists ix_foreign_key_schema_def_id;
 
@@ -142,6 +157,8 @@ alter table task_trial drop constraint if exists fk_task_trial_task_id;
 drop index if exists ix_task_trial_task_id;
 
 drop table if exists column_def;
+
+drop table if exists extension_def;
 
 drop table if exists foreign_key;
 
