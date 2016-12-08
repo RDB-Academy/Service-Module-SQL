@@ -8,7 +8,6 @@ import parser.extensionMaker.ExtensionMaker;
 import models.SchemaDef;
 import parser.tableMaker.TableMaker;
 import play.Logger;
-import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -74,7 +73,7 @@ public class TestController extends Controller {
         return ok(Json.toJson(taskTrial));
     }
 
-    public Result parserGet(Long id) throws ExecutionException, InterruptedException {
+    public Result parserGet(Long id) {
         TaskTrial taskTrial = this.taskTrialService.getById(id);
 
         if(taskTrial == null) {
@@ -94,5 +93,20 @@ public class TestController extends Controller {
         sqlParser.closeConnection();
 
         return ok();
+    }
+
+    public Result parserDelete(Long id ) {
+        TaskTrial taskTrial = this.taskTrialService.getById(id);
+
+        if(taskTrial == null) {
+            Logger.warn(String.format("TaskTrial - Object with id: %d not found", id));
+            return notFound();
+        }
+
+        this.sqlParserFactory.deleteDatabase(taskTrial);
+
+        this.taskTrialService.save(taskTrial);
+
+        return ok("successfully");
     }
 }

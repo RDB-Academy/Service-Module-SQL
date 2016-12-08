@@ -51,7 +51,7 @@ public class TaskTrialService {
 
         taskTrial.setTask(task);
         taskTrial.setBeginDate(LocalDateTime.now());
-        taskTrial.setDatabaseExtensionSeed(Math.abs(this.random.nextLong()));
+        taskTrial.setDatabaseExtensionSeed(this.random.nextLong());
 
         this.taskTrialRepository.save(taskTrial);
 
