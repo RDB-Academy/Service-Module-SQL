@@ -161,6 +161,7 @@ public class ColumnDef extends BaseModel {
         this.maxValueSet = maxValueSet;
     }
 
+    @JsonIgnore
     public String getMetaValueSetName() {
         switch (this.getMetaValueSet()) {
             case META_VALUE_SET_ID:

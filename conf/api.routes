@@ -5,19 +5,24 @@ POST    /login                      controllers.api.SessionController.authentica
 GET     /tasks/:id                  controllers.api.TaskController.show(id :Long)
 
 ## model.TaskTrial
-POST    /task-trials                 controllers.api.TaskTrialController.create()
-GET     /task-trials/:id             controllers.api.TaskTrialController.show(id: Long)
-PATCH   /task-trials/:id             controllers.api.TaskTrialController.update(id: Long)
+POST    /task-trials                controllers.api.TaskTrialController.create()
+GET     /task-trials/:id            controllers.api.TaskTrialController.show(id: Long)
+PATCH   /task-trials/:id            controllers.api.TaskTrialController.update(id: Long)
 
 ## model.SchemaDef
-GET     /schema-defs/:id             controllers.api.SchemaDefController.show(id: Long)
+GET     /schema-defs/:id            controllers.api.SchemaDefController.show(id: Long)
 
 ## model.TableDef
 GET     /table-defs/:id             controllers.api.TableDefController.show(id: Long)
 
 ## model.ColumnDef
-GET     /column-defs/:id             controllers.api.ColumnDefController.show(id: Long)
+GET     /column-defs/:id            controllers.api.ColumnDefController.show(id: Long)
 
+## model.ForeignKey
+GET     /foreign-keys/:id           controllers.api.ForeignKeyController.show(id: Long)
+
+## model.ForeignKeyRelation
+GET     /foreign-key-relations/:id  controllers.api.ForeignKeyRelationController.show(id: Long)
 
 ## Stop from General Redirecting
 GET     /*file                      controllers.HomeController.notFoundView(file: String)
