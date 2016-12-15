@@ -70,7 +70,21 @@ public class ExtensionMaker {
 
             int columm = tableDefs.get(t).getColumnDefList().size();
 
+            int comp = 0;
+            int comcount;
+            int number;
+            for(int j = 0; j < columm; j++) {
+                if(tableDefs.get(t).getColumnDefList().get(j).isPrimary() && tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet() == 358) {
+                    comp++;
+                }
+            }
+            int [] commember = new int [comp];
+            boolean[][] com2 = new boolean[row][row];
+            boolean[][][] com3 = new boolean[row][row][row];
+
+
             for(int i = 0; i < row; i++) {
+                comcount = 0;
                 for(int j = 0; j < columm; j++) {
                     switch (tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet()) {
                         case 1:
@@ -87,7 +101,33 @@ public class ExtensionMaker {
                             out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
                             break;
                         case 358:
-                            out[i][j] = "" + rand.nextInt(row);
+                            number = rand.nextInt(row);
+                            out[i][j] = "" + number;
+                            if(tableDefs.get(t).getColumnDefList().get(j).isPrimary()) {
+                                commember[comcount] = number;
+                                comcount++;
+                                if (comcount == comp) {
+                                    if (comp == 2) {
+                                        if (!com2[commember[0]][commember[1]]) {
+                                            com2[commember[0]][commember[1]] = true;
+                                        } else {
+                                            comcount--;
+                                            out[i][j] = null;
+                                            j--;
+                                        }
+                                    }
+                                    if (comp == 3) {
+                                        if (!com3[commember[0]][commember[1]][commember[2]]) {
+                                            com3[commember[0]][commember[1]][commember[2]] = true;
+                                        } else {
+                                            comcount--;
+                                            out[i][j] = null;
+                                            j--;
+                                        }
+                                    }
+
+                                }
+                            }
                             break;
                         case 485:
                             out[i][j] = "" + i;
@@ -167,6 +207,57 @@ public class ExtensionMaker {
         }
 
         return Extensionlist;
+    }
+
+    public String parseToStatmant(ArrayList<String[][]> args){
+        int row = 100;
+
+        String out = "";
+        List<TableDef> tableDefs = schemaDef.getTableDefList();
+        int tables = schemaDef.getTableDefList().size();
+        System.out.print(tables + tableDefs.get(0).getName());
+        for(int t = 0; t< tables; t++){
+            int columm = tableDefs.get(t).getColumnDefList().size();
+            String statment;
+
+            statment = "INSERT INTO " + tableDefs.get(t).getName() + " (";
+
+
+            for(int j = 0; j < columm; j++) {
+                statment = statment.concat("" + tableDefs.get(t).getColumnDefList().get(j).getName());
+                if(j +1 != columm ){
+                    statment = statment.concat(",");
+                }
+            }
+            statment = statment.concat(") " + "VALUES ");
+            String[][] mat = new String[row][tableDefs.get(t).getColumnDefList().size()];
+
+            mat = args.get(t);
+            for(int i = 0; i < row; i++) {
+                statment = statment.concat("(");
+                for(int j = 0; j < columm; j++) {
+                    statment = statment.concat("'" + mat[i][j] + "'");
+                    if(j +1 != columm ){
+                        statment = statment.concat(",");
+                    }
+                }
+                statment = statment.concat(")");
+                if(i +1 != row ){
+                    statment = statment.concat(",");
+                }
+            }
+
+            statment = statment.concat(";");
+
+            out = out. concat(statment);
+
+
+
+        }
+
+        System.out.println("OUT:  "+ out);
+
+        return out;
     }
 
     public Long getSeed() {

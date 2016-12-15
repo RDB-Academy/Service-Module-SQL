@@ -1,9 +1,11 @@
 package controllers.api;
 
+import models.Session;
 import models.TaskTrial;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.SessionService;
 import services.TaskTrialService;
 
 import javax.inject.Inject;
@@ -13,15 +15,25 @@ import javax.inject.Inject;
  */
 public class TaskTrialController extends Controller {
     private final TaskTrialService taskTrialService;
+    private final SessionService sessionService;
 
     @Inject
     public TaskTrialController(
-            TaskTrialService taskTrialService){
+            TaskTrialService taskTrialService,
+            SessionService sessionService
+    ){
 
         this.taskTrialService = taskTrialService;
+        this.sessionService = sessionService;
     }
 
     public Result create() {
+        Session session = this.sessionService.getSession(ctx());
+        if(session == null) {
+            session = new Session();
+            this.sessionService.setSession(session, ctx());
+        }
+
         TaskTrial taskTrial = this.taskTrialService.getNewTaskTrial(ctx());
 
         if(taskTrial == null) {

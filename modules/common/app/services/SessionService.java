@@ -27,10 +27,21 @@ public class SessionService {
         this.formFactory = formFactory;
     }
 
-    public void setSession(LoginForm loginForm, Http.Context ctx) {
+    public void setAdminSession(LoginForm loginForm, Http.Context ctx) {
         Session session = new Session();
         session.setUserName("admin");
 
+        UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
+        String connectedData = userAgent.toString() + ctx.request().remoteAddress();
+
+        session.setConnectionInfo(connectedData.hashCode());
+
+        session.save();
+
+        ctx.session().put(SESSION_FIELD_NAME, session.getId());
+    }
+
+    public void setSession(Session session, Http.Context ctx) {
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
         String connectedData = userAgent.toString() + ctx.request().remoteAddress();
 
