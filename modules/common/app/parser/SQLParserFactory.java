@@ -37,6 +37,7 @@ public class SQLParserFactory {
     }
 
     public TaskTrial createParser(TaskTrial taskTrial) {
+        Logger.info("Creating new Parser");
         if(taskTrial.getDatabaseUrl() != null && !taskTrial.getDatabaseUrl().isEmpty()) {
             Logger.warn(
                     String.format(
@@ -95,6 +96,8 @@ public class SQLParserFactory {
             Logger.warn(String.format("TaskTrial Object %d has no Database ", taskTrial.getId()));
             return null;
         }
+
+        Logger.info("Found DB url: " + taskTrial.getDatabaseUrl());
 
         Connection connection = this.getConnection(taskTrial.getDatabaseUrl(), true);
 

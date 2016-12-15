@@ -2,6 +2,7 @@ package controllers.api;
 
 import models.Session;
 import models.TaskTrial;
+import play.Logger;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -54,7 +55,19 @@ public class TaskTrialController extends Controller {
     }
 
     public Result update(Long id) {
-        TaskTrial taskTrial = this.taskTrialService.validateStatement(id, ctx());
+
+        Logger.info(request().body().asJson().toString());
+        TaskTrial taskTrialSubmitted = Json.fromJson(request().body().asJson(), TaskTrial.class);
+
+        if(taskTrialSubmitted.getUserStatement() == null || taskTrialSubmitted.getUserStatement().isEmpty()) {
+            Logger.info("SubmittedRequest is null or Empty");
+            return null;
+        }
+
+        Logger.info("UserStatement is " + taskTrialSubmitted.getUserStatement());
+
+
+        TaskTrial taskTrial = this.taskTrialService.validateStatement(id, taskTrialSubmitted.getUserStatement());
 
         if(taskTrial == null) {
             return internalServerError();
