@@ -3,6 +3,7 @@ package parser;
 import com.google.inject.Inject;
 import models.SchemaDef;
 import models.TaskTrial;
+import org.h2.tools.DeleteDbFiles;
 import parser.extensionMaker.ExtensionMaker;
 import parser.tableMaker.TableMaker;
 import play.Configuration;
@@ -16,7 +17,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -37,12 +37,15 @@ public class SQLParserFactory {
     }
 
     public TaskTrial createParser(TaskTrial taskTrial) {
-        String databaseUrl = this.configuration.getString("sqlParser.urlPrefix")
-                + taskTrial.getBeginDateFormat()
-                + "-"
-                + taskTrial.getTaskId()
-                + "-"
-                + taskTrial.getDatabaseExtensionSeed();
+        if(taskTrial.getDatabaseUrl() != null && !taskTrial.getDatabaseUrl().isEmpty()) {
+            Logger.warn(
+                    String.format(
+                            "Task Trial Object %d already have a database", taskTrial.getId()
+                    )
+            );
+            return taskTrial;
+        }
+        String databaseUrl = getDatabaseUrl(taskTrial);
 
         taskTrial.setDatabaseUrl(databaseUrl);
 
@@ -88,6 +91,11 @@ public class SQLParserFactory {
     }
 
     public SQLParser getParser(TaskTrial taskTrial) {
+        if(taskTrial.getDatabaseUrl() == null || taskTrial.getDatabaseUrl().isEmpty()) {
+            Logger.warn(String.format("TaskTrial Object %d has no Database ", taskTrial.getId()));
+            return null;
+        }
+
         Connection connection = this.getConnection(taskTrial.getDatabaseUrl(), true);
 
         if(connection == null) {
@@ -96,6 +104,18 @@ public class SQLParserFactory {
         }
 
         return new SQLParser(taskTrial, connection);
+    }
+
+    public void deleteDatabase(TaskTrial taskTrial) {
+        if(taskTrial.getDatabaseUrl() == null || taskTrial.getDatabaseUrl().isEmpty()) {
+            Logger.warn("TaskTrial Id: %d don't have a database");
+            return;
+        }
+        String databasePath = this.getDatabasePath(taskTrial);
+        String databaseName = this.getDatabaseName(taskTrial);
+        DeleteDbFiles.execute(databasePath, databaseName, false);
+
+        taskTrial.setDatabaseUrl(null);
     }
 
     private Connection getConnection(String databaseUrl) {
@@ -119,5 +139,23 @@ public class SQLParserFactory {
         }
 
         return connection;
+    }
+
+    private String getDatabaseUrl(TaskTrial taskTrial) {
+        return this.configuration.getString("sqlParser.urlPrefix")
+                + this.getDatabasePath(taskTrial)
+                + this.getDatabaseName(taskTrial);
+    }
+
+    private String getDatabasePath(TaskTrial taskTrial) {
+        return this.configuration.getString("sqlParser.path");
+    }
+
+    private String getDatabaseName(TaskTrial taskTrial) {
+        return taskTrial.getBeginDateFormat()
+                + "-"
+                + taskTrial.getTaskId()
+                + "-"
+                + taskTrial.getDatabaseExtensionSeed();
     }
 }

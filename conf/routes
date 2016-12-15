@@ -6,9 +6,9 @@
 # Test Routes
 GET     /test/                      controllers.TestController.test()
 GET     /table/                     controllers.TestController.testTableMaker()
-GET     /parserCreate               controllers.TestController.parserCreate()
-
+GET     /parserCre                  controllers.TestController.parserCreate()
 GET     /parserGet/:id              controllers.TestController.parserGet(id :Long)
+GET     /parserDel/:id              controllers.TestController.parserDelete(id :Long)
 
 # Admin
 ->      /admin                      admin.Routes
