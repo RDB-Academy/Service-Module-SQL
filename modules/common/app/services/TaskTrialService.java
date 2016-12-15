@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -53,9 +52,9 @@ public class TaskTrialService {
         taskTrial.setBeginDate(LocalDateTime.now());
         taskTrial.setDatabaseExtensionSeed(this.random.nextLong());
 
-        this.taskTrialRepository.save(taskTrial);
+        taskTrial = this.sqlParserFactory.createParser(taskTrial);
 
-        // Start CreateParser Async
+        this.taskTrialRepository.save(taskTrial);
 
         return taskTrial;
     }

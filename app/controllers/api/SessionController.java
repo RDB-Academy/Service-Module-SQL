@@ -40,7 +40,7 @@ public class SessionController extends Controller {
         String adminPassword = configuration.getString("sqlModule.adminPassword");
 
         if (loginForm.getPassword().equals(adminPassword)) {
-            sessionService.setSession(loginForm, ctx());
+            sessionService.setAdminSession(loginForm, ctx());
             if(request().accepts(Http.MimeTypes.TEXT)) {
                 return redirect(controllers.admin.routes.HomeController.index());
             }
