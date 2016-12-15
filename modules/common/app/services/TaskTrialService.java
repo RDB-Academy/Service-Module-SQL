@@ -70,6 +70,13 @@ public class TaskTrialService {
         Logger.info(context.request().body().asJson().toString());
         TaskTrial taskTrialSubmitted = Json.fromJson(context.request().body().asJson(), TaskTrial.class);
 
+        if(taskTrialSubmitted.getUserStatement() == null || taskTrialSubmitted.getUserStatement().isEmpty()) {
+            Logger.info("SubmittedRequest is null or Empty");
+            return null;
+        }
+
+        Logger.info("UserStatement is " + taskTrialSubmitted.getUserStatement());
+
         Future<SQLResult> sqlResultFuture = sqlParser.submit(taskTrialSubmitted.getUserStatement());
         SQLResult sqlResult;
 
