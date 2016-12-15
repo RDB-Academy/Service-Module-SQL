@@ -45,6 +45,8 @@ public class SQLParser {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            Logger.info("SQL Statement nicht valide oder so");
+            return null;
         }
 
         return null;
