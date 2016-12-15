@@ -8,7 +8,6 @@ import parser.extensionMaker.ExtensionMaker;
 import models.SchemaDef;
 import parser.tableMaker.TableMaker;
 import play.Logger;
-import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -18,6 +17,7 @@ import services.TaskTrialService;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -44,9 +44,11 @@ public class TestController extends Controller {
 
     public Result test() {
         session().clear();
-
+        Random random = new Random();
+        Long seed = random.nextLong();
+        Logger.info("Seed: " + seed);
         SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
-        ExtensionMaker extensionMaker = new ExtensionMaker(12345L, schemaDef);
+        ExtensionMaker extensionMaker = new ExtensionMaker(seed, schemaDef);
 
         ArrayList<String[][]> v = extensionMaker.buildStatements();
 

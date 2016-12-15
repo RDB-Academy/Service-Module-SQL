@@ -56,7 +56,7 @@ public class ExtensionMaker {
         });
 
         int tables = schemaDef.getTableDefList().size();
-        int row = 10;
+        int row = 100;
 
 
         System.out.println("META: " + tableDefs.get(0).getColumnDefList().get(0).getMetaValueSet());
@@ -113,7 +113,7 @@ public class ExtensionMaker {
                         case 7:
                             out[i][j] = "" + rand.nextInt(30);
                             break;
-                        case 7768:
+                        case 768:
                             out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
                             break;
                         case 9:
@@ -140,7 +140,11 @@ public class ExtensionMaker {
                         default:
                             switch (tableDefs.get(t).getColumnDefList().get(j).getDataType()) {
                                 case "INT":case "int":
-                                    out[i][j] = "" + ( tableDefs.get(t).getColumnDefList().get(j).getMinValueSet() + rand.nextInt(tableDefs.get(t).getColumnDefList().get(j).getMaxValueSet() - tableDefs.get(t).getColumnDefList().get(j).getMinValueSet()));
+                                    if(tableDefs.get(t).getColumnDefList().get(j).getMaxValueSet() != 0){
+                                        out[i][j] = "" + ( tableDefs.get(t).getColumnDefList().get(j).getMinValueSet() + rand.nextInt(tableDefs.get(t).getColumnDefList().get(j).getMaxValueSet() - tableDefs.get(t).getColumnDefList().get(j).getMinValueSet()));
+                                    }else{
+                                        out[i][j] = "" + rand.nextInt(1111);
+                                    }
                                     break;
                                 case "VARCHAR(255)":case "VARCHAR":
                                     int num = 2 + rand.nextInt(4);
