@@ -31,6 +31,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         ColumnDef           customerBook_book_id         = this.createNewColumnDef("book_id", "INT");
         ColumnDef           customerBook_lend_date       = this.createNewColumnDef("lend_date", "INT");
         ColumnDef           customerBook_return_date     = this.createNewColumnDef("return_date", "INT");
+
         ForeignKey          customerBook_customer        = this.createForeignKey("FK_CustomerBook_Customer");
         ForeignKey          customerBook_book            = this.createForeignKey("FK_CustomerBook_Book");
         ForeignKeyRelation  customerBook_customer_rel    = this.createForeignKeyRelation(customerBook_customer_id, customer_customer_id);
