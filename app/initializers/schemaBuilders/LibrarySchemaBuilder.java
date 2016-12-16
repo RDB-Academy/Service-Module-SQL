@@ -21,7 +21,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         SchemaDef           customerBookSchema           = this.createNewSchemaDef();
         TableDef            customer                     = this.createNewTableDef("customer");
         TableDef            book                         = this.createNewTableDef("book");
-        TableDef            customerBook                 = this.createNewTableDef("customer_bok");
+        TableDef            customerBook                 = this.createNewTableDef("customer_book");
         ColumnDef           customer_customer_id         = this.createNewColumnDef("customer_id", "INT");
         ColumnDef           customer_customer_firstname  = this.createNewColumnDef("customer_firstname", "VARCHAR(255)");
         ColumnDef           customer_customer_lastname   = this.createNewColumnDef("customer_lastname", "VARCHAR(255)");

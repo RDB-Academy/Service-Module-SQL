@@ -127,7 +127,6 @@ public class FootballSchemaBuilder extends SchemaBuilder {
         superbowl_superbowl_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
         superbowl_superbowl_date.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
 
-
         playerTeam_player_id.setPrimary(true);
         playerTeam_player_id.setNotNull(true);
         playerTeam_team_id.setPrimary(true);
@@ -159,7 +158,6 @@ public class FootballSchemaBuilder extends SchemaBuilder {
         teamSuperbowl_winner_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         teamSuperbowl_loser_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         teamSuperbowl_stadium_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-
 
         player.addColumnDef(player_player_id);
         player.addColumnDef(player_player_firstname);
@@ -236,7 +234,7 @@ public class FootballSchemaBuilder extends SchemaBuilder {
 
         footballTask.setName("Find Luke Kuechly.");
         footballTask.setText("Find Luke Kuechly.");
-        footballTask.setReferenceStatement("SELECT * FROM book WHERE player_firstname = \"Luke\" AND player_lastname = \"Kuechly\";");
+        footballTask.setReferenceStatement("SELECT * FROM player WHERE player_firstname = \"Luke\" AND player_lastname = \"Kuechly\";");
 
         taskList.add(footballTask);
 
