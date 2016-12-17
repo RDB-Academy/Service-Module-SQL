@@ -8,17 +8,16 @@ import parser.extensionMaker.ExtensionMaker;
 import models.SchemaDef;
 import parser.tableMaker.TableMaker;
 import play.Logger;
-import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import repository.SchemaDefRepository;
+import repository.TaskTrialRepository;
 import services.TaskTrialService;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author fabiomazzone
@@ -27,19 +26,19 @@ public class TestController extends Controller {
     private final SchemaDefRepository   schemaDefRepository;
     private final SQLParserFactory      sqlParserFactory;
     private final TaskTrialService      taskTrialService;
-    private final FormFactory formFactory;
+    private final TaskTrialRepository   taskTrialRepository;
 
     @Inject
     public TestController(
             SchemaDefRepository schemaDefRepository,
             SQLParserFactory sqlParserFactory,
             TaskTrialService taskTrialService,
-            FormFactory formFactory) {
+            TaskTrialRepository taskTrialRepository) {
 
         this.schemaDefRepository = schemaDefRepository;
         this.sqlParserFactory = sqlParserFactory;
         this.taskTrialService = taskTrialService;
-        this.formFactory = formFactory;
+        this.taskTrialRepository = taskTrialRepository;
     }
 
     public Result test() {
@@ -51,8 +50,7 @@ public class TestController extends Controller {
         ExtensionMaker extensionMaker = new ExtensionMaker(seed, schemaDef);
 
         ArrayList<String[][]> v = extensionMaker.buildStatements();
-        String out = new String();
-        out = extensionMaker.parseToStatmant(v);
+        String out = extensionMaker.parseToStatmant(v);
 
         return ok(Json.toJson(out));
     }
@@ -73,7 +71,7 @@ public class TestController extends Controller {
 
         taskTrial = this.sqlParserFactory.createParser(taskTrial);
 
-        this.taskTrialService.save(taskTrial);
+        this.taskTrialRepository.save(taskTrial);
 
         return ok(Json.toJson(taskTrial));
     }
@@ -110,7 +108,7 @@ public class TestController extends Controller {
 
         this.sqlParserFactory.deleteDatabase(taskTrial);
 
-        this.taskTrialService.save(taskTrial);
+        this.taskTrialRepository.save(taskTrial);
 
         return ok("successfully");
     }

@@ -3,14 +3,14 @@ package models;
 import com.avaje.ebean.annotation.WhenCreated;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * @author invisible
@@ -42,6 +42,17 @@ public class TaskTrial extends BaseModel {
     private LocalDateTime beginDate;
 
     private LocalDateTime submitDate;
+
+    @Transient
+    private SQLError error;
+
+    private class SQLError {
+        private final String message;
+
+        public SQLError(String message) {
+            this.message = message;
+        }
+    }
 
 
     public Long getId() {
@@ -129,5 +140,17 @@ public class TaskTrial extends BaseModel {
 
     public String getDatabaseUrl() {
         return databaseUrl;
+    }
+
+    public boolean hasError() {
+        return this.error != null;
+    }
+
+    public void addError(String message) {
+        this.error = new SQLError(message);
+    }
+
+    public JsonNode errorsAsJson() {
+        return Json.toJson(this.error);
     }
 }

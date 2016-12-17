@@ -64,8 +64,12 @@ public class TaskTrialController extends Controller {
                 .supplyAsync(() -> this.taskTrialService.validateStatement(id), this.httpExecutionContext.current())
                 .thenApply((taskTrial -> {
                     if(taskTrial == null) {
-                        return internalServerError();
+                        return notFound("No such object available!");
                     }
+                    if(taskTrial.hasError()) {
+                        return badRequest(taskTrial.errorsAsJson());
+                    }
+
                     return ok(Json.toJson(taskTrial));
                 }));
     }

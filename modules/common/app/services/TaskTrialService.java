@@ -68,40 +68,35 @@ public class TaskTrialService {
         TaskTrial taskTrial = this.getById(id);
         SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
 
+        // Log request body
         Logger.info(Http.Context.current().request().body().asJson().toString());
-        TaskTrial taskTrialSubmitted = Json.fromJson(Http.Context.current().request().body().asJson(), TaskTrial.class);
 
-        if(taskTrialSubmitted.getUserStatement() == null || taskTrialSubmitted.getUserStatement().isEmpty()) {
+        taskTrial = this.taskTrialRepository.update(taskTrial, Http.Context.current().request().body().asJson());
+
+
+        if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
             Logger.info("SubmittedRequest is null or Empty");
-            return null;
+            taskTrial.addError("SubmittedRequest is null or Empty");
+            return taskTrial;
         }
 
-        Logger.info("UserStatement is " + taskTrialSubmitted.getUserStatement());
+        Logger.info("UserStatement is " + taskTrial.getUserStatement());
 
-        Future<SQLResult> sqlResultFuture = sqlParser.submit(taskTrialSubmitted.getUserStatement());
+        Future<SQLResult> sqlResultFuture = sqlParser.submit(taskTrial.getUserStatement());
         SQLResult sqlResult;
 
-        taskTrial.setUserStatement(taskTrialSubmitted.getUserStatement());
         taskTrial.addTry();
 
         try {
-            sqlResult = sqlResultFuture.get();
+            if(sqlResultFuture != null) {
+                sqlResult = sqlResultFuture.get();
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;
         }
-        this.setTaskTrialWithSQLResult(taskTrial, sqlResult);
+        // this.setTaskTrialWithSQLResult(taskTrial, sqlResult);
 
         return taskTrial;
-    }
-
-    private void setTaskTrialWithSQLResult(TaskTrial taskTrial, SQLResult sqlResult) {
-        taskTrial.setCorrect(sqlResult.isCorrect());
-        // Set Result Set
-        
-    }
-
-    public void save(TaskTrial taskTrial) {
-        taskTrial.save();
     }
 }

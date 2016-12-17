@@ -1,6 +1,7 @@
 package repository;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Singleton;
 import models.TaskTrial;
 
@@ -23,5 +24,16 @@ public class TaskTrialRepository {
 
     public void save(TaskTrial taskTrial) {
         taskTrial.save();
+    }
+
+    /**
+     * Did Not Save !!!1111!!1
+     * @param taskTrial
+     * @param jsonNode
+     * @return
+     */
+    public TaskTrial update(TaskTrial taskTrial, JsonNode jsonNode) {
+        taskTrial.setUserStatement("SELECT H2VERSION();");
+        return taskTrial;
     }
 }
