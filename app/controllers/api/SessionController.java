@@ -20,7 +20,11 @@ public class SessionController extends Controller {
     private SessionService sessionService;
 
     @Inject
-    public SessionController(FormFactory formFactory, Configuration configuration, SessionService sessionService) {
+    public SessionController(
+            FormFactory formFactory,
+            Configuration configuration,
+            SessionService sessionService) {
+
         this.formFactory = formFactory;
         this.configuration = configuration;
         this.sessionService = sessionService;

@@ -64,14 +64,24 @@ public class TaskTrialService {
     }
 
 
-    public TaskTrial validateStatement(Long id, String userStatement) {
+    public TaskTrial validateStatement(Long id) {
         TaskTrial taskTrial = this.getById(id);
         SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
 
-        Future<SQLResult> sqlResultFuture = sqlParser.submit(userStatement);
+        Logger.info(Http.Context.current().request().body().asJson().toString());
+        TaskTrial taskTrialSubmitted = Json.fromJson(Http.Context.current().request().body().asJson(), TaskTrial.class);
+
+        if(taskTrialSubmitted.getUserStatement() == null || taskTrialSubmitted.getUserStatement().isEmpty()) {
+            Logger.info("SubmittedRequest is null or Empty");
+            return null;
+        }
+
+        Logger.info("UserStatement is " + taskTrialSubmitted.getUserStatement());
+
+        Future<SQLResult> sqlResultFuture = sqlParser.submit(taskTrialSubmitted.getUserStatement());
         SQLResult sqlResult;
 
-        taskTrial.setUserStatement(userStatement);
+        taskTrial.setUserStatement(taskTrialSubmitted.getUserStatement());
         taskTrial.addTry();
 
         try {

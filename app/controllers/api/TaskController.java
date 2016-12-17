@@ -20,7 +20,10 @@ public class TaskController extends Controller {
     private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public TaskController(TaskService taskService, HttpExecutionContext httpExecutionContext) {
+    public TaskController(
+            TaskService taskService,
+            HttpExecutionContext httpExecutionContext) {
+
         this.taskService = taskService;
         this.httpExecutionContext = httpExecutionContext;
     }

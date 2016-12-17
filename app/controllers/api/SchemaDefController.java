@@ -20,7 +20,10 @@ public class SchemaDefController extends Controller {
     private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public SchemaDefController(SchemaDefService schemaDefService, HttpExecutionContext httpExecutionContext) {
+    public SchemaDefController(
+            SchemaDefService schemaDefService,
+            HttpExecutionContext httpExecutionContext) {
+
         this.schemaDefService = schemaDefService;
         this.httpExecutionContext = httpExecutionContext;
     }

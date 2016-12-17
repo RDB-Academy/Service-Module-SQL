@@ -22,8 +22,8 @@ public class ColumnDefController extends Controller {
     @Inject
     public ColumnDefController(
             ColumnDefService columnDefService,
-            HttpExecutionContext httpExecutionContext
-    ) {
+            HttpExecutionContext httpExecutionContext) {
+
         this.columnDefService = columnDefService;
         this.httpExecutionContext = httpExecutionContext;
     }

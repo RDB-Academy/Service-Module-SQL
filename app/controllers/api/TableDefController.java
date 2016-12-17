@@ -20,7 +20,10 @@ public class TableDefController extends Controller {
     private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public TableDefController(TableDefService tableDefService, HttpExecutionContext httpExecutionContext) {
+    public TableDefController(
+            TableDefService tableDefService,
+            HttpExecutionContext httpExecutionContext) {
+
         this.tableDefService = tableDefService;
         this.httpExecutionContext = httpExecutionContext;
     }
