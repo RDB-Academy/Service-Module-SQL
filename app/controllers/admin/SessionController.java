@@ -23,7 +23,7 @@ public class SessionController extends Controller{
     }
 
     public Result login() {
-        if(this.sessionService.getSession(ctx()) != null) {
+        if(this.sessionService.isLoggedIn(ctx())) {
             return redirect(routes.HomeController.index());
         }
         Form<LoginForm> loginForm = this.sessionService.getLoginForm();

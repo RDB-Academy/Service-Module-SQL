@@ -15,6 +15,7 @@ public class Session extends BaseModel {
     private Long userId;
 
     private String userName;
+
     private int connectionInfo;
 
     public Session() {

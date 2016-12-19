@@ -47,7 +47,7 @@ public class TaskTrialService {
 
         taskTrial.setTask(task);
         taskTrial.setBeginDate(LocalDateTime.now());
-        taskTrial.setDatabaseExtensionSeed(this.random.nextLong());
+        taskTrial.setDatabaseExtensionSeed(Math.abs(this.random.nextLong()));
 
         taskTrial = this.sqlParserFactory.createParser(taskTrial);
 

@@ -65,7 +65,7 @@ public class ExtensionMaker {
             for(int i = 0; i < row; i++) {
                 comcount = 0;
                 for(int j = 0; j < column; j++) {
-                    if (!tableDefs.get(t).getColumnDefList().get(j).isNotNull() && rand.nextInt(50) == 1){
+                    if (!tableDefs.get(t).getColumnDefList().get(j).isNotNull() && rand.nextInt(50) == 51){
                         out[i][j] = "";
                     }else{
                         switch (tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet()) {

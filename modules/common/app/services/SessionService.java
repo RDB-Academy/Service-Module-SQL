@@ -10,6 +10,7 @@ import repository.SessionRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 
 /**
@@ -84,5 +85,15 @@ public class SessionService {
         anyData.put("email", "test1@test.de");
         anyData.put("password", "password");
         return loginForm.bind(anyData);
+    }
+
+    /**
+     * This function Checks if the Session contains a UserName
+     * @param ctx the current Http.Context
+     * @return returns true if this is a authenticated Session
+     */
+    public boolean isLoggedIn(@NotNull Http.Context ctx) {
+        Session session = this.getSession(ctx);
+        return session != null && !(session.getUserName() == null || session.getUserName().isEmpty());
     }
 }
