@@ -72,6 +72,8 @@ public class SQLParser {
         }
     }
 
+
+
     public void closeConnection() {
         try {
             this.connection.close();
