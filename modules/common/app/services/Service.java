@@ -5,6 +5,4 @@ package services;
  */
 public abstract class Service {
     static final String formErrorNotFound = "Not Found";
-
-
 }
