@@ -27,28 +27,28 @@ public class FootballSchemaBuilder extends SchemaBuilder {
         TableDef            teamStadium                 = this.createNewTableDef("team_stadium");
         TableDef            teamSuperbowl               = this.createNewTableDef("team_superbowl");
 
-        ColumnDef           player_player_id            = this.createNewColumnDef("player_id" , "INT");
-        ColumnDef           player_player_firstname     = this.createNewColumnDef("player_firstname", "VARCHAR(255)");
-        ColumnDef           player_player_lastname      = this.createNewColumnDef("player_lastname", "VARCHAR(255)");
-        ColumnDef           player_player_position      = this.createNewColumnDef("player_position", "VARCHAR(255)");
-        ColumnDef           player_player_number        = this.createNewColumnDef("player_number", "INT");
-        ColumnDef           player_player_height        = this.createNewColumnDef("player_height", "INT");
-        ColumnDef           player_player_weight        = this.createNewColumnDef("player_weight", "INT");
+        ColumnDef           player_player_id            = this.createNewColumnDef("id" , "INT");
+        ColumnDef           player_player_firstname     = this.createNewColumnDef("firstname", "VARCHAR(255)");
+        ColumnDef           player_player_lastname      = this.createNewColumnDef("lastname", "VARCHAR(255)");
+        ColumnDef           player_player_position      = this.createNewColumnDef("position", "VARCHAR(255)");
+        ColumnDef           player_player_number        = this.createNewColumnDef("number", "INT");
+        ColumnDef           player_player_height        = this.createNewColumnDef("height", "INT");
+        ColumnDef           player_player_weight        = this.createNewColumnDef("weight", "INT");
 
-        ColumnDef           team_team_id                = this.createNewColumnDef("team_id", "INT");
-        ColumnDef           team_team_name              = this.createNewColumnDef("team_name", "VARCHAR(255)");
-        ColumnDef           team_team_color1            = this.createNewColumnDef("team_color1", "VARCHAR(255)");
-        ColumnDef           team_team_color2            = this.createNewColumnDef("team_color2", "VARCHAR(255)");
-        ColumnDef           team_team_color3            = this.createNewColumnDef("team_color3", "VARCHAR(255)");
+        ColumnDef           team_team_id                = this.createNewColumnDef("id", "INT");
+        ColumnDef           team_team_name              = this.createNewColumnDef("name", "VARCHAR(255)");
+        ColumnDef           team_team_color1            = this.createNewColumnDef("color1", "VARCHAR(255)");
+        ColumnDef           team_team_color2            = this.createNewColumnDef("color2", "VARCHAR(255)");
+        ColumnDef           team_team_color3            = this.createNewColumnDef("color3", "VARCHAR(255)");
 
-        ColumnDef           stadium_stadium_id          = this.createNewColumnDef("stadium_id", "INT");
-        ColumnDef           stadium_stadium_name        = this.createNewColumnDef("stadium_name", "VARCHAR(255)");
-        ColumnDef           stadium_stadium_city        = this.createNewColumnDef("stadium_city", "VARCHAR(255)");
-        ColumnDef           stadium_stadium_capacity    = this.createNewColumnDef("stadium_capacity", "INT");
+        ColumnDef           stadium_stadium_id          = this.createNewColumnDef("id", "INT");
+        ColumnDef           stadium_stadium_name        = this.createNewColumnDef("name", "VARCHAR(255)");
+        ColumnDef           stadium_stadium_city        = this.createNewColumnDef("city", "VARCHAR(255)");
+        ColumnDef           stadium_stadium_capacity    = this.createNewColumnDef("capacity", "INT");
 
-        ColumnDef           superbowl_superbowl_id      = this.createNewColumnDef("superbowl_id", "INT");
-        ColumnDef           superbowl_superbowl_name    = this.createNewColumnDef("superbowl_name", "VARCHAR(255)");
-        ColumnDef           superbowl_superbowl_date    = this.createNewColumnDef("superbowl_date", "DATE");
+        ColumnDef           superbowl_superbowl_id      = this.createNewColumnDef("id", "INT");
+        ColumnDef           superbowl_superbowl_name    = this.createNewColumnDef("name", "VARCHAR(255)");
+        ColumnDef           superbowl_superbowl_date    = this.createNewColumnDef("date", "DATE");
 
         ColumnDef           playerTeam_player_id        = this.createNewColumnDef("player_id", "INT");
         ColumnDef           playerTeam_team_id          = this.createNewColumnDef("team_id", "INT");
@@ -234,7 +234,7 @@ public class FootballSchemaBuilder extends SchemaBuilder {
 
         footballTask.setName("Find Luke Kuechly.");
         footballTask.setText("Find Luke Kuechly.");
-        footballTask.setReferenceStatement("SELECT * FROM player WHERE player_firstname = \"Luke\" AND player_lastname = \"Kuechly\";");
+        footballTask.setReferenceStatement("SELECT * FROM player WHERE firstname = 'Luke' AND lastname = 'Kuechly';");
 
         taskList.add(footballTask);
 

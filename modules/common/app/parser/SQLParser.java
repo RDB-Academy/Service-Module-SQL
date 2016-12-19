@@ -28,9 +28,10 @@ public class SQLParser {
         SQLResult sqlResult;
 
         SQLResultSet userResultSet = executeStatement(taskTrial.getUserStatement());
-        //List<List<String>> refResultSet = executeStatement(taskTrial.getTask().getReferenceStatement());
+        SQLResultSet refResultSet = executeStatement(taskTrial.getTask().getReferenceStatement());
 
         // Log UserResultSet
+        System.out.println("UserResultSet");
         for(List<String> row : userResultSet.getResultSet()) {
             for(String column : row) {
                 System.out.print(column + " | ");
@@ -38,7 +39,15 @@ public class SQLParser {
             System.out.println();
         }
 
-        sqlResult = new SQLResult(userResultSet, false);
+        System.out.println("RefResultSet");
+        for(List<String> row : refResultSet.getResultSet()) {
+            for(String column : row) {
+                System.out.print(column + " | ");
+            }
+            System.out.println();
+        }
+
+        sqlResult = new SQLResult(userResultSet, userResultSet.equals(refResultSet));
 
         return sqlResult;
     }

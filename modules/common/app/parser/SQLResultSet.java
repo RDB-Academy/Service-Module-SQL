@@ -1,5 +1,7 @@
 package parser;
 
+import play.Logger;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,22 @@ public class SQLResultSet {
 
     public SQLResultSet() {
         resultSet = new ArrayList<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+
+        SQLResultSet that = (SQLResultSet) o;
+
+
+        Logger.debug("Check if is equal");
+        // ToDo
+        // Check
+
+
+        return false;
     }
 
     public List<List<String>> getResultSet() {
