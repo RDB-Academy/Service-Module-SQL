@@ -65,7 +65,7 @@ public class SQLParserFactory {
 
         LocalDateTime startTime = LocalDateTime.now();
 
-        CompletableFuture<ArrayList<String[][]>> extensionMakerExtension =
+        CompletableFuture<ArrayList<String>> extensionMakerExtension =
                 CompletableFuture.supplyAsync(extensionMaker::buildStatements);
         CompletableFuture<List<String>> tableMakerStatements =
                 CompletableFuture.supplyAsync(tableMaker::buildStatement);
@@ -73,7 +73,7 @@ public class SQLParserFactory {
 
         try {
             List<String> createTableStatements = tableMakerStatements.get();
-            ArrayList<String[][]> extension = extensionMakerExtension.get();
+            ArrayList<String> extension = extensionMakerExtension.get();
 
             LocalDateTime endTime = LocalDateTime.now();
             Duration differenceTime = Duration.between(startTime, endTime);

@@ -35,7 +35,7 @@ public class ExtensionMaker {
         this.rand = new Random(this.seed);
     }
 
-    public ArrayList<String[][]> buildStatements() {
+    public ArrayList<String> buildStatements() {
 
         ArrayList<String[][]> Extensionlist = new ArrayList<String[][]>();
 
@@ -211,16 +211,8 @@ public class ExtensionMaker {
 
         }
 
-        return Extensionlist;
-    }
-
-    public ArrayList<String> parseToStatemant(ArrayList<String[][]> args){
-        int row = 100;
-
-
-        List<TableDef> tableDefs = schemaDef.getTableDefList();
-        int tables = schemaDef.getTableDefList().size();
-        ArrayList<String> out = new ArrayList<>();
+        //return Extensionlist;
+        ArrayList<String> insert = new ArrayList<>();
         for(int t = 0; t< tables; t++){
             int column = tableDefs.get(t).getColumnDefList().size();
             String statement;
@@ -237,7 +229,7 @@ public class ExtensionMaker {
             statement = statement.concat(") " + "VALUES ");
             String[][] mat = new String[row][tableDefs.get(t).getColumnDefList().size()];
 
-            mat = args.get(t);
+            mat = Extensionlist.get(t);
             for(int i = 0; i < row; i++) {
                 statement = statement.concat("(");
                 for(int j = 0; j < column; j++) {
@@ -253,10 +245,10 @@ public class ExtensionMaker {
             }
             statement = statement.concat(";");
 
-            out.add(statement);
+            insert.add(statement);
         }
 
-        return out;
+        return insert;
     }
 
     public Long getSeed() {

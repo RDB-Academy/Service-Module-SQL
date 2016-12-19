@@ -49,10 +49,9 @@ public class TestController extends Controller {
         SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
         ExtensionMaker extensionMaker = new ExtensionMaker(seed, schemaDef);
 
-        ArrayList<String[][]> v = extensionMaker.buildStatements();
-        ArrayList<String> out = extensionMaker.parseToStatemant(v);
+        ArrayList<String> v = extensionMaker.buildStatements();
 
-        return ok(Json.toJson(out));
+        return ok(Json.toJson(v));
     }
 
     public Result testTableMaker() {
