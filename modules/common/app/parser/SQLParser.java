@@ -7,8 +7,6 @@ import javax.inject.Singleton;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 
 /**
  * @author fabiomazzone

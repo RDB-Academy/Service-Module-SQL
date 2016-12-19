@@ -2,6 +2,7 @@ package parser;
 
 import com.google.inject.Inject;
 import models.SchemaDef;
+import models.TableDef;
 import models.TaskTrial;
 import org.h2.tools.DeleteDbFiles;
 import parser.extensionMaker.ExtensionMaker;
@@ -10,6 +11,7 @@ import play.Configuration;
 import play.Logger;
 
 import javax.inject.Singleton;
+import javax.swing.plaf.nimbus.State;
 import javax.validation.constraints.NotNull;
 import java.sql.*;
 import java.time.Duration;
@@ -41,8 +43,16 @@ public class SQLParserFactory {
      * @return returns a updated TaskTrial Object
      */
     public TaskTrial createParser(@NotNull TaskTrial taskTrial) {
-        Logger.info("Creating new Parser");
-        if(taskTrial.getDatabaseUrl() != null && !taskTrial.getDatabaseUrl().isEmpty()) {
+        String          databaseUrl;
+        Connection      connection;
+        SchemaDef       schemaDef;
+        TableMaker      tableMaker;
+        ExtensionMaker  extensionMaker;
+
+        Statement       statement;
+
+        Logger.debug("Creating new Parser");
+        if(taskTrial.getDatabaseUrl() == null || taskTrial.getDatabaseUrl().isEmpty()) {
             Logger.warn(
                     String.format(
                             "Task Trial Object %d already have a database", taskTrial.getId()
@@ -50,77 +60,82 @@ public class SQLParserFactory {
             );
             return taskTrial;
         }
-        String databaseUrl = getDatabaseUrl(taskTrial);
 
+        databaseUrl = this.getDatabaseUrl(taskTrial);
         taskTrial.setDatabaseUrl(databaseUrl);
+        connection = this.getConnection(databaseUrl);
 
-        Logger.debug(databaseUrl);
-
-        Connection connection = getConnection(databaseUrl);
         if(connection == null) {
             Logger.error("ParserFactory.createParser - didn't get a connection");
             return null;
         }
 
-        SchemaDef schemaDef             = taskTrial.getTask().getSchemaDef();
-        TableMaker tableMaker           = new TableMaker(schemaDef);
-        ExtensionMaker extensionMaker   = new ExtensionMaker(taskTrial.getDatabaseExtensionSeed(), schemaDef);
+        schemaDef       = taskTrial.getTask().getSchemaDef();
+        tableMaker      = new TableMaker(schemaDef);
+        extensionMaker  = new ExtensionMaker(taskTrial.getDatabaseExtensionSeed(), schemaDef);
 
+        // StopWatch
         LocalDateTime startTime = LocalDateTime.now();
 
+        // Start Makers
         CompletableFuture<ArrayList<String>> extensionMakerExtension =
                 CompletableFuture.supplyAsync(extensionMaker::buildStatements);
         CompletableFuture<List<String>> tableMakerStatements =
                 CompletableFuture.supplyAsync(tableMaker::buildStatement);
 
-
         try {
+            // Get Result
             List<String> createTableStatements = tableMakerStatements.get();
             ArrayList<String> extension = extensionMakerExtension.get();
 
+            // StopWatch
             LocalDateTime endTime = LocalDateTime.now();
             Duration differenceTime = Duration.between(startTime, endTime);
             Logger.debug("Time Needed: " + differenceTime.toMillis() + " Millis");
 
             try {
+                statement = connection.createStatement();
+
+                // Create Tables
                 for(String createTableStatement : createTableStatements) {
-                    Statement statement = connection.createStatement();
                     statement.execute(createTableStatement);
-                    statement.close();
                 }
 
+                // Insert Static Extensions
+                // ToDo
+
+                // Insert Generated Extensions
                 for(String extension1 : extension) {
-                    Statement statement = connection.createStatement();
                     if(statement.execute(extension1)) {
                         Logger.info("ResultSet ftw");
                         ResultSet rs = statement.getResultSet();
                         rs.close();
                     }
-                    statement.close();
                 }
+
+                statement.close();
             } catch (SQLException e) {
                 Logger.error("Failed while create ");
                 Logger.error(e.getMessage());
             }
 
-
             connection.close();
         } catch (InterruptedException | ExecutionException e) {
             Logger.error("Cannot get Create Statement or Extension");
-            e.printStackTrace();
+            Logger.error(e.getMessage());
         } catch (SQLException e) {
             Logger.error("Cannot Close Connection");
-            e.printStackTrace();
+            Logger.error(e.getMessage());
         }
         return taskTrial;
     }
 
     /**
-     *
-     * @param taskTrial
-     * @return
+     * This functions returns a the sql parser for the task Trial Object
+     * @param taskTrial needs a task trial object
+     * @return returns a sqlParser
      */
-    public SQLParser getParser(TaskTrial taskTrial) {
+    public SQLParser getParser(@NotNull TaskTrial taskTrial) {
         if(taskTrial.getDatabaseUrl() == null || taskTrial.getDatabaseUrl().isEmpty()) {
             Logger.warn(String.format("TaskTrial Object %d has no Database ", taskTrial.getId()));
             return null;
@@ -174,9 +189,11 @@ public class SQLParserFactory {
     }
 
     private String getDatabaseUrl(TaskTrial taskTrial) {
-        return this.configuration.getString("sqlParser.urlPrefix")
+        String databaseUrl = this.configuration.getString("sqlParser.urlPrefix")
                 + this.getDatabasePath(taskTrial)
                 + this.getDatabaseName(taskTrial);
+        Logger.debug(databaseUrl);
+        return databaseUrl;
     }
 
     private String getDatabasePath(TaskTrial taskTrial) {

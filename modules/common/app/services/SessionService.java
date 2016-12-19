@@ -3,6 +3,7 @@ package services;
 import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
@@ -32,6 +33,8 @@ public class SessionService {
         Session session = new Session();
         session.setUserName("admin");
 
+        Logger.debug(loginForm.toString());
+        
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
         String connectedData = userAgent.toString() + ctx.request().remoteAddress();
 
@@ -42,7 +45,7 @@ public class SessionService {
         ctx.session().put(SESSION_FIELD_NAME, session.getId());
     }
 
-    public Session createSession(Http.Context ctx) {
+    Session createSession(Http.Context ctx) {
         Session session = new Session();
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
         String connectedData = userAgent.toString() + ctx.request().remoteAddress();

@@ -1,12 +1,9 @@
 package controllers.api;
 
-import models.Session;
-import models.TaskTrial;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.SessionService;
 import services.TaskTrialService;
 
 import javax.inject.Inject;

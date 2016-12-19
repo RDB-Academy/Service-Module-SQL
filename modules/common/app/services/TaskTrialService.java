@@ -7,7 +7,6 @@ import parser.SQLParser;
 import parser.SQLParserFactory;
 import parser.SQLResult;
 import play.Logger;
-import play.data.FormFactory;
 import play.mvc.Http;
 import repository.TaskRepository;
 import repository.TaskTrialRepository;
@@ -45,12 +44,13 @@ public class TaskTrialService {
 
     public TaskTrial createTaskTrial() {
         Session session = this.sessionService.getSession(Http.Context.current());
-        TaskTrial taskTrial = null;
+        TaskTrial taskTrial;
         if(session == null) {
             session = this.sessionService.createSession(Http.Context.current());
         }
+        taskTrial = session.getTaskTrial();
 
-        if((taskTrial = session.getTaskTrial()) == null) {
+        if(taskTrial == null || taskTrial.isFinished()) {
             taskTrial = new TaskTrial();
             Task task = this.taskRepository.getRandomTask();
 
