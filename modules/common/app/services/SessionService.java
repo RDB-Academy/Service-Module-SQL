@@ -3,6 +3,7 @@ package services;
 import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
+import play.Configuration;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
@@ -12,7 +13,6 @@ import repository.SessionRepository;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 
 /**
  * @author fabiomazzone
@@ -20,13 +20,19 @@ import java.util.HashMap;
 @Singleton
 public class SessionService {
     private static final String SESSION_FIELD_NAME = "SessionID";
-    private SessionRepository sessionRepository;
-    private FormFactory formFactory;
+    private final SessionRepository sessionRepository;
+    private final FormFactory formFactory;
+    private final Configuration configuration;
 
     @Inject
-    public SessionService(SessionRepository sessionRepository, FormFactory formFactory) {
+    public SessionService(
+            SessionRepository sessionRepository,
+            FormFactory formFactory,
+            Configuration configuration) {
+
         this.sessionRepository = sessionRepository;
         this.formFactory = formFactory;
+        this.configuration = configuration;
     }
 
     public void setAdminSession(LoginForm loginForm, Http.Context ctx) {
@@ -81,17 +87,31 @@ public class SessionService {
         return null;
     }
 
+    public Form<LoginForm> login() {
+        Form<LoginForm>     loginForm = this.getLoginForm();
+        String              adminPassword = this.configuration.getString("sqlModule.adminPassword");
+        LoginForm           login;
+        if (loginForm.hasErrors()) {
+            return loginForm;
+        }
+        login = loginForm.get();
+
+        if (login.getPassword().equals(adminPassword)) {
+            this.setAdminSession(login, Http.Context.current());
+        } else {
+            loginForm.reject("Wrong E-Mail or Password");
+        }
+
+        return loginForm;
+    }
+
     public boolean logout() {
         Http.Context.current().session().clear();
         return true;
     }
 
     public Form<LoginForm> getLoginForm() {
-        Form<LoginForm> loginForm = this.formFactory.form(LoginForm.class);
-        HashMap<String, String> anyData = new HashMap<>();
-        anyData.put("email", "test1@test.de");
-        anyData.put("password", "password");
-        return loginForm.bind(anyData);
+        return this.formFactory.form(LoginForm.class);
     }
 
     /**

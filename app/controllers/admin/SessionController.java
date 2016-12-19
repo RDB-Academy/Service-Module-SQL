@@ -37,6 +37,17 @@ public class SessionController extends Controller{
         return ok(views.html.admin.sessionViews.login.render(loginForm));
     }
 
+    public CompletionStage<Result> authenticate() {
+        return CompletableFuture
+                .supplyAsync(this.sessionService::login, this.httpExecutionContext.current())
+                .thenApply(loginForm -> {
+                    if(loginForm.hasErrors()) {
+                        return badRequest(views.html.admin.sessionViews.login.render(loginForm));
+                    }
+                    return ok();
+                });
+    }
+
     @Security.Authenticated(Authenticated.class)
     public CompletionStage<Result> logout() {
         return CompletableFuture

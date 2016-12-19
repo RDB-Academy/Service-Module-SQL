@@ -31,9 +31,9 @@ public class FootballSchemaBuilder extends SchemaBuilder {
         ColumnDef           player_player_firstname     = this.createNewColumnDef("player_firstname", "VARCHAR(255)");
         ColumnDef           player_player_lastname      = this.createNewColumnDef("player_lastname", "VARCHAR(255)");
         ColumnDef           player_player_position      = this.createNewColumnDef("player_position", "VARCHAR(255)");
-        ColumnDef           player_player_number        = this.createNewColumnDef("player_number", "VARCHAR(255)");
-        ColumnDef           player_player_height        = this.createNewColumnDef("player_height", "VARCHAR(255)");
-        ColumnDef           player_player_weight        = this.createNewColumnDef("player_weight", "VARCHAR(255)");
+        ColumnDef           player_player_number        = this.createNewColumnDef("player_number", "INT");
+        ColumnDef           player_player_height        = this.createNewColumnDef("player_height", "INT");
+        ColumnDef           player_player_weight        = this.createNewColumnDef("player_weight", "INT");
 
         ColumnDef           team_team_id                = this.createNewColumnDef("team_id", "INT");
         ColumnDef           team_team_name              = this.createNewColumnDef("team_name", "VARCHAR(255)");
