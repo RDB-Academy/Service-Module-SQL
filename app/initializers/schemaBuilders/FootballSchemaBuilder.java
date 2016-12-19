@@ -43,11 +43,11 @@ public class FootballSchemaBuilder extends SchemaBuilder {
 
         ColumnDef           stadium_stadium_id          = this.createNewColumnDef("stadium_id", "INT");
         ColumnDef           stadium_stadium_name        = this.createNewColumnDef("stadium_name", "VARCHAR(255)");
-        ColumnDef           stadium_stadium_city        = this.createNewColumnDef("stadium_city", "INT");
+        ColumnDef           stadium_stadium_city        = this.createNewColumnDef("stadium_city", "VARCHAR(255)");
         ColumnDef           stadium_stadium_capacity    = this.createNewColumnDef("stadium_capacity", "INT");
 
         ColumnDef           superbowl_superbowl_id      = this.createNewColumnDef("superbowl_id", "INT");
-        ColumnDef           superbowl_superbowl_name    = this.createNewColumnDef("superbowl_name", "INT");
+        ColumnDef           superbowl_superbowl_name    = this.createNewColumnDef("superbowl_name", "VARCHAR(255)");
         ColumnDef           superbowl_superbowl_date    = this.createNewColumnDef("superbowl_date", "DATE");
 
         ColumnDef           playerTeam_player_id        = this.createNewColumnDef("player_id", "INT");

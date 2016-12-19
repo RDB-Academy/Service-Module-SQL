@@ -34,9 +34,15 @@ public class TaskTrialRepository {
      * @param jsonNode
      * @return
      */
-    public TaskTrial update(TaskTrial taskTrial, JsonNode jsonNode) {
+    public TaskTrial refreshWithJson(TaskTrial taskTrial, JsonNode jsonNode) {
         TaskTrial taskTrial1 = Json.fromJson(jsonNode, TaskTrial.class);
-        taskTrial.setUserStatement(taskTrial1.getUserStatement());
+        taskTrial.setUserStatement(
+                taskTrial1.getUserStatement()
+                        .replaceAll("\n", "")
+                        .replaceAll("\t", "")
+                        .replaceAll("    ", "")
+                        .trim()
+        );
         return taskTrial;
     }
 }

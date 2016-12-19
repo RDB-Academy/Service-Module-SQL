@@ -1,6 +1,5 @@
 package services;
 
-import models.SchemaDef;
 import models.Task;
 import models.TaskTrial;
 import parser.SQLParser;
@@ -66,22 +65,18 @@ public class TaskTrialService {
         TaskTrial taskTrial = this.getById(id);
         SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
 
-        // Log request body
-        Logger.info(Http.Context.current().request().body().asJson().toString());
-
-        taskTrial = this.taskTrialRepository.update(
+        taskTrial = this.taskTrialRepository.refreshWithJson(
                 taskTrial,
                 Http.Context.current().request().body().asJson()
         );
 
-
         if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
-            Logger.info("SubmittedRequest is null or Empty");
+            Logger.warn("SubmittedRequest is null or Empty");
             taskTrial.addError("SubmittedRequest is null or Empty");
             return taskTrial;
         }
 
-        Logger.info("UserStatement is " + taskTrial.getUserStatement());
+        Logger.debug("UserStatement is " + taskTrial.getUserStatement());
 
         SQLResult sqlResult = sqlParser.submit(taskTrial.getUserStatement());
 

@@ -40,30 +40,11 @@ public class ExtensionMaker {
         ArrayList<String[][]> Extensionlist = new ArrayList<String[][]>();
 
         List<TableDef> tableDefs = schemaDef.getTableDefList();
-        schemaDef.getTableDefList().forEach((tabledef) -> {
-            System.out.println(tabledef.getName());
-            tabledef.getColumnDefList().forEach(columnDef -> {
-                System.out.println("  - " + columnDef.getName() + " " + columnDef.getDataType());
-            });
-        });
-
-        schemaDef.getForeignKeyList().forEach(foreignKey -> {
-            System.out.println(foreignKey.getName());
-            foreignKey.getForeignKeyRelationList().forEach(foreignKeyRelation -> {
-                System.out.println("  - " + foreignKeyRelation.getSourceColumn().getName() + " -> " + foreignKeyRelation.getTargetColumn().getName());
-            });
-        });
 
         int tables = schemaDef.getTableDefList().size();
         int row = 100;
 
-        //System.out.println("META: " + tableDefs.get(0).getColumnDefList().get(0).getMetaValueSet());
-
-        //tableDefs.forEach(tableDef -> tableDef.getColumnDefList().forEach(columnDef -> System.out.println(columnDef.getName())));
-
         for(int t = 0; t< tables; t++){
-            //System.out.println(tableDefs.get(t));
-
             String[][] out = new String[row][tableDefs.get(t).getColumnDefList().size()];
 
             int column = tableDefs.get(t).getColumnDefList().size();
