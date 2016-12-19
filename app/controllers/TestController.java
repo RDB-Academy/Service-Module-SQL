@@ -90,7 +90,7 @@ public class TestController extends Controller {
     }
 
     public Result parserGet(Long id) {
-        TaskTrial taskTrial = this.taskTrialService.getById(id);
+        TaskTrial taskTrial = this.taskTrialService.read(id);
 
         if(taskTrial == null) {
             Logger.warn(String.format("TaskTrial - Object with id: %d not found", id));
@@ -112,7 +112,7 @@ public class TestController extends Controller {
     }
 
     public Result parserDelete(Long id ) {
-        TaskTrial taskTrial = this.taskTrialService.getById(id);
+        TaskTrial taskTrial = this.taskTrialService.read(id);
 
         if(taskTrial == null) {
             Logger.warn(String.format("TaskTrial - Object with id: %d not found", id));
