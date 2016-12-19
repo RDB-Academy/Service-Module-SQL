@@ -96,7 +96,7 @@ public class TaskTrialService {
 
         if(taskTrial.isFinished()) {
             taskTrial.save();
-            return null;
+            return taskTrial;
         }
 
         if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
@@ -109,11 +109,11 @@ public class TaskTrialService {
 
         Logger.debug("UserStatement is " + taskTrial.getUserStatement());
 
-        SQLResult sqlResult = sqlParser.submit(taskTrial.getUserStatement());
+        SQLResult sqlResult = sqlParser.submit(taskTrial);
 
         taskTrial.addTry();
 
-        taskTrial.setSqlResultSet(sqlResult.getResultSet());
+        taskTrial.setSqlResult(sqlResult);
 
         return taskTrial;
     }

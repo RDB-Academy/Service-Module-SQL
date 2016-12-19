@@ -1,5 +1,9 @@
 package parser;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import play.Logger;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,40 +11,45 @@ import java.util.List;
  * @author fabiomazzone
  */
 public class SQLResult {
-    private SQLResultSet resultSet;
-    private boolean      isCorrect;
+    private List<String>    header;
+    private List<List<String>> dataSets;
 
-    public static class SQLResultSet {
-        List<String> header;
-        List<List<String>> dataSets;
+    private boolean         isCorrect;
+    private SQLException    error;
 
-        public SQLResultSet(List<String> headerList, List<List<String>> dataSet) {
-            this.header = headerList;
-            this.dataSets = dataSet;
-        }
-
-        public List<String> getHeader() {
-            return header;
-        }
-
-        public List<List<String>> getDatasets() {
-            return dataSets;
-        }
-    }
-
-    SQLResult(List<List<String>> resultSet, boolean isCorrect) {
+    SQLResult(SQLResultSet resultSet, boolean isCorrect) {
         this.isCorrect = isCorrect;
-        List<List<String>> dataSet = new ArrayList<>(resultSet);
-        dataSet.remove(0);
+        this.header = new ArrayList<>();
+        this.dataSets = new ArrayList<>();
 
-        this.resultSet = new SQLResultSet(resultSet.get(0), dataSet);
+        if(resultSet.getError() != null) {
+            this.isCorrect = false;
+            this.error = resultSet.getError();
+            return;
+        }
+
+        for(String headerName : resultSet.getResultSet().get(0)) {
+            this.header.add(headerName);
+        }
+
+        for(int i = 1; i < resultSet.getResultSet().size(); i++) {
+            List<String> row = resultSet.getResultSet().get(i);
+            this.dataSets.add(row);
+        }
     }
 
-    public SQLResultSet getResultSet() {
-        return resultSet;
+    public List<String> getHeader() {
+        return header;
     }
 
-    public boolean isCorrect() {
-        return isCorrect;
+    @JsonGetter("datasets")
+    public List<List<String>> getDataSets() {
+        return dataSets;
+    }
+
+    @JsonGetter("errorMessage")
+    public String getError() {
+        return (error != null)? error.getMessage() : null;
     }
 }
+

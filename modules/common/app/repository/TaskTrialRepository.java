@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 import models.TaskTrial;
+import play.Logger;
 import play.libs.Json;
 
 import java.util.List;

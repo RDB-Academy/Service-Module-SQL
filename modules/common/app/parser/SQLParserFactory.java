@@ -52,7 +52,7 @@ public class SQLParserFactory {
         Statement       statement;
 
         Logger.debug("Creating new Parser");
-        if(taskTrial.getDatabaseUrl() == null || taskTrial.getDatabaseUrl().isEmpty()) {
+        if(taskTrial.getDatabaseUrl() != null && !taskTrial.getDatabaseUrl().isEmpty()) {
             Logger.warn(
                     String.format(
                             "Task Trial Object %d already have a database", taskTrial.getId()

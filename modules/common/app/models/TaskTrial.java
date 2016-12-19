@@ -3,8 +3,11 @@ package models;
 import com.avaje.ebean.annotation.WhenCreated;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import parser.SQLResult;
+import play.Logger;
 import play.libs.Json;
 
 import javax.persistence.*;
@@ -29,6 +32,7 @@ public class TaskTrial extends BaseModel {
     private String userStatement;
 
     private boolean isCorrect = false;
+
     private boolean isFinished = false;
 
     @NotNull
@@ -52,7 +56,7 @@ public class TaskTrial extends BaseModel {
 
     @Transient
     @JsonIgnore
-    private SQLResult.SQLResultSet sqlResultSet;
+    private SQLResult sqlResult;
 
     private class SQLError {
         private final String message;
@@ -154,6 +158,7 @@ public class TaskTrial extends BaseModel {
         return isFinished;
     }
 
+    @JsonSetter("isFinished")
     public void setFinished(boolean finished) {
         isFinished = finished;
     }
@@ -169,17 +174,21 @@ public class TaskTrial extends BaseModel {
 
     @JsonIgnore
     public JsonNode errorsAsJson() {
-        return Json.toJson(this.error);
+        ObjectNode errorNode = Json.newObject();
+
+        errorNode.put("errorMessage", this.error.message);
+
+        return errorNode;
     }
 
     @JsonIgnore
-    public void setSqlResultSet(SQLResult.SQLResultSet sqlResultSet) {
-        this.sqlResultSet = sqlResultSet;
+    public void setSqlResult(SQLResult sqlResultSet) {
+        this.sqlResult = sqlResultSet;
     }
 
     @JsonGetter("resultSet")
-    public SQLResult.SQLResultSet getSqlResultSet() {
-        return sqlResultSet;
+    public SQLResult getSqlResult() {
+        return sqlResult;
     }
 
 }

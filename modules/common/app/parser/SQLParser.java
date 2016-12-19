@@ -24,27 +24,47 @@ public class SQLParser {
         this.connection = connection;
     }
 
-    public SQLResult submit(String userStatement) {
-        Statement statement = null;
-        SQLResult sqlResult = null;
-        try {
-            statement = connection.createStatement(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            );
-            ResultSet rs = statement.executeQuery(userStatement);
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            List<List<String>> resultSet = new ArrayList<>();
+    public SQLResult submit(TaskTrial taskTrial) {
+        SQLResult sqlResult;
 
+        SQLResultSet userResultSet = executeStatement(taskTrial.getUserStatement());
+        //List<List<String>> refResultSet = executeStatement(taskTrial.getTask().getReferenceStatement());
 
-            // Build Header
-            List<String> headerList = new ArrayList<>();
-            for(int i = 1; i <= columnCount; i++) {
-                headerList.add(metaData.getColumnName(i));
+        // Log UserResultSet
+        for(List<String> row : userResultSet.getResultSet()) {
+            for(String column : row) {
+                System.out.print(column + " | ");
             }
-            resultSet.add(headerList);
+            System.out.println();
+        }
 
+        sqlResult = new SQLResult(userResultSet, false);
+
+        return sqlResult;
+    }
+
+    private SQLResultSet executeStatement(String sqlStatement) {
+        Statement           statement;
+        ResultSet           rs;
+        ResultSetMetaData   rsmd;
+        List<List<String>>  resultSet = new ArrayList<>();
+        SQLResultSet        sqlResultSet = new SQLResultSet();
+        int                 columnCount;
+
+        try {
+            statement = this.connection.createStatement();
+            rs = statement.executeQuery(sqlStatement);
+            rsmd = rs.getMetaData();
+            columnCount = rsmd.getColumnCount();
+
+            // Create Header
+            List<String> header = new ArrayList<>();
+            for(int i = 1; i <= columnCount; i++) {
+                header.add(rsmd.getColumnName(i));
+            }
+            resultSet.add(header);
+
+            // Load data
             while(rs.next()) {
                 List<String> rowList = new ArrayList<>();
                 for(int i = 1; i <= columnCount; i++) {
@@ -53,26 +73,17 @@ public class SQLParser {
                 resultSet.add(rowList);
             }
 
-            rs.close();
             statement.close();
+            rs.close();
 
-            for(List<String> row : resultSet) {
-                for(String column : row) {
-                    System.out.print(column + " | ");
-                }
-                System.out.println();
-            }
-
-            sqlResult = new SQLResult(resultSet, false);
-            return sqlResult;
+            sqlResultSet.setResultSet(resultSet);
         } catch (SQLException e) {
-            Logger.error("SQL Statement nicht valide oder so");
+            Logger.error("Submit SQL Statement nicht valide oder so");
             Logger.error(e.getMessage());
-            return null;
+            sqlResultSet.setError(e);
         }
+        return sqlResultSet;
     }
-
-
 
     public void closeConnection() {
         try {

@@ -104,8 +104,6 @@ public class TestController extends Controller {
             return internalServerError();
         }
 
-        sqlParser.submit("SELECT H2VERSION() AS Test");
-
         sqlParser.closeConnection();
 
         return ok();
