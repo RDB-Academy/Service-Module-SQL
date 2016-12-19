@@ -31,7 +31,7 @@ public class TaskTrialController extends Controller {
 
     public CompletionStage<Result> create() {
         return CompletableFuture
-                .supplyAsync(this.taskTrialService::createNewTaskTrialObject, this.httpExecutionContext.current())
+                .supplyAsync(this.taskTrialService::createTaskTrial, this.httpExecutionContext.current())
                 .thenApply(taskTrial -> {
                     if(taskTrial == null) {
                         return internalServerError();
@@ -65,17 +65,4 @@ public class TaskTrialController extends Controller {
                     return ok(Json.toJson(taskTrial));
                 }));
     }
-
-    public CompletionStage<Result> delete(Long id) {
-        return CompletableFuture
-                .supplyAsync(() -> this.taskTrialService.setFinished(id), this.httpExecutionContext.current())
-                .thenApply(taskTrialForm -> {
-                    if(taskTrialForm.hasErrors()) {
-                        return badRequest(taskTrialForm.errorsAsJson());
-                    }
-                    return ok();
-                });
-    }
-
-
 }

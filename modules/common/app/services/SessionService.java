@@ -42,7 +42,8 @@ public class SessionService {
         ctx.session().put(SESSION_FIELD_NAME, session.getId());
     }
 
-    public void setSession(Session session, Http.Context ctx) {
+    public Session createSession(Http.Context ctx) {
+        Session session = new Session();
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
         String connectedData = userAgent.toString() + ctx.request().remoteAddress();
 
@@ -51,6 +52,8 @@ public class SessionService {
         session.save();
 
         ctx.session().put(SESSION_FIELD_NAME, session.getId());
+
+        return session;
     }
 
     public Session getSession(Http.Context ctx) {

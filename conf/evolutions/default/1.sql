@@ -60,6 +60,7 @@ create table session (
   user_id                       bigint,
   user_name                     varchar(255),
   connection_info               integer,
+  task_trial_id                 bigint,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_session primary key (id)
@@ -89,13 +90,13 @@ create table task (
 create table task_trial (
   id                            bigint auto_increment not null,
   task_id                       bigint not null,
-  database_url                  varchar(255),
-  database_extension_seed       bigint,
+  tries                         integer,
   user_statement                varchar(255),
   is_correct                    boolean,
-  tries                         integer,
+  is_finished                   boolean,
   submit_date                   timestamp,
-  finished                      boolean,
+  database_url                  varchar(255),
+  database_extension_seed       bigint,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   begin_date                    timestamp not null,
@@ -119,6 +120,9 @@ create index ix_foreign_key_relation_source_column_id on foreign_key_relation (s
 
 alter table foreign_key_relation add constraint fk_foreign_key_relation_target_column_id foreign key (target_column_id) references column_def (id) on delete restrict on update restrict;
 create index ix_foreign_key_relation_target_column_id on foreign_key_relation (target_column_id);
+
+alter table session add constraint fk_session_task_trial_id foreign key (task_trial_id) references task_trial (id) on delete restrict on update restrict;
+create index ix_session_task_trial_id on session (task_trial_id);
 
 alter table table_def add constraint fk_table_def_schema_def_id foreign key (schema_def_id) references schema_def (id) on delete restrict on update restrict;
 create index ix_table_def_schema_def_id on table_def (schema_def_id);
@@ -149,6 +153,9 @@ drop index if exists ix_foreign_key_relation_source_column_id;
 
 alter table foreign_key_relation drop constraint if exists fk_foreign_key_relation_target_column_id;
 drop index if exists ix_foreign_key_relation_target_column_id;
+
+alter table session drop constraint if exists fk_session_task_trial_id;
+drop index if exists ix_session_task_trial_id;
 
 alter table table_def drop constraint if exists fk_table_def_schema_def_id;
 drop index if exists ix_table_def_schema_def_id;

@@ -7,7 +7,6 @@ import parser.SQLParser;
 import parser.SQLParserFactory;
 import parser.SQLResult;
 import play.Logger;
-import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
 import repository.TaskRepository;
@@ -27,7 +26,6 @@ public class TaskTrialService {
     private final TaskTrialRepository taskTrialRepository;
     private final Random random;
     private final SQLParserFactory sqlParserFactory;
-    private final FormFactory formFactory;
     private final SessionService sessionService;
 
     @Inject
@@ -35,39 +33,38 @@ public class TaskTrialService {
             TaskRepository taskRepository,
             TaskTrialRepository taskTrialRepository,
             SQLParserFactory sqlParserFactory,
-            FormFactory formFactory,
             SessionService sessionService) {
 
         this.taskRepository = taskRepository;
         this.taskTrialRepository = taskTrialRepository;
         this.sqlParserFactory = sqlParserFactory;
-        this.formFactory = formFactory;
         this.sessionService = sessionService;
 
         this.random = new Random();
     }
 
-    public TaskTrial createNewTaskTrialObject() {
+    public TaskTrial createTaskTrial() {
         Session session = this.sessionService.getSession(Http.Context.current());
+        TaskTrial taskTrial = null;
         if(session == null) {
-            session = new Session();
-            this.sessionService.setSession(session, Http.Context.current());
+            session = this.sessionService.createSession(Http.Context.current());
         }
 
-        TaskTrial taskTrial = new TaskTrial();
-        Task task = this.taskRepository.getRandomTask();
+        if((taskTrial = session.getTaskTrial()) == null) {
+            taskTrial = new TaskTrial();
+            Task task = this.taskRepository.getRandomTask();
 
-        if(task == null) {
-            return null;
+            taskTrial.setTask(task);
+            taskTrial.setBeginDate(LocalDateTime.now());
+            taskTrial.setDatabaseExtensionSeed(Math.abs(this.random.nextLong()));
+
+            taskTrial = this.sqlParserFactory.createParser(taskTrial);
+
+            session.setTaskTrial(taskTrial);
+            this.taskTrialRepository.save(taskTrial);
+
+            session.save();
         }
-
-        taskTrial.setTask(task);
-        taskTrial.setBeginDate(LocalDateTime.now());
-        taskTrial.setDatabaseExtensionSeed(Math.abs(this.random.nextLong()));
-
-        taskTrial = this.sqlParserFactory.createParser(taskTrial);
-
-        this.taskTrialRepository.save(taskTrial);
 
         return taskTrial;
     }
@@ -78,22 +75,27 @@ public class TaskTrialService {
 
     public TaskTrial validateStatement(Long id) {
         TaskTrial taskTrial = this.read(id);
-        if(taskTrial == null) {
+        if(taskTrial == null || taskTrial.isFinished()) {
             return null;
         }
-
-        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
 
         taskTrial = this.taskTrialRepository.refreshWithJson(
                 taskTrial,
                 Http.Context.current().request().body().asJson()
         );
 
+        if(taskTrial.isFinished()) {
+            taskTrial.save();
+            return null;
+        }
+
         if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
             Logger.warn("SubmittedRequest is null or Empty");
             taskTrial.addError("SubmittedRequest is null or Empty");
             return taskTrial;
         }
+
+        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
 
         Logger.debug("UserStatement is " + taskTrial.getUserStatement());
 
@@ -104,23 +106,5 @@ public class TaskTrialService {
         taskTrial.setSqlResultSet(sqlResult.getResultSet());
 
         return taskTrial;
-    }
-
-    public Form<TaskTrial> setFinished(Long id) {
-        Form<TaskTrial> taskTrialForm = this.getForm();
-        TaskTrial taskTrial = this.read(id);
-
-        if(taskTrial == null) {
-            taskTrialForm.reject(Service.formErrorNotFound);
-            return taskTrialForm;
-        }
-
-        taskTrial.setFinished(true);
-        taskTrial.save();
-        return taskTrialForm;
-    }
-
-    private Form<TaskTrial> getForm() {
-        return this.formFactory.form(TaskTrial.class);
     }
 }

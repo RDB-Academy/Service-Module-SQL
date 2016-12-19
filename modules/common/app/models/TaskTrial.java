@@ -24,17 +24,12 @@ public class TaskTrial extends BaseModel {
     @ManyToOne(optional = false)
     private Task task;
 
-    @JsonIgnore
-    private String databaseUrl;
-
-    @JsonIgnore
-    private long databaseExtensionSeed;
+    private int tries = 0;
 
     private String userStatement;
 
     private boolean isCorrect = false;
-
-    private int tries = 0;
+    private boolean isFinished = false;
 
     @NotNull
     @WhenCreated
@@ -43,17 +38,21 @@ public class TaskTrial extends BaseModel {
 
     private LocalDateTime submitDate;
 
+    @JsonIgnore
+    private String databaseUrl;
+
+    @JsonIgnore
+    private long databaseExtensionSeed;
+
+
+
+    @JsonIgnore
     @Transient
     private SQLError error;
 
     @Transient
     @JsonIgnore
     private SQLResult.SQLResultSet sqlResultSet;
-    private boolean finished;
-
-    public void setFinished(boolean finished) {
-        this.finished = finished;
-    }
 
     private class SQLError {
         private final String message;
@@ -151,14 +150,24 @@ public class TaskTrial extends BaseModel {
         return databaseUrl;
     }
 
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
     public boolean hasError() {
         return this.error != null;
     }
+
 
     public void addError(String message) {
         this.error = new SQLError(message);
     }
 
+    @JsonIgnore
     public JsonNode errorsAsJson() {
         return Json.toJson(this.error);
     }
