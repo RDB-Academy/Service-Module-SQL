@@ -45,6 +45,7 @@ public class TaskTrialRepository {
                             .trim()
             );
         }
+        taskTrial.setFinished(taskTrial1.isFinished());
         return taskTrial;
     }
 }
