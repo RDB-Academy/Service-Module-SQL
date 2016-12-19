@@ -1,11 +1,14 @@
 package services;
 
+import models.Session;
 import models.Task;
 import models.TaskTrial;
 import parser.SQLParser;
 import parser.SQLParserFactory;
 import parser.SQLResult;
 import play.Logger;
+import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Http;
 import repository.TaskRepository;
 import repository.TaskTrialRepository;
@@ -23,21 +26,34 @@ public class TaskTrialService {
     private final TaskRepository taskRepository;
     private final TaskTrialRepository taskTrialRepository;
     private final Random random;
-    private SQLParserFactory sqlParserFactory;
+    private final SQLParserFactory sqlParserFactory;
+    private final FormFactory formFactory;
+    private final SessionService sessionService;
 
     @Inject
     public TaskTrialService(
             TaskRepository taskRepository,
             TaskTrialRepository taskTrialRepository,
-            SQLParserFactory sqlParserFactory) {
+            SQLParserFactory sqlParserFactory,
+            FormFactory formFactory,
+            SessionService sessionService) {
 
         this.taskRepository = taskRepository;
         this.taskTrialRepository = taskTrialRepository;
         this.sqlParserFactory = sqlParserFactory;
+        this.formFactory = formFactory;
+        this.sessionService = sessionService;
+
         this.random = new Random();
     }
 
-    public TaskTrial getNewTaskTrial(Http.Context context) {
+    public TaskTrial createNewTaskTrialObject() {
+        Session session = this.sessionService.getSession(Http.Context.current());
+        if(session == null) {
+            session = new Session();
+            this.sessionService.setSession(session, Http.Context.current());
+        }
+
         TaskTrial taskTrial = new TaskTrial();
         Task task = this.taskRepository.getRandomTask();
 
@@ -56,13 +72,16 @@ public class TaskTrialService {
         return taskTrial;
     }
 
-    public TaskTrial getById(Long id) {
+    public TaskTrial read(Long id) {
         return this.taskTrialRepository.getById(id);
     }
 
-
     public TaskTrial validateStatement(Long id) {
-        TaskTrial taskTrial = this.getById(id);
+        TaskTrial taskTrial = this.read(id);
+        if(taskTrial == null) {
+            return null;
+        }
+
         SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
 
         taskTrial = this.taskTrialRepository.refreshWithJson(
@@ -85,5 +104,23 @@ public class TaskTrialService {
         taskTrial.setSqlResultSet(sqlResult.getResultSet());
 
         return taskTrial;
+    }
+
+    public Form<TaskTrial> setFinished(Long id) {
+        Form<TaskTrial> taskTrialForm = this.getForm();
+        TaskTrial taskTrial = this.read(id);
+
+        if(taskTrial == null) {
+            taskTrialForm.reject(Service.formErrorNotFound);
+            return taskTrialForm;
+        }
+
+        taskTrial.setFinished(true);
+        taskTrial.save();
+        return taskTrialForm;
+    }
+
+    private Form<TaskTrial> getForm() {
+        return this.formFactory.form(TaskTrial.class);
     }
 }

@@ -95,6 +95,7 @@ create table task_trial (
   is_correct                    boolean,
   tries                         integer,
   submit_date                   timestamp,
+  finished                      boolean,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
   begin_date                    timestamp not null,

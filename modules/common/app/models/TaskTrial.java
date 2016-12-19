@@ -49,6 +49,11 @@ public class TaskTrial extends BaseModel {
     @Transient
     @JsonIgnore
     private SQLResult.SQLResultSet sqlResultSet;
+    private boolean finished;
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
 
     private class SQLError {
         private final String message;
