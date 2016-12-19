@@ -134,8 +134,8 @@ public class FootballSchemaBuilder extends SchemaBuilder {
         playerTeam_join_year.setNotNull(true);
         playerTeam_player_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         playerTeam_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        playerTeam_join_year.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
-        playerTeam_left_year.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
+        playerTeam_join_year.setMetaValueSet(ColumnDef.META_VALUE_SET_YEAR);
+        playerTeam_left_year.setMetaValueSet(ColumnDef.META_VALUE_SET_YEAR);
 
         teamStadium_team_id.setPrimary(true);
         teamStadium_team_id.setNotNull(true);
