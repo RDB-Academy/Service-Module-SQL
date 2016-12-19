@@ -47,7 +47,8 @@ public class TaskTrial extends BaseModel {
     private SQLError error;
 
     @Transient
-    private SQLResult.SQLResultSet resultSet;
+    @JsonIgnore
+    private SQLResult.SQLResultSet sqlResultSet;
 
     private class SQLError {
         private final String message;
@@ -157,11 +158,14 @@ public class TaskTrial extends BaseModel {
         return Json.toJson(this.error);
     }
 
-    public void setResultSet(SQLResult.SQLResultSet resultSet) {
-        this.resultSet = resultSet;
+    @JsonIgnore
+    public void setSqlResultSet(SQLResult.SQLResultSet sqlResultSet) {
+        this.sqlResultSet = sqlResultSet;
     }
 
-    public SQLResult.SQLResultSet getResultSet() {
-        return resultSet;
+    @JsonGetter("resultSet")
+    public SQLResult.SQLResultSet getSqlResultSet() {
+        return sqlResultSet;
     }
+
 }
