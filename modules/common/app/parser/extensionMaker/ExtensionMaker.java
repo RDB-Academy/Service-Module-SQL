@@ -35,7 +35,7 @@ public class ExtensionMaker {
         this.rand = new Random(this.seed);
     }
 
-    public ArrayList<String[][]> buildStatements() {
+    public ArrayList<String> buildStatements() {
 
         ArrayList<String[][]> Extensionlist = new ArrayList<String[][]>();
 
@@ -173,7 +173,7 @@ public class ExtensionMaker {
                                 out[i][j] = "" + colour[rand.nextInt(colour.length)];
                                 break;
                             case 11:
-                                out[i][j] = rand.nextInt(30) +"."+ rand.nextInt(13) +"."+ (1930 + rand.nextInt(87));
+                                out[i][j] = (1930 + rand.nextInt(87)+"-"+ rand.nextInt(13) +"-"+ rand.nextInt(30));
                                 break;
                             case 12:
                                 out[i][j] = "" + plant[rand.nextInt(plant.length)];
@@ -210,17 +210,7 @@ public class ExtensionMaker {
             Extensionlist.add(out);
 
         }
-
-        return Extensionlist;
-    }
-
-    public ArrayList<String> parseToStatemant(ArrayList<String[][]> args){
-        int row = 100;
-
-
-        List<TableDef> tableDefs = schemaDef.getTableDefList();
-        int tables = schemaDef.getTableDefList().size();
-        ArrayList<String> out = new ArrayList<>();
+        ArrayList<String> insert = new ArrayList<>();
         for(int t = 0; t< tables; t++){
             int column = tableDefs.get(t).getColumnDefList().size();
             String statement;
@@ -237,7 +227,7 @@ public class ExtensionMaker {
             statement = statement.concat(") " + "VALUES ");
             String[][] mat = new String[row][tableDefs.get(t).getColumnDefList().size()];
 
-            mat = args.get(t);
+            mat = Extensionlist.get(t);
             for(int i = 0; i < row; i++) {
                 statement = statement.concat("(");
                 for(int j = 0; j < column; j++) {
@@ -253,10 +243,10 @@ public class ExtensionMaker {
             }
             statement = statement.concat(";");
 
-            out.add(statement);
+            insert.add(statement);
         }
 
-        return out;
+        return insert;
     }
 
     public Long getSeed() {

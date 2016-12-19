@@ -11,10 +11,7 @@ import play.Logger;
 
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -71,7 +68,7 @@ public class SQLParserFactory {
 
         LocalDateTime startTime = LocalDateTime.now();
 
-        CompletableFuture<ArrayList<String[][]>> extensionMakerExtension =
+        CompletableFuture<ArrayList<String>> extensionMakerExtension =
                 CompletableFuture.supplyAsync(extensionMaker::buildStatements);
         CompletableFuture<List<String>> tableMakerStatements =
                 CompletableFuture.supplyAsync(tableMaker::buildStatement);
@@ -79,7 +76,7 @@ public class SQLParserFactory {
 
         try {
             List<String> createTableStatements = tableMakerStatements.get();
-            ArrayList<String[][]> extension = extensionMakerExtension.get();
+            ArrayList<String> extension = extensionMakerExtension.get();
 
             LocalDateTime endTime = LocalDateTime.now();
             Duration differenceTime = Duration.between(startTime, endTime);
@@ -89,15 +86,19 @@ public class SQLParserFactory {
                 for(String createTableStatement : createTableStatements) {
                     Statement statement = connection.createStatement();
                     if(!statement.execute(createTableStatement)) {
-                        Logger.error(createTableStatement + " was not successfully");
+                        // ToDO
+                        Logger.error("Was Ausdenken");
                     }
+
+                    statement.close();
                 }
 
-                for(String[][] extension1 : extension) {
-                    for(String[] extenstion2 : extension1) {
-                        for(String bla : extenstion2) {
-                            System.out.println(bla);
-                        }
+                for(String extension1 : extension) {
+                    Statement statement = connection.createStatement();
+                    if(statement.execute(extension1)) {
+                        Logger.info("ResultSet ftw");
+                        ResultSet rs = statement.getResultSet();
+                        rs.close();
                     }
                 }
             } catch (SQLException e) {

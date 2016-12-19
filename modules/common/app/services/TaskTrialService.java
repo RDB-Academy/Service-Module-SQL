@@ -1,5 +1,6 @@
 package services;
 
+import models.SchemaDef;
 import models.Task;
 import models.TaskTrial;
 import parser.SQLParser;

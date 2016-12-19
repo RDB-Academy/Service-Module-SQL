@@ -25,7 +25,6 @@ class DevelopmentInitializer {
     private void init() {
         List<SchemaBuilder> schemaBuilders = Arrays.asList(
                 new HeroSchemaBuilder(),
-                new UsersSchemaBuilder(),
                 new StudentSchemaBuilder(),
                 new LibrarySchemaBuilder(),
                 new FootballSchemaBuilder()

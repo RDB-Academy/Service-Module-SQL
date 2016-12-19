@@ -68,7 +68,7 @@ public class TableMaker {
         String create = " "
                 + columnDef.getName() + " "
                 + columnDef.getDataType()
-                + ((columnDef.isNotNull()) ? "" : " NOT NULL");
+                + ((columnDef.isNotNull()) ? " NOT NULL" : " ");
 
         return create;
     }
