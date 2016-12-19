@@ -173,10 +173,10 @@ public class ExtensionMaker {
                                 }else{
                                     out[i][j]= out[i][j].concat("0"+ (gc.get(gc.MONTH) + 1));
                                 }
-                                if(gc.get(gc.DAY_OF_MONTH) >8){
-                                    out[i][j]= out[i][j].concat("-"+ (gc.get(gc.DAY_OF_MONTH) + 1));
+                                if(gc.get(gc.DAY_OF_MONTH) >9){
+                                    out[i][j]= out[i][j].concat("-"+ (gc.get(gc.DAY_OF_MONTH)));
                                 }else{
-                                    out[i][j]= out[i][j].concat("-0"+ (gc.get(gc.DAY_OF_MONTH) + 1));
+                                    out[i][j]= out[i][j].concat("-0"+ (gc.get(gc.DAY_OF_MONTH)));
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_PLANT:
