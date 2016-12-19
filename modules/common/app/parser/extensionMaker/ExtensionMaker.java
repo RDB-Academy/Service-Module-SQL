@@ -214,12 +214,13 @@ public class ExtensionMaker {
         return Extensionlist;
     }
 
-    public String parseToStatemant(ArrayList<String[][]> args){
+    public ArrayList<String> parseToStatemant(ArrayList<String[][]> args){
         int row = 100;
 
-        String out = "";
+
         List<TableDef> tableDefs = schemaDef.getTableDefList();
         int tables = schemaDef.getTableDefList().size();
+        ArrayList<String> out = new ArrayList<>();
         for(int t = 0; t< tables; t++){
             int column = tableDefs.get(t).getColumnDefList().size();
             String statement;
@@ -252,7 +253,7 @@ public class ExtensionMaker {
             }
             statement = statement.concat(";");
 
-            out = out. concat(statement);
+            out.add(statement);
         }
 
         return out;

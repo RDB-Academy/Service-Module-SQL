@@ -50,7 +50,7 @@ public class TestController extends Controller {
         ExtensionMaker extensionMaker = new ExtensionMaker(seed, schemaDef);
 
         ArrayList<String[][]> v = extensionMaker.buildStatements();
-        String out = extensionMaker.parseToStatemant(v);
+        ArrayList<String> out = extensionMaker.parseToStatemant(v);
 
         return ok(Json.toJson(out));
     }
