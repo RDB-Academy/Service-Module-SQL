@@ -69,7 +69,7 @@ public class ExtensionMaker {
                 comcount = 0;
                 for(int j = 0; j < column; j++) {
                     if (!tableDefs.get(t).getColumnDefList().get(j).isNotNull() && rand.nextInt(50) == 1){
-                        out[i][j] = "";
+                        out[i][j] = "NULL";
                     }else{
                         switch (tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet()) {
                             case ColumnDef.META_VALUE_SET_MAIL:
@@ -236,7 +236,11 @@ public class ExtensionMaker {
             for(int i = 0; i < row; i++) {
                 statement = statement.concat("(");
                 for(int j = 0; j < column; j++) {
-                    statement = statement.concat("'" + mat[i][j] + "'");
+                    if(mat[i][j].equals("NULL")){
+                        statement = statement.concat("" + mat[i][j]);
+                    }else{
+                        statement = statement.concat("'" + mat[i][j] + "'");
+                    }
                     if(j +1 != column ){
                         statement = statement.concat(",");
                     }
