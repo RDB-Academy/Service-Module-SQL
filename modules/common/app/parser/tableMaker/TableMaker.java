@@ -34,8 +34,6 @@ public class TableMaker {
             }
         }
 
-        createStatement.forEach(System.out::println);
-
         return createStatement;
     }
 

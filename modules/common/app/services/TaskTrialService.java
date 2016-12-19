@@ -6,7 +6,6 @@ import parser.SQLParser;
 import parser.SQLParserFactory;
 import parser.SQLResult;
 import play.Logger;
-import play.libs.Json;
 import play.mvc.Http;
 import repository.TaskRepository;
 import repository.TaskTrialRepository;
@@ -15,8 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * @author fabiomazzone
@@ -71,7 +68,10 @@ public class TaskTrialService {
         // Log request body
         Logger.info(Http.Context.current().request().body().asJson().toString());
 
-        taskTrial = this.taskTrialRepository.update(taskTrial, Http.Context.current().request().body().asJson());
+        taskTrial = this.taskTrialRepository.update(
+                taskTrial,
+                Http.Context.current().request().body().asJson()
+        );
 
 
         if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
@@ -82,20 +82,11 @@ public class TaskTrialService {
 
         Logger.info("UserStatement is " + taskTrial.getUserStatement());
 
-        Future<SQLResult> sqlResultFuture = sqlParser.submit(taskTrial.getUserStatement());
-        SQLResult sqlResult;
+        SQLResult sqlResult = sqlParser.submit(taskTrial.getUserStatement());
 
         taskTrial.addTry();
 
-        try {
-            if(sqlResultFuture != null) {
-                sqlResult = sqlResultFuture.get();
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            return null;
-        }
-        // this.setTaskTrialWithSQLResult(taskTrial, sqlResult);
+        taskTrial.setResultSet(sqlResult.getResultSet());
 
         return taskTrial;
     }

@@ -2,8 +2,10 @@ package repository;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 import models.TaskTrial;
+import play.libs.Json;
 
 import java.util.List;
 
@@ -27,13 +29,17 @@ public class TaskTrialRepository {
     }
 
     /**
-     * Did Not Save !!!1111!!1
+     * Did Not Save !!!11elf11!!1
      * @param taskTrial
      * @param jsonNode
      * @return
      */
     public TaskTrial update(TaskTrial taskTrial, JsonNode jsonNode) {
-        taskTrial.setUserStatement("SELECT H2VERSION();");
+        ObjectNode taskTrialNode = (ObjectNode) jsonNode;
+        taskTrialNode.remove("resultSet");
+
+        TaskTrial taskTrial1 = Json.fromJson(taskTrialNode, TaskTrial.class);
+        taskTrial.setUserStatement(taskTrial1.getUserStatement());
         return taskTrial;
     }
 }

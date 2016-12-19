@@ -5,7 +5,10 @@ import play.Logger;
 
 import javax.inject.Singleton;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 /**
  * @author fabiomazzone
@@ -23,33 +26,52 @@ public class SQLParser {
         this.connection = connection;
     }
 
-    public Future<SQLResult> submit(String userStatement) {
-        Logger.info("Statement is: " + userStatement);
-
+    public SQLResult submit(String userStatement) {
         Statement statement = null;
+        SQLResult sqlResult = null;
         try {
-            statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            statement = connection.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            );
             ResultSet rs = statement.executeQuery(userStatement);
             ResultSetMetaData metaData = rs.getMetaData();
-            Logger.info("Column Count " + metaData.getColumnCount());
+            int columnCount = metaData.getColumnCount();
+            List<List<String>> resultSet = new ArrayList<>();
 
-            for(int i = 1; i <= metaData.getColumnCount(); i++) {
-                Logger.info("ColumnName " + metaData.getColumnName(i));
-                Logger.info("ColumnType " + metaData.getColumnTypeName(i));
+
+            // Build Header
+            List<String> headerList = new ArrayList<>();
+            for(int i = 1; i <= columnCount; i++) {
+                headerList.add(metaData.getColumnName(i));
             }
+            resultSet.add(headerList);
+
             while(rs.next()) {
-                Logger.info("Row: " + rs.getRow());
-                Logger.info("Data " + rs.getString(1));
+                List<String> rowList = new ArrayList<>();
+                for(int i = 1; i <= columnCount; i++) {
+                    rowList.add(rs.getString(i));
+                }
+                resultSet.add(rowList);
             }
+
             rs.close();
             statement.close();
+
+            for(List<String> row : resultSet) {
+                for(String column : row) {
+                    System.out.print(column + " | ");
+                }
+                System.out.println();
+            }
+
+            sqlResult = new SQLResult(resultSet, false);
+            return sqlResult;
         } catch (SQLException e) {
-            e.printStackTrace();
-            Logger.info("SQL Statement nicht valide oder so");
+            Logger.error("SQL Statement nicht valide oder so");
+            Logger.error(e.getMessage());
             return null;
         }
-
-        return null;
     }
 
     public void closeConnection() {

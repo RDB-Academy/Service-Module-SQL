@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -78,7 +79,17 @@ public class SQLParserFactory {
             Duration differenceTime = Duration.between(startTime, endTime);
             System.out.println("Time Needed: " + differenceTime.toMillis() + " Millis");
 
-            // Run Statements
+            try {
+                for(String createTableStatement : createTableStatements) {
+                    Statement statement = connection.createStatement();
+                    if(!statement.execute(createTableStatement)) {
+                        Logger.error(createTableStatement + " was successfully");
+                    }
+                }
+            } catch (SQLException e) {
+                Logger.error(e.getMessage());
+            }
+
 
             connection.close();
         } catch (InterruptedException | ExecutionException e) {
@@ -97,7 +108,7 @@ public class SQLParserFactory {
             return null;
         }
 
-        Logger.info("Found DB url: " + taskTrial.getDatabaseUrl());
+        Logger.debug("Found DB url: " + taskTrial.getDatabaseUrl());
 
         Connection connection = this.getConnection(taskTrial.getDatabaseUrl(), true);
 

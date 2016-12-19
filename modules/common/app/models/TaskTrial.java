@@ -4,13 +4,13 @@ import com.avaje.ebean.annotation.WhenCreated;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
+import parser.SQLResult;
 import play.libs.Json;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * @author invisible
@@ -46,10 +46,13 @@ public class TaskTrial extends BaseModel {
     @Transient
     private SQLError error;
 
+    @Transient
+    private SQLResult.SQLResultSet resultSet;
+
     private class SQLError {
         private final String message;
 
-        public SQLError(String message) {
+        SQLError(String message) {
             this.message = message;
         }
     }
@@ -152,5 +155,13 @@ public class TaskTrial extends BaseModel {
 
     public JsonNode errorsAsJson() {
         return Json.toJson(this.error);
+    }
+
+    public void setResultSet(SQLResult.SQLResultSet resultSet) {
+        this.resultSet = resultSet;
+    }
+
+    public SQLResult.SQLResultSet getResultSet() {
+        return resultSet;
     }
 }
