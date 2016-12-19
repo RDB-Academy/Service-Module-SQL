@@ -32,8 +32,8 @@ public class FootballSchemaBuilder extends SchemaBuilder {
         ColumnDef           player_player_lastname      = this.createNewColumnDef("player_lastname", "VARCHAR(255)");
         ColumnDef           player_player_position      = this.createNewColumnDef("player_position", "VARCHAR(255)");
         ColumnDef           player_player_number        = this.createNewColumnDef("player_number", "VARCHAR(255)");
-        ColumnDef           player_player_height        = this.createNewColumnDef("player_height", "VARCHAR(255");
-        ColumnDef           player_player_weight        = this.createNewColumnDef("player_weight", "VARCHAR(255");
+        ColumnDef           player_player_height        = this.createNewColumnDef("player_height", "VARCHAR(255)");
+        ColumnDef           player_player_weight        = this.createNewColumnDef("player_weight", "VARCHAR(255)");
 
         ColumnDef           team_team_id                = this.createNewColumnDef("team_id", "INT");
         ColumnDef           team_team_name              = this.createNewColumnDef("team_name", "VARCHAR(255)");
@@ -48,7 +48,7 @@ public class FootballSchemaBuilder extends SchemaBuilder {
 
         ColumnDef           superbowl_superbowl_id      = this.createNewColumnDef("superbowl_id", "INT");
         ColumnDef           superbowl_superbowl_name    = this.createNewColumnDef("superbowl_name", "INT");
-        ColumnDef           superbowl_superbowl_date    = this.createNewColumnDef("superbowl_date", "VARCHAR(255)");
+        ColumnDef           superbowl_superbowl_date    = this.createNewColumnDef("superbowl_date", "DATE");
 
         ColumnDef           playerTeam_player_id        = this.createNewColumnDef("player_id", "INT");
         ColumnDef           playerTeam_team_id          = this.createNewColumnDef("team_id", "INT");
@@ -57,8 +57,8 @@ public class FootballSchemaBuilder extends SchemaBuilder {
 
         ColumnDef           teamStadium_team_id         = this.createNewColumnDef("team_id", "INT");
         ColumnDef           teamStadium_stadium_id      = this.createNewColumnDef("stadium_id", "INT");
-        ColumnDef           teamStadium_owned_since     = this.createNewColumnDef("owned_since", "INT");
-        ColumnDef           teamStadium_owned_until     = this.createNewColumnDef("owned_until", "INT");
+        ColumnDef           teamStadium_owned_since     = this.createNewColumnDef("owned_since", "DATE");
+        ColumnDef           teamStadium_owned_until     = this.createNewColumnDef("owned_until", "DATE");
 
         ColumnDef           teamSuperbowl_superbowl_id  = this.createNewColumnDef("superbowl_id", "INT");
         ColumnDef           teamSuperbowl_winner_id     = this.createNewColumnDef("team1_id", "INT");

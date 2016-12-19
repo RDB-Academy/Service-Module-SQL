@@ -29,8 +29,8 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         ColumnDef           book_book_name               = this.createNewColumnDef("book_name", "VARCHAR(255)");
         ColumnDef           customerBook_customer_id     = this.createNewColumnDef("customer_id", "INT");
         ColumnDef           customerBook_book_id         = this.createNewColumnDef("book_id", "INT");
-        ColumnDef           customerBook_lend_date       = this.createNewColumnDef("lend_date", "INT");
-        ColumnDef           customerBook_return_date     = this.createNewColumnDef("return_date", "INT");
+        ColumnDef           customerBook_lend_date       = this.createNewColumnDef("lend_date", "DATE");
+        ColumnDef           customerBook_return_date     = this.createNewColumnDef("return_date", "DATE");
 
         ForeignKey          customerBook_customer        = this.createForeignKey("FK_CustomerBook_Customer");
         ForeignKey          customerBook_book            = this.createForeignKey("FK_CustomerBook_Book");

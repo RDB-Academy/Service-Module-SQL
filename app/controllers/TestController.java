@@ -63,9 +63,6 @@ public class TestController extends Controller {
     }
 
     public Result parserCreate() {
-        SchemaDef schemaDef = schemaDefRepository.getByName("HeroTeamSchema");
-        schemaDef.save();
-
         TaskTrial taskTrial = this.taskTrialService.getNewTaskTrial(null);
 
         taskTrial = this.sqlParserFactory.createParser(taskTrial);

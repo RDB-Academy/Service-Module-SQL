@@ -35,6 +35,7 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         ForeignKeyRelation  heroTeam_team_rel   = this.createForeignKeyRelation(heroTeam_team_id, team_team_id);
 
         hero_hero_id.setPrimary(true);
+
         hero_hero_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         hero_hero_name.setNotNull(true);
         hero_hero_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
@@ -49,7 +50,6 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         heroTeam_team_id.setPrimary(true);
         heroTeam_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         heroTeam_join_year.setNotNull(false);
-        //heroTeam_join_year.setMetaValueSet(ColumnDef.META_VALUE_SET_YEAR);
         heroTeam_join_year.setMinValueSet(1900);
         heroTeam_join_year.setMaxValueSet(2017);
 
