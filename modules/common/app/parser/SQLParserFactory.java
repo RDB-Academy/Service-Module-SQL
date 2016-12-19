@@ -51,7 +51,7 @@ public class SQLParserFactory {
 
         taskTrial.setDatabaseUrl(databaseUrl);
 
-        System.out.println(databaseUrl);
+        Logger.debug(databaseUrl);
 
         Connection connection = getConnection(databaseUrl);
         if(connection == null) {
@@ -77,7 +77,7 @@ public class SQLParserFactory {
 
             LocalDateTime endTime = LocalDateTime.now();
             Duration differenceTime = Duration.between(startTime, endTime);
-            System.out.println("Time Needed: " + differenceTime.toMillis() + " Millis");
+            Logger.debug("Time Needed: " + differenceTime.toMillis() + " Millis");
 
             try {
                 for(String createTableStatement : createTableStatements) {
@@ -86,6 +86,8 @@ public class SQLParserFactory {
                         Logger.error(createTableStatement + " was successfully");
                     }
                 }
+
+                
             } catch (SQLException e) {
                 Logger.error(e.getMessage());
             }
