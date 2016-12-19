@@ -15,8 +15,8 @@ public class ForeignKeyRelationService {
 
     @Inject
     public ForeignKeyRelationService(
-            ForeignKeyRelationRepository foreignKeyRelationRepository
-    ) {
+            ForeignKeyRelationRepository foreignKeyRelationRepository) {
+
         this.foreignKeyRelationRepository = foreignKeyRelationRepository;
     }
 

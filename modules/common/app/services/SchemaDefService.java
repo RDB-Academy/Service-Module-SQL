@@ -15,11 +15,13 @@ import java.util.List;
  */
 @Singleton
 public class SchemaDefService extends Service {
-    private SchemaDefRepository schemaDefRepository;
-    private FormFactory formFactory;
+    private final SchemaDefRepository schemaDefRepository;
+    private final FormFactory formFactory;
 
     @Inject
-    public SchemaDefService(SchemaDefRepository schemaDefRepository, FormFactory formFactory) {
+    public SchemaDefService(
+            SchemaDefRepository schemaDefRepository,
+            FormFactory formFactory) {
         this.schemaDefRepository = schemaDefRepository;
         this.formFactory = formFactory;
     }

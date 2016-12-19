@@ -1,6 +1,5 @@
 package services;
 
-import com.google.common.collect.ImmutableMap;
 import models.TableDef;
 import play.data.Form;
 import play.data.FormFactory;
@@ -8,15 +7,14 @@ import repository.TableDefRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Map;
 
 /**
  * @author fabiomazzone
  */
 @Singleton
 public class TableDefService extends Service {
-    private TableDefRepository tableDefRepository;
-    private FormFactory formFactory;
+    private final TableDefRepository tableDefRepository;
+    private final FormFactory formFactory;
 
     @Inject
     public TableDefService(
