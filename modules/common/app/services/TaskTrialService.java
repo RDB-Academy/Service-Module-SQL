@@ -42,6 +42,10 @@ public class TaskTrialService {
         this.random = new Random();
     }
 
+    /**
+     * Create a new TaskTrial Object
+     * @return returns the new TaskTrial Object
+     */
     public TaskTrial createTaskTrial() {
         Session session = this.sessionService.getSession(Http.Context.current());
         TaskTrial taskTrial;
@@ -50,21 +54,27 @@ public class TaskTrialService {
         }
         taskTrial = session.getTaskTrial();
 
-        if(taskTrial == null || taskTrial.isFinished()) {
-            taskTrial = new TaskTrial();
-            Task task = this.taskRepository.getRandomTask();
-
-            taskTrial.setTask(task);
-            taskTrial.setBeginDate(LocalDateTime.now());
-            taskTrial.setDatabaseExtensionSeed(Math.abs(this.random.nextLong()));
-
-            taskTrial = this.sqlParserFactory.createParser(taskTrial);
-
-            session.setTaskTrial(taskTrial);
-            this.taskTrialRepository.save(taskTrial);
-
-            session.save();
+        if(taskTrial != null) {
+            if(!taskTrial.isFinished()) {
+                return taskTrial;
+            } else {
+                this.sqlParserFactory.deleteDatabase(taskTrial);
+            }
         }
+
+        taskTrial = new TaskTrial();
+        Task task = this.taskRepository.getRandomTask();
+
+        taskTrial.setTask(task);
+        taskTrial.setBeginDate(LocalDateTime.now());
+        taskTrial.setDatabaseExtensionSeed(Math.abs(this.random.nextLong()));
+
+        taskTrial = this.sqlParserFactory.createParser(taskTrial);
+
+        session.setTaskTrial(taskTrial);
+        this.taskTrialRepository.save(taskTrial);
+
+        session.save();
 
         return taskTrial;
     }
