@@ -173,7 +173,7 @@ public class ExtensionMaker {
                                 out[i][j] = "" + colour[rand.nextInt(colour.length)];
                                 break;
                             case 11:
-                                out[i][j] = rand.nextInt(30) +"."+ rand.nextInt(13) +"."+ (1930 + rand.nextInt(87));
+                                out[i][j] = (1930 + rand.nextInt(87)+"-"+ rand.nextInt(13) +"-"+ rand.nextInt(30));
                                 break;
                             case 12:
                                 out[i][j] = "" + plant[rand.nextInt(plant.length)];
@@ -210,8 +210,6 @@ public class ExtensionMaker {
             Extensionlist.add(out);
 
         }
-
-        //return Extensionlist;
         ArrayList<String> insert = new ArrayList<>();
         for(int t = 0; t< tables; t++){
             int column = tableDefs.get(t).getColumnDefList().size();

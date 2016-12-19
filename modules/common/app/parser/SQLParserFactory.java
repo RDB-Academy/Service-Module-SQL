@@ -93,11 +93,8 @@ public class SQLParserFactory {
                     }
                 }
 
-                for(String[][] extension1 : extension) {
-                    for(String[] extenstion2 : extension1) {
-                        for(String bla : extenstion2) {
-                            System.out.println(bla);
-                        }
+                for(String extension1 : extension) { {
+                            System.out.println(extension1);
                     }
                 }
             } catch (SQLException e) {
