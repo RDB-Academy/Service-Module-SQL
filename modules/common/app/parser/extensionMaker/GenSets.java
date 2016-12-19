@@ -4,18 +4,22 @@ import models.ColumnDef;
 import models.SchemaDef;
 import models.TableDef;
 
-import java.util.List;
 import java.util.Random;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-
 /**
- * @author carl
+ * Created by carl on 19.12.16.
  */
-public class ExtensionMaker {
+public class GenSets {
+
     private final Long      seed;
     private final SchemaDef schemaDef;
     private final Random    rand;
+
+    public GenSets(Long seed, SchemaDef schemaDef) {
+        this.seed = seed;
+        this.schemaDef = schemaDef;
+        this.rand = new Random(this.seed);
+    }
+
 
     String[] mail = {"tu-bs.de","aol.com","att.net","comcast.net","facebook.com","gmail.com","gmx.com","googlemail.com","google.com","hotmail.com","hotmail.co.uk","mac.com","me.com","mail.com","msn.com","live.com","sbcglobal.net","verizon.net","yahoo.com","yahoo.co.uk"};
     String[] metal = {"Calcium","Strontium","Barium","Radium","Aluminum","Gallium","Indium","Tin","Thallium","Lead","Bismuth","Scandium","Titanium","Vanadium","Chromium","Manganese","Iron","Cobalt","Nickel","Copper","Zinc","Yttrium","Zirconium","Niobium","Molybdenum","Technetium","Ruthenium","Rhodium","Palladium","Silver","Cadmium","Lanthanum","Hafnium","Tantalum","Tungsten","Rhenium","Osmium","Iridium","Platinum","Gold"};
@@ -31,253 +35,11 @@ public class ExtensionMaker {
     String[] position = {"C","G","T","QB","RB","WR","TE","DT","DE","MLB","OLB","CB","S","K","H","LS","P","KOS","KR","PR"};
     String[] plant = {"Aloe Vera","Alfalfa","American Coffee Berry Tree","Bloodroot","Bouncing Bet","Bull Nettle","Bracken or Brake Fern","Burning Bush","Buttercup","Carelessweed ","Castor Bean","Chrysanthemums","Clover","Cocklebur","Creeping Charlie","Crown of Thorns","Curly Dock","Daffodil","Daphne","Delphinium","Devil's Trumpet","Dogbane","Dutchman's Breeches","Elderberry","Ergot","Fern","Fireweed","Foxglove","Poison Hemlock","Water Hemlock","Hemp","Horse Chestnut, Buckeyes","Horse Nettle","Horsetails","Hyacinth","Hydrangea","English Ivy","Ground Ivy","Poison Ivy","Jack-in-the-Pulpit","Japanese Yew","Jerusalem Cherry","Jimson Weed","Kalanchoe","Kentucky Coffee Tree","Kentucky Mahagony Tree","Klamath Weed","Lamb's Quarters","Lantana","Larkspur","Daylily","True Lily","Lily-of-the-Valley","Lupine","Mad Apple","Maple, Red","Mayapple","Milkweed","Mint","Mountain Laurel","Nicker Tree","Nightshade","Oleander","Ohio Buckeye","Philodendron","Pigweed","Poinsettia","Poke","Purple Mint","Redroot","Rhododendron","Rhubarb","Rosary Pea","Squirrelcorn","Staggerweed","St. Johnswort","Stinging Nettle","Stink Weed","Stump Tree","Sudan Grass","Summer Cypress","Thorn Apple","Tulip","White Snakeroot","Wild Onion","Yellow Sage"};
 
-    public ExtensionMaker(Long seed, SchemaDef schemaDef) {
-        this.seed = seed;
-        this.schemaDef = schemaDef;
-        this.rand = new Random(this.seed);
+    public static final int maill = 44;
+
+    public String getRandom(){
+        return "kahn";
     }
 
-    public ArrayList<String> buildStatements() {
 
-        ArrayList<String[][]> Extensionlist = new ArrayList<>();
-
-        List<TableDef> tableDefs = schemaDef.getTableDefList();
-
-        int tables = schemaDef.getTableDefList().size();
-        int row = 100;
-
-        //goes through every table given
-        for(int t = 0; t< tables; t++){
-            TableDef tableDef = tableDefs.get(t);
-            String[][] out = new String[row][tableDef.getColumnDefList().size()];
-
-            int column = tableDef.getColumnDefList().size();
-
-            //variables used for combined keys
-            int comp = 0;
-            for(int j = 0; j < column; j++) {
-                ColumnDef columnDef = tableDef.getColumnDefList().get(j);
-                if(columnDef.isPrimary() && columnDef.getMetaValueSet() == ColumnDef.META_VALUE_SET_FOREIGN_KEY) {
-                    comp++;
-                }
-            }
-            int [] commember = new int [comp];
-            boolean[][] com2 = new boolean[row][row];
-            boolean[][][] com3 = new boolean[row][row][row];
-
-            GregorianCalendar gc = new GregorianCalendar();
-
-            //goes 	through row given
-            for(int i = 0; i < row; i++) {
-                int comcount = 0;
-
-                //goes through column and fills it whit an random attribute according to is datatyp
-                for(int j = 0; j < column; j++) {
-                    ColumnDef columnDef = tableDef.getColumnDefList().get(j);
-                    if (!columnDef.isNotNull() && rand.nextInt(50) == 1){
-                        out[i][j] = "NULL";
-                    }else{
-                        switch (columnDef.getMetaValueSet()) {
-                            case ColumnDef.META_VALUE_SET_MAIL:
-                                for ( int b = 0; b <= j; b ++){
-                                    int set = tableDef.getColumnDefList().get(b).getMetaValueSet();
-                                    if((set == ColumnDef.META_VALUE_SET_NAME ) || (set == ColumnDef.META_VALUE_SET_LASTNAME)){
-                                        if(out[i][j] == null ){
-                                            out[i][j] = out[i][b];
-                                        }else{
-                                            out[i][j] = out[i][j] + "." + out[i][b];
-                                        }
-                                    }
-                                }
-                                out[i][j] = out[i][j] + rand.nextInt(100) +"@"+ mail[rand.nextInt(mail.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_FIRSTNAME:
-                                out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_FOREIGN_KEY:
-                                int number = rand.nextInt(row);
-                                out[i][j] = "" + number;
-                                if(columnDef.isPrimary()) {
-                                    commember[comcount] = number;
-                                    comcount++;
-                                    if (comcount == comp) {
-                                        if (comp == 2) {
-                                            if (!com2[commember[0]][commember[1]]) {
-                                                com2[commember[0]][commember[1]] = true;
-                                            } else {
-                                                comcount--;
-                                                out[i][j] = null;
-                                                j--;
-                                            }
-                                        }
-                                        if (comp == 3) {
-                                            if (!com3[commember[0]][commember[1]][commember[2]]) {
-                                                com3[commember[0]][commember[1]][commember[2]] = true;
-                                            } else {
-                                                comcount--;
-                                                out[i][j] = null;
-                                                j--;
-                                            }
-                                        }
-
-                                    }
-                                }
-                                break;
-                            case ColumnDef.META_VALUE_SET_ID:
-                                out[i][j] = "" + i;
-                                break;
-                            case ColumnDef.META_VALUE_SET_ANIMAL:
-                                out[i][j] = "" + animal[rand.nextInt(animal.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_CITY:
-                                out[i][j] = "" + city[rand.nextInt(city.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_POSITION:
-                                out[i][j] = "" + position[rand.nextInt(position.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_TITLE:
-                                out[i][j] = "" + title[rand.nextInt(title.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_FULLNAME:
-                                out[i][j] = "" + firstname[rand.nextInt(firstname.length)] +
-                                           " " + lastname[rand.nextInt(lastname.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_METAL:
-                                out[i][j] = "" + metal[rand.nextInt(metal.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_DAY:
-                                out[i][j] = "" + (1 +rand.nextInt(30));
-                                break;
-                            case ColumnDef.META_VALUE_SET_NAME:
-                                out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_MONTH:
-                                out[i][j] = "" + (1 +rand.nextInt(12));
-                                break;
-                            case ColumnDef.META_VALUE_SET_YEAR:
-                                out[i][j] = "" + (1930 + rand.nextInt(88));
-                                break;
-                            case ColumnDef.META_VALUE_SET_LOREM_IPSUM:
-                                out[i][j] = word[rand.nextInt(word.length)] + " " + word[rand.nextInt(word.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_LASTNAME:
-                                out[i][j] = "" + lastname[rand.nextInt(lastname.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_COLOR:
-                                out[i][j] = "" + colour[rand.nextInt(colour.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_DATE:
-                                int year = (1930 + rand.nextInt(87));
-
-                                gc.set(gc.YEAR, year);
-
-                                int dayOfYear = (1 + rand.nextInt(gc.getActualMaximum(gc.DAY_OF_YEAR)));
-
-                                gc.set(gc.DAY_OF_YEAR, dayOfYear);
-
-                                out[i][j] = (gc.get(gc.YEAR) + "-" );
-                                if(gc.get(gc.MONTH) >8){
-                                    out[i][j]= out[i][j].concat(""+ (gc.get(gc.MONTH) + 1));
-                                }else{
-                                    out[i][j]= out[i][j].concat("0"+ (gc.get(gc.MONTH) + 1));
-                                }
-                                if(gc.get(gc.DAY_OF_MONTH) >9){
-                                    out[i][j]= out[i][j].concat("-"+ (gc.get(gc.DAY_OF_MONTH)));
-                                }else{
-                                    out[i][j]= out[i][j].concat("-0"+ (gc.get(gc.DAY_OF_MONTH)));
-                                }
-                                break;
-                            case ColumnDef.META_VALUE_SET_PLANT:
-                                out[i][j] = "" + plant[rand.nextInt(plant.length)];
-                                break;
-                            case ColumnDef.META_VALUE_SET_GRADE:
-                                out[i][j] = "" + ((10 + rand.nextInt(41))/10);
-                                break;
-                            case ColumnDef.META_VALUE_SET_LOCATION:
-                                out[i][j] = "" + country[rand.nextInt(country.length)];
-                                break;
-                            default:
-                                switch (columnDef.getDataType()) {
-                                    case "INT":case "int":
-                                        int min = columnDef.getMinValueSet();
-                                        int max = columnDef.getMaxValueSet();
-                                        if( max != 0){
-                                            out[i][j] = "" + ( min + rand.nextInt(max - min));
-                                        }else{
-                                            out[i][j] = "" + rand.nextInt(1111);
-                                        }
-                                        break;
-                                    case "VARCHAR(255)":case "VARCHAR":
-                                        int num = 2 + rand.nextInt(4);
-                                        out[i][j] = "";
-                                        while ( num > 0 ){
-                                            out[i][j] += sound[rand.nextInt(sound.length)];
-                                            num--;
-                                        }
-                                        break;
-                                    default:
-                                        out[i][j] = "" + columnDef.getName() + columnDef.getDataType();
-                                        break;
-                                }
-                                break;
-                        }
-                    }
-                }
-            }
-            Extensionlist.add(out);
-
-        }
-
-        //transforms the extension in an insert statement
-        ArrayList<String> insert = new ArrayList<>();
-        for(int t = 0; t< tables; t++){
-            TableDef tableDef = tableDefs.get(t);
-            int column = tableDef.getColumnDefList().size();
-            String statement;
-
-            statement = "INSERT INTO " + tableDef.getName() + " (";
-
-
-            for(int j = 0; j < column; j++) {
-                statement = statement.concat("" + tableDef.getColumnDefList().get(j).getName());
-                if(j +1 != column ){
-                    statement = statement.concat(",");
-                }
-            }
-            statement = statement.concat(") " + "VALUES ");
-            String[][] mat;
-
-            mat = Extensionlist.get(t);
-            for(int i = 0; i < row; i++) {
-                statement = statement.concat("(");
-                for(int j = 0; j < column; j++) {
-                    if(mat[i][j].equals("NULL")){
-                        statement = statement.concat("" + mat[i][j]);
-                    }else{
-                        statement = statement.concat("'" + mat[i][j] + "'");
-                    }
-                    if(j +1 != column ){
-                        statement = statement.concat(",");
-                    }
-                }
-                statement = statement.concat(")");
-                if(i +1 != row ){
-                    statement = statement.concat(",");
-                }
-            }
-            statement = statement.concat(";");
-
-            insert.add(statement);
-        }
-
-        return insert;
-    }
-
-    public Long getSeed() {
-        return seed;
-    }
-
-    public SchemaDef getSchemaDef() {
-        return schemaDef;
-    }
 }
