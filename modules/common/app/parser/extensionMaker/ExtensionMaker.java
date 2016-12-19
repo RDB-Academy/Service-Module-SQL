@@ -1,11 +1,13 @@
 package parser.extensionMaker;
 
+import models.ColumnDef;
 import models.SchemaDef;
 import models.TableDef;
 
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 /**
  * @author carl
@@ -61,6 +63,7 @@ public class ExtensionMaker {
             boolean[][] com2 = new boolean[row][row];
             boolean[][][] com3 = new boolean[row][row][row];
 
+            GregorianCalendar gc = new GregorianCalendar();
 
             for(int i = 0; i < row; i++) {
                 comcount = 0;
@@ -69,7 +72,7 @@ public class ExtensionMaker {
                         out[i][j] = "";
                     }else{
                         switch (tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet()) {
-                            case 1:
+                            case ColumnDef.META_VALUE_SET_MAIL:
                                 for ( int b = 0; b <= j; b ++){
                                     if( (tableDefs.get(t).getColumnDefList().get(b).getMetaValueSet() == 8 ) || (tableDefs.get(t).getColumnDefList().get(b).getMetaValueSet() == 744)){
                                         if(out[i][j] == null ){
@@ -79,10 +82,10 @@ public class ExtensionMaker {
                                 }
                                 out[i][j] = out[i][j] + rand.nextInt(100) +"@"+ mail[rand.nextInt(mail.length)];
                                 break;
-                            case 8:
+                            case ColumnDef.META_VALUE_SET_FIRSTNAME:
                                 out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
                                 break;
-                            case 358:
+                            case ColumnDef.META_VALUE_SET_FOREIGN_KEY:
                                 number = rand.nextInt(row);
                                 out[i][j] = "" + number;
                                 if(tableDefs.get(t).getColumnDefList().get(j).isPrimary()) {
@@ -111,55 +114,78 @@ public class ExtensionMaker {
                                     }
                                 }
                                 break;
-                            case 485:
+                            case ColumnDef.META_VALUE_SET_ID:
                                 out[i][j] = "" + i;
                                 break;
-                            case 2:
+                            case ColumnDef.META_VALUE_SET_ANIMAL:
                                 out[i][j] = "" + animal[rand.nextInt(animal.length)];
                                 break;
-                            case 3:
+                            case ColumnDef.META_VALUE_SET_CITY:
                                 out[i][j] = "" + city[rand.nextInt(city.length)];
                                 break;
-                            case 33:
+                            case ColumnDef.META_VALUE_SET_POSITION:
                                 out[i][j] = "" + position[rand.nextInt(position.length)];
                                 break;
-                            case 4:
+                            case ColumnDef.META_VALUE_SET_TITLE:
                                 out[i][j] = "" + title[rand.nextInt(title.length)];
                                 break;
-                            case 5:
+                            case ColumnDef.META_VALUE_SET_FULLNAME:
                                 out[i][j] = "" + firstname[rand.nextInt(firstname.length)] + " " + lastname[rand.nextInt(lastname.length)];
                                 break;
-                            case 6:
+                            case ColumnDef.META_VALUE_SET_METAL:
                                 out[i][j] = "" + metal[rand.nextInt(metal.length)];
                                 break;
-                            case 7:
-                                out[i][j] = "" + rand.nextInt(30);
+                            case ColumnDef.META_VALUE_SET_DAY:
+                                out[i][j] = "" + (1 +rand.nextInt(30));
                                 break;
-                            case 768:
+                            case ColumnDef.META_VALUE_SET_NAME:
                                 out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
                                 break;
-                            case 9:
-                                out[i][j] = "" + rand.nextInt(13);
+                            case ColumnDef.META_VALUE_SET_MONTH:
+                                out[i][j] = "" + (1 +rand.nextInt(12));
                                 break;
-                            case 154:
-                                out[i][j] = "" + (1930 + rand.nextInt(87));
+                            case ColumnDef.META_VALUE_SET_YEAR:
+                                out[i][j] = "" + (1930 + rand.nextInt(88));
                                 break;
-                            case 672:
+                            case ColumnDef.META_VALUE_SET_LOREM_IPSUM:
                                 out[i][j] = word[rand.nextInt(word.length)] + " " + word[rand.nextInt(word.length)];
                                 break;
-                            case 744:
+                            case ColumnDef.META_VALUE_SET_LASTNAME:
                                 out[i][j] = "" + lastname[rand.nextInt(lastname.length)];
                                 break;
-                            case 10:
+                            case ColumnDef.META_VALUE_SET_COLOR:
                                 out[i][j] = "" + colour[rand.nextInt(colour.length)];
                                 break;
-                            case 11:
-                                out[i][j] = (1930 + rand.nextInt(87)+"-"+  1 + rand.nextInt(12)+"-"+ 1 + rand.nextInt(28));
+                            case ColumnDef.META_VALUE_SET_DATE:
+                                int year = (1930 + rand.nextInt(88));
+
+                                gc.set(gc.YEAR, year);
+
+                                int dayOfYear = (1 + rand.nextInt(gc.getActualMaximum(gc.DAY_OF_YEAR)));
+
+                                gc.set(gc.DAY_OF_YEAR, dayOfYear);
+
+                                System.out.println(gc.get(gc.YEAR) + "-" + (gc.get(gc.MONTH) + 1) + "-" + gc.get(gc.DAY_OF_MONTH));
+
+                                out[i][j] = (gc.get(gc.YEAR) + "-" );
+                                if(gc.get(gc.MONTH) >8){
+                                    out[i][j]= out[i][j].concat(""+ (gc.get(gc.MONTH) + 1));
+                                }else{
+                                    out[i][j]= out[i][j].concat("0"+ (gc.get(gc.MONTH) + 1));
+                                }
+                                if(gc.get(gc.DAY_OF_MONTH) >8){
+                                    out[i][j]= out[i][j].concat("-"+ (gc.get(gc.DAY_OF_MONTH) + 1));
+                                }else{
+                                    out[i][j]= out[i][j].concat("-0"+ (gc.get(gc.DAY_OF_MONTH) + 1));
+                                }
                                 break;
-                            case 12:
+                            case ColumnDef.META_VALUE_SET_PLANT:
                                 out[i][j] = "" + plant[rand.nextInt(plant.length)];
                                 break;
-                            case 952:
+                            case ColumnDef.META_VALUE_SET_GRADE:
+                                out[i][j] = "" + (rand.nextInt(60)/100);
+                                break;
+                            case ColumnDef.META_VALUE_SET_LOCATION:
                                 out[i][j] = "" + country[rand.nextInt(country.length)];
                                 break;
                             default:
