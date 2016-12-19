@@ -10,6 +10,7 @@ import play.Configuration;
 import play.Logger;
 
 import javax.inject.Singleton;
+import javax.validation.constraints.NotNull;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -37,7 +38,12 @@ public class SQLParserFactory {
         this.configuration = configuration;
     }
 
-    public TaskTrial createParser(TaskTrial taskTrial) {
+    /**
+     * this function creates a parser and a database
+     * @param taskTrial needs a TaskTrial Object
+     * @return returns a updated TaskTrial Object
+     */
+    public TaskTrial createParser(@NotNull TaskTrial taskTrial) {
         Logger.info("Creating new Parser");
         if(taskTrial.getDatabaseUrl() != null && !taskTrial.getDatabaseUrl().isEmpty()) {
             Logger.warn(
@@ -51,7 +57,7 @@ public class SQLParserFactory {
 
         taskTrial.setDatabaseUrl(databaseUrl);
 
-        System.out.println(databaseUrl);
+        Logger.debug(databaseUrl);
 
         Connection connection = getConnection(databaseUrl);
         if(connection == null) {
@@ -77,13 +83,21 @@ public class SQLParserFactory {
 
             LocalDateTime endTime = LocalDateTime.now();
             Duration differenceTime = Duration.between(startTime, endTime);
-            System.out.println("Time Needed: " + differenceTime.toMillis() + " Millis");
+            Logger.debug("Time Needed: " + differenceTime.toMillis() + " Millis");
 
             try {
                 for(String createTableStatement : createTableStatements) {
                     Statement statement = connection.createStatement();
                     if(!statement.execute(createTableStatement)) {
-                        Logger.error(createTableStatement + " was successfully");
+                        Logger.error(createTableStatement + " was not successfully");
+                    }
+                }
+
+                for(String[][] extension1 : extension) {
+                    for(String[] extenstion2 : extension1) {
+                        for(String bla : extenstion2) {
+                            System.out.println(bla);
+                        }
                     }
                 }
             } catch (SQLException e) {
@@ -102,6 +116,11 @@ public class SQLParserFactory {
         return taskTrial;
     }
 
+    /**
+     *
+     * @param taskTrial
+     * @return
+     */
     public SQLParser getParser(TaskTrial taskTrial) {
         if(taskTrial.getDatabaseUrl() == null || taskTrial.getDatabaseUrl().isEmpty()) {
             Logger.warn(String.format("TaskTrial Object %d has no Database ", taskTrial.getId()));

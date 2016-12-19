@@ -5,9 +5,7 @@ import models.TableDef;
 
 import java.util.List;
 import java.util.Random;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author carl
@@ -29,6 +27,7 @@ public class ExtensionMaker {
     String[] country = {"Qatar","Luxembourg","Singapore","Brunei Darussalam","Kuwait","Norway","United Arab Emirates","Hong Kong","United States","Switzerland","Saudi Arabia","Bahrain","Netherlands","Ireland","Australia","Austria","Sweden","Germany","Taiwan","Canada","Denmark","Oman","Iceland","Belgium","France","Finland","United Kingdom","Japan","Republic Of Korea","New Zealand","Italy","Spain","Israel","Malta","Trinidad And Tobago","Slovenia","Equatorial Guinea","Czech Republic","Slovak Republic","Cyprus","Lithuania","Estonia","Portugal","Greece","Malaysia","Bahamas","Poland","Seychelles","Hungary","Kazakhstan","Russian Federation","Latvia","Chile","Antigua And Barbuda","Gabon","Argentina","Panama","Uruguay","Saint Kitts And Nevis","Croatia","Romania","Turkey","Libyan Arab Jamahiriya","Azerbaijan","Belarus","Mauritius","Mexico","Lebanon","Bulgaria","Bolivarian Republic Of Venezuela","Suriname","Iran","Botswana","Barbados","Montenegro","Palau","Turkmenistan","Costa Rica","Brazil","Thailand","Algeria","Colombia","China","Macedonia","Iraq","Dominican Republic","South Africa","Maldives","Serbia","Peru","Jordan","Grenada","Tunisia","Ecuador","Albania","Egypt","Saint Lucia","Saint Vincent And The Grenadines","Namibia","Sri Lanka","Mongolia","Dominica","Indonesia","Bosnia And Herzegovina","Jamaica","Paraguay","Angola","Fiji","Ukraine","Belize","El Salvador","Bhutan","Georgia","Morocco","Swaziland","Armenia","Guatemala","Philippines","Timor Leste","Guyana","Rep.Congo","Cape Verde","Bolivia","Nigeria","India","Viet Nam","Uzbekistan","Lao People S Democratic Republic","Samoa","Tonga","Myanmar","Moldova","Nicaragua","Pakistan","Honduras","Sudan","Zambia","Ghana","Yemen","Bangladesh","Mauritania","Kyrgyz Republic","Cambodia","Sao Tome And Principe","Kenya","Marshall Islands","Micronesia","Djibouti","Cameroon","Lesotho","Côte D Ivoir"};
     String[] sound = {"an","au","be","ch","da","de","di","ei","el","en","er","es","ge","he","ht","ic","ie","in","it","le","li","nd","ne","ng","re","sc","se","si","st","te","un","en","er","ch","de","ei","ie","in","te","ge","un","en","er","sch","de","ei","ie","in","wi","te","ge","un","wo","ko","ir","re","ni","il"};
     String[] position = {"C","G","T","QB","RB","WR","TE","DT","DE","MLB","OLB","CB","S","K","H","LS","P","KOS","KR","PR"};
+    String[] plant = {"Aloe Vera","Alfalfa","American Coffee Berry Tree","Bloodroot","Bouncing Bet","Bull Nettle","Bracken or Brake Fern","Burning Bush","Buttercup","Carelessweed ","Castor Bean","Chrysanthemums","Clover","Cocklebur","Creeping Charlie","Crown of Thorns","Curly Dock","Daffodil","Daphne","Delphinium","Devil's Trumpet","Dogbane","Dutchman's Breeches","Elderberry","Ergot","Fern","Fireweed","Foxglove","Poison Hemlock","Water Hemlock","Hemp","Horse Chestnut, Buckeyes","Horse Nettle","Horsetails","Hyacinth","Hydrangea","English Ivy","Ground Ivy","Poison Ivy","Jack-in-the-Pulpit","Japanese Yew","Jerusalem Cherry","Jimson Weed","Kalanchoe","Kentucky Coffee Tree","Kentucky Mahagony Tree","Klamath Weed","Lamb's Quarters","Lantana","Larkspur","Daylily","True Lily","Lily-of-the-Valley","Lupine","Mad Apple","Maple, Red","Mayapple","Milkweed","Mint","Mountain Laurel","Nicker Tree","Nightshade","Oleander","Ohio Buckeye","Philodendron","Pigweed","Poinsettia","Poke","Purple Mint","Redroot","Rhododendron","Rhubarb","Rosary Pea","Squirrelcorn","Staggerweed","St. Johnswort","Stinging Nettle","Stink Weed","Stump Tree","Sudan Grass","Summer Cypress","Thorn Apple","Tulip","White Snakeroot","Wild Onion","Yellow Sage"};
 
     public ExtensionMaker(Long seed, SchemaDef schemaDef) {
         this.seed = seed;
@@ -58,22 +57,21 @@ public class ExtensionMaker {
         int tables = schemaDef.getTableDefList().size();
         int row = 100;
 
-
-        System.out.println("META: " + tableDefs.get(0).getColumnDefList().get(0).getMetaValueSet());
+        //System.out.println("META: " + tableDefs.get(0).getColumnDefList().get(0).getMetaValueSet());
 
         //tableDefs.forEach(tableDef -> tableDef.getColumnDefList().forEach(columnDef -> System.out.println(columnDef.getName())));
 
         for(int t = 0; t< tables; t++){
-            System.out.println(tableDefs.get(t));
+            //System.out.println(tableDefs.get(t));
 
             String[][] out = new String[row][tableDefs.get(t).getColumnDefList().size()];
 
-            int columm = tableDefs.get(t).getColumnDefList().size();
+            int column = tableDefs.get(t).getColumnDefList().size();
 
             int comp = 0;
             int comcount;
             int number;
-            for(int j = 0; j < columm; j++) {
+            for(int j = 0; j < column; j++) {
                 if(tableDefs.get(t).getColumnDefList().get(j).isPrimary() && tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet() == 358) {
                     comp++;
                 }
@@ -85,120 +83,127 @@ public class ExtensionMaker {
 
             for(int i = 0; i < row; i++) {
                 comcount = 0;
-                for(int j = 0; j < columm; j++) {
-                    switch (tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet()) {
-                        case 1:
-                            for ( int b = 0; b <= j; b ++){
-                                if( (tableDefs.get(t).getColumnDefList().get(b).getMetaValueSet() == 8 ) || (tableDefs.get(t).getColumnDefList().get(b).getMetaValueSet() == 744)){
-                                    if(out[i][j] == null ){
-                                        out[i][j] = out[i][b];
-                                    }else{out[i][j] = out[i][j] + "." + out[i][b];}
+                for(int j = 0; j < column; j++) {
+                    if (!tableDefs.get(t).getColumnDefList().get(j).isNotNull() && rand.nextInt(50) == 1){
+                        out[i][j] = "";
+                    }else{
+                        switch (tableDefs.get(t).getColumnDefList().get(j).getMetaValueSet()) {
+                            case 1:
+                                for ( int b = 0; b <= j; b ++){
+                                    if( (tableDefs.get(t).getColumnDefList().get(b).getMetaValueSet() == 8 ) || (tableDefs.get(t).getColumnDefList().get(b).getMetaValueSet() == 744)){
+                                        if(out[i][j] == null ){
+                                            out[i][j] = out[i][b];
+                                        }else{out[i][j] = out[i][j] + "." + out[i][b];}
+                                    }
                                 }
-                            }
-                            out[i][j] = out[i][j] + rand.nextInt(100) +"@"+ mail[rand.nextInt(mail.length)];
-                            break;
-                        case 8:
-                            out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
-                            break;
-                        case 358:
-                            number = rand.nextInt(row);
-                            out[i][j] = "" + number;
-                            if(tableDefs.get(t).getColumnDefList().get(j).isPrimary()) {
-                                commember[comcount] = number;
-                                comcount++;
-                                if (comcount == comp) {
-                                    if (comp == 2) {
-                                        if (!com2[commember[0]][commember[1]]) {
-                                            com2[commember[0]][commember[1]] = true;
-                                        } else {
-                                            comcount--;
-                                            out[i][j] = null;
-                                            j--;
+                                out[i][j] = out[i][j] + rand.nextInt(100) +"@"+ mail[rand.nextInt(mail.length)];
+                                break;
+                            case 8:
+                                out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
+                                break;
+                            case 358:
+                                number = rand.nextInt(row);
+                                out[i][j] = "" + number;
+                                if(tableDefs.get(t).getColumnDefList().get(j).isPrimary()) {
+                                    commember[comcount] = number;
+                                    comcount++;
+                                    if (comcount == comp) {
+                                        if (comp == 2) {
+                                            if (!com2[commember[0]][commember[1]]) {
+                                                com2[commember[0]][commember[1]] = true;
+                                            } else {
+                                                comcount--;
+                                                out[i][j] = null;
+                                                j--;
+                                            }
                                         }
-                                    }
-                                    if (comp == 3) {
-                                        if (!com3[commember[0]][commember[1]][commember[2]]) {
-                                            com3[commember[0]][commember[1]][commember[2]] = true;
-                                        } else {
-                                            comcount--;
-                                            out[i][j] = null;
-                                            j--;
+                                        if (comp == 3) {
+                                            if (!com3[commember[0]][commember[1]][commember[2]]) {
+                                                com3[commember[0]][commember[1]][commember[2]] = true;
+                                            } else {
+                                                comcount--;
+                                                out[i][j] = null;
+                                                j--;
+                                            }
                                         }
-                                    }
 
+                                    }
                                 }
-                            }
-                            break;
-                        case 485:
-                            out[i][j] = "" + i;
-                            break;
-                        case 2:
-                            out[i][j] = "" + animal[rand.nextInt(animal.length)];
-                            break;
-                        case 3:
-                            out[i][j] = "" + city[rand.nextInt(city.length)];
-                            break;
-                        case 33:
-                            out[i][j] = "" + position[rand.nextInt(position.length)];
-                            break;
-                        case 4:
-                            out[i][j] = "" + title[rand.nextInt(title.length)];
-                            break;
-                        case 5:
-                            out[i][j] = "" + firstname[rand.nextInt(firstname.length)] + " " + lastname[rand.nextInt(lastname.length)];
-                            break;
-                        case 6:
-                            out[i][j] = "" + metal[rand.nextInt(metal.length)];
-                            break;
-                        case 7:
-                            out[i][j] = "" + rand.nextInt(30);
-                            break;
-                        case 768:
-                            out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
-                            break;
-                        case 9:
-                            out[i][j] = "" + rand.nextInt(13);
-                            break;
-                        case 154:
-                            out[i][j] = "" + (1930 + rand.nextInt(87));
-                            break;
-                        case 672:
-                            out[i][j] = word[rand.nextInt(word.length)] + " " + word[rand.nextInt(word.length)];
-                            break;
-                        case 744:
-                            out[i][j] = "" + lastname[rand.nextInt(lastname.length)];
-                            break;
-                        case 10:
-                            out[i][j] = "" + colour[rand.nextInt(colour.length)];
-                            break;
-                        case 11:
-                            out[i][j] = rand.nextInt(30) +"."+ rand.nextInt(13) +"."+ (1930 + rand.nextInt(87));
-                            break;
-                        case 952:
-                            out[i][j] = "" + country[rand.nextInt(country.length)];
-                            break;
-                        default:
-                            switch (tableDefs.get(t).getColumnDefList().get(j).getDataType()) {
-                                case "INT":case "int":
-                                    if(tableDefs.get(t).getColumnDefList().get(j).getMaxValueSet() != 0){
-                                        out[i][j] = "" + ( tableDefs.get(t).getColumnDefList().get(j).getMinValueSet() + rand.nextInt(tableDefs.get(t).getColumnDefList().get(j).getMaxValueSet() - tableDefs.get(t).getColumnDefList().get(j).getMinValueSet()));
-                                    }else{
-                                        out[i][j] = "" + rand.nextInt(1111);
-                                    }
-                                    break;
-                                case "VARCHAR(255)":case "VARCHAR":
-                                    int num = 2 + rand.nextInt(4);
-                                    out[i][j] = "";
-                                    while ( num > 0 ){
-                                        out[i][j] += sound[rand.nextInt(sound.length)];
-                                        num--;
-                                    }
-                                    break;
-                                default:
-                                    out[i][j] = "" + tableDefs.get(t).getColumnDefList().get(j).getName() + tableDefs.get(t).getColumnDefList().get(j).getDataType();
-                                    break;
-                            }
-                            break;
+                                break;
+                            case 485:
+                                out[i][j] = "" + i;
+                                break;
+                            case 2:
+                                out[i][j] = "" + animal[rand.nextInt(animal.length)];
+                                break;
+                            case 3:
+                                out[i][j] = "" + city[rand.nextInt(city.length)];
+                                break;
+                            case 33:
+                                out[i][j] = "" + position[rand.nextInt(position.length)];
+                                break;
+                            case 4:
+                                out[i][j] = "" + title[rand.nextInt(title.length)];
+                                break;
+                            case 5:
+                                out[i][j] = "" + firstname[rand.nextInt(firstname.length)] + " " + lastname[rand.nextInt(lastname.length)];
+                                break;
+                            case 6:
+                                out[i][j] = "" + metal[rand.nextInt(metal.length)];
+                                break;
+                            case 7:
+                                out[i][j] = "" + rand.nextInt(30);
+                                break;
+                            case 768:
+                                out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
+                                break;
+                            case 9:
+                                out[i][j] = "" + rand.nextInt(13);
+                                break;
+                            case 154:
+                                out[i][j] = "" + (1930 + rand.nextInt(87));
+                                break;
+                            case 672:
+                                out[i][j] = word[rand.nextInt(word.length)] + " " + word[rand.nextInt(word.length)];
+                                break;
+                            case 744:
+                                out[i][j] = "" + lastname[rand.nextInt(lastname.length)];
+                                break;
+                            case 10:
+                                out[i][j] = "" + colour[rand.nextInt(colour.length)];
+                                break;
+                            case 11:
+                                out[i][j] = rand.nextInt(30) +"."+ rand.nextInt(13) +"."+ (1930 + rand.nextInt(87));
+                                break;
+                            case 12:
+                                out[i][j] = "" + plant[rand.nextInt(plant.length)];
+                                break;
+                            case 952:
+                                out[i][j] = "" + country[rand.nextInt(country.length)];
+                                break;
+                            default:
+                                switch (tableDefs.get(t).getColumnDefList().get(j).getDataType()) {
+                                    case "INT":case "int":
+                                        if(tableDefs.get(t).getColumnDefList().get(j).getMaxValueSet() != 0){
+                                            out[i][j] = "" + ( tableDefs.get(t).getColumnDefList().get(j).getMinValueSet() + rand.nextInt(tableDefs.get(t).getColumnDefList().get(j).getMaxValueSet() - tableDefs.get(t).getColumnDefList().get(j).getMinValueSet()));
+                                        }else{
+                                            out[i][j] = "" + rand.nextInt(1111);
+                                        }
+                                        break;
+                                    case "VARCHAR(255)":case "VARCHAR":
+                                        int num = 2 + rand.nextInt(4);
+                                        out[i][j] = "";
+                                        while ( num > 0 ){
+                                            out[i][j] += sound[rand.nextInt(sound.length)];
+                                            num--;
+                                        }
+                                        break;
+                                    default:
+                                        out[i][j] = "" + tableDefs.get(t).getColumnDefList().get(j).getName() + tableDefs.get(t).getColumnDefList().get(j).getDataType();
+                                        break;
+                                }
+                                break;
+                        }
                     }
                 }
             }
@@ -209,53 +214,47 @@ public class ExtensionMaker {
         return Extensionlist;
     }
 
-    public String parseToStatmant(ArrayList<String[][]> args){
+    public ArrayList<String> parseToStatemant(ArrayList<String[][]> args){
         int row = 100;
 
-        String out = "";
+
         List<TableDef> tableDefs = schemaDef.getTableDefList();
         int tables = schemaDef.getTableDefList().size();
-        System.out.print(tables + tableDefs.get(0).getName());
+        ArrayList<String> out = new ArrayList<>();
         for(int t = 0; t< tables; t++){
-            int columm = tableDefs.get(t).getColumnDefList().size();
-            String statment;
+            int column = tableDefs.get(t).getColumnDefList().size();
+            String statement;
 
-            statment = "INSERT INTO " + tableDefs.get(t).getName() + " (";
+            statement = "INSERT INTO " + tableDefs.get(t).getName() + " (";
 
 
-            for(int j = 0; j < columm; j++) {
-                statment = statment.concat("" + tableDefs.get(t).getColumnDefList().get(j).getName());
-                if(j +1 != columm ){
-                    statment = statment.concat(",");
+            for(int j = 0; j < column; j++) {
+                statement = statement.concat("" + tableDefs.get(t).getColumnDefList().get(j).getName());
+                if(j +1 != column ){
+                    statement = statement.concat(",");
                 }
             }
-            statment = statment.concat(") " + "VALUES ");
+            statement = statement.concat(") " + "VALUES ");
             String[][] mat = new String[row][tableDefs.get(t).getColumnDefList().size()];
 
             mat = args.get(t);
             for(int i = 0; i < row; i++) {
-                statment = statment.concat("(");
-                for(int j = 0; j < columm; j++) {
-                    statment = statment.concat("'" + mat[i][j] + "'");
-                    if(j +1 != columm ){
-                        statment = statment.concat(",");
+                statement = statement.concat("(");
+                for(int j = 0; j < column; j++) {
+                    statement = statement.concat("'" + mat[i][j] + "'");
+                    if(j +1 != column ){
+                        statement = statement.concat(",");
                     }
                 }
-                statment = statment.concat(")");
+                statement = statement.concat(")");
                 if(i +1 != row ){
-                    statment = statment.concat(",");
+                    statement = statement.concat(",");
                 }
             }
+            statement = statement.concat(";");
 
-            statment = statment.concat(";");
-
-            out = out. concat(statment);
-
-
-
+            out.add(statement);
         }
-
-        System.out.println("OUT:  "+ out);
 
         return out;
     }
