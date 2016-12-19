@@ -173,7 +173,7 @@ public class ExtensionMaker {
                                 out[i][j] = "" + colour[rand.nextInt(colour.length)];
                                 break;
                             case 11:
-                                out[i][j] = (1930 + rand.nextInt(87)+"-"+ rand.nextInt(13) +"-"+ rand.nextInt(30));
+                                out[i][j] = (1930 + rand.nextInt(87)+"-"+ rand.nextInt(12)+ 1 +"-"+ rand.nextInt(28) +1);
                                 break;
                             case 12:
                                 out[i][j] = "" + plant[rand.nextInt(plant.length)];
