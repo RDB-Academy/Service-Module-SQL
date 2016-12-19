@@ -157,15 +157,13 @@ public class ExtensionMaker {
                                 out[i][j] = "" + colour[rand.nextInt(colour.length)];
                                 break;
                             case ColumnDef.META_VALUE_SET_DATE:
-                                int year = (1930 + rand.nextInt(88));
+                                int year = (1930 + rand.nextInt(87));
 
                                 gc.set(gc.YEAR, year);
 
                                 int dayOfYear = (1 + rand.nextInt(gc.getActualMaximum(gc.DAY_OF_YEAR)));
 
                                 gc.set(gc.DAY_OF_YEAR, dayOfYear);
-
-                                System.out.println(gc.get(gc.YEAR) + "-" + (gc.get(gc.MONTH) + 1) + "-" + gc.get(gc.DAY_OF_MONTH));
 
                                 out[i][j] = (gc.get(gc.YEAR) + "-" );
                                 if(gc.get(gc.MONTH) >8){
