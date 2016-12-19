@@ -29,6 +29,7 @@ public class UsersSchemaBuilder extends SchemaBuilder{
         ColumnDef   location_name           = this.createNewColumnDef("name", "VARCHAR(255)");
         ColumnDef   location_description    = this.createNewColumnDef("description","VARCHAR(255)");
 
+
         user_firstname.setPrimary(true);
         user_firstname.setNotNull(true);
         user_firstname.setMetaValueSet(ColumnDef.META_VALUE_SET_FIRSTNAME);
