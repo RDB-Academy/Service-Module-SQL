@@ -157,7 +157,7 @@ public class ExtensionMaker {
                                 out[i][j] = "" + colour[rand.nextInt(colour.length)];
                                 break;
                             case ColumnDef.META_VALUE_SET_DATE:
-                                int year = (1930 + rand.nextInt(88));
+                                int year = (1930 + rand.nextInt(87));
 
                                 gc.set(gc.YEAR, year);
 
@@ -165,18 +165,16 @@ public class ExtensionMaker {
 
                                 gc.set(gc.DAY_OF_YEAR, dayOfYear);
 
-                                System.out.println(gc.get(gc.YEAR) + "-" + (gc.get(gc.MONTH) + 1) + "-" + gc.get(gc.DAY_OF_MONTH));
-
                                 out[i][j] = (gc.get(gc.YEAR) + "-" );
                                 if(gc.get(gc.MONTH) >8){
                                     out[i][j]= out[i][j].concat(""+ (gc.get(gc.MONTH) + 1));
                                 }else{
                                     out[i][j]= out[i][j].concat("0"+ (gc.get(gc.MONTH) + 1));
                                 }
-                                if(gc.get(gc.DAY_OF_MONTH) >8){
-                                    out[i][j]= out[i][j].concat("-"+ (gc.get(gc.DAY_OF_MONTH) + 1));
+                                if(gc.get(gc.DAY_OF_MONTH) >9){
+                                    out[i][j]= out[i][j].concat("-"+ (gc.get(gc.DAY_OF_MONTH)));
                                 }else{
-                                    out[i][j]= out[i][j].concat("-0"+ (gc.get(gc.DAY_OF_MONTH) + 1));
+                                    out[i][j]= out[i][j].concat("-0"+ (gc.get(gc.DAY_OF_MONTH)));
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_PLANT:
