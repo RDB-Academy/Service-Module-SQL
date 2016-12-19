@@ -4,30 +4,35 @@ import forms.LoginForm;
 import play.Configuration;
 import play.data.Form;
 import play.data.FormFactory;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import services.SessionService;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author fabiomazzone
  */
 public class SessionController extends Controller {
-    private FormFactory formFactory;
-    private Configuration configuration;
-    private SessionService sessionService;
+    private final FormFactory formFactory;
+    private final Configuration configuration;
+    private final SessionService sessionService;
+    private final HttpExecutionContext httpExecutionContext;
 
     @Inject
     public SessionController(
             FormFactory formFactory,
             Configuration configuration,
-            SessionService sessionService) {
+            SessionService sessionService,
+            HttpExecutionContext httpExecutionContext) {
 
         this.formFactory = formFactory;
         this.configuration = configuration;
         this.sessionService = sessionService;
+        this.httpExecutionContext = httpExecutionContext;
     }
 
     public Result authenticate() {
@@ -59,11 +64,14 @@ public class SessionController extends Controller {
         }
     }
 
-    public Result logout() {
-        this.sessionService.clear(ctx());
-        if(request().accepts(Http.MimeTypes.TEXT)) {
-            redirect(controllers.admin.routes.SessionController.login());
-        }
-        return ok();
+    public CompletableFuture<Result> logout() {
+        return CompletableFuture
+                .supplyAsync(this.sessionService::logout, this.httpExecutionContext.current())
+                .thenApply((status) -> {
+                    if(request().accepts(Http.MimeTypes.TEXT)) {
+                        redirect(controllers.admin.routes.SessionController.login());
+                    }
+                    return ok();
+                });
     }
 }

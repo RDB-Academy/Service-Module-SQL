@@ -3,23 +3,30 @@ package controllers.admin;
 import authenticators.Authenticated;
 import forms.LoginForm;
 import play.data.Form;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import services.SessionService;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author fabiomazzone
  */
 public class SessionController extends Controller{
     private final SessionService sessionService;
+    private final HttpExecutionContext httpExecutionContext;
 
     @Inject
     public SessionController(
-            SessionService sessionService) {
+            SessionService sessionService,
+            HttpExecutionContext httpExecutionContext) {
+
         this.sessionService = sessionService;
+        this.httpExecutionContext = httpExecutionContext;
     }
 
     public Result login() {
@@ -31,8 +38,9 @@ public class SessionController extends Controller{
     }
 
     @Security.Authenticated(Authenticated.class)
-    public Result logout() {
-        this.sessionService.clear(ctx());
-        return redirect(routes.SessionController.login());
+    public CompletionStage<Result> logout() {
+        return CompletableFuture
+                .supplyAsync(this.sessionService::logout, this.httpExecutionContext.current())
+                .thenApply((Boolean status) -> redirect(routes.SessionController.login()));
     }
 }

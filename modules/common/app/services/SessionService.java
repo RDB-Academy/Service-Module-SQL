@@ -34,7 +34,7 @@ public class SessionService {
         session.setUserName("admin");
 
         Logger.debug(loginForm.toString());
-        
+
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
         String connectedData = userAgent.toString() + ctx.request().remoteAddress();
 
@@ -81,8 +81,9 @@ public class SessionService {
         return null;
     }
 
-    public void clear(Http.Context ctx) {
-        ctx.session().clear();
+    public boolean logout() {
+        Http.Context.current().session().clear();
+        return true;
     }
 
     public Form<LoginForm> getLoginForm() {
