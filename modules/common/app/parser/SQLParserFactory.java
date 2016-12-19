@@ -85,11 +85,7 @@ public class SQLParserFactory {
             try {
                 for(String createTableStatement : createTableStatements) {
                     Statement statement = connection.createStatement();
-                    if(!statement.execute(createTableStatement)) {
-                        // ToDO
-                        Logger.error("Was Ausdenken");
-                    }
-
+                    statement.execute(createTableStatement);
                     statement.close();
                 }
 
@@ -100,8 +96,10 @@ public class SQLParserFactory {
                         ResultSet rs = statement.getResultSet();
                         rs.close();
                     }
+                    statement.close();
                 }
             } catch (SQLException e) {
+                Logger.error("Failed while create ");
                 Logger.error(e.getMessage());
             }
 
