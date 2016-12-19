@@ -35,10 +35,7 @@ public class TaskTrialRepository {
      * @return
      */
     public TaskTrial update(TaskTrial taskTrial, JsonNode jsonNode) {
-        ObjectNode taskTrialNode = (ObjectNode) jsonNode;
-        taskTrialNode.remove("resultSet");
-
-        TaskTrial taskTrial1 = Json.fromJson(taskTrialNode, TaskTrial.class);
+        TaskTrial taskTrial1 = Json.fromJson(jsonNode, TaskTrial.class);
         taskTrial.setUserStatement(taskTrial1.getUserStatement());
         return taskTrial;
     }

@@ -10,7 +10,7 @@ public class SQLResult {
     private SQLResultSet resultSet;
     private boolean      isCorrect;
 
-    public class SQLResultSet {
+    public static class SQLResultSet {
         List<String> header;
         List<List<String>> dataSets;
 

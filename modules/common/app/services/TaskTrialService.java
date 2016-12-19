@@ -86,7 +86,7 @@ public class TaskTrialService {
 
         taskTrial.addTry();
 
-        taskTrial.setResultSet(sqlResult.getResultSet());
+        taskTrial.setSqlResultSet(sqlResult.getResultSet());
 
         return taskTrial;
     }
