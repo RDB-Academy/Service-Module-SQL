@@ -22,11 +22,11 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         TableDef            customer                     = this.createNewTableDef("customer");
         TableDef            book                         = this.createNewTableDef("book");
         TableDef            customerBook                 = this.createNewTableDef("customer_book");
-        ColumnDef           customer_customer_id         = this.createNewColumnDef("customer_id", "INT");
-        ColumnDef           customer_customer_firstname  = this.createNewColumnDef("customer_firstname", "VARCHAR(255)");
-        ColumnDef           customer_customer_lastname   = this.createNewColumnDef("customer_lastname", "VARCHAR(255)");
-        ColumnDef           book_book_id                 = this.createNewColumnDef("book_id", "INT");
-        ColumnDef           book_book_name               = this.createNewColumnDef("book_name", "VARCHAR(255)");
+        ColumnDef           customer_customer_id         = this.createNewColumnDef("id", "INT");
+        ColumnDef           customer_customer_firstname  = this.createNewColumnDef("firstname", "VARCHAR(255)");
+        ColumnDef           customer_customer_lastname   = this.createNewColumnDef("lastname", "VARCHAR(255)");
+        ColumnDef           book_book_id                 = this.createNewColumnDef("id", "INT");
+        ColumnDef           book_book_name               = this.createNewColumnDef("name", "VARCHAR(255)");
         ColumnDef           customerBook_customer_id     = this.createNewColumnDef("customer_id", "INT");
         ColumnDef           customerBook_book_id         = this.createNewColumnDef("book_id", "INT");
         ColumnDef           customerBook_lend_date       = this.createNewColumnDef("lend_date", "DATE");
@@ -95,7 +95,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
 
         bibleTask.setName("Find the Bible");
         bibleTask.setText("Find the Bible");
-        bibleTask.setReferenceStatement("SELECT * FROM book WHERE book_name = \"Bible\";");
+        bibleTask.setReferenceStatement("SELECT name FROM book WHERE name = 'Bible';");
 
         taskList.add(bibleTask);
 

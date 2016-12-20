@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 import models.TaskTrial;
+import play.Logger;
 import play.libs.Json;
 
 import java.util.List;
@@ -34,9 +35,18 @@ public class TaskTrialRepository {
      * @param jsonNode
      * @return
      */
-    public TaskTrial update(TaskTrial taskTrial, JsonNode jsonNode) {
+    public TaskTrial refreshWithJson(TaskTrial taskTrial, JsonNode jsonNode) {
         TaskTrial taskTrial1 = Json.fromJson(jsonNode, TaskTrial.class);
-        taskTrial.setUserStatement(taskTrial1.getUserStatement());
+        if(taskTrial1.getUserStatement() != null && !taskTrial1.getUserStatement().isEmpty()) {
+            taskTrial.setUserStatement(
+                    taskTrial1.getUserStatement()
+                            .replaceAll("\n", "")
+                            .replaceAll("\t", "")
+                            .replaceAll("    ", "")
+                            .trim()
+            );
+        }
+        taskTrial.setFinished(taskTrial1.isFinished());
         return taskTrial;
     }
 }

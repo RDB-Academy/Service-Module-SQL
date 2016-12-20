@@ -3,8 +3,11 @@ package models;
 import com.avaje.ebean.annotation.WhenCreated;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import parser.SQLResult;
+import play.Logger;
 import play.libs.Json;
 
 import javax.persistence.*;
@@ -24,17 +27,13 @@ public class TaskTrial extends BaseModel {
     @ManyToOne(optional = false)
     private Task task;
 
-    @JsonIgnore
-    private String databaseUrl;
-
-    @JsonIgnore
-    private long databaseExtensionSeed;
+    private int tries = 0;
 
     private String userStatement;
 
     private boolean isCorrect = false;
 
-    private int tries = 0;
+    private boolean isFinished = false;
 
     @NotNull
     @WhenCreated
@@ -43,12 +42,25 @@ public class TaskTrial extends BaseModel {
 
     private LocalDateTime submitDate;
 
+    @JsonIgnore
+    private String databaseUrl;
+
+    @JsonIgnore
+    private long databaseExtensionSeed;
+
+
+
+    @JsonIgnore
     @Transient
     private SQLError error;
 
     @Transient
     @JsonIgnore
-    private SQLResult.SQLResultSet sqlResultSet;
+    private SQLResult sqlResult;
+
+    public String getError() {
+        return error.message;
+    }
 
     private class SQLError {
         private final String message;
@@ -92,6 +104,7 @@ public class TaskTrial extends BaseModel {
         this.userStatement = userStatement;
     }
 
+    @JsonGetter("isCorrect")
     public boolean isCorrect() {
         return isCorrect;
     }
@@ -146,26 +159,42 @@ public class TaskTrial extends BaseModel {
         return databaseUrl;
     }
 
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    @JsonSetter("isFinished")
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
     public boolean hasError() {
         return this.error != null;
     }
+
 
     public void addError(String message) {
         this.error = new SQLError(message);
     }
 
+    @JsonIgnore
     public JsonNode errorsAsJson() {
-        return Json.toJson(this.error);
+        ObjectNode errorNode = Json.newObject();
+
+        errorNode.put("errorMessage", this.error.message);
+
+        return errorNode;
     }
 
     @JsonIgnore
-    public void setSqlResultSet(SQLResult.SQLResultSet sqlResultSet) {
-        this.sqlResultSet = sqlResultSet;
+    public void setSqlResult(SQLResult sqlResultSet) {
+        this.sqlResult = sqlResultSet;
+        this.setCorrect(sqlResult.isCorrect());
     }
 
     @JsonGetter("resultSet")
-    public SQLResult.SQLResultSet getSqlResultSet() {
-        return sqlResultSet;
+    public SQLResult getSqlResult() {
+        return sqlResult;
     }
 
 }

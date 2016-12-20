@@ -9,7 +9,7 @@ import services.TaskService;
  * @author fabiomazzone
  */
 public class TaskController extends Controller {
-    private TaskService taskService;
+    private final TaskService taskService;
 
     @Inject
     public TaskController(

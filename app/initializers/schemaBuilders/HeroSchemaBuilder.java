@@ -22,10 +22,10 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         TableDef            hero                = this.createNewTableDef("hero");
         TableDef            team                = this.createNewTableDef("team");
         TableDef            heroTeam            = this.createNewTableDef("hero_team");
-        ColumnDef           hero_hero_id        = this.createNewColumnDef("hero_id", "INT");
-        ColumnDef           hero_hero_name      = this.createNewColumnDef("hero_name", "VARCHAR");
-        ColumnDef           team_team_id        = this.createNewColumnDef("team_id", "INT");
-        ColumnDef           team_team_name      = this.createNewColumnDef("team_name", "VARCHAR");
+        ColumnDef           hero_hero_id        = this.createNewColumnDef("id", "INT");
+        ColumnDef           hero_hero_name      = this.createNewColumnDef("name", "VARCHAR");
+        ColumnDef           team_team_id        = this.createNewColumnDef("id", "INT");
+        ColumnDef           team_team_name      = this.createNewColumnDef("name", "VARCHAR");
         ColumnDef           heroTeam_hero_id    = this.createNewColumnDef("hero_id", "INT");
         ColumnDef           heroTeam_team_id    = this.createNewColumnDef("team_id", "INT");
         ColumnDef           heroTeam_join_year  = this.createNewColumnDef("join_year", "INT");
@@ -84,7 +84,7 @@ public class HeroSchemaBuilder extends SchemaBuilder {
 
         ironManTask.setName("Find Iron Man");
         ironManTask.setText("Find Iron Man");
-        ironManTask.setReferenceStatement("SELECT * FROM hero WHERE hero_name = \"Iron Man\";");
+        ironManTask.setReferenceStatement("SELECT name FROM hero WHERE name = 'Iron Man';");
 
         taskList.add(ironManTask);
 

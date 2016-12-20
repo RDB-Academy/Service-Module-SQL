@@ -21,14 +21,14 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         TableDef            student                    = this.createNewTableDef("student");
         TableDef            exam                       = this.createNewTableDef("exam");
         TableDef            studentExam                = this.createNewTableDef("student_exam");
-        ColumnDef           student_student_id         = this.createNewColumnDef("student_id", "INT");
-        ColumnDef           student_student_firstname  = this.createNewColumnDef("student_firstname", "VARCHAR(255)");
-        ColumnDef           student_student_lastname   = this.createNewColumnDef("student_lastname", "VARCHAR(255)");
-        ColumnDef           exam_exam_id               = this.createNewColumnDef("exam_id", "INT");
-        ColumnDef           exam_exam_name             = this.createNewColumnDef("exam_name", "VARCHAR(255)");
+        ColumnDef           student_student_id         = this.createNewColumnDef("id", "INT");
+        ColumnDef           student_student_firstname  = this.createNewColumnDef("firstname", "VARCHAR(255)");
+        ColumnDef           student_student_lastname   = this.createNewColumnDef("lastname", "VARCHAR(255)");
+        ColumnDef           exam_exam_id               = this.createNewColumnDef("id", "INT");
+        ColumnDef           exam_exam_name             = this.createNewColumnDef("name", "VARCHAR(255)");
         ColumnDef           studentExam_student_id     = this.createNewColumnDef("student_id", "INT");
         ColumnDef           studentExam_exam_id        = this.createNewColumnDef("exam_id", "INT");
-        ColumnDef           studentExam_grade          = this.createNewColumnDef("exam_grade", "INT");
+        ColumnDef           studentExam_grade          = this.createNewColumnDef("grade", "INT");
         ForeignKey          studentExam_student        = this.createForeignKey("FK_StudentExam_Student");
         ForeignKey          studentExam_exam           = this.createForeignKey("FK_StudentExam_Exam");
         ForeignKeyRelation  studentExam_student_rel    = this.createForeignKeyRelation(studentExam_student_id, student_student_id);
@@ -81,11 +81,15 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         List<Task> taskList = new ArrayList<>();
 
         Task johnTask = new Task();
-
         johnTask.setName("Find John");
         johnTask.setText("Find John");
-        johnTask.setReferenceStatement("SELECT * FROM student WHERE student_firstname = \"John\";");
+        johnTask.setReferenceStatement("SELECT firstname FROM student WHERE firstname = 'John';");
+        taskList.add(johnTask);
 
+        Task test = new Task();
+        johnTask.setName("DevTask");
+        johnTask.setText("DevTask");
+        johnTask.setReferenceStatement("SELECT firstname FROM student WHERE ID < 20;");
         taskList.add(johnTask);
 
         return taskList;

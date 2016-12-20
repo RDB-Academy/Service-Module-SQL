@@ -1,6 +1,6 @@
 package services;
 
-import models.SchemaDef;
+import models.Session;
 import models.Task;
 import models.TaskTrial;
 import parser.SQLParser;
@@ -24,70 +24,98 @@ public class TaskTrialService {
     private final TaskRepository taskRepository;
     private final TaskTrialRepository taskTrialRepository;
     private final Random random;
-    private SQLParserFactory sqlParserFactory;
+    private final SQLParserFactory sqlParserFactory;
+    private final SessionService sessionService;
 
     @Inject
     public TaskTrialService(
             TaskRepository taskRepository,
             TaskTrialRepository taskTrialRepository,
-            SQLParserFactory sqlParserFactory) {
+            SQLParserFactory sqlParserFactory,
+            SessionService sessionService) {
 
         this.taskRepository = taskRepository;
         this.taskTrialRepository = taskTrialRepository;
         this.sqlParserFactory = sqlParserFactory;
+        this.sessionService = sessionService;
+
         this.random = new Random();
     }
 
-    public TaskTrial getNewTaskTrial(Http.Context context) {
-        TaskTrial taskTrial = new TaskTrial();
-        Task task = this.taskRepository.getRandomTask();
-
-        if(task == null) {
-            return null;
+    /**
+     * Create a new TaskTrial Object
+     * @return returns the new TaskTrial Object
+     */
+    public TaskTrial createTaskTrial() {
+        Session session = this.sessionService.getSession(Http.Context.current());
+        TaskTrial taskTrial;
+        if(session == null) {
+            session = this.sessionService.createSession(Http.Context.current());
         }
+        taskTrial = session.getTaskTrial();
+
+        if(taskTrial != null) {
+            if(!taskTrial.isFinished()) {
+                return taskTrial;
+            } else {
+                this.sqlParserFactory.deleteDatabase(taskTrial);
+            }
+        }
+
+        taskTrial = new TaskTrial();
+        Task task = this.taskRepository.getRandomTask();
 
         taskTrial.setTask(task);
         taskTrial.setBeginDate(LocalDateTime.now());
-        taskTrial.setDatabaseExtensionSeed(this.random.nextLong());
+        taskTrial.setDatabaseExtensionSeed(Math.abs(this.random.nextLong()));
 
         taskTrial = this.sqlParserFactory.createParser(taskTrial);
 
+        session.setTaskTrial(taskTrial);
         this.taskTrialRepository.save(taskTrial);
+
+        session.save();
 
         return taskTrial;
     }
 
-    public TaskTrial getById(Long id) {
+    public TaskTrial read(Long id) {
         return this.taskTrialRepository.getById(id);
     }
 
-
     public TaskTrial validateStatement(Long id) {
-        TaskTrial taskTrial = this.getById(id);
-        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
+        TaskTrial taskTrial = this.read(id);
+        if(taskTrial == null || taskTrial.isFinished()) {
+            return null;
+        }
 
-        // Log request body
-        Logger.info(Http.Context.current().request().body().asJson().toString());
-
-        taskTrial = this.taskTrialRepository.update(
+        taskTrial = this.taskTrialRepository.refreshWithJson(
                 taskTrial,
                 Http.Context.current().request().body().asJson()
         );
 
-
-        if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
-            Logger.info("SubmittedRequest is null or Empty");
-            taskTrial.addError("SubmittedRequest is null or Empty");
+        if(taskTrial.isFinished()) {
+            taskTrial.save();
             return taskTrial;
         }
 
-        Logger.info("UserStatement is " + taskTrial.getUserStatement());
+        if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
+            Logger.warn("Submitted Statement is null or Empty");
+            taskTrial.addError("Submitted Statement is Empty");
+            return taskTrial;
+        }
 
-        SQLResult sqlResult = sqlParser.submit(taskTrial.getUserStatement());
+        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
+
+        Logger.debug("UserStatement is " + taskTrial.getUserStatement());
+
+        SQLResult sqlResult = sqlParser.submit(taskTrial);
 
         taskTrial.addTry();
 
-        taskTrial.setSqlResultSet(sqlResult.getResultSet());
+        taskTrial.setSqlResult(sqlResult);
+
+        taskTrial.save();
 
         return taskTrial;
     }

@@ -11,7 +11,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class TaskService {
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
     @Inject
     public TaskService(TaskRepository taskRepository) {
