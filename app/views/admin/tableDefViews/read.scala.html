@@ -27,58 +27,46 @@
                             <table class="table table-hover table-list">
                                 <thead>
                                     <tr>
-                                        <th style="width: 5%;">
+                                        <th style="width: 7.5%;">
                                             #
                                         </th>
-                                        <th style="width: 10%;">
+                                        <th style="width: 7.5%;">
                                             Id
                                         </th>
-                                        <th style="width: 10%;">
+                                        <th style="width: 25%;">
                                             Name
                                         </th>
-                                        <th style="width: 15%;">
+                                        <th style="width: 20%;">
                                             Datatype
                                         </th>
-                                        <th style="width: 10%">
+                                        <th style="width: 20%">
                                             Is Primary
                                         </th>
-                                        <th style="width: 10%">
+                                        <th style="width: 20%">
                                             Nullable
-                                        </th>
-                                        <th style="width: 20%;">
-                                            Created At
-                                        </th>
-                                        <th style="width: 20%;">
-                                            Modified At
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @for((columnDef, index) <- tableDefForm.get().getColumnDefList.zipWithIndex) {
                                     <tr class="">
-                                        <td style="width: 5%;">
+                                        <td style="width: 7.5%;">
                                             @{index + 1}
                                         </td>
-                                        <td style="width: 10%;">
+                                        <td style="width: 7.5%;">
                                             @columnDef.getId
                                         </td>
-                                        <td style="width: 10%;">
+                                        <td style="width: 25%;">
                                             @columnDef.getName
                                         </td>
-                                        <td style="width: 15%;">
+                                        <td style="width: 20%;">
                                             @columnDef.getDataType()
                                         </td>
-                                        <td style="width: 10%;">
+                                        <td style="width: 20%;">
                                             @columnDef.isPrimary()
                                         </td>
-                                        <td style="width: 10%;">
+                                        <td style="width: 20%;">
                                             @columnDef.isNotNull()
-                                        </td>
-                                        <td style="width: 20%;">
-                                            @columnDef.getCreatedAtFromNow
-                                        </td>
-                                        <td style="width: 20%;">
-                                            @columnDef.getModifiedAtFromNow
                                         </td>
                                     </tr>
                                     }
