@@ -14,7 +14,7 @@ public class SQLResult {
     private List<List<String>> dataSets;
 
     private boolean         isCorrect;
-    private SQLException    error;
+    private String    error;
 
     SQLResult(SQLResultSet resultSet, boolean isCorrect) {
         this.isCorrect = isCorrect;
@@ -48,7 +48,7 @@ public class SQLResult {
 
     @JsonGetter("errorMessage")
     public String getError() {
-        return (error != null)? error.getMessage() : null;
+        return error;
     }
 }
 

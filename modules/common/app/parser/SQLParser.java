@@ -90,7 +90,7 @@ public class SQLParser {
         } catch (SQLException e) {
             Logger.error("Submit SQL Statement nicht valide oder so");
             Logger.error(e.getMessage());
-            sqlResultSet.setError(e);
+            sqlResultSet.setError(e.getMessage());
         }
         return sqlResultSet;
     }

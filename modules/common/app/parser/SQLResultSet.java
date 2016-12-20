@@ -2,13 +2,12 @@ package parser;
 
 import play.Logger;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SQLResultSet {
     private List<List<String>> resultSet;
-    private SQLException error;
+    private String error;
 
     public SQLResultSet() {
         resultSet = new ArrayList<>();
@@ -22,27 +21,31 @@ public class SQLResultSet {
         this.resultSet = resultSet;
     }
 
-    public SQLException getError() {
+    public String getError() {
         return error;
     }
 
-    public void setError(SQLException error) {
+    public void setError(String error) {
         this.error = error;
     }
 
     //
     boolean isSubsetOf(SQLResultSet userResultSet) {
+        List<String> refHeader;
+        List<String> userHeader;
+
         Logger.debug("isSubsetOf");
 
         if(userResultSet.getError() != null) {
             return false;
         }
 
-        List<String> refHeader = new ArrayList<>(this.getResultSet().get(0));
-        List<String> userHeader = new ArrayList<>(userResultSet.getResultSet().get(0));
+        refHeader = new ArrayList<>(this.getResultSet().get(0));
+        userHeader = new ArrayList<>(userResultSet.getResultSet().get(0));
 
-        if (userHeader.containsAll(refHeader)) {
+        if (!userHeader.containsAll(refHeader)) {
             Logger.warn("UserHeader doesn't contain all refHeader");
+            
             return false;
         }
         Logger.info("UserHeader contains all refHeader");
