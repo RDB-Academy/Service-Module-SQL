@@ -81,11 +81,15 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         List<Task> taskList = new ArrayList<>();
 
         Task johnTask = new Task();
-
         johnTask.setName("Find John");
         johnTask.setText("Find John");
         johnTask.setReferenceStatement("SELECT firstname FROM student WHERE firstname = 'John';");
+        taskList.add(johnTask);
 
+        Task test = new Task();
+        johnTask.setName("DevTask");
+        johnTask.setText("DevTask");
+        johnTask.setReferenceStatement("SELECT firstname FROM student WHERE ID < 20;");
         taskList.add(johnTask);
 
         return taskList;

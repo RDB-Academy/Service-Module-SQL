@@ -2,8 +2,7 @@ package parser;
 
 import play.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SQLResultSet {
     private List<List<String>> resultSet;
@@ -40,35 +39,93 @@ public class SQLResultSet {
 
     //
     boolean isSubsetOf(SQLResultSet userResultSet) {
-        List<String> refHeader;
-        List<String> userHeader;
-
-        Logger.debug("isSubsetOf");
+        List<String> refHeaderList;
+        List<String> userHeaderList;
+        List<List<String>> refDataSetList;
+        List<List<String>> userDataSetList;
 
         if(userResultSet.getError() != null) {
             return false;
         }
 
-        refHeader = new ArrayList<>(this.getResultSet().get(0));
-        userHeader = new ArrayList<>(userResultSet.getResultSet().get(0));
+        refHeaderList = new ArrayList<>(this.getResultSet().get(0));
+        userHeaderList = new ArrayList<>(userResultSet.getResultSet().get(0));
 
-        if (!userHeader.containsAll(refHeader)) {
+        // Check if header is a subset
+        if (!userHeaderList.containsAll(refHeaderList)) {
             Logger.warn("UserHeader doesn't contain all refHeader");
-            refHeader.removeAll(userHeader);
+            refHeaderList.removeAll(userHeaderList);
             userResultSet.hint = "Missing Columns: ";
-            for(String header : refHeader) {
+            for(String header : refHeaderList) {
                 userResultSet.hint = userResultSet.hint + header;
             }
+            Logger.warn(userResultSet.hint);
             return false;
         }
-        Logger.info("UserHeader contains all refHeader");
 
+        // Check if the length is equal
         if(this.getResultSet().size() != userResultSet.getResultSet().size()) {
-            Logger.warn("ResultsSets Size is not equal");
+            Logger.warn("ResultsSet Size is not equal");
+            userResultSet.hint = "ResultsSet Size is not equal";
             return false;
         }
-        Logger.warn("ResultsSets Size is equal");
 
-        return false;
+        //  Delete Unnecessary Columns
+        refDataSetList = new ArrayList<>(this.resultSet.subList(1, this.resultSet.size()));
+        userDataSetList = new ArrayList<>();
+
+        for(List<String> result : userResultSet.resultSet.subList(1, userResultSet.resultSet.size())) {
+            userDataSetList.add(new ArrayList<>(result));
+        }
+
+        if(refHeaderList.size() != userHeaderList.size()) {
+            for (String refHeader : refHeaderList) {
+                for (int j = 0; j < userHeaderList.size(); ) {
+                    String userHeader = userHeaderList.get(j);
+                    if (!refHeader.equals(userHeader)) {
+                        userHeaderList.remove(j);
+                        for (List<String> dataSet : userDataSetList) {
+                            dataSet.remove(j);
+                        }
+                        continue;
+                    }
+                    j++;
+                }
+            }
+        }
+
+        System.out.println("!!!!! Result");
+        System.out.println("-- ref");
+        refHeaderList.forEach(System.out::println);
+        refDataSetList.forEach(dataSet -> {
+            dataSet.forEach(System.out::print);
+            System.out.println();
+        });
+        System.out.println("-- user");
+        userHeaderList.forEach(System.out::println);
+        userDataSetList.forEach(dataSet -> {
+            dataSet.forEach(System.out::print);
+            System.out.println();
+        });
+        System.out.println("!!!!1 Result End");
+
+        userDataSetList.removeAll(refDataSetList);
+
+        System.out.println("!!!!! Result");
+        System.out.println("-- ref");
+        refHeaderList.forEach(System.out::println);
+        refDataSetList.forEach(dataSet -> {
+            dataSet.forEach(System.out::print);
+            System.out.println();
+        });
+        System.out.println("-- user");
+        userHeaderList.forEach(System.out::println);
+        userDataSetList.forEach(dataSet -> {
+            dataSet.forEach(System.out::print);
+            System.out.println();
+        });
+        System.out.println("!!!!!! Result End");
+        
+        return (userDataSetList.size() == 0);
     }
 }

@@ -47,7 +47,7 @@ public class SQLResult {
 
     @JsonGetter("datasets")
     public List<List<String>> getDataSets() {
-        return dataSets;
+        return dataSets.subList(0, (dataSets.size() > 10)? 10 : dataSets.size());
     }
 
     @JsonGetter("errorMessage")
