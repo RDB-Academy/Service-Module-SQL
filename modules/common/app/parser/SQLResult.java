@@ -1,6 +1,7 @@
 package parser;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,11 @@ public class SQLResult {
     @JsonGetter("datasets")
     public List<List<String>> getDataSets() {
         return dataSets.subList(0, (dataSets.size() > 10)? 10 : dataSets.size());
+    }
+
+    @JsonIgnore
+    public boolean isCorrect() {
+        return isCorrect;
     }
 
     @JsonGetter("errorMessage")

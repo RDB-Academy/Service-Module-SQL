@@ -104,6 +104,7 @@ public class TaskTrial extends BaseModel {
         this.userStatement = userStatement;
     }
 
+    @JsonGetter("isCorrect")
     public boolean isCorrect() {
         return isCorrect;
     }
@@ -188,6 +189,7 @@ public class TaskTrial extends BaseModel {
     @JsonIgnore
     public void setSqlResult(SQLResult sqlResultSet) {
         this.sqlResult = sqlResultSet;
+        this.setCorrect(sqlResult.isCorrect());
     }
 
     @JsonGetter("resultSet")

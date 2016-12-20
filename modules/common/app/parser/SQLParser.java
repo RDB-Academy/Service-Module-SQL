@@ -49,7 +49,9 @@ public class SQLParser {
         }
 
         sqlResult = new SQLResult(userResultSet, refResultSet.isSubsetOf(userResultSet));
-
+        if(sqlResult.isCorrect()) {
+            System.out.println("IOSJDLSKJDLKAJASDLKJDSLAKJASDLDJLKDJ");
+        }
         return sqlResult;
     }
 
