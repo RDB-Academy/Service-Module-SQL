@@ -70,7 +70,9 @@ public class SQLParser {
             // Create Header
             List<String> header = new ArrayList<>();
             for(int i = 1; i <= columnCount; i++) {
-                header.add(rsmd.getColumnName(i));
+                header.add(
+                        ((!rsmd.getTableName(i).isEmpty()) ? rsmd.getTableName(i) + "." : "")
+                                + rsmd.getColumnName(i));
             }
             resultSet.add(header);
 

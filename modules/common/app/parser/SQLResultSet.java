@@ -8,6 +8,7 @@ import java.util.List;
 public class SQLResultSet {
     private List<List<String>> resultSet;
     private String error;
+    private String hint;
 
     public SQLResultSet() {
         resultSet = new ArrayList<>();
@@ -29,6 +30,14 @@ public class SQLResultSet {
         this.error = error;
     }
 
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
+
     //
     boolean isSubsetOf(SQLResultSet userResultSet) {
         List<String> refHeader;
@@ -46,8 +55,9 @@ public class SQLResultSet {
         if (!userHeader.containsAll(refHeader)) {
             Logger.warn("UserHeader doesn't contain all refHeader");
             refHeader.removeAll(userHeader);
+            userResultSet.hint = "Missing Columns: ";
             for(String header : refHeader) {
-                System.out.println(header);
+                userResultSet.hint = userResultSet.hint + header;
             }
             return false;
         }

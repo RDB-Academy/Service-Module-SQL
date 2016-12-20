@@ -14,6 +14,7 @@ public class SQLResult {
 
     private boolean         isCorrect;
     private String    error;
+    private String    hint;
 
     SQLResult(SQLResultSet resultSet, boolean isCorrect) {
         this.isCorrect = isCorrect;
@@ -24,6 +25,10 @@ public class SQLResult {
             this.isCorrect = false;
             this.error = resultSet.getError();
             return;
+        }
+        if(resultSet.getHint() != null) {
+            this.isCorrect = false;
+            this.hint = resultSet.getHint();
         }
 
         for(String headerName : resultSet.getResultSet().get(0)) {
@@ -48,6 +53,11 @@ public class SQLResult {
     @JsonGetter("errorMessage")
     public String getError() {
         return error;
+    }
+
+    @JsonGetter("hintMessage")
+    public String getHint() {
+        return hint;
     }
 }
 
