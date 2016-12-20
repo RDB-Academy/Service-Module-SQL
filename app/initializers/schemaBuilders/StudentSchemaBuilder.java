@@ -84,7 +84,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
 
         johnTask.setName("Find John");
         johnTask.setText("Find John");
-        johnTask.setReferenceStatement("SELECT * FROM student WHERE firstname = 'John';");
+        johnTask.setReferenceStatement("SELECT firstname FROM student WHERE firstname = 'John';");
 
         taskList.add(johnTask);
 

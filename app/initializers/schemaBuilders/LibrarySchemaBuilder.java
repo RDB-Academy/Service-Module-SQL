@@ -95,7 +95,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
 
         bibleTask.setName("Find the Bible");
         bibleTask.setText("Find the Bible");
-        bibleTask.setReferenceStatement("SELECT * FROM book WHERE name = 'Bible';");
+        bibleTask.setReferenceStatement("SELECT name FROM book WHERE name = 'Bible';");
 
         taskList.add(bibleTask);
 

@@ -84,7 +84,7 @@ public class HeroSchemaBuilder extends SchemaBuilder {
 
         ironManTask.setName("Find Iron Man");
         ironManTask.setText("Find Iron Man");
-        ironManTask.setReferenceStatement("SELECT * FROM hero WHERE hero_name = 'Iron Man';");
+        ironManTask.setReferenceStatement("SELECT name FROM hero WHERE name = 'Iron Man';");
 
         taskList.add(ironManTask);
 

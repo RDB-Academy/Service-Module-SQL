@@ -45,7 +45,10 @@ public class SQLResultSet {
 
         if (!userHeader.containsAll(refHeader)) {
             Logger.warn("UserHeader doesn't contain all refHeader");
-            
+            refHeader.removeAll(userHeader);
+            for(String header : refHeader) {
+                System.out.println(header);
+            }
             return false;
         }
         Logger.info("UserHeader contains all refHeader");

@@ -2,7 +2,6 @@ package parser;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

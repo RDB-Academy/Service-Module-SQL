@@ -234,7 +234,7 @@ public class FootballSchemaBuilder extends SchemaBuilder {
 
         footballTask.setName("Find Luke Kuechly.");
         footballTask.setText("Find Luke Kuechly.");
-        footballTask.setReferenceStatement("SELECT * FROM player WHERE firstname = 'Luke' AND lastname = 'Kuechly';");
+        footballTask.setReferenceStatement("SELECT firstname, lastname FROM player WHERE firstname = 'Luke' AND lastname = 'Kuechly';");
 
         taskList.add(footballTask);
 

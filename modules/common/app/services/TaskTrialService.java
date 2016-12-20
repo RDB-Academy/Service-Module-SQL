@@ -101,7 +101,7 @@ public class TaskTrialService {
 
         if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
             Logger.warn("Submitted Statement is null or Empty");
-            taskTrial.addError("Submitted Statement is null or Empty");
+            taskTrial.addError("Submitted Statement is Empty");
             return taskTrial;
         }
 
@@ -114,6 +114,8 @@ public class TaskTrialService {
         taskTrial.addTry();
 
         taskTrial.setSqlResult(sqlResult);
+
+        taskTrial.save();
 
         return taskTrial;
     }
