@@ -26,7 +26,8 @@ public class TaskTrial extends BaseModel {
     @ManyToOne(optional = false)
     private Task task;
 
-    private int tries = 0;
+    @Embedded
+    private TaskTrialStats stats;
 
     private String userStatement;
 
@@ -34,20 +35,11 @@ public class TaskTrial extends BaseModel {
 
     private boolean isFinished = false;
 
-    @NotNull
-    @WhenCreated
-    @Column(updatable = false)
-    private LocalDateTime beginDate;
-
-    private LocalDateTime submitDate;
-
     @JsonIgnore
     private String databaseUrl;
 
     @JsonIgnore
     private long databaseExtensionSeed;
-
-
 
     @JsonIgnore
     @Transient
@@ -56,6 +48,10 @@ public class TaskTrial extends BaseModel {
     @Transient
     @JsonIgnore
     private SQLResult sqlResult;
+
+    public TaskTrial() {
+        this.stats = new TaskTrialStats();
+    }
 
     public String getError() {
         return error.message;
@@ -68,7 +64,6 @@ public class TaskTrial extends BaseModel {
             this.message = message;
         }
     }
-
 
     public Long getId() {
         return id;
@@ -85,6 +80,10 @@ public class TaskTrial extends BaseModel {
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+    public TaskTrialStats getStats() {
+        return this.stats;
     }
 
     public long getDatabaseExtensionSeed() {
@@ -113,52 +112,6 @@ public class TaskTrial extends BaseModel {
         if(correct) {
             this.setFinished(true);
         }
-    }
-
-    public int getTries() {
-        return tries;
-    }
-
-    public void setTries(int tries) {
-        this.tries = tries;
-    }
-
-    public void addTry() {
-        this.tries++;
-    }
-
-    @JsonIgnore
-    public LocalDateTime getBeginDate() {
-        return beginDate;
-    }
-
-    @JsonGetter("beginDate")
-    public String getBeginDateFormat() {
-        if(beginDate == null) {
-            return null;
-        }
-        return beginDate.format(DateTimeFormatter.ISO_DATE_TIME);
-    }
-
-    public void setBeginDate(LocalDateTime beginDate) {
-        this.beginDate = beginDate;
-    }
-
-    @JsonIgnore
-    public LocalDateTime getSubmitDate() {
-        return submitDate;
-    }
-
-    @JsonGetter("submitDate")
-    public String getSubmitDateFormat() {
-        if(submitDate == null) {
-            return null;
-        }
-        return submitDate.format(DateTimeFormatter.ISO_DATE_TIME);
-    }
-
-    public void setSubmitDate(LocalDateTime submitDate) {
-        this.submitDate = submitDate;
     }
 
     public void setDatabaseUrl(String databaseUrl) {

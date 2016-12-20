@@ -201,7 +201,7 @@ public class SQLParserFactory {
     }
 
     private String getDatabaseName(TaskTrial taskTrial) {
-        return taskTrial.getBeginDateFormat()
+        return taskTrial.getStats().getBeginDateFormat()
                 + "-"
                 + taskTrial.getTaskId()
                 + "-"

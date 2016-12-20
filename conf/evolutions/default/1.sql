@@ -91,15 +91,15 @@ create table task_trial (
   id                            bigint auto_increment not null,
   task_id                       bigint not null,
   tries                         integer,
+  submit_date                   timestamp,
+  begin_date                    timestamp not null,
   user_statement                varchar(255),
   is_correct                    boolean,
   is_finished                   boolean,
-  submit_date                   timestamp,
   database_url                  varchar(255),
   database_extension_seed       bigint,
   created_at                    timestamp not null,
   modified_at                   timestamp not null,
-  begin_date                    timestamp not null,
   constraint pk_task_trial primary key (id)
 );
 
