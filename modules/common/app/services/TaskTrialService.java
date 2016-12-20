@@ -85,7 +85,7 @@ public class TaskTrialService {
 
     public TaskTrial validateStatement(Long id) {
         TaskTrial taskTrial = this.read(id);
-        if(taskTrial == null || taskTrial.isFinished()) {
+        if(taskTrial == null) {
             return null;
         }
 

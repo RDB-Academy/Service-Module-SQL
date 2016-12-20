@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import parser.SQLResult;
-import play.Logger;
 import play.libs.Json;
 
 import javax.persistence.*;
@@ -128,26 +127,28 @@ public class TaskTrial extends BaseModel {
         this.tries++;
     }
 
+    @JsonIgnore
     public LocalDateTime getBeginDate() {
         return beginDate;
     }
 
-    @JsonIgnore
+    @JsonGetter("beginDate")
     public String getBeginDateFormat() {
-        return beginDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm"));
+        return beginDate.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     public void setBeginDate(LocalDateTime beginDate) {
         this.beginDate = beginDate;
     }
 
+    @JsonIgnore
     public LocalDateTime getSubmitDate() {
         return submitDate;
     }
 
-    @JsonIgnore
+    @JsonGetter("submitDate")
     public String getSubmitDateFormat() {
-        return submitDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm"));
+        return submitDate.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     public void setSubmitDate(LocalDateTime submitDate) {

@@ -24,12 +24,21 @@ public class SQLParser {
         this.connection = connection;
     }
 
+    /**
+     *
+     * @param taskTrial
+     * @return
+     */
     public SQLResult submit(TaskTrial taskTrial) {
-        SQLResult sqlResult;
+        SQLResult       sqlResult;
+        SQLResultSet    userResultSet;
+        SQLResultSet    refResultSet;
 
-        SQLResultSet userResultSet = executeStatement(taskTrial.getUserStatement());
-        SQLResultSet refResultSet = executeStatement(taskTrial.getTask().getReferenceStatement());
+        userResultSet   = executeStatement(taskTrial.getUserStatement());
+        refResultSet    = executeStatement(taskTrial.getTask().getReferenceStatement());
+        sqlResult       = new SQLResult(userResultSet, refResultSet.isSubsetOf(userResultSet));
 
+        /*
         // Log UserResultSet
         System.out.println("UserResultSet");
         for(List<String> row : userResultSet.getResultSet()) {
@@ -47,14 +56,18 @@ public class SQLParser {
             }
             System.out.println();
         }
+        */
 
-        sqlResult = new SQLResult(userResultSet, refResultSet.isSubsetOf(userResultSet));
-        if(sqlResult.isCorrect()) {
-            System.out.println("IOSJDLSKJDLKAJASDLKJDSLAKJASDLDJLKDJ");
-        }
+
+
         return sqlResult;
     }
 
+    /**
+     *
+     * @param sqlStatement
+     * @return
+     */
     private SQLResultSet executeStatement(String sqlStatement) {
         Statement           statement;
         ResultSet           rs;

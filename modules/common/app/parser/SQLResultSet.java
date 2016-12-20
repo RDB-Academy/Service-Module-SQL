@@ -93,7 +93,8 @@ public class SQLResultSet {
                 }
             }
         }
-
+/*
+        // ToDo Log
         System.out.println("!!!!! Result");
         System.out.println("-- ref");
         refHeaderList.forEach(System.out::println);
@@ -108,9 +109,10 @@ public class SQLResultSet {
             System.out.println();
         });
         System.out.println("!!!!1 Result End");
-
+*/
         userDataSetList.removeAll(refDataSetList);
-
+/*
+        // ToDo Log
         System.out.println("!!!!! Result");
         System.out.println("-- ref");
         refHeaderList.forEach(System.out::println);
@@ -125,7 +127,8 @@ public class SQLResultSet {
             System.out.println();
         });
         System.out.println("!!!!!! Result End");
-        
+
+        */
         return (userDataSetList.size() == 0);
     }
 }

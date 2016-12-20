@@ -2,10 +2,8 @@ package repository;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 import models.TaskTrial;
-import play.Logger;
 import play.libs.Json;
 
 import java.time.LocalDateTime;
@@ -37,6 +35,10 @@ public class TaskTrialRepository {
      * @return
      */
     public TaskTrial refreshWithJson(TaskTrial taskTrial, JsonNode jsonNode) {
+        if (taskTrial.isFinished()) {
+            return taskTrial;
+        }
+
         TaskTrial taskTrial1 = Json.fromJson(jsonNode, TaskTrial.class);
         if(taskTrial1.getUserStatement() != null && !taskTrial1.getUserStatement().isEmpty()) {
             taskTrial.setUserStatement(
