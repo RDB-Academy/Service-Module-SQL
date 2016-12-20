@@ -66,8 +66,7 @@ public class TaskTrialService {
         Task task = this.taskRepository.getRandomTask();
 
         taskTrial.setTask(task);
-        taskTrial.getStats().setBeginDate(LocalDateTime.now());
-        taskTrial.setDatabaseExtensionSeed(Math.abs(this.random.nextLong()));
+        taskTrial.databaseInformation.setDatabaseSeed(Math.abs(this.random.nextLong()));
 
         taskTrial = this.sqlParserFactory.createParser(taskTrial);
 
@@ -111,7 +110,7 @@ public class TaskTrialService {
 
         SQLResult sqlResult = sqlParser.submit(taskTrial);
 
-        taskTrial.getStats().incrementTries();
+        taskTrial.stats.incrementTries();
 
         taskTrial.setSqlResult(sqlResult);
 

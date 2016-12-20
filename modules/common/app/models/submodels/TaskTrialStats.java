@@ -1,6 +1,5 @@
-package models;
+package models.submodels;
 
-import com.avaje.ebean.annotation.WhenCreated;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,7 +14,6 @@ public class TaskTrialStats {
     private int tries = 0;
 
     @NotNull
-    @WhenCreated
     @Column(updatable = false)
     private LocalDateTime beginDate;
 
@@ -26,7 +24,7 @@ public class TaskTrialStats {
      */
     public TaskTrialStats() {
         this.tries = 0;
-
+        this.beginDate = LocalDateTime.now();
         this.submitDate = LocalDateTime.now();
     }
 

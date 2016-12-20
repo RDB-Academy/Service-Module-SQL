@@ -1,18 +1,16 @@
 package models;
 
-import com.avaje.ebean.annotation.WhenCreated;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.submodels.DatabaseInformation;
+import models.submodels.TaskTrialStats;
 import parser.SQLResult;
 import play.libs.Json;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * @author invisible
@@ -22,12 +20,12 @@ public class TaskTrial extends BaseModel {
     @Id
     private Long id;
 
-    @JsonIgnore
-    @ManyToOne(optional = false)
-    private Task task;
-
     @Embedded
-    private TaskTrialStats stats;
+    public TaskTrialStats       stats;
+
+    @Embedded @JsonIgnore
+    public DatabaseInformation  databaseInformation;
+
 
     private String userStatement;
 
@@ -36,10 +34,8 @@ public class TaskTrial extends BaseModel {
     private boolean isFinished = false;
 
     @JsonIgnore
-    private String databaseUrl;
-
-    @JsonIgnore
-    private long databaseExtensionSeed;
+    @ManyToOne(optional = false)
+    private Task task;
 
     @JsonIgnore
     @Transient
@@ -51,6 +47,7 @@ public class TaskTrial extends BaseModel {
 
     public TaskTrial() {
         this.stats = new TaskTrialStats();
+        this.databaseInformation = new DatabaseInformation();
     }
 
     public String getError() {
@@ -82,18 +79,6 @@ public class TaskTrial extends BaseModel {
         this.task = task;
     }
 
-    public TaskTrialStats getStats() {
-        return this.stats;
-    }
-
-    public long getDatabaseExtensionSeed() {
-        return databaseExtensionSeed;
-    }
-
-    public void setDatabaseExtensionSeed(long databaseExtensionSeed) {
-        this.databaseExtensionSeed = databaseExtensionSeed;
-    }
-
     public String getUserStatement() {
         return userStatement;
     }
@@ -112,14 +97,6 @@ public class TaskTrial extends BaseModel {
         if(correct) {
             this.setFinished(true);
         }
-    }
-
-    public void setDatabaseUrl(String databaseUrl) {
-        this.databaseUrl = databaseUrl;
-    }
-
-    public String getDatabaseUrl() {
-        return databaseUrl;
     }
 
     public boolean isFinished() {

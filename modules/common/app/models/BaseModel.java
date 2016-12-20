@@ -1,7 +1,6 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.avaje.ebean.annotation.WhenCreated;
 import com.avaje.ebean.annotation.WhenModified;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,13 +16,17 @@ import java.time.format.DateTimeFormatter;
 @MappedSuperclass
 public abstract class BaseModel extends Model {
     @JsonIgnore
-    @WhenCreated
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @JsonIgnore
     @WhenModified
     private LocalDateTime modifiedAt;
+
+    public BaseModel() {
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+    }
 
     public String getCreatedAt() {
         return createdAt.format(DateTimeFormatter.ISO_DATE_TIME);

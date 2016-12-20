@@ -5,6 +5,7 @@
 
 create table column_def (
   id                            bigint auto_increment not null,
+  created_at                    timestamp,
   table_def_id                  bigint not null,
   name                          varchar(255) not null,
   data_type                     varchar(255) not null,
@@ -13,43 +14,42 @@ create table column_def (
   meta_value_set                integer not null,
   min_value_set                 integer,
   max_value_set                 integer,
-  created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_column_def primary key (id)
 );
 
 create table extension_def (
   id                            bigint auto_increment not null,
+  created_at                    timestamp,
   insert_statement              varchar(255) not null,
   table_def_id                  bigint not null,
-  created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_extension_def primary key (id)
 );
 
 create table foreign_key (
   id                            bigint auto_increment not null,
+  created_at                    timestamp,
   name                          varchar(255) not null,
   schema_def_id                 bigint not null,
-  created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_foreign_key primary key (id)
 );
 
 create table foreign_key_relation (
   id                            bigint auto_increment not null,
+  created_at                    timestamp,
   foreign_key_id                bigint not null,
   source_column_id              bigint not null,
   target_column_id              bigint not null,
-  created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_foreign_key_relation primary key (id)
 );
 
 create table schema_def (
   id                            bigint auto_increment not null,
+  created_at                    timestamp,
   name                          varchar(255) not null,
-  created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint uq_schema_def_name unique (name),
   constraint pk_schema_def primary key (id)
@@ -57,48 +57,48 @@ create table schema_def (
 
 create table session (
   id                            varchar(255) not null,
+  created_at                    timestamp,
   user_id                       bigint,
   user_name                     varchar(255),
   connection_info               integer,
   task_trial_id                 bigint,
-  created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_session primary key (id)
 );
 
 create table table_def (
   id                            bigint auto_increment not null,
+  created_at                    timestamp,
   name                          varchar(255) not null,
   schema_def_id                 bigint not null,
-  created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_table_def primary key (id)
 );
 
 create table task (
   id                            bigint auto_increment not null,
+  created_at                    timestamp,
   schema_def_id                 bigint not null,
   name                          varchar(255) not null,
   text                          varchar(255) not null,
   reference_statement           varchar(255) not null,
   difficulty                    integer not null,
-  created_at                    timestamp not null,
   modified_at                   timestamp not null,
   constraint pk_task primary key (id)
 );
 
 create table task_trial (
   id                            bigint auto_increment not null,
-  task_id                       bigint not null,
+  created_at                    timestamp,
   tries                         integer,
-  submit_date                   timestamp,
   begin_date                    timestamp not null,
+  submit_date                   timestamp,
+  database_seed                 bigint,
+  database_url                  varchar(255),
   user_statement                varchar(255),
   is_correct                    boolean,
   is_finished                   boolean,
-  database_url                  varchar(255),
-  database_extension_seed       bigint,
-  created_at                    timestamp not null,
+  task_id                       bigint not null,
   modified_at                   timestamp not null,
   constraint pk_task_trial primary key (id)
 );

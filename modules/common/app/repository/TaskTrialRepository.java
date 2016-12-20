@@ -51,7 +51,7 @@ public class TaskTrialRepository {
             );
         }
         taskTrial.setFinished(taskTrial1.isFinished());
-        taskTrial.getStats().setSubmitDate(LocalDateTime.now());
+        taskTrial.stats.setSubmitDate(LocalDateTime.now());
         return taskTrial;
     }
 }
