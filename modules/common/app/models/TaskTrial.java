@@ -134,6 +134,9 @@ public class TaskTrial extends BaseModel {
 
     @JsonGetter("beginDate")
     public String getBeginDateFormat() {
+        if(beginDate == null) {
+            return null;
+        }
         return beginDate.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
@@ -148,6 +151,9 @@ public class TaskTrial extends BaseModel {
 
     @JsonGetter("submitDate")
     public String getSubmitDateFormat() {
+        if(submitDate == null) {
+            return null;
+        }
         return submitDate.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
