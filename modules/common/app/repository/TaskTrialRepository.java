@@ -8,6 +8,7 @@ import models.TaskTrial;
 import play.Logger;
 import play.libs.Json;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -48,6 +49,7 @@ public class TaskTrialRepository {
             );
         }
         taskTrial.setFinished(taskTrial1.isFinished());
+        taskTrial.setSubmitDate(LocalDateTime.now());
         return taskTrial;
     }
 }

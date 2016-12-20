@@ -111,6 +111,9 @@ public class TaskTrial extends BaseModel {
 
     public void setCorrect(boolean correct) {
         isCorrect = correct;
+        if(correct) {
+            this.setFinished(true);
+        }
     }
 
     public int getTries() {
