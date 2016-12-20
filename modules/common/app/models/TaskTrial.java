@@ -58,6 +58,10 @@ public class TaskTrial extends BaseModel {
     @JsonIgnore
     private SQLResult sqlResult;
 
+    public String getError() {
+        return error.message;
+    }
+
     private class SQLError {
         private final String message;
 

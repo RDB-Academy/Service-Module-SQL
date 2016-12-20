@@ -14,22 +14,6 @@ public class SQLResultSet {
         resultSet = new ArrayList<>();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
-
-        SQLResultSet that = (SQLResultSet) o;
-
-
-        Logger.debug("Check if is equal");
-        // ToDo
-        // Check
-
-
-        return false;
-    }
-
     public List<List<String>> getResultSet() {
         return resultSet;
     }
@@ -44,5 +28,31 @@ public class SQLResultSet {
 
     public void setError(SQLException error) {
         this.error = error;
+    }
+
+    //
+    boolean isSubsetOf(SQLResultSet userResultSet) {
+        Logger.debug("isSubsetOf");
+
+        if(userResultSet.getError() != null) {
+            return false;
+        }
+
+        List<String> refHeader = new ArrayList<>(this.getResultSet().get(0));
+        List<String> userHeader = new ArrayList<>(userResultSet.getResultSet().get(0));
+
+        if (userHeader.containsAll(refHeader)) {
+            Logger.warn("UserHeader doesn't contain all refHeader");
+            return false;
+        }
+        Logger.info("UserHeader contains all refHeader");
+
+        if(this.getResultSet().size() != userResultSet.getResultSet().size()) {
+            Logger.warn("ResultsSets Size is not equal");
+            return false;
+        }
+        Logger.warn("ResultsSets Size is equal");
+
+        return false;
     }
 }

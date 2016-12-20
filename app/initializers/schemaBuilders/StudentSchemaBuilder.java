@@ -26,8 +26,8 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         ColumnDef           student_student_lastname   = this.createNewColumnDef("lastname", "VARCHAR(255)");
         ColumnDef           exam_exam_id               = this.createNewColumnDef("id", "INT");
         ColumnDef           exam_exam_name             = this.createNewColumnDef("name", "VARCHAR(255)");
-        ColumnDef           studentExam_student_id     = this.createNewColumnDef("id", "INT");
-        ColumnDef           studentExam_exam_id        = this.createNewColumnDef("id", "INT");
+        ColumnDef           studentExam_student_id     = this.createNewColumnDef("student_id", "INT");
+        ColumnDef           studentExam_exam_id        = this.createNewColumnDef("exam_id", "INT");
         ColumnDef           studentExam_grade          = this.createNewColumnDef("grade", "INT");
         ForeignKey          studentExam_student        = this.createForeignKey("FK_StudentExam_Student");
         ForeignKey          studentExam_exam           = this.createForeignKey("FK_StudentExam_Exam");

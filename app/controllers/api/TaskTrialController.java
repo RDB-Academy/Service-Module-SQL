@@ -59,7 +59,7 @@ public class TaskTrialController extends Controller {
                         return ok(Json.toJson(taskTrial));
                     }
                     if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
-                        return badRequest(taskTrial.errorsAsJson());
+                        return badRequest(taskTrial.getError());
                     }
                     if(taskTrial.hasError()) {
                         return ok(Json.toJson(taskTrial));

@@ -39,6 +39,7 @@ public class SQLParser {
             System.out.println();
         }
 
+        // Log RefResultSet
         System.out.println("RefResultSet");
         for(List<String> row : refResultSet.getResultSet()) {
             for(String column : row) {
@@ -47,7 +48,7 @@ public class SQLParser {
             System.out.println();
         }
 
-        sqlResult = new SQLResult(userResultSet, userResultSet.equals(refResultSet));
+        sqlResult = new SQLResult(userResultSet, refResultSet.isSubsetOf(userResultSet));
 
         return sqlResult;
     }
