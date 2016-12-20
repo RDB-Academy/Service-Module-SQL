@@ -13,18 +13,18 @@ import play.libs.Json;
 import javax.persistence.*;
 
 /**
- * @author invisible
+ * The TaskTrial Class
  */
 @Entity
 public class TaskTrial extends BaseModel {
     @Id
-    private Long id;
-
+    private Long                id;
     @Embedded
-    public TaskTrialStats       stats;
-
+    public  TaskTrialStats      stats;
     @Embedded @JsonIgnore
-    public DatabaseInformation  databaseInformation;
+    public  DatabaseInformation databaseInformation;
+
+
 
 
     private String userStatement;

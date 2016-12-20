@@ -20,46 +20,37 @@ public class TaskTrialStats {
     private LocalDateTime submitDate;
 
     /**
-     *
+     * The Constructor
      */
     public TaskTrialStats() {
-        this.tries = 0;
-        this.beginDate = LocalDateTime.now();
-        this.submitDate = LocalDateTime.now();
+        this.tries      = 0;
+
+        this.beginDate  = LocalDateTime.now();
+        this.submitDate = null;
     }
 
+    /**
+     * Get the tries
+     * @return return the tries
+     */
     public int getTries() {
         return tries;
     }
 
-    public void setTries(int tries) {
-        this.tries = tries;
-    }
-
     public void incrementTries() {
-        this.setTries(this.getTries() + 1);
-    }
-
-    @JsonIgnore
-    public LocalDateTime getBeginDate() {
-        return beginDate;
+        this.tries++;
     }
 
     @JsonGetter("beginDate")
     public String getBeginDateFormat() {
         if(beginDate == null) {
-            return null;
+            return "";
         }
         return beginDate.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     public void setBeginDate(LocalDateTime beginDate) {
         this.beginDate = beginDate;
-    }
-
-    @JsonIgnore
-    public LocalDateTime getSubmitDate() {
-        return submitDate;
     }
 
     @JsonGetter("submitDate")
