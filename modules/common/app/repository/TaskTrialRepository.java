@@ -40,9 +40,10 @@ public class TaskTrialRepository {
         if(taskTrial1.getUserStatement() != null && !taskTrial1.getUserStatement().isEmpty()) {
             taskTrial.setUserStatement(
                     taskTrial1.getUserStatement()
-                            .replaceAll("\n", "")
-                            .replaceAll("\t", "")
-                            .replaceAll("    ", "")
+                            .replaceAll("\n", " ")
+                            .replaceAll("\t", " ")
+                            .replaceAll("    ", " ")
+                            .replaceAll("\\s+", " ")
                             .trim()
             );
         }
