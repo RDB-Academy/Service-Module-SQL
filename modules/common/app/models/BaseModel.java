@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * @author fabiomazzone
+ * The BaseModel
  */
 @MappedSuperclass
 public abstract class BaseModel extends Model {
