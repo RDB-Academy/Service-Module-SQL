@@ -1,7 +1,6 @@
 package parser;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import play.Logger;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
