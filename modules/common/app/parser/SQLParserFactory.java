@@ -76,11 +76,6 @@ public class SQLParserFactory {
             List<String> createTableStatements = tableMakerStatements.get();
             List<String> genExtensionList = extensionMakerExtension.get();
 
-            // StopWatch
-            LocalDateTime endTime = LocalDateTime.now();
-            Duration differenceTime = Duration.between(startTime, endTime);
-            Logger.debug("Time Needed: " + differenceTime.toMillis() + " Millis");
-
             try {
                 statement = connection.createStatement();
 
@@ -106,6 +101,11 @@ public class SQLParserFactory {
                 Logger.error("Failed while create ");
                 Logger.error(e.getMessage());
             }
+
+            // StopWatch
+            LocalDateTime endTime = LocalDateTime.now();
+            Duration differenceTime = Duration.between(startTime, endTime);
+            Logger.debug("Time Needed: " + differenceTime.toMillis() + " Millis");
 
             connection.close();
             taskTrial.databaseInformation.setIsAvailable(true);

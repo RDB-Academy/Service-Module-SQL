@@ -264,74 +264,36 @@ public class ExtensionMaker {
             });*/
         }
 
-
-        ArrayList<String> insert = new ArrayList<>();
-        for(Map.Entry<String, List<Map<String, String>>> entry : genExtensionByTableMap.entrySet()) {
-
-            String statement;
-
-            List<Map<String, String>> value = entry.getValue();
-
-            Map<String, String> entity = value.get(0);
-
-            final String columnNames = String.join(", ", entity.keySet());
-            System.out.println(columnNames);
-
-            statement = "INSERT INTO " + entry.getKey() +" (" + columnNames+ ") VALUES ";
-
-            Map<String, String> mat;
-
-            System.out.println("MAT: "+genExtensionByTableMap.get(entry.getKey()).get(0));
-
-            for(int i = 0; i < genExtensionByTableMap.get(entry.getKey()).size(); i++) {
-                mat = genExtensionByTableMap.get(entry.getKey()).get(i);
-
-                //System.out.println("Kahn: "+mat.entrySet().iterator().next().getKey());
-                for(Map.Entry<String, String> kahn : mat.entrySet()){
-                    //System.out.println("KEY!: "+kahn.getKey());
-                    //System.out.println("MAP: "+mat.get(kahn.getKey()));
-                }
-
-                statement = statement.concat("(");
-                int j = 0;
-                for(Map.Entry<String, String> kahn : mat.entrySet()){
-                    //System.out.println("KEY: "+kahn.getKey());
-                    //System.out.println("MAP: "+mat.get(kahn.getKey()));
-                    if(mat.get(kahn.getKey()).equals("NULL")){
-                        statement = statement.concat("" + mat.get(kahn.getKey()));
-                    }else{
-                        statement = statement.concat("'" + mat.get(kahn.getKey()) + "'");
-                    }
-                    if(++j != mat.entrySet().size() ){
-                        statement = statement.concat(",");
-                    }
-                }
-
-                statement = statement.concat(")");
-                if(i +1 != genExtensionByTableMap.get(entry.getKey()).size() ){
-                    statement = statement.concat(",");
-                }
-            }
-            statement = statement.concat(";");
-            insert.add(statement);
-
-        }
-
         List<String> insertStatementList = new ArrayList<>();
         genExtensionByTableMap.forEach((tableName, entityList) -> {
             if(entityList.size() > 0) {
+                Set<String>     columnNames;
+                String          insertTemplate;
+
+                columnNames = entityList.get(0).keySet();
+
+                insertTemplate = "INSERT INTO " + tableName + " ( "
+                        + String.join(", ", columnNames) + " ) "
+                        + "VALUES ( ";
+
                 insertStatementList.addAll(
                         entityList
                             .stream()
                             .map(entity -> {
                                 String insertStatement;
-                                Set<String> columnNames = entity.keySet();
+                                insertStatement = insertTemplate;
 
-                                insertStatement = "INSERT INTO " + tableName + " ( "
-                                        + String.join(", ", columnNames) + " ) "
-                                        + "VALUES ( ";
-
-                                String values = String.join(", ", entity.values().stream().map(s -> "'" + s + "'").collect(Collectors.toList()));
+                                String values =
+                                        String.join(
+                                                ", ",
+                                                entity
+                                                    .values()
+                                                    .stream()
+                                                    .map(s ->
+                                                            (s.equalsIgnoreCase("null")) ?
+                                                                    s.toUpperCase() : "'" + s + "'")
+                                                    .collect(Collectors.toList())
+                                        );
 
                                 return insertStatement + values + " );";
                             })
