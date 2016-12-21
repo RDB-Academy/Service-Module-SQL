@@ -54,6 +54,7 @@ public class TestController extends Controller {
         Long seed = random.nextLong();
         Logger.info("Seed: " + seed);
         SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
+
         ExtensionMaker extensionMaker = new ExtensionMaker(seed, schemaDef);
 
         ArrayList<String> v = extensionMaker.buildStatements();
