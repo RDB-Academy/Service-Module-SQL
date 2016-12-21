@@ -4,10 +4,8 @@ import models.ColumnDef;
 import models.SchemaDef;
 import models.TableDef;
 
-import java.util.List;
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author carl
@@ -20,11 +18,11 @@ public class ExtensionMaker {
     String[] mail = {"tu-bs.de","aol.com","att.net","comcast.net","facebook.com","gmail.com","gmx.com","googlemail.com","google.com","hotmail.com","hotmail.co.uk","mac.com","me.com","mail.com","msn.com","live.com","sbcglobal.net","verizon.net","yahoo.com","yahoo.co.uk"};
     String[] metal = {"Calcium","Strontium","Barium","Radium","Aluminum","Gallium","Indium","Tin","Thallium","Lead","Bismuth","Scandium","Titanium","Vanadium","Chromium","Manganese","Iron","Cobalt","Nickel","Copper","Zinc","Yttrium","Zirconium","Niobium","Molybdenum","Technetium","Ruthenium","Rhodium","Palladium","Silver","Cadmium","Lanthanum","Hafnium","Tantalum","Tungsten","Rhenium","Osmium","Iridium","Platinum","Gold"};
     String[] title = {"1984","A Doll's House","A Sentimental Education","Absalom, Absalom!","The Adventures of Huckleberry Finn","The Aeneid","Anna Karenina","Beloved","Berlin Alexanderplatz","Blindness","The Book of Disquiet","The Book of Jo","The Brothers Karamazov","Buddenbrooks","Canterbury Tales","The Castle","Children of Gebelawi","Collected Fictions","Complete Poems","The Complete Stories","The Complete Tales","Confessions of Zeno","Crime and Punishment","Dead Souls","The Death of Ivan Ilyich and Other Stories","Decameron","The Devil to Pay in the Backlands","Diary of a Madman and Other Stories","The Divine Comedy","Don Quixote","Essays","Fairy Tales and Stories","Faust","Gargantua and Pantagruel","The Golden Notebook","Great Expectations","Gulliver's Travels","Gypsy Ballads","Hamlet","History","Hunger","The Idiot","The Iliad","Independent People","Invisible Man","Jacques the Fatalist and His Master","Journey to the End of the Night","King Lear","Leaves of Grass","The Life and Opinions of Tristram Shandy","Lolita","Love in the Time of Cholera","Madame Bovary","The Magic Mountain","Mahabharat","The Man Without Qualities","The Mathnaw","Medea","Memoirs of Hadrian","Metamorphoses","Middlemarch","Midnight's Children","Moby-Dick","Mrs. Dalloway","Njaals Sag","Nostromo","The Odyssey","Oedipus the King Sophocle","Old Goriot","The Old Man and the Sea","One Hundred Years of Solitude","The Orchard","Othello","Pedro Paramo","Pippi Longstocking","Poems","The Possessed","Pride and Prejudice","The Ramayana","The Recognition of Sakuntala","The Red and the Black","Remembrance of Things Past","Season of Migration to the North","Sons and Lovers","The Sound and the Fury","The Sound of the Mountain","The Stranger","The Tale of Genji","Things Fall Apart","Thousand and One Night","The Tin Drum","To the Lighthouse","The Trial","Trilogy: Molloy, Malone Dies, The Unnamable","Ulysses","War and Peace","Wuthering Heights","Zorba the Greek"};
-    String[] firstname = {"Abigail","Alexandra","Alison","Amanda","Amelia","Amy","Andrea","Angela","Anna","Anne","Audrey","Ava","Bella","Bernadette","Carol","Caroline","Carolyn","Chloe","Claire","Deirdre","Diana","Diane","Donna","Dorothy","Elizabeth","Ella","Emily","Emma","Faith","Felicity","Fiona","Gabrielle","Grace","Hannah","Heather","Irene","Jan","Jane","Jasmine","Jennifer","Jessica","Joan","Joanne","Julia","Karen","Katherine","Kimberly","Kylie","Lauren","Leah","Lillian","Lily","Lisa","Madeleine","Maria","Mary","Megan","Melanie","Michelle","Molly","Natalie","Nicola","Olivia","Penelope","Pippa","Rachel","Rebecca","Rose","Ruth","Sally","Samantha","Sarah","Sonia","Sophie","Stephanie","Sue","Theresa","Tracey","Una","Vanessa","Victoria","Virginia","Wanda","Wendy","Yvonne","Zoe","Adam","Adrian","Alan","Alexander","Andrew","Anthony","Austin","Benjamin","Blake","Boris","Brandon","Brian","Cameron","Carl","Charles","Christian","Christopher","Colin","Connor","Dan","David","Dominic","Dylan","Edward","Eric","Evan","Frank","Gavin","Gordon","Harry","Ian","Isaac","Jack","Jacob","Jake","James","Jason","Joe","John","Jonathan","Joseph","Joshua","Julian","Justin","Keith","Kevin","Leonard","Liam","Lucas","Luke","Matt","Max","Michael","Nathan","Neil","Nicholas","Oliver","Owen","Paul","Peter","Phil","Piers","Richard","Robert","Ryan","Sam","Sean","Sebastian","Simon","Stephen","Steven","Stewart","Thomas","Tim","Trevor","Victor","Warren","William"};
+    String[] firstname = {"Fabio","Sören","Abigail","Alexandra","Alison","Amanda","Amelia","Amy","Andrea","Angela","Anna","Anne","Audrey","Ava","Bella","Bernadette","Carol","Caroline","Carolyn","Chloe","Claire","Deirdre","Diana","Diane","Donna","Dorothy","Elizabeth","Ella","Emily","Emma","Faith","Felicity","Fiona","Gabrielle","Grace","Hannah","Heather","Irene","Jan","Jane","Jasmine","Jennifer","Jessica","Joan","Joanne","Julia","Karen","Katherine","Kimberly","Kylie","Lauren","Leah","Lillian","Lily","Lisa","Madeleine","Maria","Mary","Megan","Melanie","Michelle","Molly","Natalie","Nicola","Olivia","Penelope","Pippa","Rachel","Rebecca","Rose","Ruth","Sally","Samantha","Sarah","Sonia","Sophie","Stephanie","Sue","Theresa","Tracey","Una","Vanessa","Victoria","Virginia","Wanda","Wendy","Yvonne","Zoe","Adam","Adrian","Alan","Alexander","Andrew","Anthony","Austin","Benjamin","Blake","Boris","Brandon","Brian","Cameron","Carl","Charles","Christian","Christopher","Colin","Connor","Dan","David","Dominic","Dylan","Edward","Eric","Evan","Frank","Gavin","Gordon","Harry","Ian","Isaac","Jack","Jacob","Jake","James","Jason","Joe","John","Jonathan","Joseph","Joshua","Julian","Justin","Keith","Kevin","Leonard","Liam","Lucas","Luke","Matt","Max","Michael","Nathan","Neil","Nicholas","Oliver","Owen","Paul","Peter","Phil","Piers","Richard","Robert","Ryan","Sam","Sean","Sebastian","Simon","Stephen","Steven","Stewart","Thomas","Tim","Trevor","Victor","Warren","William"};
     String[] word = {"cheap","three","thoughtless","acceptable","yellow","eggnog","rely","exchange","abandoned","cause","order","pet","potato","grin","tired","earth","faithful","jog","lick","fold","innate","periodic","birds","dusty","resolute","unwieldy","stream","surprise","high","can","vanish","employ","poor","snobbish","swim","shrug","needless","measly","boy","extra-large","mammoth","puzzling","flag","need","economic","macabre","gainful","notebook","hug","note","industrious","argument","bustling","temporary","temper","sheet","loaf","silver","miss","cemetery","pop","plastic","sink","gratis","parsimonious","educated","marvelous","witty","hop","fierce","afford","abounding","birth","suit","tangy","basketball","guarantee","classy","drain","better","pleasure","groan","melted","part","carriage","satisfying","room","calculator","tan","inconclusive","women","tidy","tremble","cherry","confess","chunky","rot","handsome","sip","bless","rice","son","bitter","spotless","ink","complete","bushes","frame","toad","flock","moldy","likeable","worthless","panicky","cabbage","weary","call","kiss","sidewalk","ablaze","romantic","undress","unknown","pin","resonant","mend","lighten","turn","reflective","cactus","lean","girls","tail","steam","synonymous","crack","fax","cast","fertile","upset","action","telephone","pricey","theory","guess","rings","robin","basin","cruel","practise","sore","rich","capricious","tiny","jeans","wood","salty","record","lip","interest","school","annoying","screw","spot","pies","sleepy","guitar","competition","magnificent","march","well-groomed","elegant","adhesive","cycle","attend","harsh","trite","coat","door","tree","utter","spell","crayon","brown","quarter","judge","necessary","mark","difficult","scrawny","interrupt","dry","table","venomous","acidic","melodic","mitten","cakes","flippant","scatter"};
     String[] animal = {"Dog","Squirrel","Cougar","Raven","Cat","Alligator","Polar Bear","Possum","Lion","Crocodile","Bear","Koala","Tiger","Chipmunks","Grizzly","Swan","Rabbit","Whale","Platypus","Goat","Duck","Octopus","Sheep","Zebra","Anaconda","Cow","Goose","Eagle","Pig","Donkey","Osprey","Parrot","Panda","Poodle","Elephant","Skunk","Bull","Dolphin","Jaguar","Rooster","Salamander","Tortoise","Chicken","Raccoon","Hedgehog","Piranha","Penguin","Iguana","Turkey","Polar Bear","Flamingo","Crow","Walrus","Worms","Ape","Jellyﬁsh","Frog","Monkey","Giraffe","Sloth","Pigeon","Ostrich","Lobster","Wolf","Swordﬁsh","Cod","Deer","Mackerel","Gecko","Antelope","Bonito","Spider","Catﬁsh","Trout","Cobra","Whale","Falcon","Hamster","Fox","Chimpanzee","Seal","Lama","Kangaroo","Leopard","Camel","Porcupines","Cheetah","Gorilla","Hyena","Crab","Toad","Hippo","Mouse","Quail","Rhino","Rat","Moose","Crab","Tuna","Manta"};
     String[] city = {"New York City","Los Angeles","Chicago","Houston","Philadelphia","Phoenix","San Antonio","San Diego","Dallas","San Jose","Austin","Jacksonville","Indianapolis","San Francisco","Columbus","Fort Worth","Charlotte","Detroit","El Paso","Memphis","Boston","Seattle","Denver","Washington","Nashville-Davidson","Baltimore","Louisville/Jefferson","Portland","Oklahoma","Milwaukee","Las Vegas","Albuquerque","Tucson","Fresno","Sacramento","Long Beach","Kansas","Mesa","Virginia Beach","Atlanta","Colorado Springs","Raleigh","Omaha","Miami","Oakland","Tulsa","Minneapolis","Cleveland","Wichita","Arlington","New Orleans","Bakersfield","Tampa","Honolulu","Anaheim","Aurora","Santa Ana","St. Louis","Riverside","Corpus Christi","Pittsburgh","Lexington-Fayette","Anchorage","Stockton","Cincinnati","Buffalo","Orlando"};
-    String[] lastname = {"Medina","Arnold","Chase","Blake","Blackburn","Chan","Adkins","Pacheco","Barry","Jordan","Bowers","Pitts","Duarte","Dean","Wilkinson","Mcintyre","Joseph","Melton","Summers","Mcintosh","Moody","Pollard","Tran","Delacruz","Cox","Tucker","Wilkerson","Lindsey","Boone","Goodwin","Doyle","Hanson","Velazquez","Camacho","Moss","Tanner","Clark","Bautista","Glenn","Mccormick","Blackwell","Orozco","Clay","Perez","Cervantes","Vance","Lynn","Berry","Perkins","Cherry","Mejia","Rocha","Rosales","Simmons","Calhoun","Mcconnell","Mckee","Davis","Horne","Skinner","Galloway","Cardenas","Villa","Woods","Arroyo","Galvan","Castillo","Sanders","Flowers","Barr","Montes","Briggs","Maynard","Bradshaw","Higgins","Hart","Duke","Alvarez","Hill","Davenport","Douglas","Olsen","Noble","Mason","Parks","Allison","Braun","Bean","Curry","Cummings","Kent","Dodson","Best","Jacobson","Guzman","Hale","Mccarty","Meza","Maxwell","Mcneil","Abraham","Allan","Alsop","Anderson","Arnold","Avery","Bailey","Baker","Ball","Bell","Berry","Black","Blake","Bond","Bower","Brown","Buckland","Burgess","Butler","Cameron","Campbell","Carr","Chapman","Churchill","Clark","Clarkson","Coleman","Cornish","Davidson","Davies","Dickens","Dowd","Duncan","Dyer","Edmunds","Ellison","Ferguson","Fisher","Forsyth","Fraser","Gibson","Gill","Glover","Graham","Grant","Gray","Greene","Hamilton","Hardacre","Harris","Hart","Hemmings","Henderson","Hill","Hodges","Howard","Hudson","Hughes","Hunter","Ince","Jackson","James","Johnston","Jones","Kelly","Kerr","King","Knox","Lambert","Langdon","Lawrence","Lee","Lewis","Lyman","MacDonald","Mackay","Mackenzie","MacLeod","Manning","Marshall","Martin","Mathis","May","McDonald","McLean","McGrath","Metcalfe","Miller","Mills","Mitchell","Morgan","Morrison","Murray","Nash","Newman","Nolan","North","Ogden","Oliver","Paige","Parr","Parsons","Paterson","Payne","Peake","Peters","Piper","Poole","Powell","Pullman","Quinn","Rampling","Randall","Rees","Reid","Roberts","Robertson","Ross","Russell","Rutherford","Sanderson","Scott","Sharp","Short","Simpson","Skinner","Slater","Smith","Springer","Stewart","Sutherland","Taylor","Terry","Thomson","Tucker","Turner","Underwood","Vance","Vaughan","Walker","Wallace","Walsh","Watson","Welch","White","Wilkins","Wilson","Wright","Young"};
+    String[] lastname = {"Naczk","Friebe","Medina","Arnold","Chase","Blake","Blackburn","Chan","Adkins","Pacheco","Barry","Jordan","Bowers","Pitts","Duarte","Dean","Wilkinson","Mcintyre","Joseph","Melton","Summers","Mcintosh","Moody","Pollard","Tran","Delacruz","Cox","Tucker","Wilkerson","Lindsey","Boone","Goodwin","Doyle","Hanson","Velazquez","Camacho","Moss","Tanner","Clark","Bautista","Glenn","Mccormick","Blackwell","Orozco","Clay","Perez","Cervantes","Vance","Lynn","Berry","Perkins","Cherry","Mejia","Rocha","Rosales","Simmons","Calhoun","Mcconnell","Mckee","Davis","Horne","Skinner","Galloway","Cardenas","Villa","Woods","Arroyo","Galvan","Castillo","Sanders","Flowers","Barr","Montes","Briggs","Maynard","Bradshaw","Higgins","Hart","Duke","Alvarez","Hill","Davenport","Douglas","Olsen","Noble","Mason","Parks","Allison","Braun","Bean","Curry","Cummings","Kent","Dodson","Best","Jacobson","Guzman","Hale","Mccarty","Meza","Maxwell","Mcneil","Abraham","Allan","Alsop","Anderson","Arnold","Avery","Bailey","Baker","Ball","Bell","Berry","Black","Blake","Bond","Bower","Brown","Buckland","Burgess","Butler","Cameron","Campbell","Carr","Chapman","Churchill","Clark","Clarkson","Coleman","Cornish","Davidson","Davies","Dickens","Dowd","Duncan","Dyer","Edmunds","Ellison","Ferguson","Fisher","Forsyth","Fraser","Gibson","Gill","Glover","Graham","Grant","Gray","Greene","Hamilton","Hardacre","Harris","Hart","Hemmings","Henderson","Hill","Hodges","Howard","Hudson","Hughes","Hunter","Ince","Jackson","James","Johnston","Jones","Kelly","Kerr","King","Knox","Lambert","Langdon","Lawrence","Lee","Lewis","Lyman","MacDonald","Mackay","Mackenzie","MacLeod","Manning","Marshall","Martin","Mathis","May","McDonald","McLean","McGrath","Metcalfe","Miller","Mills","Mitchell","Morgan","Morrison","Murray","Nash","Newman","Nolan","North","Ogden","Oliver","Paige","Parr","Parsons","Paterson","Payne","Peake","Peters","Piper","Poole","Powell","Pullman","Quinn","Rampling","Randall","Rees","Reid","Roberts","Robertson","Ross","Russell","Rutherford","Sanderson","Scott","Sharp","Short","Simpson","Skinner","Slater","Smith","Springer","Stewart","Sutherland","Taylor","Terry","Thomson","Tucker","Turner","Underwood","Vance","Vaughan","Walker","Wallace","Walsh","Watson","Welch","White","Wilkins","Wilson","Wright","Young"};
     String[] colour = {"IndianRed","LightCoral","Salmon","DarkSalmon","LightSalmon","Crimson","Red","FireBrick","DarkRed","Pink","LightPink","HotPink","DeepPink","MediumVioletRed","PaleVioletRed","LightSalmon","Coral","Tomato","OrangeRed","DarkOrange","Orange","Gold","Yellow","LightYellow","LemonChiffon","LightGoldenRodYellow","PapayaWhip","Moccasin","PeachPuff","PaleGoldenrod","Khaki","DarkKhaki","Lavender","Thistle","Plum","Violet","Orchid","Fuchsia","Magenta","MediumOrchid","MediumPurple","BlueViolet","DarkViolet","DarkOrchid","DarkMagenta","Purple","Indigo","SlateBlue","DarkSlateBlue","MediumSlateBlue","GreenYellow","Chartreuse","LawnGreen","Lime","LimeGreen","PaleGreen","LightGreen","MediumSpringGreen","SpringGreen","MediumSeaGreen","SeaGreen","ForestGreen","Green","DarkGreen","YellowGreen","OliveDrab","Olive","DarkOliveGreen","MediumAquamarine","DarkSeaGreen","LightSeaGreen","DarkCyan","Teal","Aqua","Cyan","LightCyan","PaleTurquoise","Aquamarine","Turquoise","MediumTurquoise","DarkTurquoise","CadetBlue","SteelBlue","LightSteelBlue","PowderBlue","LightBlue","SkyBlue","LightSkyBlue","DeepSkyBlue","DodgerBlue","CornflowerBlue","MediumSlateBlue","RoyalBlue","Blue","MediumBlue","DarkBlue","Navy","MidnightBlue","Cornsilk","BlanchedAlmond","Bisque","NavajoWhite","Wheat","BurlyWood","Tan","RosyBrown","SandyBrown","Goldenrod","DarkGoldenrod","Peru","Chocolate","SaddleBrown","Sienna","Brown","Maroon","White","Snow","Honeydew","MintCream","Azure","AliceBlue","GhostWhite","WhiteSmoke","Seashell","Beige","OldLace","FloralWhite","Ivory","AntiqueWhite","Linen","LavenderBlush","MistyRose","Gainsboro","LightGray","Silver","DarkGray","Gray","DimGray","LightSlateGray","SlateGray","DarkSlateGray","Black"};
     String[] country = {"Qatar","Luxembourg","Singapore","Brunei Darussalam","Kuwait","Norway","United Arab Emirates","Hong Kong","United States","Switzerland","Saudi Arabia","Bahrain","Netherlands","Ireland","Australia","Austria","Sweden","Germany","Taiwan","Canada","Denmark","Oman","Iceland","Belgium","France","Finland","United Kingdom","Japan","Republic Of Korea","New Zealand","Italy","Spain","Israel","Malta","Trinidad And Tobago","Slovenia","Equatorial Guinea","Czech Republic","Slovak Republic","Cyprus","Lithuania","Estonia","Portugal","Greece","Malaysia","Bahamas","Poland","Seychelles","Hungary","Kazakhstan","Russian Federation","Latvia","Chile","Antigua And Barbuda","Gabon","Argentina","Panama","Uruguay","Saint Kitts And Nevis","Croatia","Romania","Turkey","Libyan Arab Jamahiriya","Azerbaijan","Belarus","Mauritius","Mexico","Lebanon","Bulgaria","Bolivarian Republic Of Venezuela","Suriname","Iran","Botswana","Barbados","Montenegro","Palau","Turkmenistan","Costa Rica","Brazil","Thailand","Algeria","Colombia","China","Macedonia","Iraq","Dominican Republic","South Africa","Maldives","Serbia","Peru","Jordan","Grenada","Tunisia","Ecuador","Albania","Egypt","Saint Lucia","Saint Vincent And The Grenadines","Namibia","Sri Lanka","Mongolia","Dominica","Indonesia","Bosnia And Herzegovina","Jamaica","Paraguay","Angola","Fiji","Ukraine","Belize","El Salvador","Bhutan","Georgia","Morocco","Swaziland","Armenia","Guatemala","Philippines","Timor Leste","Guyana","Rep.Congo","Cape Verde","Bolivia","Nigeria","India","Viet Nam","Uzbekistan","Lao People S Democratic Republic","Samoa","Tonga","Myanmar","Moldova","Nicaragua","Pakistan","Honduras","Sudan","Zambia","Ghana","Yemen","Bangladesh","Mauritania","Kyrgyz Republic","Cambodia","Sao Tome And Principe","Kenya","Marshall Islands","Micronesia","Djibouti","Cameroon","Lesotho","Côte D Ivoir"};
     String[] sound = {"an","au","be","ch","da","de","di","ei","el","en","er","es","ge","he","ht","ic","ie","in","it","le","li","nd","ne","ng","re","sc","se","si","st","te","un","en","er","ch","de","ei","ie","in","te","ge","un","en","er","sch","de","ei","ie","in","wi","te","ge","un","wo","ko","ir","re","ni","il"};
@@ -44,12 +42,26 @@ public class ExtensionMaker {
         List<TableDef> tableDefs = schemaDef.getTableDefList();
 
         int tables = schemaDef.getTableDefList().size();
-        int row = 100;
+        int [] row = new int [tables];
+
+        //the point the ids start
+        int start = 1000;
+
+        //number of rows
+        int minRow = 100;
+        int spread = 75;
+
+        //chance for a attribute to be NULL (in %)
+        int nullChance = 2;
+
+
+        TreeMap<String, List<Map<String, String>>> tableMap = new TreeMap<>();
 
         //goes through every table given
         for(int t = 0; t< tables; t++){
+            row[t] = random(minRow,spread);
             TableDef tableDef = tableDefs.get(t);
-            String[][] out = new String[row][tableDef.getColumnDefList().size()];
+            String[][] out = new String[row[t]][tableDef.getColumnDefList().size()];
 
             int column = tableDef.getColumnDefList().size();
 
@@ -61,20 +73,28 @@ public class ExtensionMaker {
                     comp++;
                 }
             }
-            int [] commember = new int [comp];
-            boolean[][] com2 = new boolean[row][row];
-            boolean[][][] com3 = new boolean[row][row][row];
+            int [] comMember = new int [comp];
+            boolean[][] com2 = new boolean[row[t]][row[t]];
+            boolean[][][] com3 = new boolean[row[t]][row[t]][row[t]];
 
             GregorianCalendar gc = new GregorianCalendar();
 
-            //goes 	through row given
-            for(int i = 0; i < row; i++) {
-                int comcount = 0;
 
-                //goes through column and fills it whit an random attribute according to is datatyp
+            List<Map<String, String>> rowList = new ArrayList<>();
+
+            //goes 	through row given
+            for(int i = 0; i < row[t]; i++) {
+                int comCount = 0;
+
+
+                TreeMap<String, String> columnMap = new TreeMap<>();
+
+                //goes through column and fills it whit an random attribute according to its MetaValueSet
                 for(int j = 0; j < column; j++) {
                     ColumnDef columnDef = tableDef.getColumnDefList().get(j);
-                    if (!columnDef.isNotNull() && rand.nextInt(50) == 1){
+
+
+                    if (!columnDef.isNotNull() && chance(nullChance)){
                         out[i][j] = "NULL";
                     }else{
                         switch (columnDef.getMetaValueSet()) {
@@ -89,32 +109,32 @@ public class ExtensionMaker {
                                         }
                                     }
                                 }
-                                out[i][j] = out[i][j] + rand.nextInt(100) +"@"+ mail[rand.nextInt(mail.length)];
+                                out[i][j] = out[i][j] + random(minRow) +"@"+ mail[random(mail.length)];
                                 break;
                             case ColumnDef.META_VALUE_SET_FIRSTNAME:
-                                out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
+                                out[i][j] = gen(firstname);
                                 break;
                             case ColumnDef.META_VALUE_SET_FOREIGN_KEY:
-                                int number = rand.nextInt(row);
+                                int number = random(start, minRow);
                                 out[i][j] = "" + number;
                                 if(columnDef.isPrimary()) {
-                                    commember[comcount] = number;
-                                    comcount++;
-                                    if (comcount == comp) {
+                                    comMember[comCount] = number - start;
+                                    comCount++;
+                                    if (comCount == comp) {
                                         if (comp == 2) {
-                                            if (!com2[commember[0]][commember[1]]) {
-                                                com2[commember[0]][commember[1]] = true;
+                                            if (!com2[comMember[0]][comMember[1]]) {
+                                                com2[comMember[0]][comMember[1]] = true;
                                             } else {
-                                                comcount--;
+                                                comCount--;
                                                 out[i][j] = null;
                                                 j--;
                                             }
                                         }
                                         if (comp == 3) {
-                                            if (!com3[commember[0]][commember[1]][commember[2]]) {
-                                                com3[commember[0]][commember[1]][commember[2]] = true;
+                                            if (!com3[comMember[0]][comMember[1]][comMember[2]]) {
+                                                com3[comMember[0]][comMember[1]][comMember[2]] = true;
                                             } else {
-                                                comcount--;
+                                                comCount--;
                                                 out[i][j] = null;
                                                 j--;
                                             }
@@ -124,54 +144,53 @@ public class ExtensionMaker {
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_ID:
-                                out[i][j] = "" + i;
+                                out[i][j] = "" + (start +  i);
                                 break;
                             case ColumnDef.META_VALUE_SET_ANIMAL:
-                                out[i][j] = "" + animal[rand.nextInt(animal.length)];
+                                out[i][j] = gen(animal);
                                 break;
                             case ColumnDef.META_VALUE_SET_CITY:
-                                out[i][j] = "" + city[rand.nextInt(city.length)];
+                                out[i][j] = gen(city);
                                 break;
                             case ColumnDef.META_VALUE_SET_POSITION:
-                                out[i][j] = "" + position[rand.nextInt(position.length)];
+                                out[i][j] = gen(position);
                                 break;
                             case ColumnDef.META_VALUE_SET_TITLE:
-                                out[i][j] = "" + title[rand.nextInt(title.length)];
+                                out[i][j] = gen(title);
                                 break;
                             case ColumnDef.META_VALUE_SET_FULLNAME:
-                                out[i][j] = "" + firstname[rand.nextInt(firstname.length)] +
-                                           " " + lastname[rand.nextInt(lastname.length)];
+                                out[i][j] = gen(firstname) + gen(lastname);
                                 break;
                             case ColumnDef.META_VALUE_SET_METAL:
-                                out[i][j] = "" + metal[rand.nextInt(metal.length)];
+                                out[i][j] = gen(metal);
                                 break;
                             case ColumnDef.META_VALUE_SET_DAY:
-                                out[i][j] = "" + (1 +rand.nextInt(30));
+                                out[i][j] = "" + random(1,30);
                                 break;
                             case ColumnDef.META_VALUE_SET_NAME:
-                                out[i][j] = "" + firstname[rand.nextInt(firstname.length)];
+                                out[i][j] = gen(firstname);
                                 break;
                             case ColumnDef.META_VALUE_SET_MONTH:
-                                out[i][j] = "" + (1 +rand.nextInt(12));
+                                out[i][j] = "" + random(1,12);
                                 break;
                             case ColumnDef.META_VALUE_SET_YEAR:
-                                out[i][j] = "" + (1930 + rand.nextInt(88));
+                                out[i][j] = "" + random(1930,88);
                                 break;
                             case ColumnDef.META_VALUE_SET_LOREM_IPSUM:
-                                out[i][j] = word[rand.nextInt(word.length)] + " " + word[rand.nextInt(word.length)];
+                                out[i][j] = gen(word) + gen(word);
                                 break;
                             case ColumnDef.META_VALUE_SET_LASTNAME:
-                                out[i][j] = "" + lastname[rand.nextInt(lastname.length)];
+                                out[i][j] = gen(lastname);
                                 break;
                             case ColumnDef.META_VALUE_SET_COLOR:
-                                out[i][j] = "" + colour[rand.nextInt(colour.length)];
+                                out[i][j] = gen(colour);
                                 break;
                             case ColumnDef.META_VALUE_SET_DATE:
-                                int year = (1930 + rand.nextInt(87));
+                                int year = random(1930,87);
 
                                 gc.set(gc.YEAR, year);
 
-                                int dayOfYear = (1 + rand.nextInt(gc.getActualMaximum(gc.DAY_OF_YEAR)));
+                                int dayOfYear = random(1,gc.getActualMaximum(gc.DAY_OF_YEAR));
 
                                 gc.set(gc.DAY_OF_YEAR, dayOfYear);
 
@@ -188,13 +207,13 @@ public class ExtensionMaker {
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_PLANT:
-                                out[i][j] = "" + plant[rand.nextInt(plant.length)];
+                                out[i][j] = gen(plant);
                                 break;
                             case ColumnDef.META_VALUE_SET_GRADE:
-                                out[i][j] = "" + ((10 + rand.nextInt(41))/10);
+                                out[i][j] = "" + (random(10,41)/10);
                                 break;
                             case ColumnDef.META_VALUE_SET_LOCATION:
-                                out[i][j] = "" + country[rand.nextInt(country.length)];
+                                out[i][j] = gen(country);
                                 break;
                             default:
                                 switch (columnDef.getDataType()) {
@@ -202,16 +221,16 @@ public class ExtensionMaker {
                                         int min = columnDef.getMinValueSet();
                                         int max = columnDef.getMaxValueSet();
                                         if( max != 0){
-                                            out[i][j] = "" + ( min + rand.nextInt(max - min));
+                                            out[i][j] = "" + random(min,max - min);
                                         }else{
-                                            out[i][j] = "" + rand.nextInt(1111);
+                                            out[i][j] = "" + random(1111);
                                         }
                                         break;
                                     case "VARCHAR(255)":case "VARCHAR":
-                                        int num = 2 + rand.nextInt(4);
+                                        int num = random(2,4);
                                         out[i][j] = "";
                                         while ( num > 0 ){
-                                            out[i][j] += sound[rand.nextInt(sound.length)];
+                                            out[i][j] += gen(sound);
                                             num--;
                                         }
                                         break;
@@ -222,20 +241,83 @@ public class ExtensionMaker {
                                 break;
                         }
                     }
+                    columnMap.put(columnDef.getName(), out[i][j]);
                 }
+
+                rowList.add(columnMap);
             }
             Extensionlist.add(out);
-
+            tableMap.put(tableDef.getName(), rowList);
+            /*tableMap.entrySet().forEach(entry -> {
+                System.out.println(entry.getKey());
+            });*/
         }
 
-        //transforms the extension in an insert statement
+
         ArrayList<String> insert = new ArrayList<>();
+        for(Map.Entry<String, List<Map<String, String>>> entry : tableMap.entrySet()) {
+
+            String statement;
+
+            List<Map<String, String>> value = entry.getValue();
+
+            Map<String, String> entity = value.get(0);
+
+            final String columnNames = String.join(", ", entity.keySet());
+            System.out.println(columnNames);
+
+            statement = "INSERT INTO " + entry.getKey() +" (" + columnNames+ ") VALUES ";
+
+            Map<String, String> mat;
+
+            System.out.println("MAT: "+tableMap.get(entry.getKey()).get(0));
+
+
+            for(int i = 0; i < tableMap.get(entry.getKey()).size(); i++) {
+                mat = tableMap.get(entry.getKey()).get(i);
+
+                //System.out.println("Kahn: "+mat.entrySet().iterator().next().getKey());
+                for(Map.Entry<String, String> kahn : mat.entrySet()){
+                    //System.out.println("KEY!: "+kahn.getKey());
+                    //System.out.println("MAP: "+mat.get(kahn.getKey()));
+                }
+
+                statement = statement.concat("(");
+                int j = 0;
+                for(Map.Entry<String, String> kahn : mat.entrySet()){
+                    //System.out.println("KEY: "+kahn.getKey());
+                    //System.out.println("MAP: "+mat.get(kahn.getKey()));
+                    if(mat.get(kahn.getKey()).equals("NULL")){
+                        statement = statement.concat("" + mat.get(kahn.getKey()));
+                    }else{
+                        statement = statement.concat("'" + mat.get(kahn.getKey()) + "'");
+                    }
+                    if(++j != mat.entrySet().size() ){
+                        statement = statement.concat(",");
+                    }
+                }
+
+                statement = statement.concat(")");
+                if(i +1 != tableMap.get(entry.getKey()).size() ){
+                    statement = statement.concat(",");
+                }
+            }
+            statement = statement.concat(";");
+            insert.add(statement);
+
+        }
+        tableMap.entrySet().forEach(entry -> {
+            //System.out.println(entry.getKey());
+        });
+        //transforms the extension into an insert statement
+
         for(int t = 0; t< tables; t++){
             TableDef tableDef = tableDefs.get(t);
             int column = tableDef.getColumnDefList().size();
             String statement;
 
-            statement = "INSERT INTO " + tableDef.getName() + " (";
+
+            statement = "INSERT INTO " +  " (";
 
 
             for(int j = 0; j < column; j++) {
@@ -248,7 +330,7 @@ public class ExtensionMaker {
             String[][] mat;
 
             mat = Extensionlist.get(t);
-            for(int i = 0; i < row; i++) {
+            for(int i = 0; i < row[t]; i++) {
                 statement = statement.concat("(");
                 for(int j = 0; j < column; j++) {
                     if(mat[i][j].equals("NULL")){
@@ -261,16 +343,36 @@ public class ExtensionMaker {
                     }
                 }
                 statement = statement.concat(")");
-                if(i +1 != row ){
+                if(i +1 != row[t] ){
                     statement = statement.concat(",");
                 }
             }
             statement = statement.concat(";");
 
-            insert.add(statement);
+            //insert.add(statement);
         }
 
         return insert;
+    }
+
+    public int random( int min,int max){
+        return ( min + rand.nextInt(max));
+    }
+
+    public int random(int max){
+        return rand.nextInt(max);
+    }
+
+    public boolean chance(int chance){
+        if(random(100)< chance){
+            return true;
+        }
+        return false;
+
+    }
+
+    public String gen(String[] field){
+        return "" + field[random(field.length)];
     }
 
     public Long getSeed() {
