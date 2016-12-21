@@ -35,8 +35,10 @@ public class SQLParser {
         SQLResultSet    refResultSet;
 
         userResultSet   = executeStatement(taskTrial.getUserStatement());
-        refResultSet    = executeStatement(taskTrial.getTask().getReferenceStatement());
+        refResultSet    = executeStatement(this.taskTrial.getTask().getReferenceStatement());
+
         sqlResult       = new SQLResult(userResultSet, refResultSet.isSubsetOf(userResultSet));
+
         if(sqlResult.isCorrect()) {
             Logger.debug("Statement is Correct");
         }

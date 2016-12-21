@@ -1,7 +1,5 @@
 package parser;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import models.submodels.ResultSet;
 
 import java.util.ArrayList;
@@ -43,28 +41,8 @@ public class SQLResult {
         }
     }
 
-    public List<String> getHeader() {
-        return header;
-    }
-
-    @JsonGetter("datasets")
-    public List<List<String>> getDataSets() {
-        return dataSets.subList(0, (dataSets.size() > 10)? 10 : dataSets.size());
-    }
-
-    @JsonIgnore
     public boolean isCorrect() {
         return isCorrect;
-    }
-
-    @JsonGetter("errorMessage")
-    public String getError() {
-        return error;
-    }
-
-    @JsonGetter("hintMessage")
-    public String getHint() {
-        return hint;
     }
 
     public ResultSet getAsResultSet() {
