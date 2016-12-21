@@ -264,6 +264,9 @@ public class ExtensionMaker {
             });*/
         }
 
+
+        // InsertStatement Generator
+
         List<String> insertStatementList = new ArrayList<>();
         genExtensionByTableMap.forEach((tableName, entityList) -> {
             if(entityList.size() > 0) {
