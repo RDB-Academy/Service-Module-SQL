@@ -1,80 +1,70 @@
 package services;
 
 import models.Session;
-import models.Task;
 import models.TaskTrial;
 import parser.SQLParser;
 import parser.SQLParserFactory;
 import parser.SQLResult;
 import play.Logger;
 import play.mvc.Http;
-import repository.TaskRepository;
 import repository.TaskTrialRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.time.LocalDateTime;
-import java.util.Random;
 
 /**
  * @author fabiomazzone
  */
 @Singleton
 public class TaskTrialService {
-    private final TaskRepository taskRepository;
     private final TaskTrialRepository taskTrialRepository;
-    private final Random random;
     private final SQLParserFactory sqlParserFactory;
     private final SessionService sessionService;
 
     @Inject
     public TaskTrialService(
-            TaskRepository taskRepository,
             TaskTrialRepository taskTrialRepository,
             SQLParserFactory sqlParserFactory,
             SessionService sessionService) {
 
-        this.taskRepository = taskRepository;
         this.taskTrialRepository = taskTrialRepository;
         this.sqlParserFactory = sqlParserFactory;
         this.sessionService = sessionService;
-
-        this.random = new Random();
     }
 
     /**
      * Create a new TaskTrial Object
      * @return returns the new TaskTrial Object
      */
-    public TaskTrial createTaskTrial() {
-        Session session = this.sessionService.getSession(Http.Context.current());
-        TaskTrial taskTrial;
+    public TaskTrial create() {
+        Session     session;
+        TaskTrial   taskTrial;
+
+        session = this.sessionService.getSession(Http.Context.current());
         if(session == null) {
             session = this.sessionService.createSession(Http.Context.current());
         }
+
         taskTrial = session.getTaskTrial();
 
         if(taskTrial != null) {
-            if(!taskTrial.isFinished()) {
+            if(!taskTrial.getIsFinished()) {
                 return taskTrial;
             } else {
                 this.sqlParserFactory.deleteDatabase(taskTrial);
             }
         }
 
-        taskTrial = new TaskTrial();
-        Task task = this.taskRepository.getRandomTask();
+        taskTrial = this.taskTrialRepository.create();
 
-        taskTrial.setTask(task);
-        taskTrial.setBeginDate(LocalDateTime.now());
-        taskTrial.setDatabaseExtensionSeed(Math.abs(this.random.nextLong()));
+        taskTrial.setSession(session);
 
         taskTrial = this.sqlParserFactory.createParser(taskTrial);
 
         session.setTaskTrial(taskTrial);
-        this.taskTrialRepository.save(taskTrial);
 
-        session.save();
+        this.taskTrialRepository.save(taskTrial);
+        this.sessionService.save(session);
 
         return taskTrial;
     }
@@ -84,8 +74,12 @@ public class TaskTrialService {
     }
 
     public TaskTrial validateStatement(Long id) {
-        TaskTrial taskTrial = this.read(id);
-        if(taskTrial == null || taskTrial.isFinished()) {
+        TaskTrial taskTrial;
+        SQLParser sqlParser;
+        SQLResult sqlResult;
+
+        taskTrial = this.read(id);
+        if(taskTrial == null) {
             return null;
         }
 
@@ -94,27 +88,35 @@ public class TaskTrialService {
                 Http.Context.current().request().body().asJson()
         );
 
-        if(taskTrial.isFinished()) {
+        if(taskTrial.getIsFinished()) {
             taskTrial.save();
             return taskTrial;
         }
 
         if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
-            Logger.warn("SubmittedRequest is null or Empty");
-            taskTrial.addError("SubmittedRequest is null or Empty");
+            Logger.warn("Submitted Statement is null or Empty");
+            taskTrial.setError("Submitted Statement is Empty");
             return taskTrial;
         }
 
-        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
-
         Logger.debug("UserStatement is " + taskTrial.getUserStatement());
 
-        SQLResult sqlResult = sqlParser.submit(taskTrial);
+        sqlParser = this.sqlParserFactory.getParser(taskTrial);
+        if(sqlParser == null) {
+            taskTrial.setError("Cannot create DB Connection");
+            return taskTrial;
+        }
+        sqlResult = sqlParser.submit(taskTrial);
 
-        taskTrial.addTry();
+        taskTrial.stats.incrementTries();
+        taskTrial.resultSet = sqlResult.getAsResultSet();
+        taskTrial.setIsCorrect(sqlResult.isCorrect());
 
-        taskTrial.setSqlResult(sqlResult);
 
+        sqlParser.closeConnection();
+
+
+        taskTrial.save();
         return taskTrial;
     }
 }

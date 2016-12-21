@@ -26,6 +26,13 @@ POST    /tableDef/:id/update        controllers.admin.TableDefController.update(
 DELETE  /tableDef/:id               controllers.admin.TableDefController.delete(id: Long)
 
 
+
+
+GET     /foreignKeyDef/:id          controllers.admin.ForeignKeyDefController.read(id: Long)
+DELETE  /foreignKeyDef/:id          controllers.admin.ForeignKeyDefController.delete(id: Long)
+
+
+
 POST    /columnDef/:id/addColumn    controllers.admin.ColumnDefController.addColumn(id: Long)
 
 #GET     /columnDef/:id              controllers.admin.ColumnDefController.read(id: Long)

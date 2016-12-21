@@ -24,12 +24,25 @@ public class SQLParser {
         this.connection = connection;
     }
 
+    /**
+     *
+     * @param taskTrial
+     * @return
+     */
     public SQLResult submit(TaskTrial taskTrial) {
-        SQLResult sqlResult;
+        SQLResult       sqlResult;
+        SQLResultSet    userResultSet;
+        SQLResultSet    refResultSet;
 
-        SQLResultSet userResultSet = executeStatement(taskTrial.getUserStatement());
-        SQLResultSet refResultSet = executeStatement(taskTrial.getTask().getReferenceStatement());
+        userResultSet   = executeStatement(taskTrial.getUserStatement());
+        refResultSet    = executeStatement(this.taskTrial.getTask().getReferenceStatement());
 
+        sqlResult       = new SQLResult(userResultSet, refResultSet.isSubsetOf(userResultSet));
+
+        if(sqlResult.isCorrect()) {
+            Logger.debug("Statement is Correct");
+        }
+        /*
         // Log UserResultSet
         System.out.println("UserResultSet");
         for(List<String> row : userResultSet.getResultSet()) {
@@ -39,6 +52,7 @@ public class SQLParser {
             System.out.println();
         }
 
+        // Log RefResultSet
         System.out.println("RefResultSet");
         for(List<String> row : refResultSet.getResultSet()) {
             for(String column : row) {
@@ -46,12 +60,18 @@ public class SQLParser {
             }
             System.out.println();
         }
+        */
 
-        sqlResult = new SQLResult(userResultSet, userResultSet.equals(refResultSet));
+
 
         return sqlResult;
     }
 
+    /**
+     *
+     * @param sqlStatement
+     * @return
+     */
     private SQLResultSet executeStatement(String sqlStatement) {
         Statement           statement;
         ResultSet           rs;
@@ -69,7 +89,9 @@ public class SQLParser {
             // Create Header
             List<String> header = new ArrayList<>();
             for(int i = 1; i <= columnCount; i++) {
-                header.add(rsmd.getColumnName(i));
+                header.add(
+                        ((!rsmd.getTableName(i).isEmpty()) ? rsmd.getTableName(i) + "." : "")
+                                + rsmd.getColumnName(i));
             }
             resultSet.add(header);
 
@@ -89,7 +111,7 @@ public class SQLParser {
         } catch (SQLException e) {
             Logger.error("Submit SQL Statement nicht valide oder so");
             Logger.error(e.getMessage());
-            sqlResultSet.setError(e);
+            sqlResultSet.setError(e.getMessage());
         }
         return sqlResultSet;
     }

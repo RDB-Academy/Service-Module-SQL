@@ -1,74 +1,93 @@
 package models;
 
-import com.avaje.ebean.annotation.WhenCreated;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import models.submodels.DatabaseInformation;
+import models.submodels.ResultSet;
+import models.submodels.TaskTrialStats;
 import parser.SQLResult;
-import play.Logger;
-import play.libs.Json;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
- * @author invisible
+ * The TaskTrial Class
  */
 @Entity
 public class TaskTrial extends BaseModel {
     @Id
-    private Long id;
+    private Long                id;
+
+    @Embedded
+    @JsonProperty(value = "stats", access = JsonProperty.Access.READ_ONLY)
+    public  TaskTrialStats      stats;
+
+    @JsonIgnore
+    @Embedded
+    public  DatabaseInformation databaseInformation;
+
+    private String userStatement;
+
+    private boolean isCorrect;
+
+    private boolean isFinished;
 
     @JsonIgnore
     @ManyToOne(optional = false)
     private Task task;
 
-    private int tries = 0;
-
-    private String userStatement;
-
-    private boolean isCorrect = false;
-
-    private boolean isFinished = false;
-
-    @NotNull
-    @WhenCreated
-    @Column(updatable = false)
-    private LocalDateTime beginDate;
-
-    private LocalDateTime submitDate;
-
     @JsonIgnore
-    private String databaseUrl;
-
-    @JsonIgnore
-    private long databaseExtensionSeed;
-
-
+    @ManyToOne(optional = false)
+    private Session session;
 
     @JsonIgnore
     @Transient
-    private SQLError error;
+    private String error;
 
     @Transient
-    @JsonIgnore
-    private SQLResult sqlResult;
+    @JsonProperty(value = "resultSet", access = JsonProperty.Access.READ_ONLY)
+    public ResultSet resultSet;
 
-    private class SQLError {
-        private final String message;
+    /**
+     * The Constructor
+     */
+    public TaskTrial() {
+        this.stats = new TaskTrialStats();
+        this.databaseInformation = new DatabaseInformation();
 
-        SQLError(String message) {
-            this.message = message;
-        }
+        this.isCorrect = false;
+        this.isFinished = false;
     }
-
 
     public Long getId() {
         return id;
+    }
+
+    public String getUserStatement() {
+        return userStatement;
+    }
+
+    public void setUserStatement(String userStatement) {
+        this.userStatement = userStatement;
+    }
+
+    public boolean getIsCorrect() {
+        return isCorrect;
+    }
+
+    public void setIsCorrect(boolean correct) {
+        isCorrect = correct;
+        if(correct) {
+            this.setIsFinished(true);
+        }
+    }
+
+    public boolean getIsFinished() {
+        return isFinished;
+    }
+
+    public void setIsFinished(boolean finished) {
+        isFinished = finished;
     }
 
     public Task getTask() {
@@ -84,111 +103,23 @@ public class TaskTrial extends BaseModel {
         this.task = task;
     }
 
-    public long getDatabaseExtensionSeed() {
-        return databaseExtensionSeed;
+    public Session getSession() {
+        return session;
     }
 
-    public void setDatabaseExtensionSeed(long databaseExtensionSeed) {
-        this.databaseExtensionSeed = databaseExtensionSeed;
-    }
-
-    public String getUserStatement() {
-        return userStatement;
-    }
-
-    public void setUserStatement(String userStatement) {
-        this.userStatement = userStatement;
-    }
-
-    public boolean isCorrect() {
-        return isCorrect;
-    }
-
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
-    }
-
-    public int getTries() {
-        return tries;
-    }
-
-    public void setTries(int tries) {
-        this.tries = tries;
-    }
-
-    public void addTry() {
-        this.tries++;
-    }
-
-    public LocalDateTime getBeginDate() {
-        return beginDate;
-    }
-
-    @JsonIgnore
-    public String getBeginDateFormat() {
-        return beginDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm"));
-    }
-
-    public void setBeginDate(LocalDateTime beginDate) {
-        this.beginDate = beginDate;
-    }
-
-    public LocalDateTime getSubmitDate() {
-        return submitDate;
-    }
-
-    @JsonIgnore
-    public String getSubmitDateFormat() {
-        return submitDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm"));
-    }
-
-    public void setSubmitDate(LocalDateTime submitDate) {
-        this.submitDate = submitDate;
-    }
-
-    public void setDatabaseUrl(String databaseUrl) {
-        this.databaseUrl = databaseUrl;
-    }
-
-    public String getDatabaseUrl() {
-        return databaseUrl;
-    }
-
-    public boolean isFinished() {
-        return isFinished;
-    }
-
-    @JsonSetter("isFinished")
-    public void setFinished(boolean finished) {
-        isFinished = finished;
+    public void setSession(Session session) {
+        this.session = session;
     }
 
     public boolean hasError() {
         return this.error != null;
     }
 
-
-    public void addError(String message) {
-        this.error = new SQLError(message);
+    public String getError() {
+        return error;
     }
 
-    @JsonIgnore
-    public JsonNode errorsAsJson() {
-        ObjectNode errorNode = Json.newObject();
-
-        errorNode.put("errorMessage", this.error.message);
-
-        return errorNode;
+    public void setError(String errorMessage) {
+        this.error = errorMessage;
     }
-
-    @JsonIgnore
-    public void setSqlResult(SQLResult sqlResultSet) {
-        this.sqlResult = sqlResultSet;
-    }
-
-    @JsonGetter("resultSet")
-    public SQLResult getSqlResult() {
-        return sqlResult;
-    }
-
 }

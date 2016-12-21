@@ -80,8 +80,7 @@ public class TestController extends Controller {
         }
 
         taskTrial.setTask(task);
-        taskTrial.setBeginDate(LocalDateTime.now());
-        taskTrial.setDatabaseExtensionSeed(12345L);
+        taskTrial.databaseInformation.setSeed(12345L);
 
         taskTrial = this.sqlParserFactory.createParser(taskTrial);
 

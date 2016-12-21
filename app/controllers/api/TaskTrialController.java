@@ -28,7 +28,7 @@ public class TaskTrialController extends Controller {
 
     public CompletionStage<Result> create() {
         return CompletableFuture
-                .supplyAsync(this.taskTrialService::createTaskTrial, this.httpExecutionContext.current())
+                .supplyAsync(this.taskTrialService::create, this.httpExecutionContext.current())
                 .thenApply(taskTrial -> {
                     if(taskTrial == null) {
                         return internalServerError();
@@ -55,11 +55,11 @@ public class TaskTrialController extends Controller {
                     if(taskTrial == null) {
                         return notFound("No such object available!");
                     }
-                    if(taskTrial.isFinished()) {
+                    if(taskTrial.getIsFinished()) {
                         return ok(Json.toJson(taskTrial));
                     }
                     if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
-                        return badRequest(taskTrial.errorsAsJson());
+                        return badRequest(taskTrial.getError());
                     }
                     if(taskTrial.hasError()) {
                         return ok(Json.toJson(taskTrial));

@@ -27,48 +27,42 @@
                             <table class="table table-hover table-list">
                                 <thead>
                                     <tr>
-                                        <th style="width: 5%;">
+                                        <th style="width: 7.5%;">
                                             #
                                         </th>
-                                        <th style="width: 5%;">
+                                        <th style="width: 7.5%;">
                                             Id
                                         </th>
-                                        <th style="width: 15%;">
+                                        <th style="width: 25%;">
                                             Name
                                         </th>
-                                        <th style="width: 15%;">
+                                        <th style="width: 20%;">
                                             Datatype
                                         </th>
-                                        <th style="width: 10%">
+                                        <th style="width: 17.5%">
                                             Is Primary
                                         </th>
-                                        <th style="width: 10%">
+                                        <th style="width: 22.5%">
                                             Nullable
-                                        </th>
-                                        <th style="width: 20%;">
-                                            Created At
-                                        </th>
-                                        <th style="width: 20%;">
-                                            Modified At
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableBody">
                                 @for((columnDef, index) <- tableDefForm.get().getColumnDefList.zipWithIndex) {
                                     <tr class="">
-                                        <td style="width: 5%;">
+                                        <td style="width: 7.5%;">
                                             @{index + 1}
                                         </td>
-                                        <td style="width: 5%;">
+                                        <td style="width: 7.5%;">
                                             @columnDef.getId
                                         </td>
-                                        <td style="width: 15%;">
+                                        <td style="width: 25%;">
                                             <input type="text" class="form-control" value="@columnDef.getName">
                                         </td>
-                                        <td style="width: 15%;">
+                                        <td style="width: 20%;">
                                             <input type="text" class="form-control" value="@columnDef.getDataType()">
                                         </td>
-                                        <td style="width: 10%;">
+                                        <td style="width: 17.5%;">
                                             @if(columnDef.isPrimary()){
                                                 <select>
                                                     <option selected>true</option>
@@ -81,7 +75,7 @@
                                                 </select>
                                             }
                                         </td>
-                                        <td style="width: 10%;">
+                                        <td style="width: 22.5%;">
                                             @if(columnDef.isNotNull()){
                                                 <select>
                                                     <option selected>true</option>
@@ -93,12 +87,6 @@
                                                     <option selected>false</option>
                                                 </select>
                                             }
-                                        </td>
-                                        <td style="width: 20%;">
-                                            @columnDef.getCreatedAtFromNow
-                                        </td>
-                                        <td style="width: 20%;">
-                                            @columnDef.getModifiedAtFromNow
                                         </td>
                                     </tr>
                                 }
@@ -113,28 +101,26 @@
 
                                     var newRow = $(
                                         '<tr>' +
-                                            '<td style="width: 5%;">-</td>' +
-                                            '<td style="width: 5%;">-</td>' +
-                                            '<td style="width: 15%;">' +
+                                            '<td style="width: 7.5%;">-</td>' +
+                                            '<td style="width: 7.5%;">-</td>' +
+                                            '<td style="width: 25%;">' +
                                                 '<input type="text" class="form-control"/> ' +
                                             '</td>' +
-                                            '<td style="width: 15%;">' +
+                                            '<td style="width: 20%;">' +
                                                 '<input type="text" class="form-control"/> ' +
                                             '</td>' +
-                                            '<td style="width: 10%;">' +
+                                            '<td style="width: 17.5%;">' +
                                                 '<select>' +
                                                     '<option value="true">true</option>' +
-                                                    '<option value="false">false</option>' +
+                                                    '<option selected value="false">false</option>' +
                                                 '</select> ' +
                                             '</td>' +
-                                            '<td style="width: 10%;">' +
+                                            '<td style="width: 17.5%;">' +
                                                 '<select>' +
                                                     '<option value="true">true</option>' +
-                                                    '<option value="false">false</option>' +
+                                                    '<option selected value="false">false</option>' +
                                                 '</select> ' +
                                             '</td>' +
-                                            '<td style="width: 20%;">-</td>' +
-                                            '<td style="width: 15%;">-</td>' +
                                             '<td style="width: 5%;">' +
                                                 '<a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></a>' +
                                             '</td>' +
