@@ -142,8 +142,8 @@ public class FootballSchemaBuilder extends SchemaBuilder {
         teamStadium_stadium_id.setPrimary(true);
         teamStadium_stadium_id.setNotNull(true);
         teamStadium_owned_since.setNotNull(true);
-        teamStadium_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        teamStadium_stadium_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
+        teamStadium_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
+        teamStadium_stadium_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         teamStadium_owned_since.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
         teamStadium_owned_until.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
 

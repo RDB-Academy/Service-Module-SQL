@@ -13,7 +13,7 @@ public class ExtensionMaker {
     private final Long      seed;
     private final SchemaDef schemaDef;
     private final Random    rand;
-    private final int idOffset;
+    private final int       idOffset;
 
     String[] mail = {"tu-bs.de","aol.com","att.net","comcast.net","facebook.com","gmail.com","gmx.com","googlemail.com","google.com","hotmail.com","hotmail.co.uk","mac.com","me.com","mail.com","msn.com","live.com","sbcglobal.net","verizon.net","yahoo.com","yahoo.co.uk"};
     String[] metal = {"Calcium","Strontium","Barium","Radium","Aluminum","Gallium","Indium","Tin","Thallium","Lead","Bismuth","Scandium","Titanium","Vanadium","Chromium","Manganese","Iron","Cobalt","Nickel","Copper","Zinc","Yttrium","Zirconium","Niobium","Molybdenum","Technetium","Ruthenium","Rhodium","Palladium","Silver","Cadmium","Lanthanum","Hafnium","Tantalum","Tungsten","Rhenium","Osmium","Iridium","Platinum","Gold"};
@@ -45,8 +45,8 @@ public class ExtensionMaker {
      *
      * @return
      */
-    public ArrayList<String> buildStatements() {
-        ArrayList<String[][]> Extensionlist = new ArrayList<>();
+    public List<String> buildStatements() {
+        List<String[][]> Extensionlist = new ArrayList<>();
 
         List<TableDef> tableDefs = schemaDef.getTableDefList();
 
@@ -61,7 +61,7 @@ public class ExtensionMaker {
         int nullChance = 2;
 
 
-        TreeMap<String, List<Map<String, String>>> tableMap = new TreeMap<>();
+        Map<String, List<Map<String, String>>> tableMap = new LinkedHashMap<>();
 
         //goes through every table given
         for(int t = 0; t< tables; t++){
@@ -93,7 +93,7 @@ public class ExtensionMaker {
                 int comCount = 0;
 
 
-                TreeMap<String, String> columnMap = new TreeMap<>();
+                Map<String, String> columnMap = new LinkedHashMap<>();
 
                 //goes through column and fills it whit an random attribute according to its MetaValueSet
                 for(int j = 0; j < column; j++) {
@@ -194,22 +194,22 @@ public class ExtensionMaker {
                             case ColumnDef.META_VALUE_SET_DATE:
                                 int year = random(1930,87);
 
-                                gc.set(gc.YEAR, year);
+                                gc.set(Calendar.YEAR, year);
 
-                                int dayOfYear = random(1,gc.getActualMaximum(gc.DAY_OF_YEAR));
+                                int dayOfYear = random(1,gc.getActualMaximum(Calendar.DAY_OF_YEAR));
 
-                                gc.set(gc.DAY_OF_YEAR, dayOfYear);
+                                gc.set(Calendar.DAY_OF_YEAR, dayOfYear);
 
-                                out[i][j] = (gc.get(gc.YEAR) + "-" );
-                                if(gc.get(gc.MONTH) >8){
-                                    out[i][j]= out[i][j].concat(""+ (gc.get(gc.MONTH) + 1));
+                                out[i][j] = (gc.get(Calendar.YEAR) + "-" );
+                                if(gc.get(Calendar.MONTH) >8){
+                                    out[i][j]= out[i][j].concat(""+ (gc.get(Calendar.MONTH) + 1));
                                 }else{
-                                    out[i][j]= out[i][j].concat("0"+ (gc.get(gc.MONTH) + 1));
+                                    out[i][j]= out[i][j].concat("0"+ (gc.get(Calendar.MONTH) + 1));
                                 }
-                                if(gc.get(gc.DAY_OF_MONTH) >9){
-                                    out[i][j]= out[i][j].concat("-"+ (gc.get(gc.DAY_OF_MONTH)));
+                                if(gc.get(Calendar.DAY_OF_MONTH) >9){
+                                    out[i][j]= out[i][j].concat("-"+ (gc.get(Calendar.DAY_OF_MONTH)));
                                 }else{
-                                    out[i][j]= out[i][j].concat("-0"+ (gc.get(gc.DAY_OF_MONTH)));
+                                    out[i][j]= out[i][j].concat("-0"+ (gc.get(Calendar.DAY_OF_MONTH)));
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_PLANT:
@@ -370,10 +370,7 @@ public class ExtensionMaker {
     }
 
     public boolean chance(int chance){
-        if(random(100)< chance){
-            return true;
-        }
-        return false;
+        return random(100) < chance;
 
     }
 
