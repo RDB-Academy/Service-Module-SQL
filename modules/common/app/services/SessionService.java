@@ -123,4 +123,8 @@ public class SessionService {
         Session session = this.getSession(ctx);
         return session != null && !(session.getUserName() == null || session.getUserName().isEmpty());
     }
+
+    public void save(Session session) {
+        session.save();
+    }
 }

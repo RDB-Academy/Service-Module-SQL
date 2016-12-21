@@ -55,7 +55,7 @@ public class TaskTrialController extends Controller {
                     if(taskTrial == null) {
                         return notFound("No such object available!");
                     }
-                    if(taskTrial.isFinished()) {
+                    if(taskTrial.getIsFinished()) {
                         return ok(Json.toJson(taskTrial));
                     }
                     if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {

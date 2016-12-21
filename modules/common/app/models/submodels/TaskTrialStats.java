@@ -1,7 +1,6 @@
 package models.submodels;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -9,6 +8,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * The TaskTrial Stat Class
+ */
 @Embeddable
 public class TaskTrialStats {
     private int tries = 0;

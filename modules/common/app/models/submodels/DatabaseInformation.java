@@ -3,26 +3,59 @@ package models.submodels;
 import javax.persistence.Embeddable;
 
 /**
- * @author fabiomazzone
+ * The Database Information Class
  */
 @Embeddable
 public class DatabaseInformation {
-    private Long    databaseSeed;
-    private String  databaseUrl;
+    private boolean isAvailable;
 
-    public Long getDatabaseSeed() {
-        return databaseSeed;
+    private Long    Seed;
+
+    private String  Url;
+    private String  Path;
+    private String  Name;
+
+    public DatabaseInformation() {
+        this.isAvailable = false;
     }
 
-    public void setDatabaseSeed(Long databaseSeed) {
-        this.databaseSeed = databaseSeed;
+    public boolean getIsAvailable() {
+        return isAvailable;
     }
 
-    public String getDatabaseUrl() {
-        return databaseUrl;
+    public void setIsAvailable(boolean available) {
+        isAvailable = available;
     }
 
-    public void setDatabaseUrl(String databaseUrl) {
-        this.databaseUrl = databaseUrl;
+    public Long getSeed() {
+        return Seed;
+    }
+
+    public void setSeed(Long seed) {
+        Seed = seed;
+    }
+
+    public String getUrl() {
+        return Url;
+    }
+
+    public void setUrl(String url) {
+        Url = url;
+    }
+
+    public String getPath() {
+        return Path;
+    }
+
+    public void setPath(String path) {
+        Path = path;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
     }
 }

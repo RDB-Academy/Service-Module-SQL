@@ -2,13 +2,9 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.submodels.DatabaseInformation;
 import models.submodels.TaskTrialStats;
 import parser.SQLResult;
-import play.libs.Json;
 
 import javax.persistence.*;
 
@@ -19,19 +15,18 @@ import javax.persistence.*;
 public class TaskTrial extends BaseModel {
     @Id
     private Long                id;
+
     @Embedded
     public  TaskTrialStats      stats;
+
     @Embedded @JsonIgnore
     public  DatabaseInformation databaseInformation;
 
-
-
-
     private String userStatement;
 
-    private boolean isCorrect = false;
+    private boolean isCorrect;
 
-    private boolean isFinished = false;
+    private boolean isFinished;
 
     @JsonIgnore
     @ManyToOne(optional = false)
@@ -39,27 +34,21 @@ public class TaskTrial extends BaseModel {
 
     @JsonIgnore
     @Transient
-    private SQLError error;
+    private String error;
 
     @Transient
     @JsonIgnore
     private SQLResult sqlResult;
 
+    /**
+     * The Constructor
+     */
     public TaskTrial() {
         this.stats = new TaskTrialStats();
         this.databaseInformation = new DatabaseInformation();
-    }
 
-    public String getError() {
-        return error.message;
-    }
-
-    private class SQLError {
-        private final String message;
-
-        SQLError(String message) {
-            this.message = message;
-        }
+        this.isCorrect = false;
+        this.isFinished = false;
     }
 
     public Long getId() {
@@ -87,24 +76,22 @@ public class TaskTrial extends BaseModel {
         this.userStatement = userStatement;
     }
 
-    @JsonGetter("isCorrect")
-    public boolean isCorrect() {
+    public boolean getIsCorrect() {
         return isCorrect;
     }
 
-    public void setCorrect(boolean correct) {
+    private void setIsCorrect(boolean correct) {
         isCorrect = correct;
         if(correct) {
-            this.setFinished(true);
+            this.setIsFinished(true);
         }
     }
 
-    public boolean isFinished() {
+    public boolean getIsFinished() {
         return isFinished;
     }
 
-    @JsonSetter("isFinished")
-    public void setFinished(boolean finished) {
+    public void setIsFinished(boolean finished) {
         isFinished = finished;
     }
 
@@ -112,24 +99,18 @@ public class TaskTrial extends BaseModel {
         return this.error != null;
     }
 
-
-    public void addError(String message) {
-        this.error = new SQLError(message);
+    public String getError() {
+        return error;
     }
 
-    @JsonIgnore
-    public JsonNode errorsAsJson() {
-        ObjectNode errorNode = Json.newObject();
-
-        errorNode.put("errorMessage", this.error.message);
-
-        return errorNode;
+    public void setError(String errorMessage) {
+        this.error = errorMessage;
     }
 
     @JsonIgnore
     public void setSqlResult(SQLResult sqlResultSet) {
         this.sqlResult = sqlResultSet;
-        this.setCorrect(sqlResult.isCorrect());
+        this.setIsCorrect(sqlResult.isCorrect());
     }
 
     @JsonGetter("resultSet")
