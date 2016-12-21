@@ -5,7 +5,7 @@ import models.SchemaDef;
 import models.TableDef;
 
 import java.util.*;
-
+import java.util.stream.Collectors;
 
 /**
  * @author carl
@@ -13,7 +13,11 @@ import java.util.*;
 public class ExtensionMaker {
     private final Long      seed;
     private final SchemaDef schemaDef;
-    private final Random rand;
+    private final Random    rand;
+    private final Integer   idOffset;
+    private final Integer   minEntities;
+    private final Integer   maxEntities;
+    private final Integer   nullChance = 2;
 
     String[] mail = {"tu-bs.de","aol.com","att.net","comcast.net","facebook.com","gmail.com","gmx.com","googlemail.com","google.com","hotmail.com","hotmail.co.uk","mac.com","me.com","mail.com","msn.com","live.com","sbcglobal.net","verizon.net","yahoo.com","yahoo.co.uk"};
     String[] metal = {"Calcium","Strontium","Barium","Radium","Aluminum","Gallium","Indium","Tin","Thallium","Lead","Bismuth","Scandium","Titanium","Vanadium","Chromium","Manganese","Iron","Cobalt","Nickel","Copper","Zinc","Yttrium","Zirconium","Niobium","Molybdenum","Technetium","Ruthenium","Rhodium","Palladium","Silver","Cadmium","Lanthanum","Hafnium","Tantalum","Tungsten","Rhenium","Osmium","Iridium","Platinum","Gold"};
@@ -29,38 +33,49 @@ public class ExtensionMaker {
     String[] position = {"C","G","T","QB","RB","WR","TE","DT","DE","MLB","OLB","CB","S","K","H","LS","P","KOS","KR","PR"};
     String[] plant = {"Aloe Vera","Alfalfa","American Coffee Berry Tree","Bloodroot","Bouncing Bet","Bull Nettle","Bracken or Brake Fern","Burning Bush","Buttercup","Carelessweed ","Castor Bean","Chrysanthemums","Clover","Cocklebur","Creeping Charlie","Crown of Thorns","Curly Dock","Daffodil","Daphne","Delphinium","Devil's Trumpet","Dogbane","Dutchman's Breeches","Elderberry","Ergot","Fern","Fireweed","Foxglove","Poison Hemlock","Water Hemlock","Hemp","Horse Chestnut, Buckeyes","Horse Nettle","Horsetails","Hyacinth","Hydrangea","English Ivy","Ground Ivy","Poison Ivy","Jack-in-the-Pulpit","Japanese Yew","Jerusalem Cherry","Jimson Weed","Kalanchoe","Kentucky Coffee Tree","Kentucky Mahagony Tree","Klamath Weed","Lamb's Quarters","Lantana","Larkspur","Daylily","True Lily","Lily-of-the-Valley","Lupine","Mad Apple","Maple, Red","Mayapple","Milkweed","Mint","Mountain Laurel","Nicker Tree","Nightshade","Oleander","Ohio Buckeye","Philodendron","Pigweed","Poinsettia","Poke","Purple Mint","Redroot","Rhododendron","Rhubarb","Rosary Pea","Squirrelcorn","Staggerweed","St. Johnswort","Stinging Nettle","Stink Weed","Stump Tree","Sudan Grass","Summer Cypress","Thorn Apple","Tulip","White Snakeroot","Wild Onion","Yellow Sage"};
 
-    public ExtensionMaker(Long seed, SchemaDef schemaDef) {
-        this.seed = seed;
-        this.schemaDef = schemaDef;
-        this.rand = new Random(this.seed);
+    /**
+     *
+     * @param seed
+     * @param schemaDef
+     */
+    public ExtensionMaker(
+            Long seed,
+            SchemaDef schemaDef,
+            Integer idOffset,
+            Integer minEntities,
+            Integer maxEntities ) {
+
+        this.seed           = seed;
+        this.schemaDef      = schemaDef;
+        this.rand           = new Random(this.seed);
+        this.idOffset       = idOffset;
+        this.minEntities    = minEntities;
+        this.maxEntities    = maxEntities;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> buildStatements() {
+        Map<String, List<Map<String, String>>>  genExtensionByTableMap;
+        List<TableDef>                          tableDefList;
+
+        genExtensionByTableMap  = new LinkedHashMap<>();
+        tableDefList            = schemaDef.getTableDefList();
 
         List<String[][]> Extensionlist = new ArrayList<>();
-
-        List<TableDef> tableDefs = schemaDef.getTableDefList();
-
         int tables = schemaDef.getTableDefList().size();
         int [] row = new int [tables];
 
-        //the point the ids start
-        int start = 1000;
-
-        //number of rows
-        int minRow = 100;
-        int spread = 75;
-
-        //chance for a attribute to be NULL (in %)
-        int nullChance = 2;
-
-
-        Map<String, List<Map<String, String>>> tableMap = new LinkedHashMap<>();
-
         //goes through every table given
         for(int t = 0; t< tables; t++){
-            row[t] = random(minRow,spread);
-            TableDef tableDef = tableDefs.get(t);
+            TableDef tableDef = tableDefList.get(t);
+            List<Map<String, String>> rowList = new ArrayList<>();
+
+            Integer rowCount = randomBetween(this.minEntities, this.maxEntities);
+            row[t] = rowCount;
+
             String[][] out = new String[row[t]][tableDef.getColumnDefList().size()];
 
             int column = tableDef.getColumnDefList().size();
@@ -69,7 +84,8 @@ public class ExtensionMaker {
             int comp = 0;
             for(int j = 0; j < column; j++) {
                 ColumnDef columnDef = tableDef.getColumnDefList().get(j);
-                if(columnDef.isPrimary() && columnDef.getMetaValueSet() == ColumnDef.META_VALUE_SET_FOREIGN_KEY) {
+                if(columnDef.isPrimary()
+                        && columnDef.getMetaValueSet() == ColumnDef.META_VALUE_SET_FOREIGN_KEY) {
                     comp++;
                 }
             }
@@ -77,17 +93,11 @@ public class ExtensionMaker {
             boolean[][] com2 = new boolean[row[t]][row[t]];
             boolean[][][] com3 = new boolean[row[t]][row[t]][row[t]];
 
-            GregorianCalendar gc = new GregorianCalendar();
-
-
-            List<Map<String, String>> rowList = new ArrayList<>();
-
             //goes 	through row given
-            for(int i = 0; i < row[t]; i++) {
+            for(int i = 0; i < rowCount; i++) {
+                Map<String, String> entityMap = new LinkedHashMap<>();
+
                 int comCount = 0;
-
-
-                Map<String, String> columnMap = new LinkedHashMap<>();
 
                 //goes through column and fills it whit an random attribute according to its MetaValueSet
                 for(int j = 0; j < column; j++) {
@@ -109,16 +119,16 @@ public class ExtensionMaker {
                                         }
                                     }
                                 }
-                                out[i][j] = out[i][j] + random(minRow) +"@"+ mail[random(mail.length)];
+                                out[i][j] = out[i][j] + random(this.minEntities) +"@"+ mail[random(mail.length)];
                                 break;
                             case ColumnDef.META_VALUE_SET_FIRSTNAME:
                                 out[i][j] = gen(firstname);
                                 break;
                             case ColumnDef.META_VALUE_SET_FOREIGN_KEY:
-                                int number = random(start, minRow);
+                                int number = random(this.idOffset, this.minEntities);
                                 out[i][j] = "" + number;
                                 if(columnDef.isPrimary()) {
-                                    comMember[comCount] = number - start;
+                                    comMember[comCount] = number - idOffset;
                                     comCount++;
                                     if (comCount == comp) {
                                         if (comp == 2) {
@@ -144,7 +154,7 @@ public class ExtensionMaker {
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_ID:
-                                out[i][j] = "" + (start +  i);
+                                out[i][j] = "" + (idOffset +  i);
                                 break;
                             case ColumnDef.META_VALUE_SET_ANIMAL:
                                 out[i][j] = gen(animal);
@@ -186,6 +196,7 @@ public class ExtensionMaker {
                                 out[i][j] = gen(colour);
                                 break;
                             case ColumnDef.META_VALUE_SET_DATE:
+                                GregorianCalendar gc = new GregorianCalendar();
                                 int year = random(1930,87);
 
                                 gc.set(Calendar.YEAR, year);
@@ -241,13 +252,13 @@ public class ExtensionMaker {
                                 break;
                         }
                     }
-                    columnMap.put(columnDef.getName(), out[i][j]);
+                    entityMap.put(columnDef.getName(), out[i][j]);
                 }
 
-                rowList.add(columnMap);
+                rowList.add(entityMap);
             }
             Extensionlist.add(out);
-            tableMap.put(tableDef.getName(), rowList);
+            genExtensionByTableMap.put(tableDef.getName(), rowList);
             /*tableMap.entrySet().forEach(entry -> {
                 System.out.println(entry.getKey());
             });*/
@@ -255,7 +266,7 @@ public class ExtensionMaker {
 
 
         ArrayList<String> insert = new ArrayList<>();
-        for(Map.Entry<String, List<Map<String, String>>> entry : tableMap.entrySet()) {
+        for(Map.Entry<String, List<Map<String, String>>> entry : genExtensionByTableMap.entrySet()) {
 
             String statement;
 
@@ -270,11 +281,10 @@ public class ExtensionMaker {
 
             Map<String, String> mat;
 
-            System.out.println("MAT: "+tableMap.get(entry.getKey()).get(0));
+            System.out.println("MAT: "+genExtensionByTableMap.get(entry.getKey()).get(0));
 
-
-            for(int i = 0; i < tableMap.get(entry.getKey()).size(); i++) {
-                mat = tableMap.get(entry.getKey()).get(i);
+            for(int i = 0; i < genExtensionByTableMap.get(entry.getKey()).size(); i++) {
+                mat = genExtensionByTableMap.get(entry.getKey()).get(i);
 
                 //System.out.println("Kahn: "+mat.entrySet().iterator().next().getKey());
                 for(Map.Entry<String, String> kahn : mat.entrySet()){
@@ -298,7 +308,7 @@ public class ExtensionMaker {
                 }
 
                 statement = statement.concat(")");
-                if(i +1 != tableMap.get(entry.getKey()).size() ){
+                if(i +1 != genExtensionByTableMap.get(entry.getKey()).size() ){
                     statement = statement.concat(",");
                 }
             }
@@ -306,53 +316,34 @@ public class ExtensionMaker {
             insert.add(statement);
 
         }
-        tableMap.entrySet().forEach(entry -> {
-            //System.out.println(entry.getKey());
+
+        List<String> insertStatementList = new ArrayList<>();
+        genExtensionByTableMap.forEach((tableName, entityList) -> {
+            if(entityList.size() > 0) {
+                insertStatementList.addAll(
+                        entityList
+                            .stream()
+                            .map(entity -> {
+                                String insertStatement;
+                                Set<String> columnNames = entity.keySet();
+
+                                insertStatement = "INSERT INTO " + tableName + " ( "
+                                        + String.join(", ", columnNames) + " ) "
+                                        + "VALUES ( ";
+
+                                String values = String.join(", ", entity.values().stream().map(s -> "'" + s + "'").collect(Collectors.toList()));
+
+                                return insertStatement + values + " );";
+                            })
+                            .collect(Collectors.toList()));
+            }
         });
-        //transforms the extension into an insert statement
 
-        for(int t = 0; t< tables; t++){
-            TableDef tableDef = tableDefs.get(t);
-            int column = tableDef.getColumnDefList().size();
-            String statement;
+        return insertStatementList;
+    }
 
-
-            statement = "INSERT INTO " +  " (";
-
-
-            for(int j = 0; j < column; j++) {
-                statement = statement.concat("" + tableDef.getColumnDefList().get(j).getName());
-                if(j +1 != column ){
-                    statement = statement.concat(",");
-                }
-            }
-            statement = statement.concat(") " + "VALUES ");
-            String[][] mat;
-
-            mat = Extensionlist.get(t);
-            for(int i = 0; i < row[t]; i++) {
-                statement = statement.concat("(");
-                for(int j = 0; j < column; j++) {
-                    if(mat[i][j].equals("NULL")){
-                        statement = statement.concat("" + mat[i][j]);
-                    }else{
-                        statement = statement.concat("'" + mat[i][j] + "'");
-                    }
-                    if(j +1 != column ){
-                        statement = statement.concat(",");
-                    }
-                }
-                statement = statement.concat(")");
-                if(i +1 != row[t] ){
-                    statement = statement.concat(",");
-                }
-            }
-            statement = statement.concat(";");
-
-            //insert.add(statement);
-        }
-
-        return insert;
+    private Integer randomBetween(Integer minEntities, Integer maxEntities) {
+        return ( minEntities + rand.nextInt(maxEntities - minEntities));
     }
 
     public int random( int min,int max){

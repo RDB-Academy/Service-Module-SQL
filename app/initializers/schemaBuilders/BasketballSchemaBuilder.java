@@ -256,10 +256,53 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
 
         Task task = new Task();
 
-        task.setName("Players Age");
         task.setText("What is the average age of all players?");
         task.setReferenceStatement("SELECT avg(age) as average FROM player;");
+        taskList.add(task);
 
+        task.setText("List the ids of the most used stadiums in 2015.?");
+        task.setReferenceStatement("SELECT stadium_id, count(id) FROM game WHERE year = 2015 GROUP BY stadium_id HAVING count(id) = (Select max(totalCount) from( SELECT  stadium_id, COUNT(id) totalCount FROM    game WHERE year = 2015 GROUP   BY stadium_id ) as s)");
+        taskList.add(task);
+
+        task.setText("How many teams have not played in the stadium with id “5”?");
+        task.setReferenceStatement("SELECT count(distinct(u.id))\n" +
+                "FROM team AS u\n" +
+                "LEFT JOIN game AS p ON \n" +
+                "(p.guest_team_id = u.id or p.home_team_id = u.id) and p.stadium_id = 5\n" +
+                "WHERE p.id IS NULL");
+        taskList.add(task);
+
+        task.setText("How many players are from Canada?");
+        task.setReferenceStatement("SELECT count(id)\n" +
+                "FROM player\n" +
+                "WHERE country LIKE '%canada%'\n" +
+                "OR country LIKE '%Canada%';");
+        taskList.add(task);
+
+        task.setText("Show the age, the lastname and the country of the player who got most points so far.");
+        task.setReferenceStatement(" SELECT age,lastname, country\n" +
+                "FROM player\n" +
+                "WHERE points_per_game*games_played =(SELECT max(points_per_game*games_played)\n" +
+                "\t\t\t FROM player)");
+        taskList.add(task);
+
+        task.setText("Give me a set of all cities of the guest teams who won in the year 2015. ");
+        task.setReferenceStatement("SELECT distinct(t.city)\n" +
+                "FROM team AS t\n" +
+                "JOIN game AS g ON t.id = g.home_team_id\n" +
+                "WHERE g.home_score > g.guest_score\n" +
+                "AND g.year=2015");
+        taskList.add(task);
+
+        task.setText("What is the percentage that a guest team wins, based on the given data?");
+        task.setReferenceStatement("WITH result1 as (\n" +
+                "SELECT count(id) as wins\n" +
+                "FROM game\n" +
+                "WHERE guest_score > home_score)\n" +
+                "\n" +
+                "SELECT ((SELECT result1.wins\n" +
+                "FROM result1)*100/ (SELECT count(id)\n" +
+                "\t\tFROM game))");
         taskList.add(task);
 
         return taskList;

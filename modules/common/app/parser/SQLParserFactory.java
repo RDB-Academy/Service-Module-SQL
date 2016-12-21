@@ -54,7 +54,13 @@ public class SQLParserFactory {
 
         schemaDef       = taskTrial.getTask().getSchemaDef();
         tableMaker      = new TableMaker(schemaDef);
-        extensionMaker  = new ExtensionMaker(taskTrial.databaseInformation.getSeed(), schemaDef);
+        extensionMaker  = new ExtensionMaker(
+                taskTrial.databaseInformation.getSeed(),
+                schemaDef,
+                0,
+                75,
+                150
+        );
 
         // StopWatch
         LocalDateTime startTime = LocalDateTime.now();
