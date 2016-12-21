@@ -1,10 +1,14 @@
 package initializers.schemaBuilders;
 
+import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
 import models.*;
+import models.submodels.ExtensionDef;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by carl on 21.12.16.
@@ -18,76 +22,76 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
 
     @Override
     protected SchemaDef buildSchema() {
-        SchemaDef           basketballSchema            = this.createNewSchemaDef();
-        TableDef            team                        = this.createNewTableDef("team");
-        TableDef            stadium                     = this.createNewTableDef("stadium");
-        TableDef            game                        = this.createNewTableDef("game");
-        TableDef            player                      = this.createNewTableDef("player");
-        TableDef            forward                     = this.createNewTableDef("forward");
-        TableDef            guard                       = this.createNewTableDef("guard");
-        TableDef            center                      = this.createNewTableDef("center");
+        SchemaDef basketballSchema = this.createNewSchemaDef();
+        TableDef team = this.createNewTableDef("team");
+        TableDef stadium = this.createNewTableDef("stadium");
+        TableDef game = this.createNewTableDef("game");
+        TableDef player = this.createNewTableDef("player");
+        TableDef forward = this.createNewTableDef("forward");
+        TableDef guard = this.createNewTableDef("guard");
+        TableDef center = this.createNewTableDef("center");
 
-        ColumnDef           team_team_id                = this.createNewColumnDef("id", "INT");
-        ColumnDef           team_team_city              = this.createNewColumnDef("city", "VARCHAR(255)");
-        ColumnDef           team_team_color             = this.createNewColumnDef("color", "VARCHAR(255)");
-        ColumnDef           team_mascot                 = this.createNewColumnDef("mascot", "VARCHAR(255)");
+        ColumnDef team_team_id = this.createNewColumnDef("id", "INT");
+        ColumnDef team_team_city = this.createNewColumnDef("city", "VARCHAR(255)");
+        ColumnDef team_team_color = this.createNewColumnDef("color", "VARCHAR(255)");
+        ColumnDef team_mascot = this.createNewColumnDef("mascot", "VARCHAR(255)");
 
-        ColumnDef           stadium_stadium_id          = this.createNewColumnDef("id", "INT");
-        ColumnDef           stadium_stadium_name        = this.createNewColumnDef("name", "VARCHAR(255)");
-        ColumnDef           stadium_stadium_city        = this.createNewColumnDef("city", "VARCHAR(255)");
-        ColumnDef           stadium_stadium_capacity    = this.createNewColumnDef("capacity", "INT");
+        ColumnDef stadium_stadium_id = this.createNewColumnDef("id", "INT");
+        ColumnDef stadium_stadium_name = this.createNewColumnDef("name", "VARCHAR(255)");
+        ColumnDef stadium_stadium_city = this.createNewColumnDef("city", "VARCHAR(255)");
+        ColumnDef stadium_stadium_capacity = this.createNewColumnDef("capacity", "INT");
 
-        ColumnDef           game_game_id                = this.createNewColumnDef("id", "INT");
-        ColumnDef           game_stadium_id             = this.createNewColumnDef("stadium_id", "INT");
-        ColumnDef           game_home_score             = this.createNewColumnDef("home_score", "INT");
-        ColumnDef           game_guest_score            = this.createNewColumnDef("guest_score", "INT");
-        ColumnDef           game_home_team_id           = this.createNewColumnDef("home_team_id", "INT");
-        ColumnDef           game_guest_team_id          = this.createNewColumnDef("guest_team_id", "INT");
+        ColumnDef game_game_id = this.createNewColumnDef("id", "INT");
+        ColumnDef game_stadium_id = this.createNewColumnDef("stadium_id", "INT");
+        ColumnDef game_home_score = this.createNewColumnDef("home_score", "INT");
+        ColumnDef game_guest_score = this.createNewColumnDef("guest_score", "INT");
+        ColumnDef game_home_team_id = this.createNewColumnDef("home_team_id", "INT");
+        ColumnDef game_guest_team_id = this.createNewColumnDef("guest_team_id", "INT");
 
-        ColumnDef           player_player_id            = this.createNewColumnDef("id" , "INT");
-        ColumnDef           player_player_firstname     = this.createNewColumnDef("firstname", "VARCHAR(255)");
-        ColumnDef           player_player_lastname      = this.createNewColumnDef("lastname", "VARCHAR(255)");
-        ColumnDef           player_player_country       = this.createNewColumnDef("country", "VARCHAR(255)");
-        ColumnDef           player_player_age           = this.createNewColumnDef("age", "INT");
-        ColumnDef           player_player_number        = this.createNewColumnDef("number", "INT");
-        ColumnDef           player_player_height        = this.createNewColumnDef("height", "INT");
-        ColumnDef           player_player_weight        = this.createNewColumnDef("weight", "INT");
-        ColumnDef           player_points_per_game      = this.createNewColumnDef("points_per_game", "INT");
+        ColumnDef player_player_id = this.createNewColumnDef("id", "INT");
+        ColumnDef player_player_firstname = this.createNewColumnDef("firstname", "VARCHAR(255)");
+        ColumnDef player_player_lastname = this.createNewColumnDef("lastname", "VARCHAR(255)");
+        ColumnDef player_player_country = this.createNewColumnDef("country", "VARCHAR(255)");
+        ColumnDef player_player_age = this.createNewColumnDef("age", "INT");
+        ColumnDef player_player_number = this.createNewColumnDef("number", "INT");
+        ColumnDef player_player_height = this.createNewColumnDef("height", "INT");
+        ColumnDef player_player_weight = this.createNewColumnDef("weight", "INT");
+        ColumnDef player_points_per_game = this.createNewColumnDef("points_per_game", "INT");
 
-        ColumnDef           center_player_id            = this.createNewColumnDef("player_id", "INT");
-        ColumnDef           center_team_id              = this.createNewColumnDef("team_id", "INT");
-        ColumnDef           center_blocks               = this.createNewColumnDef("blocks", "INT");
-        ColumnDef           center_rebounds             = this.createNewColumnDef("rebounds", "INT");
+        ColumnDef center_player_id = this.createNewColumnDef("player_id", "INT");
+        ColumnDef center_team_id = this.createNewColumnDef("team_id", "INT");
+        ColumnDef center_blocks = this.createNewColumnDef("blocks", "INT");
+        ColumnDef center_rebounds = this.createNewColumnDef("rebounds", "INT");
 
-        ColumnDef           guard_player_id             = this.createNewColumnDef("player_id", "INT");
-        ColumnDef           guard_team_id               = this.createNewColumnDef("team_id", "INT");
-        ColumnDef           guard_three_pointers        = this.createNewColumnDef("three_pointers", "INT");
-        ColumnDef           guard_assists               = this.createNewColumnDef("assists", "INT");
+        ColumnDef guard_player_id = this.createNewColumnDef("player_id", "INT");
+        ColumnDef guard_team_id = this.createNewColumnDef("team_id", "INT");
+        ColumnDef guard_three_pointers = this.createNewColumnDef("three_pointers", "INT");
+        ColumnDef guard_assists = this.createNewColumnDef("assists", "INT");
 
-        ColumnDef           forward_player_id           = this.createNewColumnDef("player_id", "INT");
-        ColumnDef           forward_team_id             = this.createNewColumnDef("team_id", "INT");
+        ColumnDef forward_player_id = this.createNewColumnDef("player_id", "INT");
+        ColumnDef forward_team_id = this.createNewColumnDef("team_id", "INT");
 
-        ForeignKey          center_team             = this.createForeignKey("FK_Center_Team");
-        ForeignKey          center_player           = this.createForeignKey("FK_Center_Player");
-        ForeignKeyRelation  center_team_rel         = this.createForeignKeyRelation(team_team_id, center_team_id);
-        ForeignKeyRelation  center_player_rel       = this.createForeignKeyRelation(player_player_id, center_player_id);
+        ForeignKey center_team = this.createForeignKey("FK_Center_Team");
+        ForeignKey center_player = this.createForeignKey("FK_Center_Player");
+        ForeignKeyRelation center_team_rel = this.createForeignKeyRelation(center_team_id, team_team_id);
+        ForeignKeyRelation center_player_rel = this.createForeignKeyRelation(center_player_id, player_player_id);
 
-        ForeignKey          forward_team            = this.createForeignKey("FK_Forward_Team");
-        ForeignKey          forward_player          = this.createForeignKey("FK_Forward_Player");
-        ForeignKeyRelation  forward_team_rel        = this.createForeignKeyRelation(team_team_id, forward_team_id);
-        ForeignKeyRelation  forward_player_rel      = this.createForeignKeyRelation(player_player_id, forward_player_id);
+        ForeignKey forward_team = this.createForeignKey("FK_Forward_Team");
+        ForeignKey forward_player = this.createForeignKey("FK_Forward_Player");
+        ForeignKeyRelation forward_team_rel = this.createForeignKeyRelation(forward_team_id, team_team_id);
+        ForeignKeyRelation forward_player_rel = this.createForeignKeyRelation(forward_player_id, player_player_id);
 
-        ForeignKey          guard_team              = this.createForeignKey("FK_TeamStadium_Team");
-        ForeignKey          guard_player            = this.createForeignKey("FK_TeamStadium_Stadium");
-        ForeignKeyRelation  guard_team_rel          = this.createForeignKeyRelation(team_team_id, guard_team_id);
-        ForeignKeyRelation  guard_player_rel        = this.createForeignKeyRelation(player_player_id, guard_player_id);
+        ForeignKey guard_team = this.createForeignKey("FK_TeamStadium_Team");
+        ForeignKey guard_player = this.createForeignKey("FK_TeamStadium_Stadium");
+        ForeignKeyRelation guard_team_rel = this.createForeignKeyRelation(guard_team_id, team_team_id);
+        ForeignKeyRelation guard_player_rel = this.createForeignKeyRelation(guard_player_id, player_player_id);
 
-        ForeignKey          game_home_team       = this.createForeignKey("FK_Game_Home_Team");
-        ForeignKey          game_guest_team      = this.createForeignKey("FK_Game_Guest_Team");
-        ForeignKey          game_stadium         = this.createForeignKey("FK_Game_Stadium");
-        ForeignKeyRelation  game_home_team_id_rel   = this.createForeignKeyRelation(team_team_id, game_home_team_id);
-        ForeignKeyRelation  game_guest_team_id_rel  = this.createForeignKeyRelation(team_team_id, game_guest_team_id);
-        ForeignKeyRelation  game_stadium_id_rel     = this.createForeignKeyRelation(stadium_stadium_id, game_stadium_id);
+        ForeignKey game_home_team = this.createForeignKey("FK_Game_Home_Team");
+        ForeignKey game_guest_team = this.createForeignKey("FK_Game_Guest_Team");
+        ForeignKey game_stadium = this.createForeignKey("FK_Game_Stadium");
+        ForeignKeyRelation game_home_team_id_rel = this.createForeignKeyRelation(game_home_team_id, team_team_id);
+        ForeignKeyRelation game_guest_team_id_rel = this.createForeignKeyRelation(game_guest_team_id, team_team_id);
+        ForeignKeyRelation game_stadium_id_rel = this.createForeignKeyRelation(game_stadium_id, stadium_stadium_id);
 
         player_player_id.setPrimary(true);
         player_player_id.setNotNull(true);
@@ -147,6 +151,8 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         center_team_id.setPrimary(true);
         center_player_id.setNotNull(true);
         center_team_id.setNotNull(true);
+        center_player_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
+        center_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         center_blocks.setMinValueSet(10);
         center_blocks.setMaxValueSet(130);
         center_rebounds.setMinValueSet(25);
@@ -156,6 +162,8 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         guard_team_id.setPrimary(true);
         guard_player_id.setNotNull(true);
         guard_team_id.setNotNull(true);
+        guard_player_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
+        guard_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         guard_three_pointers.setMinValueSet(10);
         guard_three_pointers.setMaxValueSet(1300);
         guard_assists.setMinValueSet(25);
@@ -165,6 +173,8 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         forward_team_id.setPrimary(true);
         forward_player_id.setNotNull(true);
         forward_team_id.setNotNull(true);
+        forward_player_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
+        forward_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
 
         player.addColumnDef(player_player_id);
         player.addColumnDef(player_player_firstname);
@@ -244,14 +254,15 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
     protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
-        Task footballTask = new Task();
+        Task ironManTask = new Task();
 
-        footballTask.setName("Find Luke Kuechly.");
-        footballTask.setText("Find Luke Kuechly.");
-        footballTask.setReferenceStatement("SELECT firstname, lastname FROM player WHERE firstname = 'Luke' AND lastname = 'Kuechly';");
+        ironManTask.setName("Players Age");
+        ironManTask.setText("What is the average age of all players?");
+        ironManTask.setReferenceStatement("SELECT avg(age) as average FROM player;");
 
-        taskList.add(footballTask);
+        taskList.add(ironManTask);
 
         return taskList;
     }
 }
+
