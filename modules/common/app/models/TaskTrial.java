@@ -19,7 +19,8 @@ public class TaskTrial extends BaseModel {
     @Embedded
     public  TaskTrialStats      stats;
 
-    @Embedded @JsonIgnore
+    @JsonIgnore
+    @Embedded
     public  DatabaseInformation databaseInformation;
 
     private String userStatement;
@@ -31,6 +32,10 @@ public class TaskTrial extends BaseModel {
     @JsonIgnore
     @ManyToOne(optional = false)
     private Task task;
+
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    private Session session;
 
     @JsonIgnore
     @Transient
@@ -53,19 +58,6 @@ public class TaskTrial extends BaseModel {
 
     public Long getId() {
         return id;
-    }
-
-    public Task getTask() {
-        return task;
-    }
-
-    @JsonGetter("task")
-    public Long getTaskId() {
-        return this.getTask().getId();
-    }
-
-    public void setTask(Task task) {
-        this.task = task;
     }
 
     public String getUserStatement() {
@@ -94,6 +86,33 @@ public class TaskTrial extends BaseModel {
     public void setIsFinished(boolean finished) {
         isFinished = finished;
     }
+
+    public Task getTask() {
+        return task;
+    }
+
+    @JsonGetter("task")
+    public Long getTaskId() {
+        return this.getTask().getId();
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+
+
+
+
+
 
     public boolean hasError() {
         return this.error != null;

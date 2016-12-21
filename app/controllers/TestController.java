@@ -79,7 +79,6 @@ public class TestController extends Controller {
         }
 
         taskTrial.setTask(task);
-        taskTrial.stats.setBeginDate(LocalDateTime.now());
         taskTrial.databaseInformation.setSeed(12345L);
 
         taskTrial = this.sqlParserFactory.createParser(taskTrial);

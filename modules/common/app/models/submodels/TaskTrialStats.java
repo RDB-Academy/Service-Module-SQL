@@ -51,10 +51,6 @@ public class TaskTrialStats {
         return beginDate.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
-    public void setBeginDate(LocalDateTime beginDate) {
-        this.beginDate = beginDate;
-    }
-
     @JsonGetter("submitDate")
     public String getSubmitDateFormat() {
         if(submitDate == null) {

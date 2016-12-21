@@ -14,6 +14,7 @@ public class DatabaseInformation {
     private String  Url;
     private String  Path;
     private String  Name;
+    private String  driver;
 
     public DatabaseInformation() {
         this.isAvailable = false;
@@ -57,5 +58,13 @@ public class DatabaseInformation {
 
     public void setName(String name) {
         Name = name;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
     }
 }

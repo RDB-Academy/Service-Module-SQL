@@ -57,6 +57,8 @@ public class TaskTrialService {
 
         taskTrial = this.taskTrialRepository.create();
 
+        taskTrial.setSession(session);
+
         taskTrial = this.sqlParserFactory.createParser(taskTrial);
 
         session.setTaskTrial(taskTrial);

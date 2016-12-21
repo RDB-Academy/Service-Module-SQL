@@ -56,6 +56,7 @@ public class TaskTrialRepository {
         taskTrial.setTask(task);
 
         taskTrial.databaseInformation.setSeed(Math.abs(this.random.nextLong()));
+        taskTrial.databaseInformation.setDriver(this.getDatabaseDriver());
         taskTrial.databaseInformation.setPath(this.getDatabasePath());
         taskTrial.databaseInformation.setName(this.getDatabaseName(taskTrial));
         taskTrial.databaseInformation.setUrl(this.getDatabaseUrl(taskTrial));
@@ -67,12 +68,8 @@ public class TaskTrialRepository {
         taskTrial.save();
     }
 
-    private String getDatabaseUrl(TaskTrial taskTrial) {
-        String databaseUrl = this.configuration.getString("sqlParser.urlPrefix")
-                + taskTrial.databaseInformation.getPath()
-                + taskTrial.databaseInformation.getName();
-        Logger.debug(databaseUrl);
-        return databaseUrl;
+    private String getDatabaseDriver() {
+        return this.configuration.getString("sqlParser.driver");
     }
 
     private String getDatabasePath() {
@@ -88,6 +85,15 @@ public class TaskTrialRepository {
                 + "-"
                 + taskTrial.databaseInformation.getSeed();
     }
+
+    private String getDatabaseUrl(TaskTrial taskTrial) {
+        String databaseUrl = this.configuration.getString("sqlParser.urlPrefix")
+                + taskTrial.databaseInformation.getPath()
+                + taskTrial.databaseInformation.getName();
+        Logger.debug(databaseUrl);
+        return databaseUrl;
+    }
+
 
 
 

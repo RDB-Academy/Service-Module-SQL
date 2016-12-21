@@ -1,12 +1,10 @@
 package parser;
 
-import com.google.inject.Inject;
 import models.SchemaDef;
 import models.TaskTrial;
 import org.h2.tools.DeleteDbFiles;
 import parser.extensionMaker.ExtensionMaker;
 import parser.tableMaker.TableMaker;
-import play.Configuration;
 import play.Logger;
 
 import javax.inject.Singleton;
@@ -23,16 +21,6 @@ import java.util.concurrent.ExecutionException;
  */
 @Singleton
 public class SQLParserFactory {
-    private final Configuration configuration;
-
-    /**
-     * This is the Constructor for the Factory
-     * @param configuration the Play Configuration
-     */
-    @Inject
-    public SQLParserFactory(Configuration configuration) {
-        this.configuration = configuration;
-    }
 
     /**
      * this function creates a parser and a database
@@ -40,7 +28,6 @@ public class SQLParserFactory {
      * @return returns a updated TaskTrial Object
      */
     public TaskTrial createParser(@NotNull TaskTrial taskTrial) {
-        String          databaseUrl;
         Connection      connection;
         SchemaDef       schemaDef;
         TableMaker      tableMaker;
@@ -58,7 +45,7 @@ public class SQLParserFactory {
             return taskTrial;
         }
 
-        connection = this.getConnection(taskTrial.databaseInformation.getUrl());
+        connection = this.getConnection(taskTrial, false);
 
         if(connection == null) {
             Logger.error("ParserFactory.createParser - didn't get a connection");
@@ -139,7 +126,7 @@ public class SQLParserFactory {
 
         Logger.debug("Found DB url: " + taskTrial.databaseInformation.getUrl());
 
-        Connection connection = this.getConnection(taskTrial.databaseInformation.getUrl(), true);
+        Connection connection = this.getConnection(taskTrial, true);
 
         if(connection == null) {
             Logger.error("Cannot Create Database Connection");
@@ -161,24 +148,24 @@ public class SQLParserFactory {
         taskTrial.databaseInformation.setIsAvailable(false);
     }
 
-    private Connection getConnection(String databaseUrl) {
-        return getConnection(databaseUrl, false);
-    }
-
     /**
-     * Private blabla
-     * @param plainUrl
-     * @param ifExists
-     * @return
+     *
+     * @param taskTrial the taskTrial object
+     * @param ifExists if Exist
+     * @return returns connection
      */
-    private Connection getConnection(String plainUrl, boolean ifExists) {
-        String databaseDriver = this.configuration.getString("sqlParser.driver");
-        String databaseUrl = plainUrl + ((ifExists) ? ";IFEXISTS=TRUE" : "");
-        Connection connection = null;
+    private Connection getConnection(TaskTrial taskTrial, boolean ifExists) {
+        String      databaseDriver;
+        String      databasePath;
+        Connection  connection = null;
+
+        databaseDriver = taskTrial.databaseInformation.getDriver();
+        databasePath = taskTrial.databaseInformation.getUrl() + ((ifExists) ? ";IFEXISTS=TRUE" : "");
+
 
         try {
             Class.forName(databaseDriver);
-            connection = DriverManager.getConnection(databaseUrl);
+            connection = DriverManager.getConnection(databasePath);
         } catch (ClassNotFoundException e) {
             Logger.error("Parser cannot get Database Driver");
             Logger.error(" - " + e.getMessage());

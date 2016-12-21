@@ -33,45 +33,53 @@ public class SQLResultSet {
         return hint;
     }
 
-    public void setHint(String hint) {
+    private void setHint(String hint) {
         this.hint = hint;
     }
 
     //
     boolean isSubsetOf(SQLResultSet userResultSet) {
-        List<String> refHeaderList;
-        List<String> userHeaderList;
-        List<List<String>> refDataSetList;
-        List<List<String>> userDataSetList;
+        List<String>        refHeaderList;
+        List<String>        userHeaderList;
+
+        List<List<String>>  refDataSetList;
+        List<List<String>>  userDataSetList;
 
         if(userResultSet.getError() != null) {
             return false;
         }
 
-        refHeaderList = new ArrayList<>(this.getResultSet().get(0));
-        userHeaderList = new ArrayList<>(userResultSet.getResultSet().get(0));
+        refHeaderList   = new ArrayList<>(this.getResultSet().get(0));
+        userHeaderList  = new ArrayList<>(userResultSet.getResultSet().get(0));
 
         // Check if header is a subset
         if (!userHeaderList.containsAll(refHeaderList)) {
+            String headerNames;
+
             Logger.warn("UserHeader doesn't contain all refHeader");
+
             refHeaderList.removeAll(userHeaderList);
-            userResultSet.hint = "Missing Columns: ";
+
+            headerNames = "Missing Columns: ";
             for(String header : refHeaderList) {
-                userResultSet.hint = userResultSet.hint + header;
+                headerNames = headerNames + header;
             }
-            Logger.warn(userResultSet.hint);
+
+            Logger.warn(headerNames);
+
+            userResultSet.setHint(headerNames);
             return false;
         }
 
         // Check if the length is equal
         if(this.getResultSet().size() != userResultSet.getResultSet().size()) {
             Logger.warn("ResultsSet Size is not equal");
-            userResultSet.hint = "ResultsSet Size is not equal";
+            userResultSet.setHint("ResultsSet Size is not equal");
             return false;
         }
 
         //  Delete Unnecessary Columns
-        refDataSetList = new ArrayList<>(this.resultSet.subList(1, this.resultSet.size()));
+        refDataSetList  = new ArrayList<>(this.resultSet.subList(1, this.resultSet.size()));
         userDataSetList = new ArrayList<>();
 
         for(List<String> result : userResultSet.resultSet.subList(1, userResultSet.resultSet.size())) {
@@ -111,6 +119,7 @@ public class SQLResultSet {
         System.out.println("!!!!1 Result End");
 */
         userDataSetList.removeAll(refDataSetList);
+
 /*
         // ToDo Log
         System.out.println("!!!!! Result");
@@ -129,6 +138,11 @@ public class SQLResultSet {
         System.out.println("!!!!!! Result End");
 
         */
-        return (userDataSetList.size() == 0);
+
+        if(userDataSetList.size() == 0) {
+            return true;
+        }
+        userResultSet.setHint("The ResultSet is not correct");
+        return false;
     }
 }

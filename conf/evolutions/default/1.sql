@@ -98,10 +98,12 @@ create table task_trial (
   url                           varchar(255),
   path                          varchar(255),
   name                          varchar(255),
+  driver                        varchar(255),
   user_statement                varchar(255),
   is_correct                    boolean,
   is_finished                   boolean,
   task_id                       bigint not null,
+  session_id                    varchar(255) not null,
   modified_at                   timestamp not null,
   constraint pk_task_trial primary key (id)
 );
@@ -136,6 +138,9 @@ create index ix_task_schema_def_id on task (schema_def_id);
 alter table task_trial add constraint fk_task_trial_task_id foreign key (task_id) references task (id) on delete restrict on update restrict;
 create index ix_task_trial_task_id on task_trial (task_id);
 
+alter table task_trial add constraint fk_task_trial_session_id foreign key (session_id) references session (id) on delete restrict on update restrict;
+create index ix_task_trial_session_id on task_trial (session_id);
+
 
 # --- !Downs
 
@@ -168,6 +173,9 @@ drop index if exists ix_task_schema_def_id;
 
 alter table task_trial drop constraint if exists fk_task_trial_task_id;
 drop index if exists ix_task_trial_task_id;
+
+alter table task_trial drop constraint if exists fk_task_trial_session_id;
+drop index if exists ix_task_trial_session_id;
 
 drop table if exists column_def;
 
