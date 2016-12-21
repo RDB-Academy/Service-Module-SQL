@@ -75,7 +75,7 @@ public class TaskTrial extends BaseModel {
         return isCorrect;
     }
 
-    private void setIsCorrect(boolean correct) {
+    public void setIsCorrect(boolean correct) {
         isCorrect = correct;
         if(correct) {
             this.setIsFinished(true);

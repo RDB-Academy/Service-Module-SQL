@@ -11,9 +11,6 @@ public class ResultSet {
     private String              errorMessage;
     private String              hintMessage;
 
-    private boolean             isCorrect;
-
-
 
     public List<String> getHeader() {
         return this.header;
@@ -45,13 +42,5 @@ public class ResultSet {
 
     public void setHintMessage(String hintMessage) {
         this.hintMessage = hintMessage;
-    }
-
-    public boolean getIsCorrect() {
-        return this.isCorrect;
-    }
-
-    public void setIsCorrect(boolean correct) {
-        this.isCorrect = correct;
     }
 }

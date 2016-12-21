@@ -106,6 +106,7 @@ public class TaskTrialService {
 
         taskTrial.stats.incrementTries();
         taskTrial.resultSet = sqlResult.getAsResultSet();
+        taskTrial.setIsCorrect(sqlResult.isCorrect());
 
 
         sqlParser.closeConnection();

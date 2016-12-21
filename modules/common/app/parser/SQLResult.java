@@ -76,7 +76,6 @@ public class SQLResult {
         resultSet.setDataSets(dataSets);
         resultSet.setHintMessage(hint);
         resultSet.setErrorMessage(error);
-        resultSet.setIsCorrect(isCorrect);
 
         return resultSet;
     }
