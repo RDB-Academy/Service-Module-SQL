@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import models.submodels.DatabaseInformation;
 import models.submodels.ResultSet;
 import models.submodels.TaskTrialStats;
-import parser.SQLResult;
 
 import javax.persistence.*;
 
