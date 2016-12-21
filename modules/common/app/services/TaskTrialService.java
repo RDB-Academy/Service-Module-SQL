@@ -36,7 +36,7 @@ public class TaskTrialService {
      * Create a new TaskTrial Object
      * @return returns the new TaskTrial Object
      */
-    public TaskTrial createTaskTrial() {
+    public TaskTrial create() {
         Session     session;
         TaskTrial   taskTrial;
 
@@ -74,7 +74,11 @@ public class TaskTrialService {
     }
 
     public TaskTrial validateStatement(Long id) {
-        TaskTrial taskTrial = this.read(id);
+        TaskTrial taskTrial;
+        SQLParser sqlParser;
+        SQLResult sqlResult;
+
+        taskTrial = this.read(id);
         if(taskTrial == null) {
             return null;
         }
@@ -95,18 +99,19 @@ public class TaskTrialService {
             return taskTrial;
         }
 
-        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
-
         Logger.debug("UserStatement is " + taskTrial.getUserStatement());
 
-        SQLResult sqlResult = sqlParser.submit(taskTrial);
+        sqlParser = this.sqlParserFactory.getParser(taskTrial);
+        sqlResult = sqlParser.submit(taskTrial);
 
         taskTrial.stats.incrementTries();
+        taskTrial.resultSet = sqlResult.getAsResultSet();
 
-        taskTrial.setSqlResult(sqlResult);
+
+        sqlParser.closeConnection();
+
 
         taskTrial.save();
-        sqlParser.closeConnection();
         return taskTrial;
     }
 }

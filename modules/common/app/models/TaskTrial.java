@@ -2,7 +2,9 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import models.submodels.DatabaseInformation;
+import models.submodels.ResultSet;
 import models.submodels.TaskTrialStats;
 import parser.SQLResult;
 
@@ -17,6 +19,7 @@ public class TaskTrial extends BaseModel {
     private Long                id;
 
     @Embedded
+    @JsonProperty(value = "stats", access = JsonProperty.Access.READ_ONLY)
     public  TaskTrialStats      stats;
 
     @JsonIgnore
@@ -42,8 +45,8 @@ public class TaskTrial extends BaseModel {
     private String error;
 
     @Transient
-    @JsonIgnore
-    private SQLResult sqlResult;
+    @JsonProperty(value = "resultSet", access = JsonProperty.Access.READ_ONLY)
+    public ResultSet resultSet;
 
     /**
      * The Constructor
@@ -125,16 +128,4 @@ public class TaskTrial extends BaseModel {
     public void setError(String errorMessage) {
         this.error = errorMessage;
     }
-
-    @JsonIgnore
-    public void setSqlResult(SQLResult sqlResultSet) {
-        this.sqlResult = sqlResultSet;
-        this.setIsCorrect(sqlResult.isCorrect());
-    }
-
-    @JsonGetter("resultSet")
-    public SQLResult getSqlResult() {
-        return sqlResult;
-    }
-
 }

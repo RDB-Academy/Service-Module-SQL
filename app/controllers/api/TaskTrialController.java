@@ -28,7 +28,7 @@ public class TaskTrialController extends Controller {
 
     public CompletionStage<Result> create() {
         return CompletableFuture
-                .supplyAsync(this.taskTrialService::createTaskTrial, this.httpExecutionContext.current())
+                .supplyAsync(this.taskTrialService::create, this.httpExecutionContext.current())
                 .thenApply(taskTrial -> {
                     if(taskTrial == null) {
                         return internalServerError();
