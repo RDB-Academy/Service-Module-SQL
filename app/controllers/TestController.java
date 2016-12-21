@@ -17,10 +17,9 @@ import repository.TaskRepository;
 import repository.TaskTrialRepository;
 import services.TaskTrialService;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -57,7 +56,7 @@ public class TestController extends Controller {
 
         ExtensionMaker extensionMaker = new ExtensionMaker(seed, schemaDef);
 
-        ArrayList<String> v = extensionMaker.buildStatements();
+        List<String> v = extensionMaker.buildStatements();
 
         return ok(Json.toJson(v));
     }
