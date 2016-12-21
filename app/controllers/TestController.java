@@ -83,7 +83,13 @@ public class TestController extends Controller {
         Logger.info("Seed: " + seed);
         SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
 
-        ExtensionMaker extensionMaker = new ExtensionMaker(seed, schemaDef);
+        ExtensionMaker extensionMaker = new ExtensionMaker(
+                seed,
+                schemaDef,
+                1000,
+                75,
+                150
+        );
 
         List<String> v = extensionMaker.buildStatements();
 
