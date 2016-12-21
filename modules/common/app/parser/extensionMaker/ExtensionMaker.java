@@ -5,7 +5,6 @@ import models.SchemaDef;
 import models.TableDef;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author carl
@@ -14,6 +13,7 @@ public class ExtensionMaker {
     private final Long      seed;
     private final SchemaDef schemaDef;
     private final Random    rand;
+    private final int idOffset;
 
     String[] mail = {"tu-bs.de","aol.com","att.net","comcast.net","facebook.com","gmail.com","gmx.com","googlemail.com","google.com","hotmail.com","hotmail.co.uk","mac.com","me.com","mail.com","msn.com","live.com","sbcglobal.net","verizon.net","yahoo.com","yahoo.co.uk"};
     String[] metal = {"Calcium","Strontium","Barium","Radium","Aluminum","Gallium","Indium","Tin","Thallium","Lead","Bismuth","Scandium","Titanium","Vanadium","Chromium","Manganese","Iron","Cobalt","Nickel","Copper","Zinc","Yttrium","Zirconium","Niobium","Molybdenum","Technetium","Ruthenium","Rhodium","Palladium","Silver","Cadmium","Lanthanum","Hafnium","Tantalum","Tungsten","Rhenium","Osmium","Iridium","Platinum","Gold"};
@@ -29,23 +29,29 @@ public class ExtensionMaker {
     String[] position = {"C","G","T","QB","RB","WR","TE","DT","DE","MLB","OLB","CB","S","K","H","LS","P","KOS","KR","PR"};
     String[] plant = {"Aloe Vera","Alfalfa","American Coffee Berry Tree","Bloodroot","Bouncing Bet","Bull Nettle","Bracken or Brake Fern","Burning Bush","Buttercup","Carelessweed ","Castor Bean","Chrysanthemums","Clover","Cocklebur","Creeping Charlie","Crown of Thorns","Curly Dock","Daffodil","Daphne","Delphinium","Devil's Trumpet","Dogbane","Dutchman's Breeches","Elderberry","Ergot","Fern","Fireweed","Foxglove","Poison Hemlock","Water Hemlock","Hemp","Horse Chestnut, Buckeyes","Horse Nettle","Horsetails","Hyacinth","Hydrangea","English Ivy","Ground Ivy","Poison Ivy","Jack-in-the-Pulpit","Japanese Yew","Jerusalem Cherry","Jimson Weed","Kalanchoe","Kentucky Coffee Tree","Kentucky Mahagony Tree","Klamath Weed","Lamb's Quarters","Lantana","Larkspur","Daylily","True Lily","Lily-of-the-Valley","Lupine","Mad Apple","Maple, Red","Mayapple","Milkweed","Mint","Mountain Laurel","Nicker Tree","Nightshade","Oleander","Ohio Buckeye","Philodendron","Pigweed","Poinsettia","Poke","Purple Mint","Redroot","Rhododendron","Rhubarb","Rosary Pea","Squirrelcorn","Staggerweed","St. Johnswort","Stinging Nettle","Stink Weed","Stump Tree","Sudan Grass","Summer Cypress","Thorn Apple","Tulip","White Snakeroot","Wild Onion","Yellow Sage"};
 
+    /**
+     *
+     * @param seed
+     * @param schemaDef
+     */
     public ExtensionMaker(Long seed, SchemaDef schemaDef) {
         this.seed = seed;
         this.schemaDef = schemaDef;
         this.rand = new Random(this.seed);
+        this.idOffset = 1000;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<String> buildStatements() {
-
         ArrayList<String[][]> Extensionlist = new ArrayList<>();
 
         List<TableDef> tableDefs = schemaDef.getTableDefList();
 
         int tables = schemaDef.getTableDefList().size();
         int [] row = new int [tables];
-
-        //the point the ids start
-        int start = 1000;
 
         //number of rows
         int minRow = 100;
@@ -115,10 +121,10 @@ public class ExtensionMaker {
                                 out[i][j] = gen(firstname);
                                 break;
                             case ColumnDef.META_VALUE_SET_FOREIGN_KEY:
-                                int number = random(start, minRow);
+                                int number = random(this.idOffset, minRow);
                                 out[i][j] = "" + number;
                                 if(columnDef.isPrimary()) {
-                                    comMember[comCount] = number - start;
+                                    comMember[comCount] = number - idOffset;
                                     comCount++;
                                     if (comCount == comp) {
                                         if (comp == 2) {
@@ -144,7 +150,7 @@ public class ExtensionMaker {
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_ID:
-                                out[i][j] = "" + (start +  i);
+                                out[i][j] = "" + (idOffset +  i);
                                 break;
                             case ColumnDef.META_VALUE_SET_ANIMAL:
                                 out[i][j] = gen(animal);
