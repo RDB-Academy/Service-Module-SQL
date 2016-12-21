@@ -4,6 +4,7 @@
 
 
 # Test Routes
+GET     /ser                        controllers.TestController.ser()
 GET     /test/                      controllers.TestController.test()
 GET     /table/                     controllers.TestController.testTableMaker()
 GET     /parserCre                  controllers.TestController.parserCreate()

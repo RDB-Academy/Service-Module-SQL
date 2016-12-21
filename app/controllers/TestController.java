@@ -17,11 +17,9 @@ import repository.TaskRepository;
 import repository.TaskTrialRepository;
 import services.TaskTrialService;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.*;
 
 import javax.inject.Inject;
-import java.util.Random;
 
 /**
  * @author fabiomazzone
@@ -46,6 +44,36 @@ public class TestController extends Controller {
         this.taskTrialService = taskTrialService;
         this.taskTrialRepository = taskTrialRepository;
         this.taskRepository = taskRepository;
+    }
+
+    public Result ser() {
+        List<SchemaDef> schemaDefList;
+
+        schemaDefList = this.schemaDefRepository.getAll();
+
+        schemaDefList.forEach(schemaDef -> {
+            System.out.println(schemaDef.getName());
+            schemaDef.getTableDefList().forEach(tableDef -> {
+                System.out.println("  - " + tableDef.getName());
+                tableDef.getColumnDefList().forEach(columnDef -> {
+                    System.out.println("    - " + columnDef.getName());
+                });
+                System.out.println();
+
+                if (tableDef.extensionDef != null) {
+                    tableDef.extensionDef.getExtensionList().forEach(entity -> {
+                        entity.forEach((k, v) -> {
+                            System.out.println("    - " + k + "=" + v);
+                        });
+                    });
+                    System.out.println();
+                }
+            });
+            System.out.println("-----------");
+            System.out.println();
+        });
+
+        return ok();
     }
 
     public Result test() {

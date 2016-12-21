@@ -1,10 +1,11 @@
 package initializers.schemaBuilders;
 
+import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
 import models.*;
+import models.submodels.ExtensionDef;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -66,6 +67,10 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         heroTeam_hero.addForeignKeyRelation(heroTeam_hero_rel);
         heroTeam_team.addForeignKeyRelation(heroTeam_team_rel);
 
+        hero.extensionDef = this.buildHeroExtension();
+        team.extensionDef = this.buildTeamExtension();
+        heroTeam.extensionDef = this.buildHeroTeamExtension();
+
         heroTeamSchema.addTableDef(hero);
         heroTeamSchema.addTableDef(team);
         heroTeamSchema.addTableDef(heroTeam);
@@ -74,6 +79,58 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         heroTeamSchema.addForeignKey(heroTeam_team);
 
         return heroTeamSchema;
+    }
+
+    private ExtensionDef buildHeroTeamExtension() {
+        ExtensionDef extensionDef;
+        extensionDef = new ExtensionDef();
+
+        List<Map<String, String>> extensionList = Arrays.asList(
+                ImmutableMap.of("hero_id", "1", "team_id", "1", "join_year", "2012"),
+                ImmutableMap.of("hero_id", "2", "team_id", "1", "join_year", "2012"),
+                ImmutableMap.of("hero_id", "3", "team_id", "1", "join_year", "2012"),
+                ImmutableMap.of("hero_id", "4", "team_id", "1", "join_year", "2012"),
+                ImmutableMap.of("hero_id", "5", "team_id", "1", "join_year", "2016"),
+                ImmutableMap.of("hero_id", "1", "team_id", "2", "join_year", "2016"),
+                ImmutableMap.of("hero_id", "5", "team_id", "2", "join_year", "2016"),
+                ImmutableMap.of("hero_id", "3", "team_id", "3", "join_year", "2016")
+        );
+
+        extensionDef.setExtensionList(extensionList);
+
+        return extensionDef;
+    }
+
+    private ExtensionDef buildTeamExtension() {
+        ExtensionDef extensionDef;
+        extensionDef = new ExtensionDef();
+
+        List<Map<String, String>> extensionList = Arrays.asList(
+                ImmutableMap.of("id", "1", "name", "avengers"),
+                ImmutableMap.of("id", "2", "name", "team iron man"),
+                ImmutableMap.of("id", "3", "name", "team cap")
+        );
+
+        extensionDef.setExtensionList(extensionList);
+
+        return extensionDef;
+    }
+
+    private ExtensionDef buildHeroExtension() {
+        ExtensionDef extensionDef;
+        extensionDef = new ExtensionDef();
+
+        List<Map<String, String>> extensionList = Arrays.asList(
+                ImmutableMap.of("id", "1", "name", "iron man"),
+                ImmutableMap.of("id", "2", "name", "thor"),
+                ImmutableMap.of("id", "3", "name", "captain america"),
+                ImmutableMap.of("id", "4", "name", "hulk"),
+                ImmutableMap.of("id", "5", "name", "spider man")
+        );
+
+        extensionDef.setExtensionList(extensionList);
+
+        return extensionDef;
     }
 
     @Override
