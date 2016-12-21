@@ -102,6 +102,10 @@ public class TaskTrialService {
         Logger.debug("UserStatement is " + taskTrial.getUserStatement());
 
         sqlParser = this.sqlParserFactory.getParser(taskTrial);
+        if(sqlParser == null) {
+            taskTrial.setError("Cannot create DB Connection");
+            return taskTrial;
+        }
         sqlResult = sqlParser.submit(taskTrial);
 
         taskTrial.stats.incrementTries();

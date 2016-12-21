@@ -111,12 +111,6 @@ public class TaskTrial extends BaseModel {
         this.session = session;
     }
 
-
-
-
-
-
-
     public boolean hasError() {
         return this.error != null;
     }

@@ -168,10 +168,10 @@ public class SQLParserFactory {
             connection = DriverManager.getConnection(databasePath);
         } catch (ClassNotFoundException e) {
             Logger.error("Parser cannot get Database Driver");
-            Logger.error(" - " + e.getMessage());
+            Logger.error(e.getMessage());
         } catch (SQLException e) {
             Logger.error("Parser cannot connect to Database");
-            Logger.error(" - " + e.getMessage());
+            Logger.error(e.getMessage());
         }
 
         return connection;
