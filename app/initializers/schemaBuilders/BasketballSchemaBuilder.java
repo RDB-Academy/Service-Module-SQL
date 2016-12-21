@@ -254,13 +254,13 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
     protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
-        Task ironManTask = new Task();
+        Task task = new Task();
 
-        ironManTask.setName("Players Age");
-        ironManTask.setText("What is the average age of all players?");
-        ironManTask.setReferenceStatement("SELECT avg(age) as average FROM player;");
+        task.setName("Players Age");
+        task.setText("What is the average age of all players?");
+        task.setReferenceStatement("SELECT avg(age) as average FROM player;");
 
-        taskList.add(ironManTask);
+        taskList.add(task);
 
         return taskList;
     }
