@@ -27,9 +27,15 @@
         @b3.text( foreignKeyDefForm("id"), '_label -> "ID: ", 'disabled -> "")
         @b3.text( foreignKeyDefForm("name"), '_label -> "Name: ", 'disabled -> "")
 
-        <!--TODO: get source and target table from foreignkey -->
+
+              @b3.textarea (foreignKeyDefForm.get().getForeignKeyRelationList.get(0).getSourceColumn.getTableDef.getName)
+
+
+
+        <!--TODO: get source and target table from foreignkey
         @@b3.text( foreignKeyRelationForm("sourceTable"), '_label -> "SourceTable: ", 'disabled -> "")
         @@b3.text( foreignKeyRelationForm("targetTable"), '_label -> "TargetTable: ", 'disabled -> "")
+        -->
         <div class="form-group">
           <label class="control-label col-md-2">ForeignKeyRelations:</label>
           <div class="col-md-10">
