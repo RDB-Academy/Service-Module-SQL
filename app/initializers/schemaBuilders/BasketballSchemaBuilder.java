@@ -265,7 +265,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
 
         task = new Task();
         task.setText("List the ids of the most used stadiums in the season of 2015.");
-        task.setReferenceStatement("SELECT stadium_id, count(id) FROM game WHERE season = 2015 GROUP BY stadium_id HAVING count(id) = (Select max(totalCount) from( SELECT  stadium_id, COUNT(id) totalCount FROM    game WHERE year = 2015 GROUP   BY stadium_id ) as s)");
+        task.setReferenceStatement("SELECT stadium_id, count(id) FROM game WHERE season = 2015 GROUP BY stadium_id HAVING count(id) = (Select max(totalCount) from( SELECT  stadium_id, COUNT(id) totalCount FROM    game WHERE season = 2015 GROUP   BY stadium_id ) as s)");
         taskList.add(task);
 
         task = new Task();
@@ -294,12 +294,12 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         taskList.add(task);
 
         task = new Task();
-        task.setText("Give me a set of all cities of the guest teams who won in the year 2015. ");
+        task.setText("Give me a set of all cities of the guest teams who won in the season of 2015. ");
         task.setReferenceStatement("SELECT distinct(t.city)\n" +
                 "FROM team AS t\n" +
                 "JOIN game AS g ON t.id = g.home_team_id\n" +
                 "WHERE g.home_score > g.guest_score\n" +
-                "AND g.year=2015");
+                "AND g.season=2015");
         taskList.add(task);
 
         task = new Task();

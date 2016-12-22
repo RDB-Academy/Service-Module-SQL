@@ -91,13 +91,22 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
     protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
-        Task bibleTask = new Task();
+        Task task = new Task();
+        task.setText("What is the average number of books any customer has purchased?");
+        task.setReferenceStatement("SELECT customer_id, count(book_id) FROM customer_book Group by customer_id order by count(book_id) desc;");
+        taskList.add(task);
 
-        bibleTask.setName("Find the Bible");
-        bibleTask.setText("Find the Bible");
-        bibleTask.setReferenceStatement("SELECT name FROM book WHERE name = 'Bible';");
+        task = new Task();
+        task.setText("What is the title of the book that have been purchased the most often?");
+        task.setReferenceStatement("SELECT b.name, count(cb.customer_id) \n" +
+                " FROM book as b \n" +
+                " Join customer_book as cb ON b.id = cb.book_id \n" +
+                " Group by b.name\n" +
+                " order by count(cb.customer_id) desc;");
+        taskList.add(task);
 
-        taskList.add(bibleTask);
+
+
 
         return taskList;
     }
