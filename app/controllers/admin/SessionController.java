@@ -44,7 +44,7 @@ public class SessionController extends Controller{
                     if(loginForm.hasErrors()) {
                         return badRequest(views.html.admin.sessionViews.login.render(loginForm));
                     }
-                    return ok();
+                    return redirect(routes.HomeController.index());
                 });
     }
 

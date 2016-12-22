@@ -42,27 +42,6 @@ public class SQLParser {
         if(sqlResult.isCorrect()) {
             Logger.debug("Statement is Correct");
         }
-        /*
-        // Log UserResultSet
-        System.out.println("UserResultSet");
-        for(List<String> row : userResultSet.getResultSet()) {
-            for(String column : row) {
-                System.out.print(column + " | ");
-            }
-            System.out.println();
-        }
-
-        // Log RefResultSet
-        System.out.println("RefResultSet");
-        for(List<String> row : refResultSet.getResultSet()) {
-            for(String column : row) {
-                System.out.print(column + " | ");
-            }
-            System.out.println();
-        }
-        */
-
-
 
         return sqlResult;
     }

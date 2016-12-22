@@ -39,8 +39,6 @@ public class SessionService {
         Session session = new Session();
         session.setUserName("admin");
 
-        Logger.debug(loginForm.toString());
-
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
         String connectedData = userAgent.toString() + ctx.request().remoteAddress();
 
@@ -88,12 +86,17 @@ public class SessionService {
     }
 
     public Form<LoginForm> login() {
-        Form<LoginForm>     loginForm = this.getLoginForm();
-        String              adminPassword = this.configuration.getString("sqlModule.adminPassword");
+        Form<LoginForm>     loginForm;
+        String              adminPassword;
         LoginForm           login;
+
+        loginForm       = this.getLoginForm().bindFromRequest();
+        adminPassword   = this.configuration.getString("sqlModule.adminPassword");
+
         if (loginForm.hasErrors()) {
             return loginForm;
         }
+
         login = loginForm.get();
 
         if (login.getPassword().equals(adminPassword)) {
