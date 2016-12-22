@@ -48,6 +48,10 @@ public class SQLResultSet {
         if(userResultSet.getError() != null) {
             return false;
         }
+        if(this.getError() != null) {
+            userResultSet.setError(this.getError());
+            return false;
+        }
 
         refHeaderList   = new ArrayList<>(this.getResultSet().get(0));
         userHeaderList  = new ArrayList<>(userResultSet.getResultSet().get(0));
