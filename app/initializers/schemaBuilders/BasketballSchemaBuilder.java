@@ -42,6 +42,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         ColumnDef stadium_stadium_capacity = this.createNewColumnDef("capacity", "INT");
 
         ColumnDef game_game_id = this.createNewColumnDef("id", "INT");
+        ColumnDef game_season = this.createNewColumnDef("season", "INT");
         ColumnDef game_stadium_id = this.createNewColumnDef("stadium_id", "INT");
         ColumnDef game_home_score = this.createNewColumnDef("home_score", "INT");
         ColumnDef game_guest_score = this.createNewColumnDef("guest_score", "INT");
@@ -142,6 +143,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         game_stadium_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         game_home_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         game_guest_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
+        game_season.setMetaValueSet(ColumnDef.META_VALUE_SET_YEAR);
         game_home_score.setMinValueSet(80);
         game_home_score.setMaxValueSet(130);
         game_guest_score.setMinValueSet(85);
@@ -202,6 +204,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         game.addColumnDef(game_guest_score);
         game.addColumnDef(game_home_team_id);
         game.addColumnDef(game_guest_team_id);
+        game.addColumnDef(game_season);
 
         forward.addColumnDef(forward_player_id);
         forward.addColumnDef(forward_team_id);
@@ -260,10 +263,12 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         task.setReferenceStatement("SELECT avg(age) as average FROM player;");
         taskList.add(task);
 
-        task.setText("List the ids of the most used stadiums in 2015.?");
-        task.setReferenceStatement("SELECT stadium_id, count(id) FROM game WHERE year = 2015 GROUP BY stadium_id HAVING count(id) = (Select max(totalCount) from( SELECT  stadium_id, COUNT(id) totalCount FROM    game WHERE year = 2015 GROUP   BY stadium_id ) as s)");
+        task = new Task();
+        task.setText("List the ids of the most used stadiums in the season of 2015.");
+        task.setReferenceStatement("SELECT stadium_id, count(id) FROM game WHERE season = 2015 GROUP BY stadium_id HAVING count(id) = (Select max(totalCount) from( SELECT  stadium_id, COUNT(id) totalCount FROM    game WHERE year = 2015 GROUP   BY stadium_id ) as s)");
         taskList.add(task);
 
+        task = new Task();
         task.setText("How many teams have not played in the stadium with id “5”?");
         task.setReferenceStatement("SELECT count(distinct(u.id))\n" +
                 "FROM team AS u\n" +
@@ -272,6 +277,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "WHERE p.id IS NULL");
         taskList.add(task);
 
+        task = new Task();
         task.setText("How many players are from Canada?");
         task.setReferenceStatement("SELECT count(id)\n" +
                 "FROM player\n" +
@@ -279,6 +285,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "OR country LIKE '%Canada%';");
         taskList.add(task);
 
+        task = new Task();
         task.setText("Show the age, the lastname and the country of the player who got most points so far.");
         task.setReferenceStatement(" SELECT age,lastname, country\n" +
                 "FROM player\n" +
@@ -286,6 +293,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "\t\t\t FROM player)");
         taskList.add(task);
 
+        task = new Task();
         task.setText("Give me a set of all cities of the guest teams who won in the year 2015. ");
         task.setReferenceStatement("SELECT distinct(t.city)\n" +
                 "FROM team AS t\n" +
@@ -294,16 +302,15 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "AND g.year=2015");
         taskList.add(task);
 
+        task = new Task();
         task.setText("What is the percentage that a guest team wins, based on the given data?");
-        task.setReferenceStatement("WITH result1 as (\n" +
-                "SELECT count(id) as wins\n" +
+        task.setReferenceStatement("SELECT ((SELECT result1.wins\n" +
+                "FROM (SELECT count(id) as wins\n" +
                 "FROM game\n" +
-                "WHERE guest_score > home_score)\n" +
-                "\n" +
-                "SELECT ((SELECT result1.wins\n" +
-                "FROM result1)*100/ (SELECT count(id)\n" +
+                "WHERE guest_score > home_score) as result1)*100/ (SELECT count(id)\n" +
                 "\t\tFROM game))");
         taskList.add(task);
+
 
         return taskList;
     }
