@@ -59,33 +59,35 @@ public class SQLResultSet {
         refHeaderList   = new ArrayList<>(this.getResultSet().get(0));
         userHeaderList  = new ArrayList<>(userResultSet.getResultSet().get(0));
 
-        // Check if header is a subset
-        if (!userHeaderList.containsAll(refHeaderList)) {
-            String headerNames;
-
-            Logger.warn("UserHeader doesn't contain all refHeader");
-
-            refHeaderList.removeAll(userHeaderList);
-
-            headerNames = "Missing Columns: ";
-            for(String header : refHeaderList) {
-                headerNames = headerNames + header;
-            }
-
-            Logger.warn(headerNames);
-
-            userResultSet.setHint(headerNames);
-            return false;
-        }
 
         // Check if the length is equal
         if(this.getResultSet().size() != userResultSet.getResultSet().size()) {
             Logger.warn("ResultsSet Size is not equal");
             userResultSet.setHint("ResultsSet Size is not equal");
-            return false;
+
+            // Check if header is a subset HAS TO GO
+            if (!userHeaderList.containsAll(refHeaderList)) {
+                String headerNames;
+
+                Logger.warn("UserHeader doesn't contain all refHeader");
+
+                refHeaderList.removeAll(userHeaderList);
+
+                headerNames = "Missing Columns: ";
+                for(String header : refHeaderList) {
+                    headerNames = headerNames + header;
+                }
+
+                Logger.warn(headerNames);
+
+                userResultSet.setHint(headerNames);
+                return false;
+            }
         }
 
-        //  Delete Unnecessary Columns
+
+
+        //  Delete Unnecessary Columns HAS TO GO
         refDataSetList  = new ArrayList<>(this.resultSet.subList(1, this.resultSet.size()));
         userDataSetList = new ArrayList<>();
 
@@ -93,6 +95,7 @@ public class SQLResultSet {
             userDataSetList.add(new ArrayList<>(result));
         }
 
+        //Has to go
         if(refHeaderList.size() != userHeaderList.size()) {
             for (String refHeader : refHeaderList) {
                 for (int j = 0; j < userHeaderList.size(); ) {
@@ -108,7 +111,12 @@ public class SQLResultSet {
                 }
             }
         }
-/*
+
+        if(refHeaderList.size() < userHeaderList.size()) {
+
+        }
+
+
         // ToDo Log
         System.out.println("!!!!! Result");
         System.out.println("-- ref");
