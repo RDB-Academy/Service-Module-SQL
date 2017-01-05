@@ -32,7 +32,7 @@ public class SQLResultSet {
         return hint;
     }
 
-    private void setHint(String hint) {
+    public void setHint(String hint) {
         this.hint = hint;
     }
 

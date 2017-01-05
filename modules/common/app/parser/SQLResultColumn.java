@@ -25,14 +25,6 @@ public class SQLResultColumn {
         return name.equals(that.name) && type.equals(that.type) && data.equals(that.data);
     }
 
-    @Override
-    public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + type.hashCode();
-        result = 31 * result + data.hashCode();
-        return result;
-    }
-
     public String getName() {
         return name;
     }

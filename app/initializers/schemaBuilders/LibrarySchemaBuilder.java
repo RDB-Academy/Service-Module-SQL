@@ -92,7 +92,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         List<Task> taskList = new ArrayList<>();
 
         Task task = new Task();
-        task.setText("What is the average number of books any customer has purchased?");
+        task.setText("What is the average number of books any customer has purchased? List all customers and there average number.");
         task.setReferenceStatement("SELECT customer_id, count(book_id) FROM customer_book Group by customer_id order by count(book_id) desc;");
         taskList.add(task);
 

@@ -58,6 +58,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         ColumnDef player_player_height = this.createNewColumnDef("height", "INT");
         ColumnDef player_player_weight = this.createNewColumnDef("weight", "INT");
         ColumnDef player_points_per_game = this.createNewColumnDef("points_per_game", "INT");
+        ColumnDef player_games_played = this.createNewColumnDef("games_played", "INT");
 
         ColumnDef center_player_id = this.createNewColumnDef("player_id", "INT");
         ColumnDef center_team_id = this.createNewColumnDef("team_id", "INT");
@@ -114,6 +115,8 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         player_player_height.setMaxValueSet(240);
         player_player_number.setMinValueSet(1);
         player_player_number.setMaxValueSet(99);
+        player_games_played.setMinValueSet(1);
+        player_games_played.setMaxValueSet(300);
 
         team_team_id.setPrimary(true);
         team_team_id.setNotNull(true);
@@ -187,6 +190,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         player.addColumnDef(player_player_country);
         player.addColumnDef(player_player_age);
         player.addColumnDef(player_points_per_game);
+        player.addColumnDef(player_games_played);
 
         team.addColumnDef(team_team_id);
         team.addColumnDef(team_team_city);
