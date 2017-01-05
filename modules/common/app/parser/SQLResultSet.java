@@ -1,24 +1,23 @@
 package parser;
 
-import play.Logger;
 
 import java.util.*;
 
 public class SQLResultSet {
-    private List<List<String>> resultSet;
+    private List<SQLResultColumn> columns;
     private String error;
     private String hint;
 
     public SQLResultSet() {
-        resultSet = new ArrayList<>();
+        columns = new ArrayList<>();
     }
 
-    public List<List<String>> getResultSet() {
-        return resultSet;
+    public List<SQLResultColumn> getColumns() {
+        return columns;
     }
 
-    public void setResultSet(List<List<String>> resultSet) {
-        this.resultSet = resultSet;
+    public void setColumns(List<SQLResultColumn> columns) {
+        this.columns = columns;
     }
 
     public String getError() {
@@ -39,7 +38,12 @@ public class SQLResultSet {
 
     //
     boolean isSubsetOf(SQLResultSet userResultSet) {
-        List<String>        refHeaderList;
+        userResultSet.getColumns().forEach(column -> {
+            System.out.print(column.getName() + " - " + column.getType());
+            System.out.println();
+            column.getData().forEach(System.out::println);
+        });
+        /* List<String>        refHeaderList;
         List<String>        userHeaderList;
 
         List<List<String>>  refDataSetList;
@@ -155,6 +159,8 @@ public class SQLResultSet {
             return true;
         }
         userResultSet.setHint("The ResultSet is not correct");
+        return false;
+        */
         return false;
     }
 }
