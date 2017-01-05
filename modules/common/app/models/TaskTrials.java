@@ -10,10 +10,10 @@ import models.submodels.TaskTrialStats;
 import javax.persistence.*;
 
 /**
- * The TaskTrial Class
+ * The TaskTrials Class
  */
 @Entity
-public class TaskTrial extends BaseModel {
+public class TaskTrials extends BaseModel {
     @Id
     private Long                id;
 
@@ -47,7 +47,7 @@ public class TaskTrial extends BaseModel {
     /**
      * The Constructor
      */
-    public TaskTrial() {
+    public TaskTrials() {
         this.stats = new TaskTrialStats();
         this.databaseInformation = new DatabaseInformation();
 

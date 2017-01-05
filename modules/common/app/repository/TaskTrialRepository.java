@@ -4,7 +4,7 @@ import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Singleton;
 import models.Task;
-import models.TaskTrial;
+import models.TaskTrials;
 import play.Configuration;
 import play.Logger;
 import play.libs.Json;
@@ -23,7 +23,7 @@ public class TaskTrialRepository {
     private final Configuration configuration;
     private final Random            random;
 
-    private Model.Finder<Long, TaskTrial> find = new Model.Finder<>(TaskTrial.class);
+    private Model.Finder<Long, TaskTrials> find = new Model.Finder<>(TaskTrials.class);
 
     @Inject
     public TaskTrialRepository(
@@ -37,35 +37,35 @@ public class TaskTrialRepository {
     }
 
 
-    public List<TaskTrial> getAll() {
+    public List<TaskTrials> getAll() {
         return this.find.all();
     }
 
-    public TaskTrial getById(Long id) {
+    public TaskTrials getById(Long id) {
         return this.find.byId(id);
     }
 
-    public TaskTrial create() {
-        TaskTrial   taskTrial;
+    public TaskTrials create() {
+        TaskTrials taskTrials;
         Task task;
 
-        taskTrial   = new TaskTrial();
+        taskTrials = new TaskTrials();
 
         task        = taskRepository.getRandomTask();
 
-        taskTrial.setTask(task);
+        taskTrials.setTask(task);
 
-        taskTrial.databaseInformation.setSeed(Math.abs(this.random.nextLong()));
-        taskTrial.databaseInformation.setDriver(this.getDatabaseDriver());
-        taskTrial.databaseInformation.setPath(this.getDatabasePath());
-        taskTrial.databaseInformation.setName(this.getDatabaseName(taskTrial));
-        taskTrial.databaseInformation.setUrl(this.getDatabaseUrl(taskTrial));
+        taskTrials.databaseInformation.setSeed(Math.abs(this.random.nextLong()));
+        taskTrials.databaseInformation.setDriver(this.getDatabaseDriver());
+        taskTrials.databaseInformation.setPath(this.getDatabasePath());
+        taskTrials.databaseInformation.setName(this.getDatabaseName(taskTrials));
+        taskTrials.databaseInformation.setUrl(this.getDatabaseUrl(taskTrials));
 
-        return taskTrial;
+        return taskTrials;
     }
 
-    public void save(TaskTrial taskTrial) {
-        taskTrial.save();
+    public void save(TaskTrials taskTrials) {
+        taskTrials.save();
     }
 
     private String getDatabaseDriver() {
@@ -76,20 +76,20 @@ public class TaskTrialRepository {
         return this.configuration.getString("sqlParser.path");
     }
 
-    private String getDatabaseName(TaskTrial taskTrial) {
-        return taskTrial.getCreatedAt()
+    private String getDatabaseName(TaskTrials taskTrials) {
+        return taskTrials.getCreatedAt()
                 + "-"
-                + taskTrial.getTask().getSchemaDef().getId()
+                + taskTrials.getTask().getSchemaDef().getId()
                 + "-"
-                + taskTrial.getTaskId()
+                + taskTrials.getTaskId()
                 + "-"
-                + taskTrial.databaseInformation.getSeed();
+                + taskTrials.databaseInformation.getSeed();
     }
 
-    private String getDatabaseUrl(TaskTrial taskTrial) {
+    private String getDatabaseUrl(TaskTrials taskTrials) {
         String databaseUrl = this.configuration.getString("sqlParser.urlPrefix")
-                + taskTrial.databaseInformation.getPath()
-                + taskTrial.databaseInformation.getName();
+                + taskTrials.databaseInformation.getPath()
+                + taskTrials.databaseInformation.getName();
         Logger.debug(databaseUrl);
         return databaseUrl;
     }
@@ -99,19 +99,19 @@ public class TaskTrialRepository {
 
     /**
      * Did Not Save !!!11elf11!!1
-     * @param taskTrial
+     * @param taskTrials
      * @param jsonNode
      * @return
      */
-    public TaskTrial refreshWithJson(TaskTrial taskTrial, JsonNode jsonNode) {
-        if (taskTrial.getIsFinished()) {
-            return taskTrial;
+    public TaskTrials refreshWithJson(TaskTrials taskTrials, JsonNode jsonNode) {
+        if (taskTrials.getIsFinished()) {
+            return taskTrials;
         }
 
-        TaskTrial taskTrial1 = Json.fromJson(jsonNode, TaskTrial.class);
-        if(taskTrial1.getUserStatement() != null && !taskTrial1.getUserStatement().isEmpty()) {
-            taskTrial.setUserStatement(
-                    taskTrial1.getUserStatement()
+        TaskTrials taskTrials1 = Json.fromJson(jsonNode, TaskTrials.class);
+        if(taskTrials1.getUserStatement() != null && !taskTrials1.getUserStatement().isEmpty()) {
+            taskTrials.setUserStatement(
+                    taskTrials1.getUserStatement()
                             .replaceAll("\n", " ")
                             .replaceAll("\t", " ")
                             .replaceAll("    ", " ")
@@ -119,8 +119,8 @@ public class TaskTrialRepository {
                             .trim()
             );
         }
-        taskTrial.setIsFinished(taskTrial1.getIsFinished());
-        taskTrial.stats.setSubmitDate(LocalDateTime.now());
-        return taskTrial;
+        taskTrials.setIsFinished(taskTrials1.getIsFinished());
+        taskTrials.stats.setSubmitDate(LocalDateTime.now());
+        return taskTrials;
     }
 }

@@ -20,7 +20,7 @@ public class Session extends BaseModel {
     private int connectionInfo;
 
     @ManyToOne()
-    private TaskTrial taskTrial;
+    private TaskTrials taskTrials;
 
     public Session() {
         this.id = UUID.randomUUID().toString();
@@ -54,11 +54,11 @@ public class Session extends BaseModel {
         return connectionInfo;
     }
 
-    public TaskTrial getTaskTrial() {
-        return taskTrial;
+    public TaskTrials getTaskTrials() {
+        return taskTrials;
     }
 
-    public void setTaskTrial(TaskTrial taskTrial) {
-        this.taskTrial = taskTrial;
+    public void setTaskTrials(TaskTrials taskTrials) {
+        this.taskTrials = taskTrials;
     }
 }

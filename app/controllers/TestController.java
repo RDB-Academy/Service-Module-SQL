@@ -1,7 +1,7 @@
 package controllers;
 
 import models.Task;
-import models.TaskTrial;
+import models.TaskTrials;
 import parser.SQLParser;
 import parser.SQLParserFactory;
 import parser.extensionMaker.ExtensionMaker;
@@ -15,7 +15,7 @@ import play.mvc.Result;
 import repository.SchemaDefRepository;
 import repository.TaskRepository;
 import repository.TaskTrialRepository;
-import services.TaskTrialService;
+import services.TaskTrialsService;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.Random;
 public class TestController extends Controller {
     private final SchemaDefRepository   schemaDefRepository;
     private final SQLParserFactory      sqlParserFactory;
-    private final TaskTrialService      taskTrialService;
+    private final TaskTrialsService taskTrialsService;
     private final TaskTrialRepository   taskTrialRepository;
     private final TaskRepository        taskRepository;
 
@@ -35,13 +35,13 @@ public class TestController extends Controller {
     public TestController(
             SchemaDefRepository schemaDefRepository,
             SQLParserFactory sqlParserFactory,
-            TaskTrialService taskTrialService,
+            TaskTrialsService taskTrialsService,
             TaskTrialRepository taskTrialRepository,
             TaskRepository taskRepository) {
 
         this.schemaDefRepository = schemaDefRepository;
         this.sqlParserFactory = sqlParserFactory;
-        this.taskTrialService = taskTrialService;
+        this.taskTrialsService = taskTrialsService;
         this.taskTrialRepository = taskTrialRepository;
         this.taskRepository = taskRepository;
     }
@@ -105,7 +105,7 @@ public class TestController extends Controller {
     }
 
     public Result parserCreate() {
-        TaskTrial taskTrial = new TaskTrial();
+        TaskTrials taskTrials = new TaskTrials();
         SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
         Task task = schemaDef.getTaskList().get(0);
 
@@ -113,25 +113,25 @@ public class TestController extends Controller {
             return null;
         }
 
-        taskTrial.setTask(task);
-        taskTrial.databaseInformation.setSeed(12345L);
+        taskTrials.setTask(task);
+        taskTrials.databaseInformation.setSeed(12345L);
 
-        taskTrial = this.sqlParserFactory.createParser(taskTrial);
+        taskTrials = this.sqlParserFactory.createParser(taskTrials);
 
-        this.taskTrialRepository.save(taskTrial);
+        this.taskTrialRepository.save(taskTrials);
 
-        return ok(Json.toJson(taskTrial));
+        return ok(Json.toJson(taskTrials));
     }
 
     public Result parserGet(Long id) {
-        TaskTrial taskTrial = this.taskTrialService.read(id);
+        TaskTrials taskTrials = this.taskTrialsService.read(id);
 
-        if(taskTrial == null) {
-            Logger.warn(String.format("TaskTrial - Object with id: %d not found", id));
+        if(taskTrials == null) {
+            Logger.warn(String.format("TaskTrials - Object with id: %d not found", id));
             return notFound();
         }
 
-        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
+        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrials);
 
         if(sqlParser == null) {
             Logger.error("Cannot create SQL Parser");
@@ -144,16 +144,16 @@ public class TestController extends Controller {
     }
 
     public Result parserDelete(Long id ) {
-        TaskTrial taskTrial = this.taskTrialService.read(id);
+        TaskTrials taskTrials = this.taskTrialsService.read(id);
 
-        if(taskTrial == null) {
-            Logger.warn(String.format("TaskTrial - Object with id: %d not found", id));
+        if(taskTrials == null) {
+            Logger.warn(String.format("TaskTrials - Object with id: %d not found", id));
             return notFound();
         }
 
-        this.sqlParserFactory.deleteDatabase(taskTrial);
+        this.sqlParserFactory.deleteDatabase(taskTrials);
 
-        this.taskTrialRepository.save(taskTrial);
+        this.taskTrialRepository.save(taskTrials);
 
         return ok("successfully");
     }

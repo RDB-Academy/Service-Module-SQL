@@ -4,7 +4,7 @@ import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.TaskTrialService;
+import services.TaskTrialsService;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
@@ -13,22 +13,22 @@ import java.util.concurrent.CompletionStage;
 /**
  * @author invisible
  */
-public class TaskTrialController extends Controller {
-    private final TaskTrialService taskTrialService;
+public class TaskTrialsController extends Controller {
+    private final TaskTrialsService taskTrialsService;
     private final HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public TaskTrialController(
-            TaskTrialService taskTrialService,
+    public TaskTrialsController(
+            TaskTrialsService taskTrialsService,
             HttpExecutionContext httpExecutionContext){
 
-        this.taskTrialService = taskTrialService;
+        this.taskTrialsService = taskTrialsService;
         this.httpExecutionContext = httpExecutionContext;
     }
 
     public CompletionStage<Result> create() {
         return CompletableFuture
-                .supplyAsync(this.taskTrialService::create, this.httpExecutionContext.current())
+                .supplyAsync(this.taskTrialsService::create, this.httpExecutionContext.current())
                 .thenApply(taskTrial -> {
                     if(taskTrial == null) {
                         return internalServerError();
@@ -39,7 +39,7 @@ public class TaskTrialController extends Controller {
 
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
-                .supplyAsync(() -> this.taskTrialService.read(id), this.httpExecutionContext.current())
+                .supplyAsync(() -> this.taskTrialsService.read(id), this.httpExecutionContext.current())
                 .thenApply(taskTrial -> {
                     if(taskTrial == null) {
                         return notFound("No such object available!");
@@ -50,7 +50,7 @@ public class TaskTrialController extends Controller {
 
     public CompletionStage<Result> update(Long id) {
         return CompletableFuture
-                .supplyAsync(() -> this.taskTrialService.validateStatement(id), this.httpExecutionContext.current())
+                .supplyAsync(() -> this.taskTrialsService.validateStatement(id), this.httpExecutionContext.current())
                 .thenApply((taskTrial -> {
                     if(taskTrial == null) {
                         return badRequest("Something went terrible wrong");

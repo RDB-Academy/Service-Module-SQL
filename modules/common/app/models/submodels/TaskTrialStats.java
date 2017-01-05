@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * The TaskTrial Stat Class
+ * The TaskTrials Stat Class
  */
 @Embeddable
 public class TaskTrialStats {

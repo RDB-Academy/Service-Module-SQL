@@ -1,7 +1,7 @@
 package parser;
 
 import models.SchemaDef;
-import models.TaskTrial;
+import models.TaskTrials;
 import org.h2.tools.DeleteDbFiles;
 import parser.extensionMaker.ExtensionMaker;
 import parser.tableMaker.TableMaker;
@@ -24,10 +24,10 @@ public class SQLParserFactory {
 
     /**
      * this function creates a parser and a database
-     * @param taskTrial needs a TaskTrial Object
-     * @return returns a updated TaskTrial Object
+     * @param taskTrials needs a TaskTrials Object
+     * @return returns a updated TaskTrials Object
      */
-    public TaskTrial createParser(@NotNull TaskTrial taskTrial) {
+    public TaskTrials createParser(@NotNull TaskTrials taskTrials) {
         Connection      connection;
         SchemaDef       schemaDef;
         TableMaker      tableMaker;
@@ -36,26 +36,26 @@ public class SQLParserFactory {
         Statement       statement;
 
         Logger.debug("Creating new Parser");
-        if(taskTrial.databaseInformation.getIsAvailable()) {
+        if(taskTrials.databaseInformation.getIsAvailable()) {
             Logger.warn(
                     String.format(
-                            "Task Trial Object %d already have a database", taskTrial.getId()
+                            "Task Trial Object %d already have a database", taskTrials.getId()
                     )
             );
-            return taskTrial;
+            return taskTrials;
         }
 
-        connection = this.getConnection(taskTrial, false);
+        connection = this.getConnection(taskTrials, false);
 
         if(connection == null) {
             Logger.error("ParserFactory.createParser - didn't get a connection");
             return null;
         }
 
-        schemaDef       = taskTrial.getTask().getSchemaDef();
+        schemaDef       = taskTrials.getTask().getSchemaDef();
         tableMaker      = new TableMaker(schemaDef);
         extensionMaker  = new ExtensionMaker(
-                taskTrial.databaseInformation.getSeed(),
+                taskTrials.databaseInformation.getSeed(),
                 schemaDef,
                 0,
                 75,
@@ -108,7 +108,7 @@ public class SQLParserFactory {
             Logger.debug("Time Needed: " + differenceTime.toMillis() + " Millis");
 
             connection.close();
-            taskTrial.databaseInformation.setIsAvailable(true);
+            taskTrials.databaseInformation.setIsAvailable(true);
         } catch (InterruptedException | ExecutionException e) {
             Logger.error("Cannot get Create Statement or Extension");
             Logger.error(e.getMessage());
@@ -116,57 +116,57 @@ public class SQLParserFactory {
             Logger.error("Cannot close Connection or something similar");
             Logger.error(e.getMessage());
         }
-        return taskTrial;
+        return taskTrials;
     }
 
     /**
      * This functions returns a the sql parser for the task Trial Object
-     * @param taskTrial needs a task trial object
+     * @param taskTrials needs a task trial object
      * @return returns a sqlParser
      */
-    public SQLParser getParser(@NotNull TaskTrial taskTrial) {
-        if(!taskTrial.databaseInformation.getIsAvailable()) {
-            Logger.warn(String.format("TaskTrial Object %d has no Database ", taskTrial.getId()));
+    public SQLParser getParser(@NotNull TaskTrials taskTrials) {
+        if(!taskTrials.databaseInformation.getIsAvailable()) {
+            Logger.warn(String.format("TaskTrials Object %d has no Database ", taskTrials.getId()));
             return null;
         }
 
-        Logger.debug("Found DB url: " + taskTrial.databaseInformation.getUrl());
+        Logger.debug("Found DB url: " + taskTrials.databaseInformation.getUrl());
 
-        Connection connection = this.getConnection(taskTrial, true);
+        Connection connection = this.getConnection(taskTrials, true);
 
         if(connection == null) {
             Logger.error("Cannot Create Database Connection");
             return null;
         }
 
-        return new SQLParser(taskTrial, connection);
+        return new SQLParser(taskTrials, connection);
     }
 
-    public void deleteDatabase(TaskTrial taskTrial) {
-        if(!taskTrial.databaseInformation.getIsAvailable()) {
-            Logger.warn("TaskTrial Id: %d don't have a database");
+    public void deleteDatabase(TaskTrials taskTrials) {
+        if(!taskTrials.databaseInformation.getIsAvailable()) {
+            Logger.warn("TaskTrials Id: %d don't have a database");
             return;
         }
-        String databasePath = taskTrial.databaseInformation.getPath();
-        String databaseName = taskTrial.databaseInformation.getName();
+        String databasePath = taskTrials.databaseInformation.getPath();
+        String databaseName = taskTrials.databaseInformation.getName();
         DeleteDbFiles.execute(databasePath, databaseName, false);
 
-        taskTrial.databaseInformation.setIsAvailable(false);
+        taskTrials.databaseInformation.setIsAvailable(false);
     }
 
     /**
      *
-     * @param taskTrial the taskTrial object
+     * @param taskTrials the taskTrials object
      * @param ifExists if Exist
      * @return returns connection
      */
-    private Connection getConnection(TaskTrial taskTrial, boolean ifExists) {
+    private Connection getConnection(TaskTrials taskTrials, boolean ifExists) {
         String      databaseDriver;
         String      databasePath;
         Connection  connection = null;
 
-        databaseDriver = taskTrial.databaseInformation.getDriver();
-        databasePath = taskTrial.databaseInformation.getUrl() + ((ifExists) ? ";IFEXISTS=TRUE" : "");
+        databaseDriver = taskTrials.databaseInformation.getDriver();
+        databasePath = taskTrials.databaseInformation.getUrl() + ((ifExists) ? ";IFEXISTS=TRUE" : "");
 
 
         try {
