@@ -228,13 +228,19 @@ public class FootballSchemaBuilder extends SchemaBuilder {
     protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
-        Task footballTask = new Task();
+        Task task = new Task();
 
-        footballTask.setName("Find Luke Kuechly.");
-        footballTask.setText("Find Luke Kuechly.");
-        footballTask.setReferenceStatement("SELECT firstname, lastname FROM player WHERE firstname = 'Luke' AND lastname = 'Kuechly';");
+        task.setText("What is the average weight of all players?");
+        task.setReferenceStatement("SELECT avg(weight) as average FROM player;");
+        taskList.add(task);
 
-        taskList.add(footballTask);
+        task = new Task();
+        task.setText("Show the weight and the lastname of the player who weighs the most.");
+        task.setReferenceStatement(" SELECT weight,lastname\n" +
+                "FROM player\n" +
+                "WHERE weight =(SELECT max(weight)\n" +
+                "\t\t\t FROM player)");
+        taskList.add(task);
 
         return taskList;
     }
