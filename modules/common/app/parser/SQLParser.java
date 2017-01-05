@@ -55,7 +55,7 @@ public class SQLParser {
         Statement           statement;
         ResultSet           rs;
         ResultSetMetaData   rsmd;
-        List<List<String>>  resultSet = new ArrayList<>();
+        List<SQLResultColumn>  resultSet = new ArrayList<>();
         SQLResultSet        sqlResultSet = new SQLResultSet();
         int                 columnCount;
 
@@ -68,25 +68,26 @@ public class SQLParser {
             // Create Header
             List<String> header = new ArrayList<>();
             for(int i = 1; i <= columnCount; i++) {
-                header.add(
-                        ((!rsmd.getTableName(i).isEmpty()) ? rsmd.getTableName(i) + "." : "")
-                                + rsmd.getColumnName(i));
+                SQLResultColumn sqlResultColumn;
+                String columnName = ((!rsmd.getTableName(i).isEmpty()) ? rsmd.getTableName(i) + "." : "") + rsmd.getColumnName(i);
+                String columnType = rsmd.getColumnTypeName(i);
+
+                sqlResultColumn = new SQLResultColumn(columnName, columnType);
+
+                resultSet.add(sqlResultColumn);
             }
-            resultSet.add(header);
 
             // Load data
             while(rs.next()) {
-                List<String> rowList = new ArrayList<>();
                 for(int i = 1; i <= columnCount; i++) {
-                    rowList.add(rs.getString(i));
+                    resultSet.get(i - 1).getData().add(rs.getString(i));
                 }
-                resultSet.add(rowList);
             }
 
             statement.close();
             rs.close();
 
-            sqlResultSet.setResultSet(resultSet);
+            sqlResultSet.setColumns(resultSet);
         } catch (SQLException e) {
             Logger.error("Submit SQL Statement nicht valide oder so");
             Logger.error(e.getMessage());

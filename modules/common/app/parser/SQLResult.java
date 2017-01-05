@@ -31,14 +31,10 @@ public class SQLResult {
             this.hint = resultSet.getHint();
         }
 
-        for(String headerName : resultSet.getResultSet().get(0)) {
-            this.header.add(headerName);
-        }
-
-        for(int i = 1; i < resultSet.getResultSet().size(); i++) {
-            List<String> row = resultSet.getResultSet().get(i);
-            this.dataSets.add(row);
-        }
+        resultSet.getColumns().forEach(sqlResultColumn -> {
+            this.header.add(sqlResultColumn.getName());
+            this.dataSets.add(sqlResultColumn.getData());
+        });
     }
 
     public boolean isCorrect() {
