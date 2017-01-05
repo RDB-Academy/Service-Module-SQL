@@ -36,7 +36,6 @@ public class SQLResultSet {
         this.hint = hint;
     }
 
-    //
     boolean isSubsetOf(SQLResultSet userResultSet) {
         userResultSet.getColumns().forEach(column -> {
             System.out.print(column.getName() + " - " + column.getType());
