@@ -4,6 +4,7 @@ import models.submodels.ResultSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author fabiomazzone
@@ -31,10 +32,27 @@ public class SQLResult {
             this.hint = resultSet.getHint();
         }
 
-        resultSet.getColumns().forEach(sqlResultColumn -> {
-            this.header.add(sqlResultColumn.getName());
-            this.dataSets.add(sqlResultColumn.getData());
-        });
+        this.header = resultSet.getColumns().stream().map(SQLResultColumn::getName).collect(Collectors.toList());
+
+        for(int i = 0; i < resultSet.getColumns().size(); i++) {
+            SQLResultColumn column = resultSet.getColumns().get(i);
+
+            List<String> columnData = column.getData();
+
+            for (int j = 0; j < columnData.size(); j++) {
+                String data = columnData.get(j);
+                List<String> row;
+
+                if(j == this.dataSets.size()) {
+                    row = new ArrayList<>();
+                    this.dataSets.add(row);
+                } else {
+                    row = this.dataSets.get(j);
+                }
+                row.add(data);
+                // add data to dataSetRow
+            }
+        }
     }
 
     public boolean isCorrect() {
