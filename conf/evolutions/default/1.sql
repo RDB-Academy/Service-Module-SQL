@@ -82,6 +82,8 @@ create table task (
 create table task_trial (
   id                            bigint auto_increment not null,
   created_at                    timestamp,
+  task_id                       bigint not null,
+  session_id                    varchar(255) not null,
   tries                         integer,
   begin_date                    timestamp not null,
   submit_date                   timestamp,
@@ -94,8 +96,6 @@ create table task_trial (
   user_statement                varchar(255),
   is_correct                    boolean,
   is_finished                   boolean,
-  task_id                       bigint not null,
-  session_id                    varchar(255) not null,
   modified_at                   timestamp not null,
   constraint pk_task_trial primary key (id)
 );

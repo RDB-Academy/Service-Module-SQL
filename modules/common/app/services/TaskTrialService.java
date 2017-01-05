@@ -95,7 +95,6 @@ public class TaskTrialService {
 
         if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
             Logger.warn("Submitted Statement is null or Empty");
-            taskTrial.setError("Submitted Statement is Empty");
             return taskTrial;
         }
 
@@ -103,13 +102,12 @@ public class TaskTrialService {
 
         sqlParser = this.sqlParserFactory.getParser(taskTrial);
         if(sqlParser == null) {
-            taskTrial.setError("Cannot create DB Connection");
-            return taskTrial;
+            return null;
         }
         sqlResult = sqlParser.submit(taskTrial);
 
         taskTrial.stats.incrementTries();
-        taskTrial.resultSet = sqlResult.getAsResultSet();
+        taskTrial.setResultSet(sqlResult.getAsResultSet());
         taskTrial.setIsCorrect(sqlResult.isCorrect());
 
 

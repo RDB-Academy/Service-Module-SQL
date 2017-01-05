@@ -17,20 +17,6 @@ public class TaskTrial extends BaseModel {
     @Id
     private Long                id;
 
-    @Embedded
-    @JsonProperty(value = "stats", access = JsonProperty.Access.READ_ONLY)
-    public  TaskTrialStats      stats;
-
-    @JsonIgnore
-    @Embedded
-    public  DatabaseInformation databaseInformation;
-
-    private String userStatement;
-
-    private boolean isCorrect;
-
-    private boolean isFinished;
-
     @JsonIgnore
     @ManyToOne(optional = false)
     private Task task;
@@ -39,13 +25,24 @@ public class TaskTrial extends BaseModel {
     @ManyToOne(optional = false)
     private Session session;
 
+
+
+
+    @Embedded
+    @JsonProperty(value = "stats", access = JsonProperty.Access.READ_ONLY)
+    public  TaskTrialStats      stats;
+
+    @Embedded
     @JsonIgnore
-    @Transient
-    private String error;
+    public  DatabaseInformation databaseInformation;
 
     @Transient
     @JsonProperty(value = "resultSet", access = JsonProperty.Access.READ_ONLY)
-    public ResultSet resultSet;
+    private ResultSet           resultSet;
+
+    private String              userStatement;
+    private boolean             isCorrect;
+    private boolean             isFinished;
 
     /**
      * The Constructor
@@ -110,15 +107,11 @@ public class TaskTrial extends BaseModel {
         this.session = session;
     }
 
-    public boolean hasError() {
-        return this.error != null;
+    public ResultSet getResultSet() {
+        return resultSet;
     }
 
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String errorMessage) {
-        this.error = errorMessage;
+    public void setResultSet(ResultSet resultSet) {
+        this.resultSet = resultSet;
     }
 }
