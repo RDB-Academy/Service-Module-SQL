@@ -1,6 +1,6 @@
 package parser;
 
-import models.TaskTrials;
+import models.TaskTrial;
 import play.Logger;
 
 import javax.inject.Singleton;
@@ -13,29 +13,29 @@ import java.util.List;
  */
 @Singleton
 public class SQLParser {
-    private final TaskTrials taskTrials;
+    private final TaskTrial taskTrial;
     private final Connection connection;
 
     SQLParser(
-            TaskTrials taskTrials,
+            TaskTrial taskTrial,
             Connection connection) {
 
-        this.taskTrials = taskTrials;
+        this.taskTrial = taskTrial;
         this.connection = connection;
     }
 
     /**
      *
-     * @param taskTrials
+     * @param taskTrial
      * @return
      */
-    public SQLResult submit(TaskTrials taskTrials) {
+    public SQLResult submit(TaskTrial taskTrial) {
         SQLResult       sqlResult;
         SQLResultSet    userResultSet;
         SQLResultSet    refResultSet;
 
-        userResultSet   = executeStatement(taskTrials.getUserStatement());
-        refResultSet    = executeStatement(this.taskTrials.getTask().getReferenceStatement());
+        userResultSet   = executeStatement(taskTrial.getUserStatement());
+        refResultSet    = executeStatement(this.taskTrial.getTask().getReferenceStatement());
 
         sqlResult       = SQLResultMatcher.match(userResultSet, refResultSet);
 

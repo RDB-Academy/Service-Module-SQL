@@ -4,10 +4,10 @@ POST    /login                      controllers.api.SessionController.login()
 ## model.Task
 GET     /tasks/:id                  controllers.api.TaskController.read(id :Long)
 
-## model.TaskTrials
-POST    /task-trials                controllers.api.TaskTrialsController.create()
-GET     /task-trials/:id            controllers.api.TaskTrialsController.read(id: Long)
-PATCH   /task-trials/:id            controllers.api.TaskTrialsController.update(id: Long)
+## model.TaskTrial
+POST    /task-trials                controllers.api.TaskTrialController.create()
+GET     /task-trials/:id            controllers.api.TaskTrialController.read(id: Long)
+PATCH   /task-trials/:id            controllers.api.TaskTrialController.update(id: Long)
 
 ## model.SchemaDef
 GET     /schema-defs/:id            controllers.api.SchemaDefController.read(id: Long)
