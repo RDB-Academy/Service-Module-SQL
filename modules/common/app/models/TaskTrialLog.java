@@ -1,5 +1,6 @@
 package models;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 /**
  * @author fabiomazzone
  */
+@Entity
 public class TaskTrialLog extends BaseModel {
     @Id
     private Long            id;

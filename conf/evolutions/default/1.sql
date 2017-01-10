@@ -100,6 +100,18 @@ create table task_trial (
   constraint pk_task_trial primary key (id)
 );
 
+create table task_trial_log (
+  id                            bigint auto_increment not null,
+  created_at                    timestamp,
+  task_trial_id                 bigint not null,
+  statement                     varchar(255),
+  submitted                     timestamp,
+  hint_message                  varchar(255),
+  error_message                 varchar(255),
+  modified_at                   timestamp not null,
+  constraint pk_task_trial_log primary key (id)
+);
+
 alter table column_def add constraint fk_column_def_table_def_id foreign key (table_def_id) references table_def (id) on delete restrict on update restrict;
 create index ix_column_def_table_def_id on column_def (table_def_id);
 
@@ -129,6 +141,9 @@ create index ix_task_trial_task_id on task_trial (task_id);
 
 alter table task_trial add constraint fk_task_trial_session_id foreign key (session_id) references session (id) on delete restrict on update restrict;
 create index ix_task_trial_session_id on task_trial (session_id);
+
+alter table task_trial_log add constraint fk_task_trial_log_task_trial_id foreign key (task_trial_id) references task_trial (id) on delete restrict on update restrict;
+create index ix_task_trial_log_task_trial_id on task_trial_log (task_trial_id);
 
 
 # --- !Downs
@@ -163,6 +178,9 @@ drop index if exists ix_task_trial_task_id;
 alter table task_trial drop constraint if exists fk_task_trial_session_id;
 drop index if exists ix_task_trial_session_id;
 
+alter table task_trial_log drop constraint if exists fk_task_trial_log_task_trial_id;
+drop index if exists ix_task_trial_log_task_trial_id;
+
 drop table if exists column_def;
 
 drop table if exists foreign_key;
@@ -178,4 +196,6 @@ drop table if exists table_def;
 drop table if exists task;
 
 drop table if exists task_trial;
+
+drop table if exists task_trial_log;
 
