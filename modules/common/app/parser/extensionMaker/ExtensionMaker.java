@@ -3,11 +3,10 @@ package parser.extensionMaker;
 import models.ColumnDef;
 import models.SchemaDef;
 import models.TableDef;
-import models.submodels.ExtensionDef;
+import models.ExtensionDef;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -69,7 +68,7 @@ public class ExtensionMaker {
             Integer                     entityCount;
 
             columnDefList   = tableDef.getColumnDefList();
-            staticExtension = tableDef.getExtensionList();
+            staticExtension = tableDef.getExtensionDef();
 
             entityList      = new ArrayList<>();
             entityCount     = randomBetween(this.minEntities, this.maxEntities);

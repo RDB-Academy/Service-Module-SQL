@@ -67,9 +67,9 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         heroTeam_hero.addForeignKeyRelation(heroTeam_hero_rel);
         heroTeam_team.addForeignKeyRelation(heroTeam_team_rel);
 
-        hero.extensionDef = this.buildHeroExtension();
-        team.extensionDef = this.buildTeamExtension();
-        heroTeam.extensionDef = this.buildHeroTeamExtension();
+        hero.setExtensionDef(this.buildHeroExtension());
+        team.setExtensionDef(this.buildTeamExtension());
+        heroTeam.setExtensionDef(this.buildHeroTeamExtension());
 
         heroTeamSchema.addTableDef(hero);
         heroTeamSchema.addTableDef(team);

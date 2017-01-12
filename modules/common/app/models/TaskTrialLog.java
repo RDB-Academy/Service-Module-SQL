@@ -1,6 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -21,13 +22,14 @@ public class TaskTrialLog extends BaseModel {
 
     private String          statement;
 
+    @JsonProperty("isCorrect")
     private boolean         isCorrect;
 
     private String          hintMessage;
 
     private String          errorMessage;
 
-    private LocalDateTime   submitted;
+    private LocalDateTime   submittedAt;
 
     public Long getId() {
         return id;
@@ -73,11 +75,11 @@ public class TaskTrialLog extends BaseModel {
         this.errorMessage = errorMessage;
     }
 
-    public LocalDateTime getSubmitted() {
-        return submitted;
+    public LocalDateTime getSubmittedAt() {
+        return submittedAt;
     }
 
-    public void setSubmitted(LocalDateTime submitted) {
-        this.submitted = submitted;
+    public void setSubmittedAt(LocalDateTime submittedAt) {
+        this.submittedAt = submittedAt;
     }
 }

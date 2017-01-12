@@ -113,7 +113,7 @@ public class TaskTrialService {
             taskTrialLog.setStatement(taskTrialLogJson.getStatement().trim());
         }
 
-        taskTrialLog.setSubmitted(LocalDateTime.now());
+        taskTrialLog.setSubmittedAt(LocalDateTime.now());
 
         if(taskTrialLog.getStatement() == null
                 || taskTrialLog.getStatement().isEmpty()) {
