@@ -24,7 +24,7 @@ public class SQLResultMatcher {
             for (SQLResultColumn userResultColumn : userResultSet.getColumns()) {
                 if(userResultColumn.getType().equals(refResultColumn.getType())){
                     columnExist = true;
-                    if(userResultColumn.getData().equals(refResultColumn.getData())){
+                    if(userResultColumn.getData().containsAll(refResultColumn.getData()) && refResultColumn.getData().containsAll(userResultColumn.getData())){
                         columnValid = true;
                         break;
                     }
