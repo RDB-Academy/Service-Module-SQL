@@ -53,7 +53,7 @@ public class TaskTrialController extends Controller {
                 .supplyAsync(() -> this.taskTrialService.validateStatement(id), this.httpExecutionContext.current())
                 .thenApply((taskTrial -> {
                     if(taskTrial == null) {
-                        return badRequest("Something went terrible wrong");
+                        return badRequest("Something went terribly wrong");
                     }
                     if(taskTrial.getIsFinished()) {
                         return ok(Json.toJson(taskTrial));
