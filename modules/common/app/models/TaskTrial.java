@@ -87,7 +87,7 @@ public class TaskTrial extends BaseModel {
     @JsonGetter("taskTrialStatus")
     public TaskTrialLog getTaskTrialStatus() {
         if(this.taskTrialLogList == null || this.taskTrialLogList.size() == 0) {
-            return null;
+            return new TaskTrialLog();
         }
 
         TaskTrialLog taskTrialLog = this.taskTrialLogList.get(0);
