@@ -32,7 +32,7 @@ public class SQLResult {
             this.hint = resultSet.getHint();
         }
 
-        this.header = resultSet.getColumns().stream().map(SQLResultColumn::getName).collect(Collectors.toList());
+        this.header = resultSet.getColumns().stream().map(SQLResultColumn::getAlias).collect(Collectors.toList());
 
         for(int i = 0; i < resultSet.getColumns().size(); i++) {
             SQLResultColumn column = resultSet.getColumns().get(i);

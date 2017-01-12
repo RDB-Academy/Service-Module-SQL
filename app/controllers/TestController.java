@@ -60,8 +60,8 @@ public class TestController extends Controller {
                 });
                 System.out.println();
 
-                if (tableDef.extensionDef != null) {
-                    tableDef.extensionDef.getExtensionList().forEach(entity -> {
+                if (tableDef.getExtensionDef() != null) {
+                    tableDef.getExtensionDef().getExtensionList().forEach(entity -> {
                         entity.forEach((k, v) -> {
                             System.out.println("    - " + k + "=" + v);
                         });

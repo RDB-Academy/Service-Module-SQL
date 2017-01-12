@@ -7,7 +7,6 @@ import models.ExtensionDef;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,21 +65,20 @@ public class ExtensionMaker {
             List<ColumnDef>             columnDefList;
             ExtensionDef                staticExtension;
             List<Map<String, String>>   entityList;
-            List<Map<String, String>>   extensionList;
             Integer                     entityCount;
+            int                         extensionSize = 0;;
 
             columnDefList   = tableDef.getColumnDefList();
-            staticExtension = tableDef.getExtensionList();
+            staticExtension = tableDef.getExtensionDef();
 
             entityList      = new ArrayList<>();
             entityCount     = randomBetween(this.minEntities, this.maxEntities);
 
-            extensionList      = new ArrayList<>();
-            int extensionSize = 0;
-            extensionList   = staticExtension.getExtensionList();
-            for (Map<String, String> extension: extensionList) {
-                entityList.add(extension);
-                extensionSize++;
+            if(staticExtension != null) {
+                for (Map<String, String> extension: staticExtension.getExtensionList()) {
+                    entityList.add(extension);
+                    extensionSize++;
+                }
             }
 
             //variables used for combined keys

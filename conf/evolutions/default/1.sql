@@ -103,7 +103,7 @@ create table task_trial_log (
   is_correct                    boolean,
   hint_message                  varchar(255),
   error_message                 varchar(255),
-  submitted                     timestamp,
+  submitted_at                  timestamp,
   modified_at                   timestamp not null,
   constraint pk_task_trial_log primary key (id)
 );

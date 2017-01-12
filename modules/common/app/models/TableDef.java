@@ -30,7 +30,7 @@ public class TableDef extends BaseModel {
 
     @JsonIgnore
     @Embedded
-    public ExtensionDef extensionDef;
+    private ExtensionDef extensionDef;
 
     public TableDef() {
         this.columnDefList = new ArrayList<>();
@@ -61,8 +61,12 @@ public class TableDef extends BaseModel {
         return columnDefList;
     }
 
-    public ExtensionDef getExtensionList() {
+    public ExtensionDef getExtensionDef() {
         return extensionDef;
+    }
+
+    public void setExtensionDef(ExtensionDef extensionDef) {
+        this.extensionDef = extensionDef;
     }
 
     public void setColumnDefList(List<ColumnDef> columnDefList) {

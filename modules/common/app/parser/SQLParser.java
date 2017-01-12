@@ -70,10 +70,11 @@ public class SQLParser {
             List<String> header = new ArrayList<>();
             for(int i = 1; i <= columnCount; i++) {
                 SQLResultColumn sqlResultColumn;
+                String columnAlias = rsmd.getColumnLabel(i);
                 String columnName = ((!rsmd.getTableName(i).isEmpty()) ? rsmd.getTableName(i) + "." : "") + rsmd.getColumnName(i);
                 String columnType = rsmd.getColumnTypeName(i);
 
-                sqlResultColumn = new SQLResultColumn(columnName, columnType);
+                sqlResultColumn = new SQLResultColumn(columnAlias, columnName, columnType);
 
                 resultSet.add(sqlResultColumn);
             }
