@@ -15,6 +15,7 @@ import services.SchemaDefService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
@@ -104,8 +105,8 @@ public class SchemaDefController extends Controller {
         schemaDefNode.set("foreignKeyList", foreignKeyIds);
         schemaDefNode.set("taskList", taskIds);
 
-        schemaDefNode.put("createdAt", schemaDef.getCreatedAt());
-        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt());
+        schemaDefNode.put("createdAt", schemaDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE));
+        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE));
 
         return schemaDefNode;
     }

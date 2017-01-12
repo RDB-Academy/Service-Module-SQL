@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import models.submodels.DatabaseInformation;
 import models.submodels.ResultSet;
-import models.submodels.TaskTrialStats;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,10 +31,6 @@ public class TaskTrial extends BaseModel {
     private List<TaskTrialLog>  taskTrialLogList;
 
     @Embedded
-    @JsonProperty(value = "stats", access = JsonProperty.Access.READ_ONLY)
-    public  TaskTrialStats      stats;
-
-    @Embedded
     @JsonIgnore
     public  DatabaseInformation databaseInformation;
 
@@ -42,18 +38,15 @@ public class TaskTrial extends BaseModel {
     @JsonProperty(value = "resultSet", access = JsonProperty.Access.READ_ONLY)
     private ResultSet           resultSet;
 
-    private String              userStatement;
-    private boolean             isCorrect;
     private boolean             isFinished;
 
     /**
      * The Constructor
      */
     public TaskTrial() {
-        this.stats = new TaskTrialStats();
-        this.databaseInformation = new DatabaseInformation();
+        this.databaseInformation= new DatabaseInformation();
+        this.taskTrialLogList   = new ArrayList<>();
 
-        this.isCorrect = false;
         this.isFinished = false;
     }
 
@@ -91,27 +84,32 @@ public class TaskTrial extends BaseModel {
         return this.getTaskTrialLogList().size();
     }
 
+    @JsonGetter("taskTrialStatus")
+    public TaskTrialLog getTaskTrialStatus() {
+        if(this.taskTrialLogList == null || this.taskTrialLogList.size() == 0) {
+            return new TaskTrialLog();
+        }
+
+        TaskTrialLog taskTrialLog = this.taskTrialLogList.get(0);
+        for (TaskTrialLog taskTrialLogIterator : this.taskTrialLogList) {
+            if(taskTrialLogIterator.getCreatedAt().isAfter(taskTrialLog.getCreatedAt())) {
+                taskTrialLog = taskTrialLogIterator;
+            }
+        }
+
+        return taskTrialLog;
+    }
+
     public void setTaskTrialLogList(List<TaskTrialLog> taskTrialLogList) {
         this.taskTrialLogList = taskTrialLogList;
     }
 
-    public String getUserStatement() {
-        return userStatement;
-    }
-
-    public void setUserStatement(String userStatement) {
-        this.userStatement = userStatement;
-    }
-
-    public boolean getIsCorrect() {
-        return isCorrect;
-    }
-
-    public void setIsCorrect(boolean correct) {
-        isCorrect = correct;
-        if(correct) {
-            this.setIsFinished(true);
+    public void addTaskTrialLog(TaskTrialLog taskTrialLog) {
+        if(this.taskTrialLogList == null) {
+            this.taskTrialLogList = new ArrayList<>();
         }
+        taskTrialLog.setTaskTrial(this);
+        this.taskTrialLogList.add(taskTrialLog);
     }
 
     public boolean getIsFinished() {

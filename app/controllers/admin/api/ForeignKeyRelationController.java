@@ -9,6 +9,7 @@ import services.ForeignKeyRelationService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -46,8 +47,8 @@ public class ForeignKeyRelationController extends Controller {
 
         foreignKeyRelNode.put("targetColumn", foreignKeyRelation.getTargetColumn().getId());
 
-        foreignKeyRelNode.put("createdAt", foreignKeyRelation.getCreatedAt());
-        foreignKeyRelNode.put("modifiedAt", foreignKeyRelation.getModifiedAt());
+        foreignKeyRelNode.put("createdAt", foreignKeyRelation.getCreatedAt().format(DateTimeFormatter.ISO_DATE));
+        foreignKeyRelNode.put("modifiedAt", foreignKeyRelation.getModifiedAt().format(DateTimeFormatter.ISO_DATE));
 
         return foreignKeyRelNode;
     }

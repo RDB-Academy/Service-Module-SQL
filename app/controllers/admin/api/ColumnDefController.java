@@ -9,6 +9,7 @@ import play.mvc.Result;
 import services.ColumnDefService;
 
 import javax.inject.Singleton;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -50,8 +51,8 @@ public class ColumnDefController extends Controller {
         columnDefNode.put("isNotNull", columnDef.isNotNull());
         columnDefNode.put("MetaValueSet", columnDef.getMetaValueSetName());
 
-        columnDefNode.put("createdAt", columnDef.getCreatedAt());
-        columnDefNode.put("modifiedAt", columnDef.getModifiedAt());
+        columnDefNode.put("createdAt", columnDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE));
+        columnDefNode.put("modifiedAt", columnDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE));
 
         return columnDefNode;
     }

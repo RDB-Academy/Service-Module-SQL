@@ -1,14 +1,10 @@
 package initializers.schemaBuilders;
 
-import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
 import models.*;
-import models.submodels.ExtensionDef;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by carl on 21.12.16.

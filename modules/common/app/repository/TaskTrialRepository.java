@@ -49,8 +49,7 @@ public class TaskTrialRepository {
         TaskTrial taskTrial;
         Task task;
 
-        taskTrial = new TaskTrial();
-
+        taskTrial   = new TaskTrial();
         task        = taskRepository.getRandomTask();
 
         taskTrial.setTask(task);
@@ -92,35 +91,5 @@ public class TaskTrialRepository {
                 + taskTrial.databaseInformation.getName();
         Logger.debug(databaseUrl);
         return databaseUrl;
-    }
-
-
-
-
-    /**
-     * Did Not Save !!!11elf11!!1
-     * @param taskTrial
-     * @param jsonNode
-     * @return
-     */
-    public TaskTrial refreshWithJson(TaskTrial taskTrial, JsonNode jsonNode) {
-        if (taskTrial.getIsFinished()) {
-            return taskTrial;
-        }
-
-        TaskTrial taskTrial1 = Json.fromJson(jsonNode, TaskTrial.class);
-        if(taskTrial1.getUserStatement() != null && !taskTrial1.getUserStatement().isEmpty()) {
-            taskTrial.setUserStatement(
-                    taskTrial1.getUserStatement()
-                            .replaceAll("\n", " ")
-                            .replaceAll("\t", " ")
-                            .replaceAll("    ", " ")
-                            .replaceAll("\\s+", " ")
-                            .trim()
-            );
-        }
-        taskTrial.setIsFinished(taskTrial1.getIsFinished());
-        taskTrial.stats.setSubmitDate(LocalDateTime.now());
-        return taskTrial;
     }
 }

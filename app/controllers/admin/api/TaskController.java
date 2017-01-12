@@ -9,6 +9,7 @@ import services.TaskService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -48,8 +49,8 @@ public class TaskController extends Controller {
         taskNode.put("referenceStatement", task.getReferenceStatement());
         taskNode.put("difficulty", task.getDifficulty());
 
-        taskNode.put("createdAt", task.getCreatedAt());
-        taskNode.put("modifiedAt", task.getModifiedAt());
+        taskNode.put("createdAt", task.getCreatedAt().format(DateTimeFormatter.ISO_DATE));
+        taskNode.put("modifiedAt", task.getModifiedAt().format(DateTimeFormatter.ISO_DATE));
 
         return taskNode;
     }

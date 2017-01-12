@@ -1,16 +1,20 @@
 package services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import models.Session;
 import models.TaskTrial;
+import models.TaskTrialLog;
 import parser.SQLParser;
 import parser.SQLParserFactory;
 import parser.SQLResult;
 import play.Logger;
+import play.libs.Json;
 import play.mvc.Http;
 import repository.TaskTrialRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.LocalDateTime;
 
 /**
  * @author fabiomazzone
@@ -38,7 +42,7 @@ public class TaskTrialService {
      */
     public TaskTrial create() {
         Session     session;
-        TaskTrial taskTrial;
+        TaskTrial   taskTrial;
 
         session = this.sessionService.getSession(Http.Context.current());
         if(session == null) {
@@ -56,11 +60,9 @@ public class TaskTrialService {
         }
 
         taskTrial = this.taskTrialRepository.create();
-
-        taskTrial.setSession(session);
-
         taskTrial = this.sqlParserFactory.createParser(taskTrial);
 
+        taskTrial.setSession(session);
         session.setTaskTrial(taskTrial);
 
         this.taskTrialRepository.save(taskTrial);
@@ -83,33 +85,55 @@ public class TaskTrialService {
             return null;
         }
 
-        taskTrial = this.taskTrialRepository.refreshWithJson(
-                taskTrial,
-                Http.Context.current().request().body().asJson()
+        TaskTrialLog taskTrialLog = new TaskTrialLog();
+
+        JsonNode taskTrialJsonNode = Http.Context.current().request().body().asJson();
+
+        TaskTrial taskTrialJson = Json.fromJson(
+                taskTrialJsonNode,
+                TaskTrial.class
         );
 
-        if(taskTrial.getIsFinished()) {
+        if (taskTrialJson.getIsFinished() || taskTrial.getIsFinished()) {
+            taskTrial.setIsFinished(taskTrialJson.getIsFinished());
             taskTrial.save();
             return taskTrial;
         }
 
-        if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
+        TaskTrialLog taskTrialLogJson = Json.fromJson(
+                taskTrialJsonNode.get("taskTrialStatus"),
+                TaskTrialLog.class
+        );
+
+        if(taskTrialLogJson == null) {
+            return null;
+        }
+
+        if(taskTrialLogJson.getStatement() != null && !taskTrialLogJson.getStatement().isEmpty()) {
+            taskTrialLog.setStatement(taskTrialLogJson.getStatement().trim());
+        }
+
+        taskTrialLog.setSubmitted(LocalDateTime.now());
+
+        if(taskTrialLog.getStatement() == null
+                || taskTrialLog.getStatement().isEmpty()) {
             Logger.warn("Submitted Statement is null or Empty");
             return taskTrial;
         }
 
-        Logger.debug("UserStatement is " + taskTrial.getUserStatement());
+        Logger.debug("UserStatement is " + taskTrialLog.getStatement());
 
         sqlParser = this.sqlParserFactory.getParser(taskTrial);
         if(sqlParser == null) {
             return null;
         }
-        sqlResult = sqlParser.submit(taskTrial);
+        sqlResult = sqlParser.submit(taskTrial, taskTrialLog);
 
-        taskTrial.stats.incrementTries();
+
+        taskTrialLog.setCorrect(sqlResult.isCorrect());
+        taskTrial.addTaskTrialLog(taskTrialLog);
+
         taskTrial.setResultSet(sqlResult.getAsResultSet());
-        taskTrial.setIsCorrect(sqlResult.isCorrect());
-
 
         sqlParser.closeConnection();
 

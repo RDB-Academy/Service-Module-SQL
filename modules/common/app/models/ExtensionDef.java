@@ -1,4 +1,4 @@
-package models.submodels;
+package models;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import play.Logger;
