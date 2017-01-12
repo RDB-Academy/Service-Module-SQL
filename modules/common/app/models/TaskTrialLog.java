@@ -1,6 +1,6 @@
 package models;
 
-import com.avaje.ebean.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

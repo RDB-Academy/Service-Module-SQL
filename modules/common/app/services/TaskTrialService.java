@@ -1,5 +1,6 @@
 package services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import models.Session;
 import models.TaskTrial;
 import models.TaskTrialLog;
@@ -86,8 +87,10 @@ public class TaskTrialService {
 
         TaskTrialLog taskTrialLog = new TaskTrialLog();
 
+        JsonNode taskTrialJsonNode = Http.Context.current().request().body().asJson();
+
         TaskTrial taskTrialJson = Json.fromJson(
-                Http.Context.current().request().body().asJson(),
+                taskTrialJsonNode,
                 TaskTrial.class
         );
 
@@ -97,10 +100,16 @@ public class TaskTrialService {
             return taskTrial;
         }
 
-        TaskTrialLog taskTrialLogJson = taskTrialJson.getTaskTrialStatus();
+        TaskTrialLog taskTrialLogJson = Json.fromJson(
+                taskTrialJsonNode.get("taskTrialStatus"),
+                TaskTrialLog.class
+        );
+
         if(taskTrialLogJson == null) {
             return null;
         }
+        System.out.println(Http.Context.current().request().body().asJson());
+        System.out.println("Test");
 
         if(taskTrialLogJson.getStatement() != null && !taskTrialLogJson.getStatement().isEmpty()) {
             taskTrialLog.setStatement(
@@ -112,6 +121,8 @@ public class TaskTrialService {
                             .trim()
             );
         }
+        System.out.println(taskTrialLogJson.getStatement());
+        System.out.println(taskTrialLog.getStatement());
 
         taskTrialLog.setSubmitted(LocalDateTime.now());
 
