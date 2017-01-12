@@ -22,7 +22,6 @@ public class TaskTrialLog extends BaseModel {
 
     private String          statement;
 
-    @JsonProperty("isCorrect")
     private boolean         isCorrect;
 
     private String          hintMessage;
@@ -51,7 +50,7 @@ public class TaskTrialLog extends BaseModel {
         this.statement = statement;
     }
 
-    public boolean isCorrect() {
+    public boolean getIsCorrect() {
         return isCorrect;
     }
 
