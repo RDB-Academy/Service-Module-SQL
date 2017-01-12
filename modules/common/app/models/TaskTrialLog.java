@@ -18,11 +18,13 @@ public class TaskTrialLog extends BaseModel {
 
     private String          statement;
 
-    private LocalDateTime   submitted;
+    private boolean         isCorrect;
 
     private String          hintMessage;
 
     private String          errorMessage;
+
+    private LocalDateTime   submitted;
 
     public Long getId() {
         return id;
@@ -44,12 +46,12 @@ public class TaskTrialLog extends BaseModel {
         this.statement = statement;
     }
 
-    public LocalDateTime getSubmitted() {
-        return submitted;
+    public boolean isCorrect() {
+        return isCorrect;
     }
 
-    public void setSubmitted(LocalDateTime submitted) {
-        this.submitted = submitted;
+    public void setCorrect(boolean correct) {
+        isCorrect = correct;
     }
 
     public String getHintMessage() {
@@ -66,5 +68,13 @@ public class TaskTrialLog extends BaseModel {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public LocalDateTime getSubmitted() {
+        return submitted;
+    }
+
+    public void setSubmitted(LocalDateTime submitted) {
+        this.submitted = submitted;
     }
 }

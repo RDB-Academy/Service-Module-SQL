@@ -2,7 +2,6 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import models.submodels.ExtensionDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

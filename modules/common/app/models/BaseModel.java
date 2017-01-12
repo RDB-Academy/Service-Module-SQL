@@ -24,8 +24,8 @@ public abstract class BaseModel extends Model {
         this.createdAt = LocalDateTime.now();
     }
 
-    public String getCreatedAt() {
-        return createdAt.format(DateTimeFormatter.ISO_DATE_TIME);
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     @JsonIgnore
@@ -33,8 +33,8 @@ public abstract class BaseModel extends Model {
         return formatter.DateFormatter.fromNow(this.createdAt);
     }
 
-    public String getModifiedAt() {
-        return modifiedAt.format(DateTimeFormatter.ISO_DATE_TIME);
+    public LocalDateTime getModifiedAt() {
+        return modifiedAt;
     }
 
     @JsonIgnore

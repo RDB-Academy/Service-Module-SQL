@@ -1,6 +1,7 @@
 package parser;
 
 import models.TaskTrial;
+import models.TaskTrialLog;
 import play.Logger;
 
 import javax.inject.Singleton;
@@ -29,12 +30,12 @@ public class SQLParser {
      * @param taskTrial
      * @return
      */
-    public SQLResult submit(TaskTrial taskTrial) {
+    public SQLResult submit(TaskTrial taskTrial, TaskTrialLog taskTrialLog) {
         SQLResult       sqlResult;
         SQLResultSet    userResultSet;
         SQLResultSet    refResultSet;
 
-        userResultSet   = executeStatement(taskTrial.getUserStatement());
+        userResultSet   = executeStatement(taskTrialLog.getStatement());
         refResultSet    = executeStatement(this.taskTrial.getTask().getReferenceStatement());
 
         sqlResult       = SQLResultMatcher.match(userResultSet, refResultSet);

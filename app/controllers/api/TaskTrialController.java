@@ -58,7 +58,7 @@ public class TaskTrialController extends Controller {
                     if(taskTrial.getIsFinished()) {
                         return ok(Json.toJson(taskTrial));
                     }
-                    if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
+                    if(taskTrial.getTaskTrialStatus().getStatement() == null || taskTrial.getTaskTrialStatus().getStatement().isEmpty()) {
                         return badRequest("Submitted Statement is Empty");
                     }
 

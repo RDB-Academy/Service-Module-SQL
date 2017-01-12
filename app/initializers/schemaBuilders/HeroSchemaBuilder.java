@@ -3,7 +3,7 @@ package initializers.schemaBuilders;
 import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
 import models.*;
-import models.submodels.ExtensionDef;
+import models.ExtensionDef;
 
 import java.util.*;
 
