@@ -151,6 +151,26 @@ public class HeroSchemaBuilder extends SchemaBuilder {
                 " Where h.name = 'Thor';");
         taskList.add(task);
 
+        task = new Task();
+        task.setText("How many Heroes are part of multiple teams?");
+        task.setReferenceStatement("select count(*)\n" +
+                "        from (\n" +
+                "                Select name as peter, count(team_id) from hero as h\n" +
+                "                left outer Join hero_team as th ON h.id = th.hero_id\n" +
+                "                group by id\n" +
+                "                having count(team_id) > 1 )");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("How many Heroes don't have a team?");
+        task.setReferenceStatement("select count(*)\n" +
+                "        from (\n" +
+                "                Select name as peter, count(team_id) from hero as h\n" +
+                "                left outer Join hero_team as th ON h.id = th.hero_id\n" +
+                "                group by id\n" +
+                "                having count(team_id) < 1 )");
+        taskList.add(task);
+
 
         return taskList;
     }

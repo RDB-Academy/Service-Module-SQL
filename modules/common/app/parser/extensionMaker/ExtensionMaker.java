@@ -3,7 +3,7 @@ package parser.extensionMaker;
 import models.ColumnDef;
 import models.SchemaDef;
 import models.TableDef;
-import models.submodels.ExtensionDef;
+import models.ExtensionDef;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -36,6 +36,7 @@ public class ExtensionMaker {
     String[] syllable = {"an","au","be","ch","da","de","di","ei","el","en","er","es","ge","he","ht","ic","ie","in","it","le","li","nd","ne","ng","re","sc","se","si","st","te","un","en","er","ch","de","ei","ie","in","te","ge","un","en","er","sch","de","ei","ie","in","wi","te","ge","un","wo","ko","ir","re","ni","il"};
     String[] position = {"C","G","T","QB","RB","WR","TE","DT","DE","MLB","OLB","CB","S","K","H","LS","P","KOS","KR","PR"};
     String[] plant = {"Aloe Vera","Alfalfa","American Coffee Berry Tree","Bloodroot","Bouncing Bet","Bull Nettle","Bracken or Brake Fern","Burning Bush","Buttercup","Carelessweed ","Castor Bean","Chrysanthemums","Clover","Cocklebur","Creeping Charlie","Crown of Thorns","Curly Dock","Daffodil","Daphne","Delphinium","Devil_s Trumpet","Dogbane","Dutchman_s Breeches","Elderberry","Ergot","Fern","Fireweed","Foxglove","Poison Hemlock","Water Hemlock","Hemp","Horse Chestnut, Buckeyes","Horse Nettle","Horsetails","Hyacinth","Hydrangea","English Ivy","Ground Ivy","Poison Ivy","Jack-in-the-Pulpit","Japanese Yew","Jerusalem Cherry","Jimson Weed","Kalanchoe","Kentucky Coffee Tree","Kentucky Mahagony Tree","Klamath Weed","Lamb_s Quarters","Lantana","Larkspur","Daylily","True Lily","Lily-of-the-Valley","Lupine","Mad Apple","Maple, Red","Mayapple","Milkweed","Mint","Mountain Laurel","Nicker Tree","Nightshade","Oleander","Ohio Buckeye","Philodendron","Pigweed","Poinsettia","Poke","Purple Mint","Redroot","Rhododendron","Rhubarb","Rosary Pea","Squirrelcorn","Staggerweed","St. Johnswort","Stinging Nettle","Stink Weed","Stump Tree","Sudan Grass","Summer Cypress","Thorn Apple","Tulip","White Snakeroot","Wild Onion","Yellow Sage"};
+    String[] postStatus = {"question","answer"};
 
     public ExtensionMaker(
             Long seed,
@@ -163,6 +164,9 @@ public class ExtensionMaker {
                             case ColumnDef.META_VALUE_SET_METAL:
                                 value = gen(metal);
                                 break;
+                            case ColumnDef.META_VALUE_SET_POSTTYPE:
+                                value = gen(postStatus);
+                                break;
                             case ColumnDef.META_VALUE_SET_DAY:
                                 value = "" + random(1, 30);
                                 break;
@@ -216,6 +220,10 @@ public class ExtensionMaker {
                                     case "VARCHAR(255)":
                                     case "VARCHAR":
                                         value = wordGenerator();
+                                        break;
+                                    case "BOOLEAN":
+                                    case "boolean":
+                                        value = "" + rand.nextBoolean();
                                         break;
                                     default:
                                         value = "" + columnDef.getName() + columnDef.getDataType();
