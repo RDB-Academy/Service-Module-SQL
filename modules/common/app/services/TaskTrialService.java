@@ -108,21 +108,10 @@ public class TaskTrialService {
         if(taskTrialLogJson == null) {
             return null;
         }
-        System.out.println(Http.Context.current().request().body().asJson());
-        System.out.println("Test");
 
         if(taskTrialLogJson.getStatement() != null && !taskTrialLogJson.getStatement().isEmpty()) {
-            taskTrialLog.setStatement(
-                    taskTrialLogJson.getStatement()
-                            .replaceAll("\n", " ")
-                            .replaceAll("\t", " ")
-                            .replaceAll("    ", " ")
-                            .replaceAll("\\s+", " ")
-                            .trim()
-            );
+            taskTrialLog.setStatement(taskTrialLogJson.getStatement().trim());
         }
-        System.out.println(taskTrialLogJson.getStatement());
-        System.out.println(taskTrialLog.getStatement());
 
         taskTrialLog.setSubmitted(LocalDateTime.now());
 
