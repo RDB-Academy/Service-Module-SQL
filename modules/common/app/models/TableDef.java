@@ -62,6 +62,10 @@ public class TableDef extends BaseModel {
         return columnDefList;
     }
 
+    public ExtensionDef getExtensionList() {
+        return extensionDef;
+    }
+
     public void setColumnDefList(List<ColumnDef> columnDefList) {
         this.columnDefList = columnDefList;
     }

@@ -81,12 +81,12 @@ public class TestController extends Controller {
         Random random = new Random();
         Long seed = random.nextLong();
         Logger.info("Seed: " + seed);
-        SchemaDef schemaDef = this.schemaDefRepository.getByName("FootballSchema");
+        SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
 
         ExtensionMaker extensionMaker = new ExtensionMaker(
                 seed,
                 schemaDef,
-                1000,
+                0,
                 75,
                 150
         );

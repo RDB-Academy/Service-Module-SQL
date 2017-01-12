@@ -3,6 +3,7 @@ package parser.extensionMaker;
 import models.ColumnDef;
 import models.SchemaDef;
 import models.TableDef;
+import models.submodels.ExtensionDef;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -62,12 +63,24 @@ public class ExtensionMaker {
         //goes through every table given
         for (TableDef tableDef : tableDefList) {
             List<ColumnDef>             columnDefList;
+            ExtensionDef                staticExtension;
             List<Map<String, String>>   entityList;
+            List<Map<String, String>>   extensionList;
             Integer                     entityCount;
 
             columnDefList   = tableDef.getColumnDefList();
+            staticExtension = tableDef.getExtensionList();
+
             entityList      = new ArrayList<>();
             entityCount     = randomBetween(this.minEntities, this.maxEntities);
+
+            extensionList      = new ArrayList<>();
+            int extensionSize = 0;
+            extensionList   = staticExtension.getExtensionList();
+            for (Map<String, String> extension: extensionList) {
+                entityList.add(extension);
+                extensionSize++;
+            }
 
             //variables used for combined keys
             Long comp = columnDefList
@@ -81,7 +94,7 @@ public class ExtensionMaker {
             boolean[][][] com3  = new boolean[entityCount][entityCount][entityCount];
 
             //goes through row given
-            for (int i = 0; i < entityCount; i++) {
+            for (int i = 0 ; i < entityCount; i++) {
                 Map<String, String> entityMap = new LinkedHashMap<>();
                 int comCount = 0;
 
@@ -130,7 +143,7 @@ public class ExtensionMaker {
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_ID:
-                                value = "" + (idOffset + i);
+                                value = "" + (idOffset + extensionSize + i);
                                 break;
                             case ColumnDef.META_VALUE_SET_ANIMAL:
                                 value = gen(animal);
