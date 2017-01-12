@@ -11,6 +11,7 @@ public class SQLResultColumn {
     private List<String> data;
 
     public SQLResultColumn(String alias, String name, String type) {
+        this.alias = alias;
         this.name = name;
         this.type = type;
         this.data = new ArrayList<>();
