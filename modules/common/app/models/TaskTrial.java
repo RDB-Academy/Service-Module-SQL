@@ -108,7 +108,7 @@ public class TaskTrial extends BaseModel {
         if(this.taskTrialLogList == null) {
             this.taskTrialLogList = new ArrayList<>();
         }
-
+        taskTrialLog.setTaskTrial(this);
         this.taskTrialLogList.add(taskTrialLog);
     }
 

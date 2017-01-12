@@ -1,5 +1,7 @@
 package models;
 
+import com.avaje.ebean.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -13,6 +15,7 @@ public class TaskTrialLog extends BaseModel {
     @Id
     private Long            id;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     private TaskTrial       taskTrial;
 
