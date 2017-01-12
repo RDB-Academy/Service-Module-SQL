@@ -3,27 +3,12 @@
 ## Home
 GET     /                           controllers.admin.HomeController.index()
 
+->      /api                        admin.api.Routes
+
 ## Login
 GET     /login                      controllers.admin.SessionController.login()
+POST    /login                      controllers.admin.SessionController.authenticate()
 GET     /logout                     controllers.admin.SessionController.logout()
-
-POST    /api/schemaDef              controllers.admin.api.SchemaDefController.create()
-GET     /api/schemaDef              controllers.admin.api.SchemaDefController.readAll()
-GET     /api/schemaDef/:id          controllers.admin.api.SchemaDefController.read(id: Long)
-DELETE  /api/schemaDef/:id          controllers.admin.api.SchemaDefController.delete(id: Long)
-
-GET     /api/tableDef/:id           controllers.admin.api.TableDefController.read(id: Long)
-
-GET     /api/columnDef/:id          controllers.admin.api.ColumnDefController.read(id: Long)
-
-GET     /api/foreignKey/:id         controllers.admin.api.ForeignKeyController.read(id: Long)
-
-GET     /api/foreignKeyRelation/:id controllers.admin.api.ForeignKeyRelationController.read(id: Long)
-
-GET     /api/task/:id               controllers.admin.api.TaskController.read(id: Long)
-
-GET     /api/*file                  controllers.admin.api.ApplicationController.notFoundView(file: String)
-
 
 GET     /schemaDef                  controllers.admin.SchemaDefController.readAll()
 GET     /schemaDef/new.form         controllers.admin.SchemaDefController.createViewForm()
@@ -39,6 +24,16 @@ GET     /tableDef/:id               controllers.admin.TableDefController.read(id
 GET     /tableDef/:id/edit          controllers.admin.TableDefController.updateView(id: Long)
 POST    /tableDef/:id/update        controllers.admin.TableDefController.update(id: Long)
 DELETE  /tableDef/:id               controllers.admin.TableDefController.delete(id: Long)
+
+
+
+
+GET     /foreignKeyDef/:id          controllers.admin.ForeignKeyDefController.read(id: Long)
+DELETE  /foreignKeyDef/:id          controllers.admin.ForeignKeyDefController.delete(id: Long)
+
+
+
+POST    /columnDef/:id/addColumn    controllers.admin.ColumnDefController.addColumn(id: Long)
 
 #GET     /columnDef/:id              controllers.admin.ColumnDefController.read(id: Long)
 #GET     /columnDef/:id/edit         controllers.admin.ColumnDefController.edit(id: Long)

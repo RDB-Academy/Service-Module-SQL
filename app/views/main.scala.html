@@ -65,9 +65,7 @@
                 }
             </div><!-- /.container-fluid -->
         </nav>
-        <div class="container">
-            @content
-        </div>
+
         @* And here's where we render the `Html` object containing
          * the page content. *@
         <script src="assets/lib/jquery/jquery.min.js"></script>
@@ -93,5 +91,8 @@
                     })
                 });
         </script>
+        <div class="container">
+        @content
+        </div>
     </body>
 </html>

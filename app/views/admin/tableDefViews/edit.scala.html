@@ -2,6 +2,7 @@
 
 @implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
 
+
 @main("Table Detail") {
     <div class="panel panel-default">
         <div class="panel-heading clearfix">
@@ -26,67 +27,109 @@
                             <table class="table table-hover table-list">
                                 <thead>
                                     <tr>
-                                        <th style="width: 5%;">
+                                        <th style="width: 7.5%;">
                                             #
                                         </th>
-                                        <th style="width: 5%;">
+                                        <th style="width: 7.5%;">
                                             Id
                                         </th>
-                                        <th style="width: 15%;">
+                                        <th style="width: 25%;">
                                             Name
                                         </th>
-                                        <th style="width: 15%;">
+                                        <th style="width: 20%;">
                                             Datatype
                                         </th>
-                                        <th style="width: 10%">
+                                        <th style="width: 17.5%">
                                             Is Primary
                                         </th>
-                                        <th style="width: 10%">
+                                        <th style="width: 22.5%">
                                             Nullable
-                                        </th>
-                                        <th style="width: 20%;">
-                                            Created At
-                                        </th>
-                                        <th style="width: 20%;">
-                                            Modified At
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tableBody">
                                 @for((columnDef, index) <- tableDefForm.get().getColumnDefList.zipWithIndex) {
                                     <tr class="">
-                                        <td style="width: 5%;">
+                                        <td style="width: 7.5%;">
                                             @{index + 1}
                                         </td>
-                                        <td style="width: 5%;">
+                                        <td style="width: 7.5%;">
                                             @columnDef.getId
                                         </td>
-
-                                        <td style="width: 15%;">
+                                        <td style="width: 25%;">
                                             <input type="text" class="form-control" value="@columnDef.getName">
                                         </td>
-                                        <td style="width: 15%;">
+                                        <td style="width: 20%;">
                                             <input type="text" class="form-control" value="@columnDef.getDataType()">
                                         </td>
-                                        <td style="width: 10%;">
-
-
-
-                                            <input type="text" class="form-control" value="@columnDef.isPrimary()">
+                                        <td style="width: 17.5%;">
+                                            @if(columnDef.isPrimary()){
+                                                <select>
+                                                    <option selected>true</option>
+                                                    <option>false</option>
+                                                </select>
+                                            } else {
+                                                <select>
+                                                    <option>true</option>
+                                                    <option selected>false</option>
+                                                </select>
+                                            }
                                         </td>
-                                        <td style="width: 10%;">
-                                            <input type="text" class="form-control" value="@columnDef.isNotNull()">
-                                        </td>
-                                        <td style="width: 20%;">
-                                            @columnDef.getCreatedAtFromNow
-                                        </td>
-                                        <td style="width: 20%;">
-                                            @columnDef.getModifiedAtFromNow
+                                        <td style="width: 22.5%;">
+                                            @if(columnDef.isNotNull()){
+                                                <select>
+                                                    <option selected>true</option>
+                                                    <option>false</option>
+                                                </select>
+                                            } else {
+                                                <select>
+                                                    <option>true</option>
+                                                    <option selected>false</option>
+                                                </select>
+                                            }
                                         </td>
                                     </tr>
                                 }
                             </table>
                         </div>
+                        <div style="padding-top: 15px">
+                            <td><a id="addColumn" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add column</a></td>
+                        </div>
+                        <script>
+                            $(document).ready(function() {
+                                $("#addColumn").on('click', function () {
+
+                                    var newRow = $(
+                                        '<tr>' +
+                                            '<td style="width: 7.5%;">-</td>' +
+                                            '<td style="width: 7.5%;">-</td>' +
+                                            '<td style="width: 25%;">' +
+                                                '<input type="text" class="form-control"/> ' +
+                                            '</td>' +
+                                            '<td style="width: 20%;">' +
+                                                '<input type="text" class="form-control"/> ' +
+                                            '</td>' +
+                                            '<td style="width: 17.5%;">' +
+                                                '<select>' +
+                                                    '<option value="true">true</option>' +
+                                                    '<option selected value="false">false</option>' +
+                                                '</select> ' +
+                                            '</td>' +
+                                            '<td style="width: 17.5%;">' +
+                                                '<select>' +
+                                                    '<option value="true">true</option>' +
+                                                    '<option selected value="false">false</option>' +
+                                                '</select> ' +
+                                            '</td>' +
+                                            '<td style="width: 5%;">' +
+                                                '<a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></a>' +
+                                            '</td>' +
+                                        '</tr>');
+
+                                    $("#tableBody").append(newRow);
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
                 @b3.text( tableDefForm("createdAt"), '_label -> "createdAt: ", 'disabled -> "")

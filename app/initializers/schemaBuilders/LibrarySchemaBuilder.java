@@ -22,15 +22,15 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         TableDef            customer                     = this.createNewTableDef("customer");
         TableDef            book                         = this.createNewTableDef("book");
         TableDef            customerBook                 = this.createNewTableDef("customer_book");
-        ColumnDef           customer_customer_id         = this.createNewColumnDef("customer_id", "INT");
-        ColumnDef           customer_customer_firstname  = this.createNewColumnDef("customer_firstname", "VARCHAR(255)");
-        ColumnDef           customer_customer_lastname   = this.createNewColumnDef("customer_lastname", "VARCHAR(255)");
-        ColumnDef           book_book_id                 = this.createNewColumnDef("book_id", "INT");
-        ColumnDef           book_book_name               = this.createNewColumnDef("book_name", "VARCHAR(255)");
+        ColumnDef           customer_customer_id         = this.createNewColumnDef("id", "INT");
+        ColumnDef           customer_customer_firstname  = this.createNewColumnDef("firstname", "VARCHAR(255)");
+        ColumnDef           customer_customer_lastname   = this.createNewColumnDef("lastname", "VARCHAR(255)");
+        ColumnDef           book_book_id                 = this.createNewColumnDef("id", "INT");
+        ColumnDef           book_book_name               = this.createNewColumnDef("name", "VARCHAR(255)");
         ColumnDef           customerBook_customer_id     = this.createNewColumnDef("customer_id", "INT");
         ColumnDef           customerBook_book_id         = this.createNewColumnDef("book_id", "INT");
-        ColumnDef           customerBook_lend_date       = this.createNewColumnDef("lend_date", "INT");
-        ColumnDef           customerBook_return_date     = this.createNewColumnDef("return_date", "INT");
+        ColumnDef           customerBook_lend_date       = this.createNewColumnDef("lend_date", "DATE");
+        ColumnDef           customerBook_return_date     = this.createNewColumnDef("return_date", "DATE");
 
         ForeignKey          customerBook_customer        = this.createForeignKey("FK_CustomerBook_Customer");
         ForeignKey          customerBook_book            = this.createForeignKey("FK_CustomerBook_Book");
@@ -49,7 +49,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         book_book_id.setNotNull(true);
         book_book_name.setNotNull(true);
         book_book_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        book_book_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
+        book_book_name.setMetaValueSet(ColumnDef.META_VALUE_SET_TITLE);
 
         customerBook_book_id.setPrimary(true);
         customerBook_customer_id.setPrimary(true);
@@ -91,13 +91,22 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
     protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
-        Task bibleTask = new Task();
+        Task task = new Task();
+        task.setText("What is the average number of books any customer has purchased? List all customers and there average number.");
+        task.setReferenceStatement("SELECT customer_id, count(book_id) FROM customer_book Group by customer_id order by count(book_id) desc;");
+        taskList.add(task);
 
-        bibleTask.setName("Find the Bible");
-        bibleTask.setText("Find the Bible");
-        bibleTask.setReferenceStatement("SELECT * FROM book WHERE book_name = \"Bible\";");
+        task = new Task();
+        task.setText("What is the title of the book that have been purchased the most often?");
+        task.setReferenceStatement("SELECT b.name, count(cb.customer_id) \n" +
+                " FROM book as b \n" +
+                " Join customer_book as cb ON b.id = cb.book_id \n" +
+                " Group by b.name\n" +
+                " order by count(cb.customer_id) desc;");
+        taskList.add(task);
 
-        taskList.add(bibleTask);
+
+
 
         return taskList;
     }

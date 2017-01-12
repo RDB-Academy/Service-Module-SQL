@@ -5,7 +5,8 @@ import play.Logger;
 
 import javax.inject.Singleton;
 import java.sql.*;
-import java.util.concurrent.Future;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author fabiomazzone
@@ -23,33 +24,76 @@ public class SQLParser {
         this.connection = connection;
     }
 
-    public Future<SQLResult> submit(String userStatement) {
-        Logger.info("Statement is: " + userStatement);
+    /**
+     *
+     * @param taskTrial
+     * @return
+     */
+    public SQLResult submit(TaskTrial taskTrial) {
+        SQLResult       sqlResult;
+        SQLResultSet    userResultSet;
+        SQLResultSet    refResultSet;
 
-        Statement statement = null;
-        try {
-            statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = statement.executeQuery(userStatement);
-            ResultSetMetaData metaData = rs.getMetaData();
-            Logger.info("Column Count " + metaData.getColumnCount());
+        userResultSet   = executeStatement(taskTrial.getUserStatement());
+        refResultSet    = executeStatement(this.taskTrial.getTask().getReferenceStatement());
 
-            for(int i = 1; i <= metaData.getColumnCount(); i++) {
-                Logger.info("ColumnName " + metaData.getColumnName(i));
-                Logger.info("ColumnType " + metaData.getColumnTypeName(i));
-            }
-            while(rs.next()) {
-                Logger.info("Row: " + rs.getRow());
-                Logger.info("Data " + rs.getString(1));
-            }
-            rs.close();
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Logger.info("SQL Statement nicht valide oder so");
-            return null;
+        sqlResult       = SQLResultMatcher.match(userResultSet, refResultSet);
+
+        if(sqlResult.isCorrect()) {
+            Logger.debug("Statement is Correct");
         }
 
-        return null;
+        return sqlResult;
+    }
+
+    /**
+     *
+     * @param sqlStatement
+     * @return
+     */
+    private SQLResultSet executeStatement(String sqlStatement) {
+        Statement           statement;
+        ResultSet           rs;
+        ResultSetMetaData   rsmd;
+        List<SQLResultColumn>  resultSet = new ArrayList<>();
+        SQLResultSet        sqlResultSet = new SQLResultSet();
+        int                 columnCount;
+
+        try {
+            statement = this.connection.createStatement();
+            rs = statement.executeQuery(sqlStatement);
+            rsmd = rs.getMetaData();
+            columnCount = rsmd.getColumnCount();
+
+            // Create Header
+            List<String> header = new ArrayList<>();
+            for(int i = 1; i <= columnCount; i++) {
+                SQLResultColumn sqlResultColumn;
+                String columnName = ((!rsmd.getTableName(i).isEmpty()) ? rsmd.getTableName(i) + "." : "") + rsmd.getColumnName(i);
+                String columnType = rsmd.getColumnTypeName(i);
+
+                sqlResultColumn = new SQLResultColumn(columnName, columnType);
+
+                resultSet.add(sqlResultColumn);
+            }
+
+            // Load data
+            while(rs.next()) {
+                for(int i = 1; i <= columnCount; i++) {
+                    resultSet.get(i - 1).getData().add(rs.getString(i));
+                }
+            }
+
+            statement.close();
+            rs.close();
+
+            sqlResultSet.setColumns(resultSet);
+        } catch (SQLException e) {
+            Logger.error("Submit SQL Statement nicht valide oder so");
+            Logger.error(e.getMessage());
+            sqlResultSet.setError(e.getMessage());
+        }
+        return sqlResultSet;
     }
 
     public void closeConnection() {

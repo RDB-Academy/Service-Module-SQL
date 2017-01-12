@@ -2,6 +2,7 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import models.submodels.ExtensionDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,8 +30,13 @@ public class TableDef extends BaseModel {
     private List<ColumnDef> columnDefList;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableDef")
-    private List<ExtensionDef> extensionList;
+    @Embedded
+    public ExtensionDef extensionDef;
+
+    public TableDef() {
+        this.columnDefList = new ArrayList<>();
+        this.extensionDef = new ExtensionDef();
+    }
 
     public Long getId() {
         return id;

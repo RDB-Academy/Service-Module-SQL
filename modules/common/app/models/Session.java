@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.UUID;
 
 /**
@@ -15,7 +16,11 @@ public class Session extends BaseModel {
     private Long userId;
 
     private String userName;
+
     private int connectionInfo;
+
+    @ManyToOne()
+    private TaskTrial taskTrial;
 
     public Session() {
         this.id = UUID.randomUUID().toString();
@@ -47,5 +52,13 @@ public class Session extends BaseModel {
 
     public int getConnectionInfo() {
         return connectionInfo;
+    }
+
+    public TaskTrial getTaskTrial() {
+        return taskTrial;
+    }
+
+    public void setTaskTrial(TaskTrial taskTrial) {
+        this.taskTrial = taskTrial;
     }
 }

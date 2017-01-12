@@ -27,13 +27,13 @@
                             <table class="table table-hover table-list">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%;">
+                                        <th style="width: 7.5%;">
                                             #
                                         </th>
-                                        <th style="width: 10%;">
+                                        <th style="width: 7.5%;">
                                             Id
                                         </th>
-                                        <th style="width: 20%;">
+                                        <th style="width: 25%;">
                                             Name
                                         </th>
                                         <th style="width: 20%">
@@ -50,13 +50,13 @@
                                 <tbody>
                                 @for((tableDef, index) <- schemaDefForm.get().getTableDefList.zipWithIndex) {
                                     <tr class="clickable-row" data-href="@controllers.admin.routes.TableDefController.read(tableDef.getId)">
-                                        <td style="width: 10%;">
+                                        <td style="width: 7.5%;">
                                         @{index + 1}
                                         </td>
-                                        <td style="width: 10%;">
+                                        <td style="width: 7.5%;">
                                         @tableDef.getId
                                         </td>
-                                        <td style="width: 20%;">
+                                        <td style="width: 25%;">
                                         @tableDef.getName
                                         </td>
                                         <td style="width: 20%;">
@@ -82,13 +82,13 @@
                             <table class="table table-hover table-list">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%;">
+                                        <th style="width: 7.5%;">
                                             #
                                         </th>
-                                        <th style="width: 10%;">
+                                        <th style="width: 7.5%;">
                                             Id
                                         </th>
-                                        <th style="width: 20%;">
+                                        <th style="width: 25%;">
                                             Name
                                         </th>
                                         <th style="width: 20%">
@@ -104,14 +104,14 @@
                                 </thead>
                                 <tbody>
                                 @for((foreignKey, index) <- schemaDefForm.get().getForeignKeyList.zipWithIndex) {
-                                    <tr>
-                                        <td style="width: 10%;">
+                                    <tr class="clickable-row" data-href="@controllers.admin.routes.ForeignKeyDefController.read(foreignKey.getId())" >
+                                        <td style="width: 7.5%;">
                                         @{index + 1}
                                         </td>
-                                        <td style="width: 10%;">
+                                        <td style="width: 7.5%;">
                                         @foreignKey.getId
                                         </td>
-                                        <td style="width: 20%;">
+                                        <td style="width: 25%;">
                                         @foreignKey.getName
                                         </td>
                                         <td style="width: 20%;">

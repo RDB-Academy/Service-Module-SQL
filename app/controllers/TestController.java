@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Task;
 import models.TaskTrial;
 import parser.SQLParser;
 import parser.SQLParserFactory;
@@ -8,17 +9,17 @@ import parser.extensionMaker.ExtensionMaker;
 import models.SchemaDef;
 import parser.tableMaker.TableMaker;
 import play.Logger;
-import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import repository.SchemaDefRepository;
+import repository.TaskRepository;
+import repository.TaskTrialRepository;
 import services.TaskTrialService;
-import java.util.ArrayList;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author fabiomazzone
@@ -26,20 +27,53 @@ import java.util.concurrent.ExecutionException;
 public class TestController extends Controller {
     private final SchemaDefRepository   schemaDefRepository;
     private final SQLParserFactory      sqlParserFactory;
-    private final TaskTrialService      taskTrialService;
-    private final FormFactory formFactory;
+    private final TaskTrialService taskTrialService;
+    private final TaskTrialRepository   taskTrialRepository;
+    private final TaskRepository        taskRepository;
 
     @Inject
     public TestController(
             SchemaDefRepository schemaDefRepository,
             SQLParserFactory sqlParserFactory,
             TaskTrialService taskTrialService,
-            FormFactory formFactory) {
+            TaskTrialRepository taskTrialRepository,
+            TaskRepository taskRepository) {
 
         this.schemaDefRepository = schemaDefRepository;
         this.sqlParserFactory = sqlParserFactory;
         this.taskTrialService = taskTrialService;
-        this.formFactory = formFactory;
+        this.taskTrialRepository = taskTrialRepository;
+        this.taskRepository = taskRepository;
+    }
+
+    public Result ser() {
+        List<SchemaDef> schemaDefList;
+
+        schemaDefList = this.schemaDefRepository.getAll();
+
+        schemaDefList.forEach(schemaDef -> {
+            System.out.println(schemaDef.getName());
+            schemaDef.getTableDefList().forEach(tableDef -> {
+                System.out.println("  - " + tableDef.getName());
+                tableDef.getColumnDefList().forEach(columnDef -> {
+                    System.out.println("    - " + columnDef.getName());
+                });
+                System.out.println();
+
+                if (tableDef.extensionDef != null) {
+                    tableDef.extensionDef.getExtensionList().forEach(entity -> {
+                        entity.forEach((k, v) -> {
+                            System.out.println("    - " + k + "=" + v);
+                        });
+                    });
+                    System.out.println();
+                }
+            });
+            System.out.println("-----------");
+            System.out.println();
+        });
+
+        return ok();
     }
 
     public Result test() {
@@ -47,14 +81,19 @@ public class TestController extends Controller {
         Random random = new Random();
         Long seed = random.nextLong();
         Logger.info("Seed: " + seed);
-        SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
-        ExtensionMaker extensionMaker = new ExtensionMaker(seed, schemaDef);
+        SchemaDef schemaDef = this.schemaDefRepository.getByName("FootballSchema");
 
-        ArrayList<String[][]> v = extensionMaker.buildStatements();
-        String out = new String();
-        out = extensionMaker.parseToStatmant(v);
+        ExtensionMaker extensionMaker = new ExtensionMaker(
+                seed,
+                schemaDef,
+                1000,
+                75,
+                150
+        );
 
-        return ok(Json.toJson(out));
+        List<String> v = extensionMaker.buildStatements();
+
+        return ok(Json.toJson(v));
     }
 
     public Result testTableMaker() {
@@ -66,20 +105,26 @@ public class TestController extends Controller {
     }
 
     public Result parserCreate() {
-        SchemaDef schemaDef = schemaDefRepository.getByName("HeroTeamSchema");
-        schemaDef.save();
+        TaskTrial taskTrial = new TaskTrial();
+        SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
+        Task task = schemaDef.getTaskList().get(0);
 
-        TaskTrial taskTrial = this.taskTrialService.getNewTaskTrial(null);
+        if(task == null) {
+            return null;
+        }
+
+        taskTrial.setTask(task);
+        taskTrial.databaseInformation.setSeed(12345L);
 
         taskTrial = this.sqlParserFactory.createParser(taskTrial);
 
-        this.taskTrialService.save(taskTrial);
+        this.taskTrialRepository.save(taskTrial);
 
         return ok(Json.toJson(taskTrial));
     }
 
     public Result parserGet(Long id) {
-        TaskTrial taskTrial = this.taskTrialService.getById(id);
+        TaskTrial taskTrial = this.taskTrialService.read(id);
 
         if(taskTrial == null) {
             Logger.warn(String.format("TaskTrial - Object with id: %d not found", id));
@@ -93,15 +138,13 @@ public class TestController extends Controller {
             return internalServerError();
         }
 
-        sqlParser.submit("SELECT H2VERSION() AS Test");
-
         sqlParser.closeConnection();
 
         return ok();
     }
 
     public Result parserDelete(Long id ) {
-        TaskTrial taskTrial = this.taskTrialService.getById(id);
+        TaskTrial taskTrial = this.taskTrialService.read(id);
 
         if(taskTrial == null) {
             Logger.warn(String.format("TaskTrial - Object with id: %d not found", id));
@@ -110,7 +153,7 @@ public class TestController extends Controller {
 
         this.sqlParserFactory.deleteDatabase(taskTrial);
 
-        this.taskTrialService.save(taskTrial);
+        this.taskTrialRepository.save(taskTrial);
 
         return ok("successfully");
     }

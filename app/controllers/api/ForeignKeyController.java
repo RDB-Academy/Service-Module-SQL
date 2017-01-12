@@ -22,8 +22,8 @@ public class ForeignKeyController extends Controller {
     @Inject
     public ForeignKeyController(
             ForeignKeyService foreignKeyService,
-            HttpExecutionContext httpExecutionContext
-    ) {
+            HttpExecutionContext httpExecutionContext) {
+
         this.foreignKeyService = foreignKeyService;
         this.httpExecutionContext = httpExecutionContext;
     }

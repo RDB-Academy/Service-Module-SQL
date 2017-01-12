@@ -1,5 +1,5 @@
 # /api
-POST    /login                      controllers.api.SessionController.authenticate()
+POST    /login                      controllers.api.SessionController.login()
 
 ## model.Task
 GET     /tasks/:id                  controllers.api.TaskController.read(id :Long)

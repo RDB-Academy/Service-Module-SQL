@@ -21,7 +21,7 @@ public class Task extends BaseModel{
     @ManyToOne(optional = false)
     private SchemaDef schemaDef;
 
-   @NotNull
+    @NotNull
     @Constraints.Required
     private String name;
 
@@ -48,6 +48,9 @@ public class Task extends BaseModel{
 
     public void setText(String text) {
         this.text = text;
+        if(this.name == null) {
+            this.name = text;
+        }
     }
 
     public String getName() {

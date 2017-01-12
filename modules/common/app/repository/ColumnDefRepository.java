@@ -19,4 +19,8 @@ public class ColumnDefRepository {
     public ColumnDef getById(Long id) {
         return this.find.byId(id);
     }
+
+    public void save(ColumnDef columnDef) {
+        columnDef.save();
+    }
 }
