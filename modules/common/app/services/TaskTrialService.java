@@ -52,7 +52,7 @@ public class TaskTrialService {
         taskTrial = session.getTaskTrial();
 
         if(taskTrial != null) {
-            if(!taskTrial.getIsFinished()) {
+            if( !taskTrial.getIsFinished()) {
                 return taskTrial;
             } else {
                 this.sqlParserFactory.deleteDatabase(taskTrial);
@@ -130,7 +130,10 @@ public class TaskTrialService {
         sqlResult = sqlParser.submit(taskTrial, taskTrialLog);
 
 
-        taskTrialLog.setCorrect(sqlResult.isCorrect());
+        taskTrialLog.setIsCorrect(sqlResult.isCorrect());
+        if(sqlResult.isCorrect()) {
+            taskTrial.setIsFinished(true);
+        }
         taskTrial.addTaskTrialLog(taskTrialLog);
 
         taskTrial.setResultSet(sqlResult.getAsResultSet());

@@ -54,7 +54,7 @@ public class TaskTrialLog extends BaseModel {
         return isCorrect;
     }
 
-    public void setCorrect(boolean correct) {
+    public void setIsCorrect(boolean correct) {
         isCorrect = correct;
     }
 
