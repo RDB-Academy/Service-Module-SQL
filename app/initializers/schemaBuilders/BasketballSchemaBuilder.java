@@ -138,15 +138,17 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         game_game_id.setNotNull(true);
         game_home_team_id.setNotNull(true);
         game_guest_team_id.setNotNull(true);
+        game_stadium_id.setNotNull(true);
         game_game_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         game_stadium_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         game_home_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         game_guest_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
-        game_season.setMetaValueSet(ColumnDef.META_VALUE_SET_YEAR);
         game_home_score.setMinValueSet(80);
         game_home_score.setMaxValueSet(130);
         game_guest_score.setMinValueSet(85);
         game_guest_score.setMaxValueSet(125);
+        game_season.setMinValueSet(1995);
+        game_season.setMaxValueSet(2017);
 
         center_player_id.setPrimary(true);
         center_team_id.setPrimary(true);
@@ -294,12 +296,12 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         taskList.add(task);
 
         task = new Task();
-        task.setText("Give me a set of all cities of the guest teams who won in the season of 2015. ");
+        task.setText("Give me a set of all cities of guest teams, who won a game between the seasons of 2000 and 2015.");
         task.setReferenceStatement("SELECT distinct(t.city)\n" +
                 "FROM team AS t\n" +
                 "JOIN game AS g ON t.id = g.home_team_id\n" +
                 "WHERE g.home_score > g.guest_score\n" +
-                "AND g.season=2015");
+                "AND g.season BETWEEN 2000 AND 2015;");
         taskList.add(task);
 
         task = new Task();
@@ -309,6 +311,13 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "FROM game\n" +
                 "WHERE guest_score > home_score) as result1)*100/ (SELECT count(id)\n" +
                 "\t\tFROM game))");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("List the id and full name of any player who is smaller than average.");
+        task.setReferenceStatement("Select id,firstname, lastname\n" +
+                "        From player\n" +
+                "        where height > (SELECT avg(height) as average FROM player);");
         taskList.add(task);
 
 
