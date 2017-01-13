@@ -1,4 +1,4 @@
-package parser.tableMaker;
+package sqlParser.tableMaker;
 
 import models.*;
 

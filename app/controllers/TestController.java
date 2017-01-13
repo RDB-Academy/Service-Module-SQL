@@ -2,12 +2,12 @@ package controllers;
 
 import models.Task;
 import models.TaskTrial;
-import parser.SQLParser;
-import parser.SQLParserFactory;
-import parser.extensionMaker.ExtensionMaker;
+import sqlParser.SQLParser;
+import sqlParser.SQLParserFactory;
+import sqlParser.extensionMaker.ExtensionMaker;
 
 import models.SchemaDef;
-import parser.tableMaker.TableMaker;
+import sqlParser.tableMaker.TableMaker;
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Controller;

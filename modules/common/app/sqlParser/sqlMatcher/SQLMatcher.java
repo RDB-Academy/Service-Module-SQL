@@ -1,9 +1,13 @@
-package parser;
+package sqlParser.sqlMatcher;
+
+import sqlParser.SQLResult;
+import sqlParser.SQLResultColumn;
+import sqlParser.SQLResultSet;
 
 /**
  * Created by fabiomazzone on 05.01.17.
  */
-public class SQLResultMatcher {
+public class SQLMatcher {
 
     public static SQLResult match(SQLResultSet userResultSet, SQLResultSet refResultSet) {
 

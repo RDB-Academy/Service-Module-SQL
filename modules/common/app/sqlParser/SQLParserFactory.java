@@ -1,10 +1,10 @@
-package parser;
+package sqlParser;
 
 import models.SchemaDef;
 import models.TaskTrial;
 import org.h2.tools.DeleteDbFiles;
-import parser.extensionMaker.ExtensionMaker;
-import parser.tableMaker.TableMaker;
+import sqlParser.extensionMaker.ExtensionMaker;
+import sqlParser.tableMaker.TableMaker;
 import play.Logger;
 
 import javax.inject.Singleton;
@@ -30,8 +30,8 @@ public class SQLParserFactory {
     public TaskTrial createParser(@NotNull TaskTrial taskTrial) {
         Connection      connection;
         SchemaDef       schemaDef;
-        TableMaker      tableMaker;
-        ExtensionMaker  extensionMaker;
+        TableMaker tableMaker;
+        ExtensionMaker extensionMaker;
 
         Statement       statement;
 

@@ -1,8 +1,6 @@
-package parser.extensionMaker;
+package sqlParser.extensionMaker;
 
-import models.ColumnDef;
 import models.SchemaDef;
-import models.TableDef;
 
 import java.util.Random;
 /**

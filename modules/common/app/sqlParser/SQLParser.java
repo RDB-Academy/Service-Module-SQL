@@ -1,7 +1,8 @@
-package parser;
+package sqlParser;
 
 import models.TaskTrial;
 import models.TaskTrialLog;
+import sqlParser.sqlMatcher.SQLMatcher;
 import play.Logger;
 
 import javax.inject.Singleton;
@@ -38,7 +39,7 @@ public class SQLParser {
         userResultSet   = executeStatement(taskTrialLog.getStatement());
         refResultSet    = executeStatement(this.taskTrial.getTask().getReferenceStatement());
 
-        sqlResult       = SQLResultMatcher.match(userResultSet, refResultSet);
+        sqlResult       = SQLMatcher.match(userResultSet, refResultSet);
 
         if(sqlResult.isCorrect()) {
             Logger.debug("Statement is Correct");

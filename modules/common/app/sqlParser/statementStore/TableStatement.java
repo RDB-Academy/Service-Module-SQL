@@ -1,4 +1,4 @@
-package parser.statementStore;
+package sqlParser.statementStore;
 
 import models.TableDef;
 

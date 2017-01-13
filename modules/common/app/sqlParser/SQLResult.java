@@ -1,4 +1,4 @@
-package parser;
+package sqlParser;
 
 import models.submodels.ResultSet;
 
@@ -17,7 +17,7 @@ public class SQLResult {
     private String    error;
     private String    hint;
 
-    SQLResult(SQLResultSet resultSet, boolean isCorrect) {
+    public SQLResult(SQLResultSet resultSet, boolean isCorrect) {
         this.isCorrect = isCorrect;
         this.header = new ArrayList<>();
         this.dataSets = new ArrayList<>();

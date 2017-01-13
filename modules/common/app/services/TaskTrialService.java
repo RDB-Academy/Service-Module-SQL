@@ -5,9 +5,9 @@ import models.Session;
 import models.Task;
 import models.TaskTrial;
 import models.TaskTrialLog;
-import parser.SQLParser;
-import parser.SQLParserFactory;
-import parser.SQLResult;
+import sqlParser.SQLParser;
+import sqlParser.SQLParserFactory;
+import sqlParser.SQLResult;
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Http;
@@ -98,54 +98,53 @@ public class TaskTrialService {
     }
 
     public TaskTrial validateStatement(Long id) {
+        JsonNode        taskTrial_JsonNode;
         TaskTrial       taskTrial;
         TaskTrial       taskTrial_Json;
-        JsonNode        taskTrial_JsonNode;
         TaskTrialLog    taskTrialLog;
         TaskTrialLog    taskTrialLog_Json;
         SQLParser       sqlParser;
         SQLResult       sqlResult;
 
-
-        taskTrial = this.taskTrialRepository.getById(id);
+        taskTrial           = this.taskTrialRepository.getById(id);
 
         if(taskTrial == null) {
-            Logger.warn("TaskTrial Object not found");
+            Logger.info("TaskTrial Object not found");
             return null;
         }
 
         if(taskTrial.getIsFinished()) {
+            Logger.info("TaskTrial already finished");
             return taskTrial;
         }
 
-        // Get TaskTrial Json Node
-        taskTrial_JsonNode = Http.Context.current().request().body().asJson();
-
-        // Parse TaskTrial Object from JsonNode
-        taskTrial_Json = Json.fromJson(
+        taskTrial_JsonNode  = Http.Context.current().request().body().asJson();
+        taskTrial_Json      = Json.fromJson(
                 taskTrial_JsonNode,
                 TaskTrial.class
         );
 
         if (taskTrial_Json.getIsFinished()) {
-
             taskTrial.setIsFinished(taskTrial_Json.getIsFinished());
             taskTrial.save();
             return taskTrial;
         }
 
-        taskTrialLog_Json = Json.fromJson(
+        taskTrialLog        = new TaskTrialLog();
+        taskTrialLog_Json   = Json.fromJson(
                 taskTrial_JsonNode.get("taskTrialStatus"),
                 TaskTrialLog.class
         );
 
         if(taskTrialLog_Json == null) {
+            Logger.warn("Client didn't send a TaskTrialStatus");
+
             return null;
         }
 
-        taskTrialLog = new TaskTrialLog();
+        taskTrial.addTaskTrialLog(taskTrialLog);
 
-        if(taskTrialLog_Json.getStatement() != null && !taskTrialLog_Json.getStatement().isEmpty()) {
+        if(taskTrialLog_Json.getStatement() != null) {
             taskTrialLog.setStatement(taskTrialLog_Json.getStatement().trim());
         }
 
@@ -153,7 +152,11 @@ public class TaskTrialService {
 
         if(taskTrialLog.getStatement() == null
                 || taskTrialLog.getStatement().isEmpty()) {
-            Logger.warn("Submitted Statement is null or Empty");
+
+            Logger.warn("Submitted Statement is Empty");
+            taskTrialLog.setErrorMessage("Submitted Statement is Empty");
+
+            taskTrial.save();
             return taskTrial;
         }
         taskTrial.addTaskTrialLog(taskTrialLog);

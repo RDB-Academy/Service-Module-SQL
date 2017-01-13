@@ -1,7 +1,6 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,6 +28,13 @@ public class TaskTrialLog extends BaseModel {
     private String          errorMessage;
 
     private LocalDateTime   submittedAt;
+
+    public TaskTrialLog() {
+        this.statement = "";
+
+        this.isCorrect = false;
+        this.submittedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
