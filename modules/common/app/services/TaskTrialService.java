@@ -67,7 +67,7 @@ public class TaskTrialService {
         }
         int difficulty = Http.Context.current().request().body().asJson().get("difficulty").asInt();
 
-        Logger.info("Difficulty: " + difficulty);
+        Logger.debug("Difficulty: " + difficulty);
 
         Task task;
         List<Task> taskList = taskRepository.getTaskListByDifficulty(difficulty);

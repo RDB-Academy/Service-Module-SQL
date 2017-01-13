@@ -5,7 +5,6 @@ import com.google.inject.Singleton;
 import models.Task;
 import models.TaskTrial;
 import play.Configuration;
-import play.Logger;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -76,11 +75,8 @@ public class TaskTrialRepository {
     }
 
     private String getDatabaseUrl(TaskTrial taskTrial) {
-        String databaseUrl = this.configuration.getString("sqlParser.urlPrefix")
+        return this.configuration.getString("sqlParser.urlPrefix")
                 + taskTrial.databaseInformation.getPath()
                 + taskTrial.databaseInformation.getName();
-
-        Logger.debug(databaseUrl);
-        return databaseUrl;
     }
 }

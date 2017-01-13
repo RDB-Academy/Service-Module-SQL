@@ -77,16 +77,17 @@ public class TestController extends Controller {
     }
 
     public Result test() {
-        session().clear();
+        Long seed;
         Random random = new Random();
-        Long seed = random.nextLong();
+
+        seed = random.nextLong();
+
         Logger.info("Seed: " + seed);
         SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
 
         ExtensionMaker extensionMaker = new ExtensionMaker(
                 seed,
                 schemaDef,
-                0,
                 75,
                 150
         );

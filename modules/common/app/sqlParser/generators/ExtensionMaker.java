@@ -1,5 +1,6 @@
 package sqlParser.generators;
 
+import com.avaje.ebeaninternal.server.lib.util.Str;
 import models.ColumnDef;
 import models.SchemaDef;
 import models.TableDef;
@@ -40,34 +41,30 @@ public class ExtensionMaker {
     public ExtensionMaker(
             Long seed,
             SchemaDef schemaDef,
-            Integer idOffset,
             Integer minEntities,
             Integer maxEntities ) {
 
         this.seed           = seed;
         this.schemaDef      = schemaDef;
         this.rand           = new Random(this.seed);
-        this.idOffset       = idOffset;
+        this.idOffset       = 1000;
         this.minEntities    = minEntities;
         this.maxEntities    = maxEntities;
         this.nullChance     = 2;
     }
 
     public List<String> buildStatements() {
-        Map<String, List<Map<String, String>>>  genExtensionByTableMap;
-        List<TableDef>                          tableDefList;
+        Map<String, List<Map<String, String>>>  extensionByTableMap = new LinkedHashMap<>();
 
-        genExtensionByTableMap  = new LinkedHashMap<>();
-        tableDefList            = schemaDef.getTableDefList();
-
-        //goes through every table given
-        for (TableDef tableDef : tableDefList) {
+        //goes through every given table
+        for (TableDef tableDef : schemaDef.getTableDefList()) {
             List<ColumnDef>             columnDefList;
             ExtensionDef                staticExtension;
             List<Map<String, String>>   entityList;
             Integer                     entityCount;
-            int                         extensionSize = 0;
+            int                         staticExtensionSize;
 
+            staticExtensionSize   = 0;
             columnDefList   = tableDef.getColumnDefList();
             staticExtension = tableDef.getExtensionDef();
 
@@ -75,10 +72,8 @@ public class ExtensionMaker {
             entityCount     = randomBetween(this.minEntities, this.maxEntities);
 
             if(staticExtension != null) {
-                for (Map<String, String> extension: staticExtension.getExtensionList()) {
-                    entityList.add(extension);
-                    extensionSize++;
-                }
+                staticExtensionSize = staticExtension.getExtensionList().size();
+                staticExtension.getExtensionList().forEach(entityList::add);
             }
 
             //variables used for combined keys
@@ -142,7 +137,7 @@ public class ExtensionMaker {
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_ID:
-                                value = "" + (idOffset + extensionSize + i);
+                                value = String.valueOf(idOffset + staticExtensionSize + i);
                                 break;
                             case ColumnDef.META_VALUE_SET_ANIMAL:
                                 value = gen(animal);
@@ -166,16 +161,16 @@ public class ExtensionMaker {
                                 value = gen(postStatus);
                                 break;
                             case ColumnDef.META_VALUE_SET_DAY:
-                                value = "" + random(1, 30);
+                                value = String.valueOf(random(1, 30));
                                 break;
                             case ColumnDef.META_VALUE_SET_NAME:
                                 value = gen(firstname);
                                 break;
                             case ColumnDef.META_VALUE_SET_MONTH:
-                                value = "" + random(1, 12);
+                                value = String.valueOf(random(1, 12));
                                 break;
                             case ColumnDef.META_VALUE_SET_YEAR:
-                                value = "" + random(1930, 88);
+                                value = String.valueOf(random(1930, 88));
                                 break;
                             case ColumnDef.META_VALUE_SET_LOREM_IPSUM:
                                 value = gen(word) + gen(word);
@@ -198,7 +193,7 @@ public class ExtensionMaker {
                                 value = gen(plant);
                                 break;
                             case ColumnDef.META_VALUE_SET_GRADE:
-                                value = "" + (random(10, 41) / 10);
+                                value =  String.valueOf(random(10, 41) / 10);
                                 break;
                             case ColumnDef.META_VALUE_SET_LOCATION:
                                 value = gen(country);
@@ -210,9 +205,9 @@ public class ExtensionMaker {
                                         int min = columnDef.getMinValueSet();
                                         int max = columnDef.getMaxValueSet();
                                         if (max != 0) {
-                                            value = "" + random(min, max - min);
+                                            value = String.valueOf(random(min, max - min));
                                         } else {
-                                            value = "" + random(1111);
+                                            value = String.valueOf(random(1111));
                                         }
                                         break;
                                     case "VARCHAR(255)":
@@ -221,10 +216,10 @@ public class ExtensionMaker {
                                         break;
                                     case "BOOLEAN":
                                     case "boolean":
-                                        value = "" + rand.nextBoolean();
+                                        value = String.valueOf(rand.nextBoolean());
                                         break;
                                     default:
-                                        value = "" + columnDef.getName() + columnDef.getDataType();
+                                        value = String.valueOf(columnDef.getName() + columnDef.getDataType());
                                         break;
                                 }
                                 break;
@@ -238,7 +233,7 @@ public class ExtensionMaker {
 
                 entityList.add(entityMap);
             }
-            genExtensionByTableMap.put(
+            extensionByTableMap.put(
                     tableDef.getName(),
                     entityList
             );
@@ -246,8 +241,8 @@ public class ExtensionMaker {
 
 
         // InsertStatement Generator
-        List<String> insertStatementList = new ArrayList<>();
-        genExtensionByTableMap.forEach((tableName, entityList) -> {
+        List<String> insertStatementList = new ArrayList<>();;
+        extensionByTableMap.forEach((tableName, entityList) -> {
             if(entityList.size() > 0) {
                 Set<String>     columnNames;
                 String          insertTemplate;

@@ -44,7 +44,6 @@ public class DBConnectionFactory {
             return taskTrial;
         }
 
-        Logger.debug("Creating new Parser");
         connection = this.getConnection(taskTrial, false);
 
         if(connection == null) {
@@ -57,7 +56,6 @@ public class DBConnectionFactory {
         extensionMaker  = new ExtensionMaker(
                 taskTrial.databaseInformation.getSeed(),
                 schemaDef,
-                0,
                 75,
                 150
         );
@@ -84,13 +82,10 @@ public class DBConnectionFactory {
                     statement.execute(createTableStatement);
                 }
 
-                // Insert Static Extensions
-                // ToDo
-
                 // Insert Generated Extensions
                 for(String extension : genExtensionList) {
                     if(statement.execute(extension)) {
-                        Logger.info("ResultSet ftw");
+                        Logger.error("ResultSet wtf?!?");
                         ResultSet rs = statement.getResultSet();
                         rs.close();
                     }
@@ -98,7 +93,10 @@ public class DBConnectionFactory {
 
                 statement.close();
             } catch (SQLException e) {
-                Logger.error("Failed while create ");
+                Logger.error("Failed while create extension oder table");
+                Logger.error("DatabaseSeed: " + taskTrial.databaseInformation.getSeed());
+                Logger.error("#" + schemaDef.getId() + "-" + schemaDef.getName());
+                Logger.error("Message: " + e.getSQLState());
                 Logger.error(e.getMessage());
             }
 
@@ -109,11 +107,11 @@ public class DBConnectionFactory {
 
             connection.close();
             taskTrial.databaseInformation.setIsAvailable(true);
-        } catch (InterruptedException | ExecutionException e) {
-            Logger.error("Cannot get Create Statement or Extension");
+        }  catch (InterruptedException | ExecutionException e) {
+            Logger.error("Cannot get create \"CreateTableStatement\" or \"Extension\"");
             Logger.error(e.getMessage());
         } catch (SQLException e) {
-            Logger.error("Cannot close DBConnection or something similar");
+            Logger.error("Cannot close connection");
             Logger.error(e.getMessage());
         }
         return taskTrial;
