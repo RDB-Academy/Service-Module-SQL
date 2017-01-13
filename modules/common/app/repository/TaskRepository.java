@@ -19,6 +19,20 @@ public class TaskRepository {
         return this.find.all();
     }
 
+    public List<Task> getTaskListByDifficulty(int difficulty) {
+        List<Task> taskList = find.where().eq("difficulty", difficulty).findList();
+
+        while((taskList == null || taskList.size() == 0) && difficulty > 0) {
+            difficulty--;
+            taskList = find.where().eq("difficulty", difficulty).findList();
+        }
+
+        if(taskList == null || taskList.size() == 0) {
+            taskList = find.all();
+        }
+
+        return taskList;
+    }
     /**
      *
      * @param id ID of the Task Object
@@ -33,13 +47,5 @@ public class TaskRepository {
         task.save();
     }
 
-    public Task getRandomTask() {
-        List<Task> taskList = find.all();
 
-        Random random = new Random();
-
-        int pos = random.nextInt(taskList.size());
-
-        return taskList.get(pos);
-    }
 }
