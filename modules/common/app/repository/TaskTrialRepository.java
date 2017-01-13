@@ -45,12 +45,10 @@ public class TaskTrialRepository {
         return this.find.byId(id);
     }
 
-    public TaskTrial create() {
+    public TaskTrial create(Task task) {
         TaskTrial taskTrial;
-        Task task;
 
         taskTrial   = new TaskTrial();
-        task        = taskRepository.getRandomTask();
 
         taskTrial.setTask(task);
 

@@ -141,6 +141,7 @@ public class HeroSchemaBuilder extends SchemaBuilder {
 
         task.setText("Find Iron Man");
         task.setReferenceStatement("SELECT name FROM hero WHERE name = 'Iron Man';");
+        task.setDifficulty(1);
         taskList.add(task);
 
         task = new Task();
