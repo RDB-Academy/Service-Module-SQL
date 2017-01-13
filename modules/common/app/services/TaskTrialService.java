@@ -5,8 +5,8 @@ import models.Session;
 import models.Task;
 import models.TaskTrial;
 import models.TaskTrialLog;
-import sqlParser.SQLParser;
-import sqlParser.SQLParserFactory;
+import sqlParser.connection.DBConnection;
+import sqlParser.connection.DBConnectionFactory;
 import sqlParser.SQLResult;
 import play.Logger;
 import play.libs.Json;
@@ -26,19 +26,19 @@ import java.util.Random;
 @Singleton
 public class TaskTrialService {
     private final TaskTrialRepository taskTrialRepository;
-    private final SQLParserFactory sqlParserFactory;
+    private final DBConnectionFactory DBConnectionFactory;
     private final SessionService sessionService;
     private final TaskRepository taskRepository;
 
     @Inject
     public TaskTrialService(
             TaskTrialRepository taskTrialRepository,
-            SQLParserFactory sqlParserFactory,
+            DBConnectionFactory DBConnectionFactory,
             SessionService sessionService,
             TaskRepository taskRepository) {
 
         this.taskTrialRepository = taskTrialRepository;
-        this.sqlParserFactory = sqlParserFactory;
+        this.DBConnectionFactory = DBConnectionFactory;
         this.sessionService = sessionService;
         this.taskRepository = taskRepository;
     }
@@ -62,12 +62,12 @@ public class TaskTrialService {
             if( !taskTrial.getIsFinished()) {
                 return taskTrial;
             } else {
-                this.sqlParserFactory.deleteDatabase(taskTrial);
+                this.DBConnectionFactory.deleteDatabase(taskTrial);
             }
         }
         int difficulty = Http.Context.current().request().body().asJson().get("difficulty").asInt();
 
-        System.out.println("Difficulty" + difficulty);
+        Logger.info("Difficulty: " + difficulty);
 
         Task task;
         List<Task> taskList = taskRepository.getTaskListByDifficulty(difficulty);
@@ -82,7 +82,7 @@ public class TaskTrialService {
         }
 
         taskTrial = this.taskTrialRepository.create(task);
-        taskTrial = this.sqlParserFactory.createParser(taskTrial);
+        taskTrial = this.DBConnectionFactory.createParser(taskTrial);
 
         taskTrial.setSession(session);
         session.setTaskTrial(taskTrial);
@@ -97,13 +97,18 @@ public class TaskTrialService {
         return this.taskTrialRepository.getById(id);
     }
 
+    /**
+     * validates the userStatement
+     * @param id the id of the taskTrial object
+     * @return returns the updated taskTrial object
+     */
     public TaskTrial validateStatement(Long id) {
         JsonNode        taskTrial_JsonNode;
         TaskTrial       taskTrial;
         TaskTrial       taskTrial_Json;
         TaskTrialLog    taskTrialLog;
         TaskTrialLog    taskTrialLog_Json;
-        SQLParser       sqlParser;
+        DBConnection DBConnection;
         SQLResult       sqlResult;
 
         taskTrial           = this.taskTrialRepository.getById(id);
@@ -159,26 +164,22 @@ public class TaskTrialService {
             taskTrial.save();
             return taskTrial;
         }
-        taskTrial.addTaskTrialLog(taskTrialLog);
 
-        Logger.debug("UserStatement is " + taskTrialLog.getStatement());
-
-        sqlParser = this.sqlParserFactory.getParser(taskTrial);
-        if(sqlParser == null) {
+        DBConnection = this.DBConnectionFactory.getParser(taskTrial);
+        if(DBConnection == null) {
             return null;
         }
-        sqlResult = sqlParser.submit(taskTrial, taskTrialLog);
+        sqlResult = DBConnection.submit(taskTrialLog);
 
 
         taskTrialLog.setIsCorrect(sqlResult.isCorrect());
         if(sqlResult.isCorrect()) {
             taskTrial.setIsFinished(true);
         }
-        taskTrial.addTaskTrialLog(taskTrialLog);
 
         taskTrial.setResultSet(sqlResult.getAsResultSet());
 
-        sqlParser.closeConnection();
+        DBConnection.closeConnection();
 
 
         taskTrial.save();

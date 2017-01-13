@@ -4,22 +4,40 @@ import sqlParser.SQLResult;
 import sqlParser.SQLResultColumn;
 import sqlParser.SQLResultSet;
 
-/**
- * Created by fabiomazzone on 05.01.17.
- */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class SQLMatcher {
 
     public static SQLResult match(SQLResultSet userResultSet, SQLResultSet refResultSet) {
+        boolean     isCorrect       = false;
+        String      errorMessage    = null;
+        String      hintMessage     = null;
 
-        if(userResultSet.getError() != null) {
-           return new SQLResult(userResultSet, false);
-        }
-        if(refResultSet.getError() != null) {
-            userResultSet.setError(refResultSet.getError());
-            return new SQLResult(userResultSet, false);
+        if(userResultSet.getErrorMessage() != null) {
+            errorMessage = userResultSet.getErrorMessage();
+
+            return newSQLResult(
+                    userResultSet,
+                    false,
+                    errorMessage,
+                    null
+            );
         }
 
-        boolean result = true;
+        if(refResultSet.getErrorMessage() != null) {
+            errorMessage = refResultSet.getErrorMessage();
+
+            return newSQLResult(
+                    userResultSet,
+                    false,
+                    errorMessage,
+                    null
+            );
+        }
+
+        isCorrect = true;
 
         for (SQLResultColumn refResultColumn : refResultSet.getColumns()) {
 
@@ -35,15 +53,65 @@ public class SQLMatcher {
                 }
             }
             if(!columnValid){
-                result = false;
+                isCorrect = false;
                 if(!columnExist){
-                    userResultSet.setHint("Missing Column: " + refResultColumn.getName() + "("+ refResultColumn.getType()+ ")");
+                    hintMessage = "Missing Column: " + refResultColumn.getAlias() + "("+ refResultColumn.getType()+ ")";
                     break;
                 }
-                userResultSet.setHint(refResultColumn.getName() + " has not been filled adequately.");
+                hintMessage = (refResultColumn.getAlias() + " has not been filled adequately.");
                 break;
             }
         }
-        return new SQLResult(userResultSet, result);
+
+        return newSQLResult(
+                userResultSet,
+                isCorrect,
+                null,
+                hintMessage
+        );
+    }
+
+    private static SQLResult newSQLResult(
+            SQLResultSet    userResultSet,
+            boolean         isCorrect,
+            String          errorMessage,
+            String          hintMessage) {
+
+        List<String> headerList;
+        List<List<String>> dataSet  = new ArrayList<>();
+
+        headerList = userResultSet.getColumns()
+                .stream()
+                .map(SQLResultColumn::getAlias)
+                .collect(Collectors.toList());
+
+
+        for(int i = 0; i < userResultSet.getColumns().size(); i++) {
+            SQLResultColumn column = userResultSet.getColumns().get(i);
+
+            List<String> columnData = column.getData();
+
+            for (int j = 0; j < columnData.size(); j++) {
+                String data = columnData.get(j);
+                List<String> row;
+
+                if(j == dataSet.size()) {
+                    row = new ArrayList<>();
+                    dataSet.add(row);
+                } else {
+                    row = dataSet.get(j);
+                }
+                row.add(data);
+                // add data to dataSetRow
+            }
+        }
+
+        return new SQLResult(
+                headerList,
+                dataSet,
+                isCorrect,
+                errorMessage,
+                hintMessage
+        );
     }
 }

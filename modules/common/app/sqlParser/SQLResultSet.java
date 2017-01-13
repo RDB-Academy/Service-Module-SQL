@@ -4,9 +4,10 @@ package sqlParser;
 import java.util.*;
 
 public class SQLResultSet {
+
     private List<SQLResultColumn> columns;
-    private String error;
-    private String hint;
+
+    private String errorMessage;
 
     public SQLResultSet() {
         columns = new ArrayList<>();
@@ -20,19 +21,11 @@ public class SQLResultSet {
         this.columns = columns;
     }
 
-    public String getError() {
-        return error;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getHint() {
-        return hint;
-    }
-
-    public void setHint(String hint) {
-        this.hint = hint;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

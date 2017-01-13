@@ -1,4 +1,4 @@
-package sqlParser.extensionMaker;
+package sqlParser.generators;
 
 import models.ColumnDef;
 import models.SchemaDef;

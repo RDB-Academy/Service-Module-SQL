@@ -1,10 +1,10 @@
-package sqlParser;
+package sqlParser.connection;
 
 import models.SchemaDef;
 import models.TaskTrial;
 import org.h2.tools.DeleteDbFiles;
-import sqlParser.extensionMaker.ExtensionMaker;
-import sqlParser.tableMaker.TableMaker;
+import sqlParser.generators.ExtensionMaker;
+import sqlParser.generators.TableMaker;
 import play.Logger;
 
 import javax.inject.Singleton;
@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
  * @author fabiomazzone
  */
 @Singleton
-public class SQLParserFactory {
+public class DBConnectionFactory {
 
     /**
      * this function creates a parser and a database
@@ -29,13 +29,12 @@ public class SQLParserFactory {
      */
     public TaskTrial createParser(@NotNull TaskTrial taskTrial) {
         Connection      connection;
-        SchemaDef       schemaDef;
-        TableMaker tableMaker;
-        ExtensionMaker extensionMaker;
-
         Statement       statement;
 
-        Logger.debug("Creating new Parser");
+        SchemaDef       schemaDef;
+        TableMaker      tableMaker;
+        ExtensionMaker  extensionMaker;
+
         if(taskTrial.databaseInformation.getIsAvailable()) {
             Logger.warn(
                     String.format(
@@ -45,6 +44,7 @@ public class SQLParserFactory {
             return taskTrial;
         }
 
+        Logger.debug("Creating new Parser");
         connection = this.getConnection(taskTrial, false);
 
         if(connection == null) {
@@ -113,7 +113,7 @@ public class SQLParserFactory {
             Logger.error("Cannot get Create Statement or Extension");
             Logger.error(e.getMessage());
         } catch (SQLException e) {
-            Logger.error("Cannot close Connection or something similar");
+            Logger.error("Cannot close DBConnection or something similar");
             Logger.error(e.getMessage());
         }
         return taskTrial;
@@ -124,7 +124,7 @@ public class SQLParserFactory {
      * @param taskTrial needs a task trial object
      * @return returns a sqlParser
      */
-    public SQLParser getParser(@NotNull TaskTrial taskTrial) {
+    public DBConnection getParser(@NotNull TaskTrial taskTrial) {
         if(!taskTrial.databaseInformation.getIsAvailable()) {
             Logger.warn(String.format("TaskTrial Object %d has no Database ", taskTrial.getId()));
             return null;
@@ -132,14 +132,14 @@ public class SQLParserFactory {
 
         Logger.debug("Found DB url: " + taskTrial.databaseInformation.getUrl());
 
-        Connection connection = this.getConnection(taskTrial, true);
+        java.sql.Connection connection = this.getConnection(taskTrial, true);
 
         if(connection == null) {
-            Logger.error("Cannot Create Database Connection");
+            Logger.error("Cannot Create Database DBConnection");
             return null;
         }
 
-        return new SQLParser(taskTrial, connection);
+        return new DBConnection(taskTrial, connection);
     }
 
     public void deleteDatabase(TaskTrial taskTrial) {
@@ -160,23 +160,22 @@ public class SQLParserFactory {
      * @param ifExists if Exist
      * @return returns connection
      */
-    private Connection getConnection(TaskTrial taskTrial, boolean ifExists) {
+    private java.sql.Connection getConnection(TaskTrial taskTrial, boolean ifExists) {
         String      databaseDriver;
         String      databasePath;
-        Connection  connection = null;
+        java.sql.Connection connection = null;
 
         databaseDriver = taskTrial.databaseInformation.getDriver();
         databasePath = taskTrial.databaseInformation.getUrl() + ((ifExists) ? ";IFEXISTS=TRUE" : "");
-
 
         try {
             Class.forName(databaseDriver);
             connection = DriverManager.getConnection(databasePath);
         } catch (ClassNotFoundException e) {
-            Logger.error("Parser cannot get Database Driver");
+            Logger.error("factory cannot get Database Driver");
             Logger.error(e.getMessage());
         } catch (SQLException e) {
-            Logger.error("Parser cannot connect to Database");
+            Logger.error("factory cannot connect to Database");
             Logger.error(e.getMessage());
         }
 
