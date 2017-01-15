@@ -4,7 +4,6 @@ import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
 import play.Configuration;
-import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
@@ -35,9 +34,10 @@ public class SessionService {
         this.configuration = configuration;
     }
 
-    public void setAdminSession(LoginForm loginForm, Http.Context ctx) {
+    private void setAdminSession(Http.Context ctx) {
         Session session = new Session();
-        session.setUserName("admin");
+        session.setUserId(0L);
+        session.setUsername("admin");
 
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
         String connectedData = userAgent.toString() + ctx.request().remoteAddress();
@@ -90,6 +90,8 @@ public class SessionService {
         String              adminPassword;
         LoginForm           login;
 
+        System.out.println(Http.Context.current().request().body().asJson().toString());
+
         loginForm       = this.getLoginForm().bindFromRequest();
         adminPassword   = this.configuration.getString("sqlModule.adminPassword");
 
@@ -100,7 +102,7 @@ public class SessionService {
         login = loginForm.get();
 
         if (login.getPassword().equals(adminPassword)) {
-            this.setAdminSession(login, Http.Context.current());
+            this.setAdminSession(Http.Context.current());
         } else {
             loginForm.reject("Wrong E-Mail or Password");
         }
@@ -124,7 +126,7 @@ public class SessionService {
      */
     public boolean isLoggedIn(@NotNull Http.Context ctx) {
         Session session = this.getSession(ctx);
-        return session != null && !(session.getUserName() == null || session.getUserName().isEmpty());
+        return session != null && !(session.getUsername() == null || session.getUsername().isEmpty());
     }
 
     public void save(Session session) {

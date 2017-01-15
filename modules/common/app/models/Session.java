@@ -1,5 +1,7 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -15,11 +17,13 @@ public class Session extends BaseModel {
 
     private Long userId;
 
-    private String userName;
+    private String username;
 
+    @JsonIgnore
     private int connectionInfo;
 
-    @ManyToOne()
+    @JsonIgnore
+    @ManyToOne
     private TaskTrial taskTrial;
 
     public Session() {
@@ -38,12 +42,12 @@ public class Session extends BaseModel {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setConnectionInfo(int connectionInfo) {

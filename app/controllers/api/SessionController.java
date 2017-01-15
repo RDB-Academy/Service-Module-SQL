@@ -1,5 +1,7 @@
 package controllers.api;
 
+import models.Session;
+import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -33,7 +35,8 @@ public class SessionController extends Controller {
                     if(loginForm.hasErrors()) {
                         return badRequest(loginForm.errorsAsJson());
                     }
-                    return ok();
+                    Session session = this.sessionService.getSession(ctx());
+                    return ok(Json.toJson(session));
                 });
     }
 

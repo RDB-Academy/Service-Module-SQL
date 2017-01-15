@@ -50,7 +50,7 @@ create table session (
   id                            varchar(255) not null,
   created_at                    timestamp,
   user_id                       bigint,
-  user_name                     varchar(255),
+  username                      varchar(255),
   connection_info               integer,
   task_trial_id                 bigint,
   modified_at                   timestamp not null,
