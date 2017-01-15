@@ -317,7 +317,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         task.setText("List the id and full name of any player who is smaller than average.");
         task.setReferenceStatement("Select id,firstname, lastname\n" +
                 "        From player\n" +
-                "        where height > (SELECT avg(height) as average FROM player);");
+                "        where height < (SELECT avg(height) as average FROM player);");
         taskList.add(task);
 
 
