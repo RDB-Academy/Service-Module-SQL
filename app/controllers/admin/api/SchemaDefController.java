@@ -1,5 +1,6 @@
 package controllers.admin.api;
 
+import authenticators.Authenticated;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.ForeignKey;
@@ -11,6 +12,7 @@ import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import services.SchemaDefService;
 
 import javax.inject.Inject;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
  * @author fabiomazzone
  */
 @Singleton
+@Security.Authenticated(Authenticated.class)
 public class SchemaDefController extends Controller {
     private final SchemaDefService schemaDefService;
     private final HttpExecutionContext httpExecutionContext;

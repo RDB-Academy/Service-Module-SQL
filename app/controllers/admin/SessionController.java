@@ -2,6 +2,7 @@ package controllers.admin;
 
 import authenticators.Authenticated;
 import forms.LoginForm;
+import models.Session;
 import play.data.Form;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
@@ -37,15 +38,19 @@ public class SessionController extends Controller{
         return ok(views.html.admin.sessionViews.login.render(loginForm));
     }
 
-    public CompletionStage<Result> authenticate() {
-        return CompletableFuture
-                .supplyAsync(this.sessionService::login, this.httpExecutionContext.current())
-                .thenApply(loginForm -> {
-                    if(loginForm.hasErrors()) {
-                        return badRequest(views.html.admin.sessionViews.login.render(loginForm));
-                    }
-                    return redirect(routes.HomeController.index());
-                });
+    public Result authenticate() {
+        Form<LoginForm> loginForm = this.sessionService.validateLoginForm();
+        if(loginForm.hasErrors()) {
+            return badRequest(views.html.admin.sessionViews.login.render(loginForm));
+        }
+
+        Session session = this.sessionService.login(loginForm);
+
+        if(session == null) {
+            return badRequest(views.html.admin.sessionViews.login.render(loginForm));
+        }
+
+        return redirect(routes.HomeController.index());
     }
 
     @Security.Authenticated(Authenticated.class)

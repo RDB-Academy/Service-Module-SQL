@@ -31,11 +31,11 @@ public class Session extends BaseModel {
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -43,7 +43,7 @@ public class Session extends BaseModel {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {

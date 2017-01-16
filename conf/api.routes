@@ -1,5 +1,6 @@
 # /api
 POST    /login                      controllers.api.SessionController.login()
+GET     /logout                     controllers.api.SessionController.logout()
 
 ## model.Task
 GET     /tasks/:id                  controllers.api.TaskController.read(id :Long)

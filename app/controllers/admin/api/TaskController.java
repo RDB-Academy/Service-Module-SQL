@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
 
 /**
  * @author fabiomazzone
@@ -25,6 +26,16 @@ public class TaskController extends Controller {
         this.taskService = taskService;
     }
 
+
+    public CompletionStage<Result> readAll() {
+        return CompletableFuture
+                .supplyAsync(this.taskService::readAll)
+                .thenApply(taskList ->
+                        ok(Json.toJson(taskList.parallelStream()
+                                .map(this::transform)
+                                .collect(Collectors.toList())))
+                );
+    }
 
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
