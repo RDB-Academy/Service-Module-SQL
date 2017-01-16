@@ -108,8 +108,8 @@ public class SchemaDefController extends Controller {
         schemaDefNode.set("foreignKeyList", foreignKeyIds);
         schemaDefNode.set("taskList", taskIds);
 
-        schemaDefNode.put("createdAt", schemaDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE));
-        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE));
+        schemaDefNode.put("createdAt", schemaDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return schemaDefNode;
     }

@@ -51,8 +51,8 @@ public class ColumnDefController extends Controller {
         columnDefNode.put("isNotNull", columnDef.isNotNull());
         columnDefNode.put("MetaValueSet", columnDef.getMetaValueSetName());
 
-        columnDefNode.put("createdAt", columnDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE));
-        columnDefNode.put("modifiedAt", columnDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE));
+        columnDefNode.put("createdAt", columnDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        columnDefNode.put("modifiedAt", columnDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return columnDefNode;
     }

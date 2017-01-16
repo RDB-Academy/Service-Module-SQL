@@ -63,8 +63,8 @@ public class ForeignKeyController extends Controller {
 
         foreignKeyNode.set("foreignKeyRelationList", foreignKeyRelationArray);
 
-        foreignKeyNode.put("createdAt", foreignKey.getCreatedAt().format(DateTimeFormatter.ISO_DATE));
-        foreignKeyNode.put("modifiedAt", foreignKey.getModifiedAt().format(DateTimeFormatter.ISO_DATE));
+        foreignKeyNode.put("createdAt", foreignKey.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        foreignKeyNode.put("modifiedAt", foreignKey.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return foreignKeyNode;
     }

@@ -60,8 +60,8 @@ public class TaskController extends Controller {
         taskNode.put("referenceStatement", task.getReferenceStatement());
         taskNode.put("difficulty", task.getDifficulty());
 
-        taskNode.put("createdAt", task.getCreatedAt().format(DateTimeFormatter.ISO_DATE));
-        taskNode.put("modifiedAt", task.getModifiedAt().format(DateTimeFormatter.ISO_DATE));
+        taskNode.put("createdAt", task.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        taskNode.put("modifiedAt", task.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return taskNode;
     }

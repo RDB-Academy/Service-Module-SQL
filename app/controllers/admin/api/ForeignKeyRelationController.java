@@ -47,8 +47,8 @@ public class ForeignKeyRelationController extends Controller {
 
         foreignKeyRelNode.put("targetColumn", foreignKeyRelation.getTargetColumn().getId());
 
-        foreignKeyRelNode.put("createdAt", foreignKeyRelation.getCreatedAt().format(DateTimeFormatter.ISO_DATE));
-        foreignKeyRelNode.put("modifiedAt", foreignKeyRelation.getModifiedAt().format(DateTimeFormatter.ISO_DATE));
+        foreignKeyRelNode.put("createdAt", foreignKeyRelation.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        foreignKeyRelNode.put("modifiedAt", foreignKeyRelation.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return foreignKeyRelNode;
     }
