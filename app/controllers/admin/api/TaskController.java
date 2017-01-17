@@ -55,6 +55,7 @@ public class TaskController extends Controller {
         taskNode.put("name", task.getName());
 
         taskNode.put("schemaDefId", task.getSchemaDefId());
+        taskNode.put("schemaDefName", task.getSchemaDef().getName());
 
         taskNode.put("text", task.getText());
         taskNode.put("referenceStatement", task.getReferenceStatement());
