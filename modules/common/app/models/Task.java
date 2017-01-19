@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import play.data.validation.Constraints;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -32,6 +33,7 @@ public class Task extends BaseModel{
     @NotNull
     @JsonIgnore
     @Constraints.Required
+    @Column(columnDefinition = "TEXT")
     private String referenceStatement;
 
     @NotNull
