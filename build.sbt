@@ -1,6 +1,10 @@
+/// packageSummary
+import com.typesafe.sbt.packager.archetypes.ServerLoader.Upstart
+
+name in Debian := "sql-academy"
 name := """Service-Module-SQL"""
 
-version := "0.1"
+version := "0.1-alpha"
 
 lazy val common = (project in file("modules/common")).enablePlugins(PlayJava, PlayEbean)
 
@@ -32,10 +36,7 @@ libraryDependencies ++= Seq(
   "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3"
 )
 
-/// packageSummary
-import com.typesafe.sbt.packager.archetypes.ServerLoader.Upstart
 
-name in Debian := "sql-academy"
 
 maintainer in Linux := "Fabio Mazzone<fabio.mazzone@me.com>"
 
