@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * @author ronja on 08.12.16.
  */
-
 public class FootballSchemaBuilder extends SchemaBuilder {
     @Override
     protected String getSchemaName() {
