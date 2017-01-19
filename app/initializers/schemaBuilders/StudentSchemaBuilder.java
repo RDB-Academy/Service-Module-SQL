@@ -1,10 +1,13 @@
 package initializers.schemaBuilders;
 
+import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
 import models.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ronja on 24.11.16.
@@ -76,7 +79,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         exam_exam_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         exam_exam_professor_id.setNotNull(true);
         exam_exam_professor_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
-        exam_exam_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
+        exam_exam_name.setMetaValueSet(ColumnDef.META_VALUE_SET_POSITION);
         exam_exam_day.setMetaValueSet(ColumnDef.META_VALUE_SET_DAY);
         exam_exam_month.setMetaValueSet(ColumnDef.META_VALUE_SET_MONTH);
         exam_exam_year.setMinValueSet(2005);
@@ -97,8 +100,8 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         professor.addColumnDef(professor_professor_id);
         professor.addColumnDef(professor_professor_firstname);
         professor.addColumnDef(professor_professor_lastname);
-        professor.addColumnDef(professor_professor_birthday);
         professor.addColumnDef(professor_professor_field);
+        professor.addColumnDef(professor_professor_birthday);
 
         exam.addColumnDef(exam_exam_id);
         exam.addColumnDef(exam_exam_name);
@@ -123,8 +126,24 @@ public class StudentSchemaBuilder extends SchemaBuilder {
 
         studentExamSchema.addForeignKey(studentExam_student);
         studentExamSchema.addForeignKey(studentExam_exam);
+        studentExamSchema.addForeignKey(exam_professor);
+
+        professor.setExtensionDef(this.buildProfessorExtension());
 
         return studentExamSchema;
+    }
+
+    private ExtensionDef buildProfessorExtension() {
+        ExtensionDef extensionDef;
+        extensionDef = new ExtensionDef();
+
+        List<Map<String, String>> extensionList = Arrays.asList(
+                ImmutableMap.of("id", "0", "firstname", "Tilo","lastname", "Balke","field", "informations systems","birthday", "1976-04-09")
+        );
+
+        extensionDef.setExtensionList(extensionList);
+
+        return extensionDef;
     }
 
     @Override
@@ -132,19 +151,28 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         List<Task> taskList = new ArrayList<>();
 
         Task task = new Task();
-        task.setDifficulty(0);
-        task.setText("Find the Student with firstname John");
-        task.setReferenceStatement("SELECT firstname FROM student WHERE firstname = 'John';");
-        taskList.add(task);
-
-        task = new Task();
-        task.setDifficulty(0);
-        task.setText("the firstname of all students with an id lower than 20");
-        task.setReferenceStatement("SELECT firstname FROM student WHERE ID < 20;");
+        task.setDifficulty(1);
+        task.setText("Find the professor with lastname Balke.");
+        task.setReferenceStatement("SELECT id FROM professor WHERE lastname = 'Balke';");
         taskList.add(task);
 
         task = new Task();
         task.setDifficulty(1);
+        task.setText("What is the best grade in any exam.");
+        task.setReferenceStatement("SELECT max(grade) FROM exam;");
+        taskList.add(task);
+
+        task = new Task();
+        task.setDifficulty(3);
+        task.setText("Find all professors who aren't involved with any exam.");
+        task.setReferenceStatement("select p.id\n" +
+                "from exam as e\n" +
+                "right outer join professor as p ON e.professor_id= p.id\n" +
+                "where e.professor_id is null");
+        taskList.add(task);
+
+        task = new Task();
+        task.setDifficulty(2);
         task.setText("Find all students by ids, who are born in november");
         task.setReferenceStatement("SELECT id FROM student WHERE birthday like '%-11-%';");
         taskList.add(task);

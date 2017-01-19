@@ -188,12 +188,12 @@ public class ExtensionMaker {
                             case ColumnDef.META_VALUE_SET_DATE:
                                 LocalDate date;
                                 date = LocalDate.now();
-                                if(ColumnDef.MAX_VALUE_SET != 0){
+                                if(columnDef.getMaxValueSet() == 0){
                                     date = date.minusDays(random(21390));
                                 }else{
                                     int year = date.getYear();
-                                    date = date.minusDays((year - ColumnDef.MAX_VALUE_SET) * 365);
-                                    date = date.minusDays(random((ColumnDef.MAX_VALUE_SET - ColumnDef.MIN_VALUE_SET)*365));
+                                    date = date.minusDays((year - columnDef.getMaxValueSet()) * 365);
+                                    date = date.minusDays(random((columnDef.getMaxValueSet() - columnDef.getMinValueSet())*365));
                                 }
                                 value = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
                                 break;
