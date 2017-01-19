@@ -65,7 +65,12 @@ public class TaskTrialService {
                 this.DBConnectionFactory.deleteDatabase(taskTrial);
             }
         }
-        int difficulty = Http.Context.current().request().body().asJson().get("difficulty").asInt();
+
+        JsonNode requestBody = Http.Context.current().request().body().asJson();
+        int difficulty = 0;
+        if(requestBody != null && requestBody.has("difficulty") && requestBody.get("difficulty").isInt()) {
+            difficulty = requestBody.get("difficulty").asInt();
+        }
 
         Logger.debug("Difficulty: " + difficulty);
 
