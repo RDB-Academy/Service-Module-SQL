@@ -93,9 +93,6 @@ public class SessionService {
         String              adminPassword;
         LoginForm           login;
 
-        // Log Body
-        System.out.println(Http.Context.current().request().body().asJson().toString());
-
         loginForm       = this.getLoginForm().bindFromRequest();
         adminPassword   = this.configuration.getString("sqlModule.adminPassword");
 
@@ -114,7 +111,10 @@ public class SessionService {
     }
 
     public Session login(Form<LoginForm> loginForm) {
-        return setAdminSession(Http.Context.current());
+        Session session = this.setAdminSession(Http.Context.current());
+        Http.Context.current().session().put(SESSION_FIELD_NAME, session.getId());
+        Http.Context.current().response().setHeader(SESSION_FIELD_NAME, session.getId());
+        return session;
     }
 
     public boolean logout() {
