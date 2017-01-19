@@ -1,0 +1,1 @@
+./bin/activator dist debian:packageBin

@@ -1,15 +1,14 @@
 /// packageSummary
 import com.typesafe.sbt.packager.archetypes.ServerLoader.Upstart
 
-name in Debian := "sql-academy"
-name := """Service-Module-SQL"""
+name := """rdb-academy-sql"""
 
 version := "0.1-alpha"
 
 lazy val common = (project in file("modules/common")).enablePlugins(PlayJava, PlayEbean)
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayJava, JDebPackaging)
+  .enablePlugins(PlayJava, DebianPlugin)
   .dependsOn(common)
   .aggregate(common)
 
@@ -36,7 +35,7 @@ libraryDependencies ++= Seq(
   "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3"
 )
 
-
+name in Debian := "rdb-academy-sql"
 
 maintainer in Linux := "Fabio Mazzone<fabio.mazzone@me.com>"
 
