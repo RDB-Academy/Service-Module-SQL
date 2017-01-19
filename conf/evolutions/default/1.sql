@@ -73,7 +73,7 @@ create table task (
   schema_def_id                 bigint not null,
   name                          varchar(255) not null,
   text                          varchar(255) not null,
-  reference_statement           varchar(255) not null,
+  reference_statement           TEXT not null,
   difficulty                    integer not null,
   modified_at                   timestamp not null,
   constraint pk_task primary key (id)
