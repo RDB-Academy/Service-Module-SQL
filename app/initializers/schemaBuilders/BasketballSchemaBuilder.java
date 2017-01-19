@@ -20,7 +20,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
     protected SchemaDef buildSchema() {
         SchemaDef basketballSchema = this.createNewSchemaDef();
         TableDef team = this.createNewTableDef("team");
-        TableDef stadium = this.createNewTableDef("stadium");
+        TableDef arena = this.createNewTableDef("arena");
         TableDef game = this.createNewTableDef("game");
         TableDef player = this.createNewTableDef("player");
         TableDef forward = this.createNewTableDef("forward");
@@ -32,14 +32,14 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         ColumnDef team_team_color = this.createNewColumnDef("color", "VARCHAR(255)");
         ColumnDef team_mascot = this.createNewColumnDef("mascot", "VARCHAR(255)");
 
-        ColumnDef stadium_stadium_id = this.createNewColumnDef("id", "INT");
-        ColumnDef stadium_stadium_name = this.createNewColumnDef("name", "VARCHAR(255)");
-        ColumnDef stadium_stadium_city = this.createNewColumnDef("city", "VARCHAR(255)");
-        ColumnDef stadium_stadium_capacity = this.createNewColumnDef("capacity", "INT");
+        ColumnDef arena_arena_id = this.createNewColumnDef("id", "INT");
+        ColumnDef arena_arena_name = this.createNewColumnDef("name", "VARCHAR(255)");
+        ColumnDef arena_arena_city = this.createNewColumnDef("city", "VARCHAR(255)");
+        ColumnDef arena_arena_capacity = this.createNewColumnDef("capacity", "INT");
 
         ColumnDef game_game_id = this.createNewColumnDef("id", "INT");
         ColumnDef game_season = this.createNewColumnDef("season", "INT");
-        ColumnDef game_stadium_id = this.createNewColumnDef("stadium_id", "INT");
+        ColumnDef game_arena_id = this.createNewColumnDef("arena_id", "INT");
         ColumnDef game_home_score = this.createNewColumnDef("home_score", "INT");
         ColumnDef game_guest_score = this.createNewColumnDef("guest_score", "INT");
         ColumnDef game_home_team_id = this.createNewColumnDef("home_team_id", "INT");
@@ -79,17 +79,17 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         ForeignKeyRelation forward_team_rel = this.createForeignKeyRelation(forward_team_id, team_team_id);
         ForeignKeyRelation forward_player_rel = this.createForeignKeyRelation(forward_player_id, player_player_id);
 
-        ForeignKey guard_team = this.createForeignKey("FK_TeamStadium_Team");
-        ForeignKey guard_player = this.createForeignKey("FK_TeamStadium_Stadium");
+        ForeignKey guard_team = this.createForeignKey("FK_Teamarena_Team");
+        ForeignKey guard_player = this.createForeignKey("FK_Teamarena_arena");
         ForeignKeyRelation guard_team_rel = this.createForeignKeyRelation(guard_team_id, team_team_id);
         ForeignKeyRelation guard_player_rel = this.createForeignKeyRelation(guard_player_id, player_player_id);
 
         ForeignKey game_home_team = this.createForeignKey("FK_Game_Home_Team");
         ForeignKey game_guest_team = this.createForeignKey("FK_Game_Guest_Team");
-        ForeignKey game_stadium = this.createForeignKey("FK_Game_Stadium");
+        ForeignKey game_arena = this.createForeignKey("FK_Game_arena");
         ForeignKeyRelation game_home_team_id_rel = this.createForeignKeyRelation(game_home_team_id, team_team_id);
         ForeignKeyRelation game_guest_team_id_rel = this.createForeignKeyRelation(game_guest_team_id, team_team_id);
-        ForeignKeyRelation game_stadium_id_rel = this.createForeignKeyRelation(game_stadium_id, stadium_stadium_id);
+        ForeignKeyRelation game_arena_id_rel = this.createForeignKeyRelation(game_arena_id, arena_arena_id);
 
         player_player_id.setPrimary(true);
         player_player_id.setNotNull(true);
@@ -123,24 +123,24 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         team_team_color.setMetaValueSet(ColumnDef.META_VALUE_SET_COLOR);
         team_team_city.setMetaValueSet(ColumnDef.META_VALUE_SET_CITY);
 
-        stadium_stadium_id.setPrimary(true);
-        stadium_stadium_id.setNotNull(true);
-        stadium_stadium_name.setNotNull(true);
-        stadium_stadium_city.setNotNull(true);
-        stadium_stadium_capacity.setNotNull(true);
-        stadium_stadium_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        stadium_stadium_city.setMetaValueSet(ColumnDef.META_VALUE_SET_CITY);
-        stadium_stadium_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
-        stadium_stadium_capacity.setMinValueSet(20000);
-        stadium_stadium_capacity.setMaxValueSet(40000);
+        arena_arena_id.setPrimary(true);
+        arena_arena_id.setNotNull(true);
+        arena_arena_name.setNotNull(true);
+        arena_arena_city.setNotNull(true);
+        arena_arena_capacity.setNotNull(true);
+        arena_arena_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
+        arena_arena_city.setMetaValueSet(ColumnDef.META_VALUE_SET_CITY);
+        arena_arena_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
+        arena_arena_capacity.setMinValueSet(20000);
+        arena_arena_capacity.setMaxValueSet(40000);
 
         game_game_id.setPrimary(true);
         game_game_id.setNotNull(true);
         game_home_team_id.setNotNull(true);
         game_guest_team_id.setNotNull(true);
-        game_stadium_id.setNotNull(true);
+        game_arena_id.setNotNull(true);
         game_game_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        game_stadium_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
+        game_arena_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         game_home_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         game_guest_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         game_home_score.setMinValueSet(80);
@@ -195,13 +195,13 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         team.addColumnDef(team_team_color);
         team.addColumnDef(team_mascot);
 
-        stadium.addColumnDef(stadium_stadium_id);
-        stadium.addColumnDef(stadium_stadium_name);
-        stadium.addColumnDef(stadium_stadium_city);
-        stadium.addColumnDef(stadium_stadium_capacity);
+        arena.addColumnDef(arena_arena_id);
+        arena.addColumnDef(arena_arena_name);
+        arena.addColumnDef(arena_arena_city);
+        arena.addColumnDef(arena_arena_capacity);
 
         game.addColumnDef(game_game_id);
-        game.addColumnDef(game_stadium_id);
+        game.addColumnDef(game_arena_id);
         game.addColumnDef(game_home_score);
         game.addColumnDef(game_guest_score);
         game.addColumnDef(game_home_team_id);
@@ -232,11 +232,11 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
 
         game_home_team.addForeignKeyRelation(game_home_team_id_rel);
         game_guest_team.addForeignKeyRelation(game_guest_team_id_rel);
-        game_stadium.addForeignKeyRelation(game_stadium_id_rel);
+        game_arena.addForeignKeyRelation(game_arena_id_rel);
 
         basketballSchema.addTableDef(player);
         basketballSchema.addTableDef(team);
-        basketballSchema.addTableDef(stadium);
+        basketballSchema.addTableDef(arena);
         basketballSchema.addTableDef(game);
         basketballSchema.addTableDef(forward);
         basketballSchema.addTableDef(guard);
@@ -250,7 +250,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         basketballSchema.addForeignKey(guard_player);
         basketballSchema.addForeignKey(game_home_team);
         basketballSchema.addForeignKey(game_guest_team);
-        basketballSchema.addForeignKey(game_stadium);
+        basketballSchema.addForeignKey(game_arena);
 
         return basketballSchema;
     }
@@ -267,18 +267,18 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         taskList.add(task);
 
         task = new Task();
-        task.setText("List the ids of the most used stadiums in the season of 2015.");
-        task.setReferenceStatement("SELECT stadium_id, count(id) FROM game WHERE season = 2015 GROUP BY stadium_id HAVING count(id) = (Select max(totalCount) from( SELECT  stadium_id, COUNT(id) totalCount FROM    game WHERE season = 2015 GROUP   BY stadium_id ) as s)");
+        task.setText("List the ids of the most used arenas in the season of 2015.");
+        task.setReferenceStatement("SELECT arena_id, count(id) FROM game WHERE season = 2015 GROUP BY arena_id HAVING count(id) = (Select max(totalCount) from( SELECT  arena_id, COUNT(id) totalCount FROM    game WHERE season = 2015 GROUP   BY arena_id ) as s)");
         task.setDifficulty(3);
         taskList.add(task);
 
 
         task = new Task();
-        task.setText("How many teams have not played in the stadium with id “5”?");
+        task.setText("How many teams have not played in the arena with id “5”?");
         task.setReferenceStatement("SELECT count(distinct(u.id))\n" +
                 "FROM team AS u\n" +
                 "LEFT JOIN game AS p ON \n" +
-                "(p.guest_team_id = u.id or p.home_team_id = u.id) and p.stadium_id = 5\n" +
+                "(p.guest_team_id = u.id or p.home_team_id = u.id) and p.arena_id = 5\n" +
                 "WHERE p.id IS NULL");
         task.setDifficulty(4);
         taskList.add(task);
