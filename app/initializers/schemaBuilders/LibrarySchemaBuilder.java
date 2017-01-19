@@ -6,7 +6,6 @@ import models.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * @author ronja on 01.12.16.
  */
