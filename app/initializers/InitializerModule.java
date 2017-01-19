@@ -19,9 +19,13 @@ public class InitializerModule extends Module {
                     bind(DevelopmentInitializer.class).toSelf().eagerly()
             );
         } else if(environment.mode() == Mode.Test()) {
-            bindingSeq = seq();
+            bindingSeq = seq(
+                    bind(DevelopmentInitializer.class).toSelf().eagerly()
+            );
         } else {
-            bindingSeq = seq();
+            bindingSeq = seq(
+                    bind(DevelopmentInitializer.class).toSelf().eagerly()
+            );
         }
         return bindingSeq;
     }
