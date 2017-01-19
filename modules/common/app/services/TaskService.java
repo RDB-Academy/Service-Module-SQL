@@ -53,6 +53,16 @@ public class TaskService extends Service {
         return this.taskRepository.getById(id);
     }
 
+    public Form<Task> readAsForm(Long id) {
+        Task task = this.read(id);
+
+        if (task == null) {
+            return null;
+        }
+
+        return this.formFactory.form(Task.class).fill(task);
+    }
+
     public List<Task> readAll() {
         return this.taskRepository.getAll();
     }

@@ -146,10 +146,11 @@ public class HeroSchemaBuilder extends SchemaBuilder {
 
         task = new Task();
         task.setText("In how many teams is Thor?");
-        task.setReferenceStatement(" Select count(ht.team_id)\n" +
+        task.setReferenceStatement("Select count(ht.team_id)\n" +
                 " From hero as h\n" +
                 " Join hero_team as ht ON h.id = ht.hero_id\n" +
                 " Where h.name = 'Thor';");
+        task.setDifficulty(3);
         taskList.add(task);
 
         task = new Task();
@@ -160,6 +161,7 @@ public class HeroSchemaBuilder extends SchemaBuilder {
                 "                left outer Join hero_team as th ON h.id = th.hero_id\n" +
                 "                group by id\n" +
                 "                having count(team_id) > 1 )");
+        task.setDifficulty(4);
         taskList.add(task);
 
         task = new Task();
@@ -170,6 +172,7 @@ public class HeroSchemaBuilder extends SchemaBuilder {
                 "                left outer Join hero_team as th ON h.id = th.hero_id\n" +
                 "                group by id\n" +
                 "                having count(team_id) < 1 )");
+        task.setDifficulty(4);
         taskList.add(task);
 
 

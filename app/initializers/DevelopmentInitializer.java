@@ -28,7 +28,8 @@ class DevelopmentInitializer {
                 new StudentSchemaBuilder(),
                 new LibrarySchemaBuilder(),
                 new FootballSchemaBuilder(),
-                new BasketballSchemaBuilder()
+                new BasketballSchemaBuilder(),
+                new StackExchangeSchemaBuilder()
         );
 
         List<SchemaDef> schemaDefList = schemaBuilders.parallelStream()

@@ -37,6 +37,7 @@ public class ExtensionMaker {
     String[] position = {"C","G","T","QB","RB","WR","TE","DT","DE","MLB","OLB","CB","S","K","H","LS","P","KOS","KR","PR"};
     String[] plant = {"Aloe Vera","Alfalfa","American Coffee Berry Tree","Bloodroot","Bouncing Bet","Bull Nettle","Bracken or Brake Fern","Burning Bush","Buttercup","Carelessweed ","Castor Bean","Chrysanthemums","Clover","Cocklebur","Creeping Charlie","Crown of Thorns","Curly Dock","Daffodil","Daphne","Delphinium","Devil_s Trumpet","Dogbane","Dutchman_s Breeches","Elderberry","Ergot","Fern","Fireweed","Foxglove","Poison Hemlock","Water Hemlock","Hemp","Horse Chestnut, Buckeyes","Horse Nettle","Horsetails","Hyacinth","Hydrangea","English Ivy","Ground Ivy","Poison Ivy","Jack-in-the-Pulpit","Japanese Yew","Jerusalem Cherry","Jimson Weed","Kalanchoe","Kentucky Coffee Tree","Kentucky Mahagony Tree","Klamath Weed","Lamb_s Quarters","Lantana","Larkspur","Daylily","True Lily","Lily-of-the-Valley","Lupine","Mad Apple","Maple, Red","Mayapple","Milkweed","Mint","Mountain Laurel","Nicker Tree","Nightshade","Oleander","Ohio Buckeye","Philodendron","Pigweed","Poinsettia","Poke","Purple Mint","Redroot","Rhododendron","Rhubarb","Rosary Pea","Squirrelcorn","Staggerweed","St. Johnswort","Stinging Nettle","Stink Weed","Stump Tree","Sudan Grass","Summer Cypress","Thorn Apple","Tulip","White Snakeroot","Wild Onion","Yellow Sage"};
     String[] postStatus = {"question","answer"};
+    String[] study = {"acarology","accidence","aceology","acology","acoustics","adenology","aedoeology","aerobiology","aerodonetics","aerodynamics","aerolithology","aerology","aeronautics","aerophilately","aerostatics","agonistics","agriology","agrobiology","agrology","agronomics","agrostology","alethiology","algedonics","algology","anaesthesiology","anaglyptics","anagraphy","anatomy","andragogy","anemology","angelology","angiology","anthropobiology","anthropology","aphnology","apiology","arachnology","archaeology","archelogy","archology","arctophily","areology","aretaics","aristology","arthrology","astacology","astheniology","astrogeology","astrology","astrometeorology","astronomy","astrophysics","astroseismology","atmology","audiology","autecology","autology","auxology","avionics","axiology","bacteriology","balneology","barodynamics","barology","batology","bibliology","bibliotics","bioecology","biology","biometrics","bionomics","botany","bromatology","brontology","bryology","cacogenics","caliology","calorifics","cambistry","campanology","carcinology","cardiology","caricology","carpology","cartography","cartophily","castrametation","catacoustics","catalactics","catechectics","cetology","chalcography","chalcotriptics","chaology","characterology","chemistry","chirocosmetics","chirography","chirology","chiropody","chorology","chrematistics","chronobiology","chrysology","ciselure","climatology","clinology","codicology","coleopterology","cometology","conchology","coprology","cosmetology","cosmology","craniology","criminology 	","cryptology","dermatology","diplomatics","ecology","economics 	","Egyptology","electrochemistry","embryology","emetology","floristry","fluviology","gastroenterology","gemmology","genealogy","genesiology","genethlialogy","gnomonics","hematology ","hydrobiology","iamatology","idiopsychology","kidology","larithmics","linguistics","magnanerie ","martyrology","mechanics","metallogeny","metapolitics","meteoritics","meteorology","metrics ","metrology","micrology ","molinology","musicology","myology","nautics","nematology","neonatology","neurology","nomology","nostology ","numismatics","oceanology","oenology","olfactology ","oncology","ontology","ophthalmology","optology","orchidology","ornithology","orology","orthoepy","osmology","otology","paedotrophy","palaeobiology","paleobotany","papyrology","paroemiology","pelology","phenology","photobiology","physiology","planetology","podology","potamology","prosody","psephology","pseudoptics","psychophysics","quinology","rhabdology","runology","schematonics","scripophily","selenology","semiotics","sindonology","spectrology","stasiology","stratigraphy","symptomatology","syntax","tegestology","teuthology","thermodynamics","timbrology","topology","toxicology","trophology","uranography","venereology","xylography","zooarchaeology","zoology","zoopathology","zoosemiotics","zymology","zymurg"};
 
     public ExtensionMaker(
             Long seed,
@@ -47,7 +48,7 @@ public class ExtensionMaker {
         this.seed           = seed;
         this.schemaDef      = schemaDef;
         this.rand           = new Random(this.seed);
-        this.idOffset       = 1000;
+        this.idOffset       = 0;
         this.minEntities    = minEntities;
         this.maxEntities    = maxEntities;
         this.nullChance     = 2;
@@ -145,6 +146,9 @@ public class ExtensionMaker {
                             case ColumnDef.META_VALUE_SET_CITY:
                                 value = gen(city);
                                 break;
+                            case ColumnDef.META_VALUE_SET_STUDY:
+                                value = gen(study);
+                                break;
                             case ColumnDef.META_VALUE_SET_POSITION:
                                 value = gen(position);
                                 break;
@@ -183,10 +187,14 @@ public class ExtensionMaker {
                                 break;
                             case ColumnDef.META_VALUE_SET_DATE:
                                 LocalDate date;
-
                                 date = LocalDate.now();
-                                date.minusDays(random(31390));
-
+                                if(columnDef.getMaxValueSet() == 0){
+                                    date = date.minusDays(random(21390));
+                                }else{
+                                    int year = date.getYear();
+                                    date = date.minusDays((year - columnDef.getMaxValueSet()) * 365);
+                                    date = date.minusDays(random((columnDef.getMaxValueSet() - columnDef.getMinValueSet())*365));
+                                }
                                 value = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
                                 break;
                             case ColumnDef.META_VALUE_SET_PLANT:

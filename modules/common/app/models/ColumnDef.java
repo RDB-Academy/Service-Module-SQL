@@ -71,6 +71,7 @@ public class ColumnDef extends BaseModel {
     public static final int META_VALUE_SET_METAL = 6;
     public static final int META_VALUE_SET_POSTTYPE = 231;
     public static final int META_VALUE_SET_COLOR = 10;
+    public static final int META_VALUE_SET_STUDY = 541;
 
     public static final int META_VALUE_SET_GRADE = 361;
 

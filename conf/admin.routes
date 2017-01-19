@@ -25,6 +25,8 @@ GET     /tableDef/:id/edit          controllers.admin.TableDefController.updateV
 POST    /tableDef/:id/update        controllers.admin.TableDefController.update(id: Long)
 DELETE  /tableDef/:id               controllers.admin.TableDefController.delete(id: Long)
 
+GET     /task                       controllers.admin.TaskController.readAll()
+GET     /task/:id                   controllers.admin.TaskController.read(id: Long)
 
 
 
