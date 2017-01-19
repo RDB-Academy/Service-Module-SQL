@@ -51,7 +51,8 @@
                         <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            @navLink(controllers.admin.routes.SchemaDefController.readAll().url, "SchemaDef")
+                            @navLink(controllers.admin.routes.SchemaDefController.readAll().url, "Schemas")
+                            @navLink(controllers.admin.routes.TaskController.readAll().url, "Tasks")
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><p class="navbar-text">Signed in as @request().username()</p></li>

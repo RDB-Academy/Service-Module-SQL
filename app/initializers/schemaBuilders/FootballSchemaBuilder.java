@@ -231,6 +231,7 @@ public class FootballSchemaBuilder extends SchemaBuilder {
 
         task.setText("What is the average weight of all players?");
         task.setReferenceStatement("SELECT avg(weight) as average FROM player;");
+        task.setDifficulty(1);
         taskList.add(task);
 
         task = new Task();
@@ -239,6 +240,7 @@ public class FootballSchemaBuilder extends SchemaBuilder {
                 "FROM player\n" +
                 "WHERE weight =(SELECT max(weight)\n" +
                 "\t\t\t FROM player)");
+        task.setDifficulty(2);
         taskList.add(task);
 
         return taskList;
