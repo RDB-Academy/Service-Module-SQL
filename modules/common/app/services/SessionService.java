@@ -75,6 +75,10 @@ public class SessionService {
             sessionId = authKey[0];
         }
 
+        if(sessionId == null || sessionId.isEmpty()) {
+            return null;
+        }
+
         Session session = sessionRepository.getById(sessionId);
 
         if (session == null) {
