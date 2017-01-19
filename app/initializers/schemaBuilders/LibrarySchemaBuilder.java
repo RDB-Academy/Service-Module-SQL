@@ -93,6 +93,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         Task task = new Task();
         task.setText("List all customers by their ID and the amount of books they have purchased.");
         task.setReferenceStatement("SELECT customer_id, count(book_id) FROM customer_book GROUP BY customer_id ORDER BY count(book_id) DESC;");
+        task.setDifficulty(3);
         taskList.add(task);
 
         task = new Task();
@@ -101,6 +102,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
                 " FROM customer_book \n" +
                 " GROUP BY customer_id\n" +
                 " HAVING count(book_id) > 1;");
+        task.setDifficulty(3);
         taskList.add(task);
 
         task = new Task();
@@ -109,7 +111,9 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
                 " FROM book as b \n" +
                 " JOIN customer_book as cb ON b.id = cb.book_id \n" +
                 " GROUP BY b.name\n" +
-                " ORDER BY count(cb.customer_id) desc;");
+                " ORDER BY count(cb.customer_id) desc" +
+                " Fetch first 1 row only;");
+        task.setDifficulty(3);
         taskList.add(task);
 
 

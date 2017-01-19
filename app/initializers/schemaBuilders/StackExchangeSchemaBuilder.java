@@ -318,7 +318,7 @@ public class StackExchangeSchemaBuilder extends SchemaBuilder {
         userTask.setName("Find Tim");
         userTask.setText("Find Tim");
         userTask.setReferenceStatement("SELECT * FROM user WHERE user_displayName = 'Tim';");
-
+        userTask.setDifficulty(1);
         taskList.add(userTask);
 
         return taskList;

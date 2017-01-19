@@ -263,12 +263,15 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
 
         task.setText("What is the average age of all players?");
         task.setReferenceStatement("SELECT avg(age) as average FROM player;");
+        task.setDifficulty(1);
         taskList.add(task);
 
         task = new Task();
         task.setText("List the ids of the most used stadiums in the season of 2015.");
         task.setReferenceStatement("SELECT stadium_id, count(id) FROM game WHERE season = 2015 GROUP BY stadium_id HAVING count(id) = (Select max(totalCount) from( SELECT  stadium_id, COUNT(id) totalCount FROM    game WHERE season = 2015 GROUP   BY stadium_id ) as s)");
+        task.setDifficulty(3);
         taskList.add(task);
+
 
         task = new Task();
         task.setText("How many teams have not played in the stadium with id “5”?");
@@ -277,6 +280,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "LEFT JOIN game AS p ON \n" +
                 "(p.guest_team_id = u.id or p.home_team_id = u.id) and p.stadium_id = 5\n" +
                 "WHERE p.id IS NULL");
+        task.setDifficulty(4);
         taskList.add(task);
 
         task = new Task();
@@ -285,6 +289,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "FROM player\n" +
                 "WHERE country LIKE '%canada%'\n" +
                 "OR country LIKE '%Canada%';");
+        task.setDifficulty(1);
         taskList.add(task);
 
         task = new Task();
@@ -293,6 +298,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "FROM player\n" +
                 "WHERE points_per_game*games_played =(SELECT max(points_per_game*games_played)\n" +
                 "\t\t\t FROM player)");
+        task.setDifficulty(4);
         taskList.add(task);
 
         task = new Task();
@@ -302,6 +308,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "JOIN game AS g ON t.id = g.home_team_id\n" +
                 "WHERE g.home_score > g.guest_score\n" +
                 "AND g.season BETWEEN 2000 AND 2015;");
+        task.setDifficulty(4);
         taskList.add(task);
 
         task = new Task();
@@ -311,6 +318,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
                 "FROM game\n" +
                 "WHERE guest_score > home_score) as result1)*100/ (SELECT count(id)\n" +
                 "\t\tFROM game))");
+        task.setDifficulty(5);
         taskList.add(task);
 
         task = new Task();
@@ -318,6 +326,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         task.setReferenceStatement("Select id,firstname, lastname\n" +
                 "        From player\n" +
                 "        where height < (SELECT avg(height) as average FROM player);");
+        task.setDifficulty(2);
         taskList.add(task);
 
 
