@@ -83,7 +83,7 @@ public class TestController extends Controller {
         seed = random.nextLong();
 
         Logger.info("Seed: " + seed);
-        SchemaDef schemaDef = this.schemaDefRepository.getByName("StackExchangeSchema");
+        SchemaDef schemaDef = this.schemaDefRepository.getByName("StudentSchema");
 
         ExtensionMaker extensionMaker = new ExtensionMaker(
                 seed,

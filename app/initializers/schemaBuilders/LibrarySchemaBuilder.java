@@ -91,7 +91,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         List<Task> taskList = new ArrayList<>();
 
         Task task = new Task();
-        task.setText("List all customers and the amount of books they have purchased.");
+        task.setText("List all customers by their ID and the amount of books they have purchased.");
         task.setReferenceStatement("SELECT customer_id, count(book_id) FROM customer_book GROUP BY customer_id ORDER BY count(book_id) DESC;");
         taskList.add(task);
 
@@ -99,17 +99,17 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         task.setText("Which customers (id,firstname,lastname) have bought more than 2 books.");
         task.setReferenceStatement("SELECT customer_id, firstname, lastname\n" +
                 " FROM customer_book \n" +
-                " Group by customer_id\n" +
-                " having count(book_id) > 1;");
+                " GROUP BY customer_id\n" +
+                " HAVING count(book_id) > 1;");
         taskList.add(task);
 
         task = new Task();
-        task.setText("What is the title of the book that have been purchased the most often?");
+        task.setText("What is the title of the book that has been borrowed the most often?");
         task.setReferenceStatement("SELECT b.name, count(cb.customer_id) \n" +
                 " FROM book as b \n" +
-                " Join customer_book as cb ON b.id = cb.book_id \n" +
-                " Group by b.name\n" +
-                " order by count(cb.customer_id) desc;");
+                " JOIN customer_book as cb ON b.id = cb.book_id \n" +
+                " GROUP BY b.name\n" +
+                " ORDER BY count(cb.customer_id) desc;");
         taskList.add(task);
 
 
