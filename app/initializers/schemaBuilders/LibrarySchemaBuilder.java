@@ -107,7 +107,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
 
         task = new Task();
         task.setText("What is the title of the book that has been borrowed the most often?");
-        task.setReferenceStatement("SELECT b.name, count(cb.customer_id) \n" +
+        task.setReferenceStatement("SELECT b.name\n" +
                 " FROM book as b \n" +
                 " JOIN customer_book as cb ON b.id = cb.book_id \n" +
                 " GROUP BY b.name\n" +
