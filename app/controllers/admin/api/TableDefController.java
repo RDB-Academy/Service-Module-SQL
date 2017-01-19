@@ -11,6 +11,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import services.TableDefService;
 
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -53,8 +54,8 @@ public class TableDefController extends Controller{
 
         tableDefNode.set("columnDefList", columnIds);
 
-        tableDefNode.put("createdAt", tableDef.getCreatedAt());
-        tableDefNode.put("modifiedAt", tableDef.getModifiedAt());
+        tableDefNode.put("createdAt", tableDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        tableDefNode.put("modifiedAt", tableDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return tableDefNode;
     }

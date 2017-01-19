@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import models.submodels.DatabaseInformation;
 import models.submodels.ResultSet;
-import models.submodels.TaskTrialStats;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The TaskTrial Class
@@ -17,76 +18,40 @@ public class TaskTrial extends BaseModel {
     @Id
     private Long                id;
 
-    @Embedded
-    @JsonProperty(value = "stats", access = JsonProperty.Access.READ_ONLY)
-    public  TaskTrialStats      stats;
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    private Task                task;
 
     @JsonIgnore
+    @ManyToOne(optional = false)
+    private Session             session;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "taskTrial", cascade = CascadeType.ALL)
+    private List<TaskTrialLog>  taskTrialLogList;
+
     @Embedded
+    @JsonIgnore
     public  DatabaseInformation databaseInformation;
-
-    private String userStatement;
-
-    private boolean isCorrect;
-
-    private boolean isFinished;
-
-    @JsonIgnore
-    @ManyToOne(optional = false)
-    private Task task;
-
-    @JsonIgnore
-    @ManyToOne(optional = false)
-    private Session session;
-
-    @JsonIgnore
-    @Transient
-    private String error;
 
     @Transient
     @JsonProperty(value = "resultSet", access = JsonProperty.Access.READ_ONLY)
-    public ResultSet resultSet;
+    private ResultSet           resultSet;
+
+    private boolean             isFinished;
 
     /**
      * The Constructor
      */
     public TaskTrial() {
-        this.stats = new TaskTrialStats();
-        this.databaseInformation = new DatabaseInformation();
+        this.databaseInformation= new DatabaseInformation();
+        this.taskTrialLogList   = new ArrayList<>();
 
-        this.isCorrect = false;
         this.isFinished = false;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getUserStatement() {
-        return userStatement;
-    }
-
-    public void setUserStatement(String userStatement) {
-        this.userStatement = userStatement;
-    }
-
-    public boolean getIsCorrect() {
-        return isCorrect;
-    }
-
-    public void setIsCorrect(boolean correct) {
-        isCorrect = correct;
-        if(correct) {
-            this.setIsFinished(true);
-        }
-    }
-
-    public boolean getIsFinished() {
-        return isFinished;
-    }
-
-    public void setIsFinished(boolean finished) {
-        isFinished = finished;
     }
 
     public Task getTask() {
@@ -110,15 +75,56 @@ public class TaskTrial extends BaseModel {
         this.session = session;
     }
 
-    public boolean hasError() {
-        return this.error != null;
+    public List<TaskTrialLog> getTaskTrialLogList() {
+        return taskTrialLogList;
     }
 
-    public String getError() {
-        return error;
+    @JsonGetter("tries")
+    public int getTries() {
+        return this.getTaskTrialLogList().size();
     }
 
-    public void setError(String errorMessage) {
-        this.error = errorMessage;
+    @JsonGetter("taskTrialStatus")
+    public TaskTrialLog getTaskTrialStatus() {
+        if(this.taskTrialLogList == null || this.taskTrialLogList.size() == 0) {
+            return new TaskTrialLog();
+        }
+
+        TaskTrialLog taskTrialLog = this.taskTrialLogList.get(0);
+        for (TaskTrialLog taskTrialLogIterator : this.taskTrialLogList) {
+            if(taskTrialLogIterator.getCreatedAt().isAfter(taskTrialLog.getCreatedAt())) {
+                taskTrialLog = taskTrialLogIterator;
+            }
+        }
+
+        return taskTrialLog;
+    }
+
+    public void setTaskTrialLogList(List<TaskTrialLog> taskTrialLogList) {
+        this.taskTrialLogList = taskTrialLogList;
+    }
+
+    public void addTaskTrialLog(TaskTrialLog taskTrialLog) {
+        if(this.taskTrialLogList == null) {
+            this.taskTrialLogList = new ArrayList<>();
+        }
+        taskTrialLog.setTaskTrial(this);
+        this.taskTrialLogList.add(taskTrialLog);
+    }
+
+    public boolean getIsFinished() {
+        return isFinished;
+    }
+
+    public void setIsFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public ResultSet getResultSet() {
+        return resultSet;
+    }
+
+    public void setResultSet(ResultSet resultSet) {
+        this.resultSet = resultSet;
     }
 }

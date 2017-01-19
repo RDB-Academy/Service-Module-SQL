@@ -49,7 +49,7 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         book_book_id.setNotNull(true);
         book_book_name.setNotNull(true);
         book_book_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
-        book_book_name.setMetaValueSet(ColumnDef.META_VALUE_SET_NAME);
+        book_book_name.setMetaValueSet(ColumnDef.META_VALUE_SET_TITLE);
 
         customerBook_book_id.setPrimary(true);
         customerBook_customer_id.setPrimary(true);
@@ -91,13 +91,30 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
     protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
-        Task bibleTask = new Task();
+        Task task = new Task();
+        task.setText("List all customers and the amount of books they have purchased.");
+        task.setReferenceStatement("SELECT customer_id, count(book_id) FROM customer_book GROUP BY customer_id ORDER BY count(book_id) DESC;");
+        taskList.add(task);
 
-        bibleTask.setName("Find the Bible");
-        bibleTask.setText("Find the Bible");
-        bibleTask.setReferenceStatement("SELECT name FROM book WHERE name = 'Bible';");
+        task = new Task();
+        task.setText("Which customers (id,firstname,lastname) have bought more than 2 books.");
+        task.setReferenceStatement("SELECT customer_id, firstname, lastname\n" +
+                " FROM customer_book \n" +
+                " Group by customer_id\n" +
+                " having count(book_id) > 1;");
+        taskList.add(task);
 
-        taskList.add(bibleTask);
+        task = new Task();
+        task.setText("What is the title of the book that have been purchased the most often?");
+        task.setReferenceStatement("SELECT b.name, count(cb.customer_id) \n" +
+                " FROM book as b \n" +
+                " Join customer_book as cb ON b.id = cb.book_id \n" +
+                " Group by b.name\n" +
+                " order by count(cb.customer_id) desc;");
+        taskList.add(task);
+
+
+
 
         return taskList;
     }

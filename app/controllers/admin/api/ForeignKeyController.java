@@ -11,6 +11,7 @@ import play.mvc.Result;
 import services.ForeignKeyService;
 
 import javax.inject.Inject;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -62,8 +63,8 @@ public class ForeignKeyController extends Controller {
 
         foreignKeyNode.set("foreignKeyRelationList", foreignKeyRelationArray);
 
-        foreignKeyNode.put("createdAt", foreignKey.getCreatedAt());
-        foreignKeyNode.put("modifiedAt", foreignKey.getModifiedAt());
+        foreignKeyNode.put("createdAt", foreignKey.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        foreignKeyNode.put("modifiedAt", foreignKey.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return foreignKeyNode;
     }

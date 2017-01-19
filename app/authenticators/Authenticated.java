@@ -23,13 +23,14 @@ public class Authenticated extends Security.Authenticator {
     @Override
     public String getUsername(Http.Context ctx) {
         Session session = this.sessionService.getSession(ctx);
-        return (session != null ) ? session.getUserName() : null;
+        if(session == null) return null;
+        return (session.getUsername() != null
+                && session.getUsername().equals("admin")) ? session.getUsername() : null;
     }
 
     @Override
     public Result onUnauthorized(Http.Context ctx) {
-        ctx.flash().put("forbidden", "error");
         Logger.info("Unauthorized Action");
-        return redirect(controllers.admin.routes.SessionController.login());
+        return unauthorized();
     }
 }

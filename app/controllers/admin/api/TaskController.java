@@ -9,8 +9,10 @@ import services.TaskService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
 
 /**
  * @author fabiomazzone
@@ -24,6 +26,16 @@ public class TaskController extends Controller {
         this.taskService = taskService;
     }
 
+
+    public CompletionStage<Result> readAll() {
+        return CompletableFuture
+                .supplyAsync(this.taskService::readAll)
+                .thenApply(taskList ->
+                        ok(Json.toJson(taskList.parallelStream()
+                                .map(this::transform)
+                                .collect(Collectors.toList())))
+                );
+    }
 
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
@@ -43,13 +55,14 @@ public class TaskController extends Controller {
         taskNode.put("name", task.getName());
 
         taskNode.put("schemaDefId", task.getSchemaDefId());
+        taskNode.put("schemaDefName", task.getSchemaDef().getName());
 
         taskNode.put("text", task.getText());
         taskNode.put("referenceStatement", task.getReferenceStatement());
         taskNode.put("difficulty", task.getDifficulty());
 
-        taskNode.put("createdAt", task.getCreatedAt());
-        taskNode.put("modifiedAt", task.getModifiedAt());
+        taskNode.put("createdAt", task.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        taskNode.put("modifiedAt", task.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return taskNode;
     }

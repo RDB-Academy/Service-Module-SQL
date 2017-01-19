@@ -1,5 +1,9 @@
 package controllers.api;
 
+import forms.LoginForm;
+import models.Session;
+import play.data.Form;
+import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -26,15 +30,19 @@ public class SessionController extends Controller {
         this.httpExecutionContext = httpExecutionContext;
     }
 
-    public CompletionStage<Result> login() {
-        return CompletableFuture
-                .supplyAsync(this.sessionService::login, this.httpExecutionContext.current())
-                .thenApply(loginForm -> {
-                    if(loginForm.hasErrors()) {
-                        return badRequest(loginForm.errorsAsJson());
-                    }
-                    return ok();
-                });
+    public Result login() {
+        Form<LoginForm> loginForm = this.sessionService.validateLoginForm();
+        if(loginForm.hasErrors()) {
+            return badRequest(loginForm.errorsAsJson());
+        }
+
+        Session session = this.sessionService.login(loginForm);
+
+        if(session == null) {
+            return internalServerError();
+        }
+
+        return ok(Json.toJson(session));
     }
 
     public CompletionStage<Result> logout() {
@@ -44,7 +52,7 @@ public class SessionController extends Controller {
                     if(request().accepts(Http.MimeTypes.TEXT)) {
                         redirect(controllers.admin.routes.SessionController.login());
                     }
-                    return ok();
+                    return ok("{}");
                 });
     }
 }

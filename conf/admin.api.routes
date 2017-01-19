@@ -1,16 +1,21 @@
-POST    /schemaDef              controllers.admin.api.SchemaDefController.create()
-GET     /schemaDef              controllers.admin.api.SchemaDefController.readAll()
-GET     /schemaDef/:id          controllers.admin.api.SchemaDefController.read(id: Long)
-DELETE  /schemaDef/:id          controllers.admin.api.SchemaDefController.delete(id: Long)
+# /api
+POST    /login                      controllers.api.SessionController.login()
+GET     /logout                     controllers.api.SessionController.logout()
 
-GET     /tableDef/:id           controllers.admin.api.TableDefController.read(id: Long)
+POST    /schemaDef                  controllers.admin.api.SchemaDefController.create()
+GET     /schemaDef                  controllers.admin.api.SchemaDefController.readAll()
+GET     /schemaDef/:id              controllers.admin.api.SchemaDefController.read(id: Long)
+DELETE  /schemaDef/:id              controllers.admin.api.SchemaDefController.delete(id: Long)
 
-GET     /columnDef/:id          controllers.admin.api.ColumnDefController.read(id: Long)
+GET     /tableDef/:id               controllers.admin.api.TableDefController.read(id: Long)
 
-GET     /foreignKey/:id         controllers.admin.api.ForeignKeyController.read(id: Long)
+GET     /columnDef/:id              controllers.admin.api.ColumnDefController.read(id: Long)
 
-GET     /foreignKeyRelation/:id controllers.admin.api.ForeignKeyRelationController.read(id: Long)
+GET     /foreignKey/:id             controllers.admin.api.ForeignKeyController.read(id: Long)
 
-GET     /task/:id               controllers.admin.api.TaskController.read(id: Long)
+GET     /foreignKeyRelation/:id     controllers.admin.api.ForeignKeyRelationController.read(id: Long)
 
-GET     /*file                  controllers.admin.api.ApplicationController.notFoundView(file: String)
+GET     /task                       controllers.admin.api.TaskController.readAll()
+GET     /task/:id                   controllers.admin.api.TaskController.read(id: Long)
+
+GET     /*file                      controllers.admin.api.ApplicationController.notFoundView(file: String)

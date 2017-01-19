@@ -1,14 +1,10 @@
 package initializers.schemaBuilders;
 
-import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
 import models.*;
-import models.submodels.ExtensionDef;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by carl on 21.12.16.
@@ -42,6 +38,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         ColumnDef stadium_stadium_capacity = this.createNewColumnDef("capacity", "INT");
 
         ColumnDef game_game_id = this.createNewColumnDef("id", "INT");
+        ColumnDef game_season = this.createNewColumnDef("season", "INT");
         ColumnDef game_stadium_id = this.createNewColumnDef("stadium_id", "INT");
         ColumnDef game_home_score = this.createNewColumnDef("home_score", "INT");
         ColumnDef game_guest_score = this.createNewColumnDef("guest_score", "INT");
@@ -57,6 +54,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         ColumnDef player_player_height = this.createNewColumnDef("height", "INT");
         ColumnDef player_player_weight = this.createNewColumnDef("weight", "INT");
         ColumnDef player_points_per_game = this.createNewColumnDef("points_per_game", "INT");
+        ColumnDef player_games_played = this.createNewColumnDef("games_played", "INT");
 
         ColumnDef center_player_id = this.createNewColumnDef("player_id", "INT");
         ColumnDef center_team_id = this.createNewColumnDef("team_id", "INT");
@@ -113,6 +111,8 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         player_player_height.setMaxValueSet(240);
         player_player_number.setMinValueSet(1);
         player_player_number.setMaxValueSet(99);
+        player_games_played.setMinValueSet(1);
+        player_games_played.setMaxValueSet(300);
 
         team_team_id.setPrimary(true);
         team_team_id.setNotNull(true);
@@ -138,6 +138,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         game_game_id.setNotNull(true);
         game_home_team_id.setNotNull(true);
         game_guest_team_id.setNotNull(true);
+        game_stadium_id.setNotNull(true);
         game_game_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         game_stadium_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         game_home_team_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
@@ -146,6 +147,8 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         game_home_score.setMaxValueSet(130);
         game_guest_score.setMinValueSet(85);
         game_guest_score.setMaxValueSet(125);
+        game_season.setMinValueSet(1995);
+        game_season.setMaxValueSet(2017);
 
         center_player_id.setPrimary(true);
         center_team_id.setPrimary(true);
@@ -185,6 +188,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         player.addColumnDef(player_player_country);
         player.addColumnDef(player_player_age);
         player.addColumnDef(player_points_per_game);
+        player.addColumnDef(player_games_played);
 
         team.addColumnDef(team_team_id);
         team.addColumnDef(team_team_city);
@@ -202,6 +206,7 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
         game.addColumnDef(game_guest_score);
         game.addColumnDef(game_home_team_id);
         game.addColumnDef(game_guest_team_id);
+        game.addColumnDef(game_season);
 
         forward.addColumnDef(forward_player_id);
         forward.addColumnDef(forward_team_id);
@@ -254,13 +259,67 @@ public class BasketballSchemaBuilder  extends SchemaBuilder {
     protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
-        Task ironManTask = new Task();
+        Task task = new Task();
 
-        ironManTask.setName("Players Age");
-        ironManTask.setText("What is the average age of all players?");
-        ironManTask.setReferenceStatement("SELECT avg(age) as average FROM player;");
+        task.setText("What is the average age of all players?");
+        task.setReferenceStatement("SELECT avg(age) as average FROM player;");
+        taskList.add(task);
 
-        taskList.add(ironManTask);
+        task = new Task();
+        task.setText("List the ids of the most used stadiums in the season of 2015.");
+        task.setReferenceStatement("SELECT stadium_id, count(id) FROM game WHERE season = 2015 GROUP BY stadium_id HAVING count(id) = (Select max(totalCount) from( SELECT  stadium_id, COUNT(id) totalCount FROM    game WHERE season = 2015 GROUP   BY stadium_id ) as s)");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("How many teams have not played in the stadium with id “5”?");
+        task.setReferenceStatement("SELECT count(distinct(u.id))\n" +
+                "FROM team AS u\n" +
+                "LEFT JOIN game AS p ON \n" +
+                "(p.guest_team_id = u.id or p.home_team_id = u.id) and p.stadium_id = 5\n" +
+                "WHERE p.id IS NULL");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("How many players are from Canada?");
+        task.setReferenceStatement("SELECT count(id)\n" +
+                "FROM player\n" +
+                "WHERE country LIKE '%canada%'\n" +
+                "OR country LIKE '%Canada%';");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("Show the age, the lastname and the country of the player who got most points so far.");
+        task.setReferenceStatement(" SELECT age,lastname, country\n" +
+                "FROM player\n" +
+                "WHERE points_per_game*games_played =(SELECT max(points_per_game*games_played)\n" +
+                "\t\t\t FROM player)");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("Give me a set of all cities of guest teams, who won a game between the seasons of 2000 and 2015.");
+        task.setReferenceStatement("SELECT distinct(t.city)\n" +
+                "FROM team AS t\n" +
+                "JOIN game AS g ON t.id = g.home_team_id\n" +
+                "WHERE g.home_score > g.guest_score\n" +
+                "AND g.season BETWEEN 2000 AND 2015;");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("What is the percentage that a guest team wins, based on the given data?");
+        task.setReferenceStatement("SELECT ((SELECT result1.wins\n" +
+                "FROM (SELECT count(id) as wins\n" +
+                "FROM game\n" +
+                "WHERE guest_score > home_score) as result1)*100/ (SELECT count(id)\n" +
+                "\t\tFROM game))");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("List the id and full name of any player who is smaller than average.");
+        task.setReferenceStatement("Select id,firstname, lastname\n" +
+                "        From player\n" +
+                "        where height < (SELECT avg(height) as average FROM player);");
+        taskList.add(task);
+
 
         return taskList;
     }

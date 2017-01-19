@@ -3,7 +3,7 @@ package initializers.schemaBuilders;
 import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
 import models.*;
-import models.submodels.ExtensionDef;
+import models.ExtensionDef;
 
 import java.util.*;
 
@@ -67,9 +67,9 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         heroTeam_hero.addForeignKeyRelation(heroTeam_hero_rel);
         heroTeam_team.addForeignKeyRelation(heroTeam_team_rel);
 
-        hero.extensionDef = this.buildHeroExtension();
-        team.extensionDef = this.buildTeamExtension();
-        heroTeam.extensionDef = this.buildHeroTeamExtension();
+        hero.setExtensionDef(this.buildHeroExtension());
+        team.setExtensionDef(this.buildTeamExtension());
+        heroTeam.setExtensionDef(this.buildHeroTeamExtension());
 
         heroTeamSchema.addTableDef(hero);
         heroTeamSchema.addTableDef(team);
@@ -86,14 +86,14 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         extensionDef = new ExtensionDef();
 
         List<Map<String, String>> extensionList = Arrays.asList(
-                ImmutableMap.of("hero_id", "1", "team_id", "1", "join_year", "2012"),
-                ImmutableMap.of("hero_id", "2", "team_id", "1", "join_year", "2012"),
-                ImmutableMap.of("hero_id", "3", "team_id", "1", "join_year", "2012"),
-                ImmutableMap.of("hero_id", "4", "team_id", "1", "join_year", "2012"),
-                ImmutableMap.of("hero_id", "5", "team_id", "1", "join_year", "2016"),
-                ImmutableMap.of("hero_id", "1", "team_id", "2", "join_year", "2016"),
-                ImmutableMap.of("hero_id", "5", "team_id", "2", "join_year", "2016"),
-                ImmutableMap.of("hero_id", "3", "team_id", "3", "join_year", "2016")
+                ImmutableMap.of("hero_id", "0", "team_id", "0", "join_year", "2012"),
+                ImmutableMap.of("hero_id", "1", "team_id", "0", "join_year", "2012"),
+                ImmutableMap.of("hero_id", "2", "team_id", "0", "join_year", "2012"),
+                ImmutableMap.of("hero_id", "3", "team_id", "0", "join_year", "2012"),
+                ImmutableMap.of("hero_id", "4", "team_id", "0", "join_year", "2016"),
+                ImmutableMap.of("hero_id", "0", "team_id", "1", "join_year", "2016"),
+                ImmutableMap.of("hero_id", "4", "team_id", "1", "join_year", "2016"),
+                ImmutableMap.of("hero_id", "2", "team_id", "2", "join_year", "2016")
         );
 
         extensionDef.setExtensionList(extensionList);
@@ -106,9 +106,9 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         extensionDef = new ExtensionDef();
 
         List<Map<String, String>> extensionList = Arrays.asList(
-                ImmutableMap.of("id", "1", "name", "avengers"),
-                ImmutableMap.of("id", "2", "name", "team iron man"),
-                ImmutableMap.of("id", "3", "name", "team cap")
+                ImmutableMap.of("id", "0", "name", "Avengers"),
+                ImmutableMap.of("id", "1", "name", "Pro-Registration"),
+                ImmutableMap.of("id", "2", "name", "Anti-Registration")
         );
 
         extensionDef.setExtensionList(extensionList);
@@ -121,11 +121,11 @@ public class HeroSchemaBuilder extends SchemaBuilder {
         extensionDef = new ExtensionDef();
 
         List<Map<String, String>> extensionList = Arrays.asList(
-                ImmutableMap.of("id", "1", "name", "iron man"),
-                ImmutableMap.of("id", "2", "name", "thor"),
-                ImmutableMap.of("id", "3", "name", "captain america"),
-                ImmutableMap.of("id", "4", "name", "hulk"),
-                ImmutableMap.of("id", "5", "name", "spider man")
+                ImmutableMap.of("id", "0", "name", "Iron Man"),
+                ImmutableMap.of("id", "1", "name", "Thor"),
+                ImmutableMap.of("id", "2", "name", "Captain America"),
+                ImmutableMap.of("id", "3", "name", "Hulk"),
+                ImmutableMap.of("id", "4", "name", "Spider Man")
         );
 
         extensionDef.setExtensionList(extensionList);
@@ -137,13 +137,41 @@ public class HeroSchemaBuilder extends SchemaBuilder {
     protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
-        Task ironManTask = new Task();
+        Task task = new Task();
 
-        ironManTask.setName("Find Iron Man");
-        ironManTask.setText("Find Iron Man");
-        ironManTask.setReferenceStatement("SELECT name FROM hero WHERE name = 'Iron Man';");
+        task.setText("Find Iron Man");
+        task.setReferenceStatement("SELECT name FROM hero WHERE name = 'Iron Man';");
+        task.setDifficulty(1);
+        taskList.add(task);
 
-        taskList.add(ironManTask);
+        task = new Task();
+        task.setText("In how many teams is Thor?");
+        task.setReferenceStatement(" Select count(ht.team_id)\n" +
+                " From hero as h\n" +
+                " Join hero_team as ht ON h.id = ht.hero_id\n" +
+                " Where h.name = 'Thor';");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("How many Heroes are part of multiple teams?");
+        task.setReferenceStatement("select count(*)\n" +
+                "        from (\n" +
+                "                Select name as peter, count(team_id) from hero as h\n" +
+                "                left outer Join hero_team as th ON h.id = th.hero_id\n" +
+                "                group by id\n" +
+                "                having count(team_id) > 1 )");
+        taskList.add(task);
+
+        task = new Task();
+        task.setText("How many Heroes don't have a team?");
+        task.setReferenceStatement("select count(*)\n" +
+                "        from (\n" +
+                "                Select name as peter, count(team_id) from hero as h\n" +
+                "                left outer Join hero_team as th ON h.id = th.hero_id\n" +
+                "                group by id\n" +
+                "                having count(team_id) < 1 )");
+        taskList.add(task);
+
 
         return taskList;
     }

@@ -2,12 +2,12 @@ package controllers;
 
 import models.Task;
 import models.TaskTrial;
-import parser.SQLParser;
-import parser.SQLParserFactory;
-import parser.extensionMaker.ExtensionMaker;
+import sqlParser.connection.DBConnection;
+import sqlParser.connection.DBConnectionFactory;
+import sqlParser.generators.ExtensionMaker;
 
 import models.SchemaDef;
-import parser.tableMaker.TableMaker;
+import sqlParser.generators.TableMaker;
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -26,21 +26,21 @@ import java.util.Random;
  */
 public class TestController extends Controller {
     private final SchemaDefRepository   schemaDefRepository;
-    private final SQLParserFactory      sqlParserFactory;
-    private final TaskTrialService      taskTrialService;
+    private final DBConnectionFactory DBConnectionFactory;
+    private final TaskTrialService taskTrialService;
     private final TaskTrialRepository   taskTrialRepository;
     private final TaskRepository        taskRepository;
 
     @Inject
     public TestController(
             SchemaDefRepository schemaDefRepository,
-            SQLParserFactory sqlParserFactory,
+            DBConnectionFactory DBConnectionFactory,
             TaskTrialService taskTrialService,
             TaskTrialRepository taskTrialRepository,
             TaskRepository taskRepository) {
 
         this.schemaDefRepository = schemaDefRepository;
-        this.sqlParserFactory = sqlParserFactory;
+        this.DBConnectionFactory = DBConnectionFactory;
         this.taskTrialService = taskTrialService;
         this.taskTrialRepository = taskTrialRepository;
         this.taskRepository = taskRepository;
@@ -60,8 +60,8 @@ public class TestController extends Controller {
                 });
                 System.out.println();
 
-                if (tableDef.extensionDef != null) {
-                    tableDef.extensionDef.getExtensionList().forEach(entity -> {
+                if (tableDef.getExtensionDef() != null) {
+                    tableDef.getExtensionDef().getExtensionList().forEach(entity -> {
                         entity.forEach((k, v) -> {
                             System.out.println("    - " + k + "=" + v);
                         });
@@ -77,16 +77,17 @@ public class TestController extends Controller {
     }
 
     public Result test() {
-        session().clear();
+        Long seed;
         Random random = new Random();
-        Long seed = random.nextLong();
+
+        seed = random.nextLong();
+
         Logger.info("Seed: " + seed);
-        SchemaDef schemaDef = this.schemaDefRepository.getByName("BasketballSchema");
+        SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");
 
         ExtensionMaker extensionMaker = new ExtensionMaker(
                 seed,
                 schemaDef,
-                1000,
                 75,
                 150
         );
@@ -116,7 +117,7 @@ public class TestController extends Controller {
         taskTrial.setTask(task);
         taskTrial.databaseInformation.setSeed(12345L);
 
-        taskTrial = this.sqlParserFactory.createParser(taskTrial);
+        taskTrial = this.DBConnectionFactory.createParser(taskTrial);
 
         this.taskTrialRepository.save(taskTrial);
 
@@ -131,14 +132,14 @@ public class TestController extends Controller {
             return notFound();
         }
 
-        SQLParser sqlParser = this.sqlParserFactory.getParser(taskTrial);
+        DBConnection DBConnection = this.DBConnectionFactory.getParser(taskTrial);
 
-        if(sqlParser == null) {
+        if(DBConnection == null) {
             Logger.error("Cannot create SQL Parser");
             return internalServerError();
         }
 
-        sqlParser.closeConnection();
+        DBConnection.closeConnection();
 
         return ok();
     }
@@ -151,7 +152,7 @@ public class TestController extends Controller {
             return notFound();
         }
 
-        this.sqlParserFactory.deleteDatabase(taskTrial);
+        this.DBConnectionFactory.deleteDatabase(taskTrial);
 
         this.taskTrialRepository.save(taskTrial);
 

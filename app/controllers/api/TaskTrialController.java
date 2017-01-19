@@ -53,16 +53,13 @@ public class TaskTrialController extends Controller {
                 .supplyAsync(() -> this.taskTrialService.validateStatement(id), this.httpExecutionContext.current())
                 .thenApply((taskTrial -> {
                     if(taskTrial == null) {
-                        return notFound("No such object available!");
+                        return badRequest("Something went terribly wrong");
                     }
                     if(taskTrial.getIsFinished()) {
                         return ok(Json.toJson(taskTrial));
                     }
-                    if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
-                        return badRequest(taskTrial.getError());
-                    }
-                    if(taskTrial.hasError()) {
-                        return ok(Json.toJson(taskTrial));
+                    if(taskTrial.getTaskTrialStatus().getStatement() == null || taskTrial.getTaskTrialStatus().getStatement().isEmpty()) {
+                        return badRequest("Submitted Statement is Empty");
                     }
 
                     return ok(Json.toJson(taskTrial));
