@@ -4,7 +4,6 @@ import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
 import play.Configuration;
-import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
@@ -19,7 +18,8 @@ import javax.validation.constraints.NotNull;
  */
 @Singleton
 public class SessionService {
-    private static final String SESSION_FIELD_NAME = "SessionID";
+    private static final String SESSION_FIELD_NAME = "auth-key";
+
     private final SessionRepository sessionRepository;
     private final FormFactory formFactory;
     private final Configuration configuration;
@@ -35,10 +35,12 @@ public class SessionService {
         this.configuration = configuration;
     }
 
-    public void setAdminSession(LoginForm loginForm, Http.Context ctx) {
+    private Session setAdminSession(Http.Context ctx) {
         Session session = new Session();
-        session.setUserName("admin");
+        session.save();
 
+        session.setUserId(0L);
+        session.setUsername("admin");
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
         String connectedData = userAgent.toString() + ctx.request().remoteAddress();
 
@@ -46,7 +48,7 @@ public class SessionService {
 
         session.save();
 
-        ctx.session().put(SESSION_FIELD_NAME, session.getId());
+        return session;
     }
 
     Session createSession(Http.Context ctx) {
@@ -64,9 +66,16 @@ public class SessionService {
     }
 
     public Session getSession(Http.Context ctx) {
+        // Old Method
         String sessionId = ctx.session().get(SESSION_FIELD_NAME);
 
-        if (sessionId == null || sessionId.isEmpty()) {
+        // new Method
+        String[] authKey = ctx.request().headers().get(SESSION_FIELD_NAME);
+        if(authKey != null && authKey.length == 1 && !authKey[0].isEmpty()) {
+            sessionId = authKey[0];
+        }
+
+        if(sessionId == null || sessionId.isEmpty()) {
             return null;
         }
 
@@ -76,16 +85,10 @@ public class SessionService {
             return null;
         }
 
-        UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
-        String connectedData = userAgent.toString() + ctx.request().remoteAddress();
-        if( session.getConnectionInfo() == connectedData.hashCode() ) {
-            return session;
-        }
-
-        return null;
+        return session;
     }
 
-    public Form<LoginForm> login() {
+    public Form<LoginForm> validateLoginForm() {
         Form<LoginForm>     loginForm;
         String              adminPassword;
         LoginForm           login;
@@ -99,13 +102,19 @@ public class SessionService {
 
         login = loginForm.get();
 
-        if (login.getPassword().equals(adminPassword)) {
-            this.setAdminSession(login, Http.Context.current());
-        } else {
+        if (!login.getPassword().equals(adminPassword)) {
             loginForm.reject("Wrong E-Mail or Password");
+            return loginForm;
         }
 
         return loginForm;
+    }
+
+    public Session login(Form<LoginForm> loginForm) {
+        Session session = this.setAdminSession(Http.Context.current());
+        Http.Context.current().session().put(SESSION_FIELD_NAME, session.getId());
+        Http.Context.current().response().setHeader(SESSION_FIELD_NAME, session.getId());
+        return session;
     }
 
     public boolean logout() {
@@ -124,7 +133,7 @@ public class SessionService {
      */
     public boolean isLoggedIn(@NotNull Http.Context ctx) {
         Session session = this.getSession(ctx);
-        return session != null && !(session.getUserName() == null || session.getUserName().isEmpty());
+        return session != null && !(session.getUsername() == null || session.getUsername().isEmpty());
     }
 
     public void save(Session session) {

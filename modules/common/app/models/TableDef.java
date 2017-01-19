@@ -2,7 +2,6 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import models.submodels.ExtensionDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -31,7 +30,7 @@ public class TableDef extends BaseModel {
 
     @JsonIgnore
     @Embedded
-    public ExtensionDef extensionDef;
+    private ExtensionDef extensionDef;
 
     public TableDef() {
         this.columnDefList = new ArrayList<>();
@@ -60,6 +59,14 @@ public class TableDef extends BaseModel {
 
     public List<ColumnDef> getColumnDefList() {
         return columnDefList;
+    }
+
+    public ExtensionDef getExtensionDef() {
+        return extensionDef;
+    }
+
+    public void setExtensionDef(ExtensionDef extensionDef) {
+        this.extensionDef = extensionDef;
     }
 
     public void setColumnDefList(List<ColumnDef> columnDefList) {

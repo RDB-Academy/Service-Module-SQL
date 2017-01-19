@@ -1,15 +1,17 @@
-package parser;
+package sqlParser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SQLResultColumn {
+    private String alias;
     private String name;
     private String type;
 
     private List<String> data;
 
-    public SQLResultColumn(String name, String type) {
+    public SQLResultColumn(String alias, String name, String type) {
+        this.alias = alias;
         this.name = name;
         this.type = type;
         this.data = new ArrayList<>();
@@ -23,6 +25,14 @@ public class SQLResultColumn {
         SQLResultColumn that = (SQLResultColumn) o;
 
         return name.equals(that.name) && type.equals(that.type) && data.equals(that.data);
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getName() {

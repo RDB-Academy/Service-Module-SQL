@@ -1,5 +1,7 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -13,16 +15,26 @@ public class TaskTrialLog extends BaseModel {
     @Id
     private Long            id;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     private TaskTrial       taskTrial;
 
     private String          statement;
 
-    private LocalDateTime   submitted;
+    private boolean         isCorrect;
 
     private String          hintMessage;
 
     private String          errorMessage;
+
+    private LocalDateTime   submittedAt;
+
+    public TaskTrialLog() {
+        this.statement = "";
+
+        this.isCorrect = false;
+        this.submittedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -44,12 +56,12 @@ public class TaskTrialLog extends BaseModel {
         this.statement = statement;
     }
 
-    public LocalDateTime getSubmitted() {
-        return submitted;
+    public boolean getIsCorrect() {
+        return isCorrect;
     }
 
-    public void setSubmitted(LocalDateTime submitted) {
-        this.submitted = submitted;
+    public void setIsCorrect(boolean correct) {
+        isCorrect = correct;
     }
 
     public String getHintMessage() {
@@ -66,5 +78,13 @@ public class TaskTrialLog extends BaseModel {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public LocalDateTime getSubmittedAt() {
+        return submittedAt;
+    }
+
+    public void setSubmittedAt(LocalDateTime submittedAt) {
+        this.submittedAt = submittedAt;
     }
 }

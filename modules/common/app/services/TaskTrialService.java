@@ -1,16 +1,24 @@
 package services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import models.Session;
+import models.Task;
 import models.TaskTrial;
-import parser.SQLParser;
-import parser.SQLParserFactory;
-import parser.SQLResult;
+import models.TaskTrialLog;
+import sqlParser.connection.DBConnection;
+import sqlParser.connection.DBConnectionFactory;
+import sqlParser.SQLResult;
 import play.Logger;
+import play.libs.Json;
 import play.mvc.Http;
+import repository.TaskRepository;
 import repository.TaskTrialRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author fabiomazzone
@@ -18,18 +26,21 @@ import javax.inject.Singleton;
 @Singleton
 public class TaskTrialService {
     private final TaskTrialRepository taskTrialRepository;
-    private final SQLParserFactory sqlParserFactory;
+    private final DBConnectionFactory DBConnectionFactory;
     private final SessionService sessionService;
+    private final TaskRepository taskRepository;
 
     @Inject
     public TaskTrialService(
             TaskTrialRepository taskTrialRepository,
-            SQLParserFactory sqlParserFactory,
-            SessionService sessionService) {
+            DBConnectionFactory DBConnectionFactory,
+            SessionService sessionService,
+            TaskRepository taskRepository) {
 
         this.taskTrialRepository = taskTrialRepository;
-        this.sqlParserFactory = sqlParserFactory;
+        this.DBConnectionFactory = DBConnectionFactory;
         this.sessionService = sessionService;
+        this.taskRepository = taskRepository;
     }
 
     /**
@@ -38,7 +49,7 @@ public class TaskTrialService {
      */
     public TaskTrial create() {
         Session     session;
-        TaskTrial taskTrial;
+        TaskTrial   taskTrial;
 
         session = this.sessionService.getSession(Http.Context.current());
         if(session == null) {
@@ -48,19 +59,37 @@ public class TaskTrialService {
         taskTrial = session.getTaskTrial();
 
         if(taskTrial != null) {
-            if(!taskTrial.getIsFinished()) {
+            if( !taskTrial.getIsFinished()) {
                 return taskTrial;
             } else {
-                this.sqlParserFactory.deleteDatabase(taskTrial);
+                this.DBConnectionFactory.deleteDatabase(taskTrial);
             }
         }
 
-        taskTrial = this.taskTrialRepository.create();
+        JsonNode requestBody = Http.Context.current().request().body().asJson();
+        int difficulty = 0;
+        if(requestBody != null && requestBody.has("difficulty") && requestBody.get("difficulty").isInt()) {
+            difficulty = requestBody.get("difficulty").asInt();
+        }
+
+        Logger.debug("Difficulty: " + difficulty);
+
+        Task task;
+        List<Task> taskList = taskRepository.getTaskListByDifficulty(difficulty);
+
+        if(taskList != null && taskList.size() > 0){
+            Random random = new Random();
+            int taskListSize = taskList.size();
+            int taskListRand = random.nextInt(taskListSize);
+            task  = taskList.get(taskListRand);
+        } else {
+            task = taskRepository.getAll().get(0);
+        }
+
+        taskTrial = this.taskTrialRepository.create(task);
+        taskTrial = this.DBConnectionFactory.createParser(taskTrial);
 
         taskTrial.setSession(session);
-
-        taskTrial = this.sqlParserFactory.createParser(taskTrial);
-
         session.setTaskTrial(taskTrial);
 
         this.taskTrialRepository.save(taskTrial);
@@ -73,45 +102,89 @@ public class TaskTrialService {
         return this.taskTrialRepository.getById(id);
     }
 
+    /**
+     * validates the userStatement
+     * @param id the id of the taskTrial object
+     * @return returns the updated taskTrial object
+     */
     public TaskTrial validateStatement(Long id) {
-        TaskTrial taskTrial;
-        SQLParser sqlParser;
-        SQLResult sqlResult;
+        JsonNode        taskTrial_JsonNode;
+        TaskTrial       taskTrial;
+        TaskTrial       taskTrial_Json;
+        TaskTrialLog    taskTrialLog;
+        TaskTrialLog    taskTrialLog_Json;
+        DBConnection DBConnection;
+        SQLResult       sqlResult;
 
-        taskTrial = this.read(id);
+        taskTrial           = this.taskTrialRepository.getById(id);
+
         if(taskTrial == null) {
+            Logger.info("TaskTrial Object not found");
             return null;
         }
 
-        taskTrial = this.taskTrialRepository.refreshWithJson(
-                taskTrial,
-                Http.Context.current().request().body().asJson()
+        if(taskTrial.getIsFinished()) {
+            Logger.info("TaskTrial already finished");
+            return taskTrial;
+        }
+
+        taskTrial_JsonNode  = Http.Context.current().request().body().asJson();
+        taskTrial_Json      = Json.fromJson(
+                taskTrial_JsonNode,
+                TaskTrial.class
         );
 
-        if(taskTrial.getIsFinished()) {
+        if (taskTrial_Json.getIsFinished()) {
+            taskTrial.setIsFinished(taskTrial_Json.getIsFinished());
             taskTrial.save();
             return taskTrial;
         }
 
-        if(taskTrial.getUserStatement() == null || taskTrial.getUserStatement().isEmpty()) {
-            Logger.warn("Submitted Statement is null or Empty");
+        taskTrialLog        = new TaskTrialLog();
+        taskTrialLog_Json   = Json.fromJson(
+                taskTrial_JsonNode.get("taskTrialStatus"),
+                TaskTrialLog.class
+        );
+
+        if(taskTrialLog_Json == null) {
+            Logger.warn("Client didn't send a TaskTrialStatus");
+
+            return null;
+        }
+
+        taskTrial.addTaskTrialLog(taskTrialLog);
+
+        if(taskTrialLog_Json.getStatement() != null) {
+            taskTrialLog.setStatement(taskTrialLog_Json.getStatement().trim());
+        }
+
+        taskTrialLog.setSubmittedAt(LocalDateTime.now());
+
+        if(taskTrialLog.getStatement() == null
+                || taskTrialLog.getStatement().isEmpty()) {
+
+            Logger.warn("Submitted Statement is Empty");
+            taskTrialLog.setErrorMessage("Submitted Statement is Empty");
+
+            taskTrial.save();
             return taskTrial;
         }
 
-        Logger.debug("UserStatement is " + taskTrial.getUserStatement());
-
-        sqlParser = this.sqlParserFactory.getParser(taskTrial);
-        if(sqlParser == null) {
+        DBConnection = this.DBConnectionFactory.getParser(taskTrial);
+        if(DBConnection == null) {
             return null;
         }
-        sqlResult = sqlParser.submit(taskTrial);
+        sqlResult = DBConnection.submit(taskTrialLog);
 
-        taskTrial.stats.incrementTries();
+
+        taskTrialLog.setIsCorrect(sqlResult.isCorrect());
+        if(sqlResult.isCorrect()) {
+            taskTrial.setIsFinished(true);
+        }
+
         taskTrial.setResultSet(sqlResult.getAsResultSet());
-        taskTrial.setIsCorrect(sqlResult.isCorrect());
 
-
-        sqlParser.closeConnection();
+        DBConnection.closeConnection();
 
 
         taskTrial.save();
