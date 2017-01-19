@@ -5,7 +5,7 @@ version := "0.1"
 lazy val common = (project in file("modules/common")).enablePlugins(PlayJava, PlayEbean)
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, JDebPackaging)
   .dependsOn(common)
   .aggregate(common)
 
@@ -31,3 +31,20 @@ libraryDependencies ++= Seq(
   javaWs,
   "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3"
 )
+
+/// packageSummary
+import com.typesafe.sbt.packager.archetypes.ServerLoader.Upstart
+
+name in Debian := "sql-academy"
+
+maintainer in Linux := "Fabio Mazzone<fabio.mazzone@me.com>"
+
+packageSummary in Linux := "SQL.Academy"
+
+debianPackageDependencies in Debian ++= Seq("nginx", "mysql-server")
+
+serverLoading in Debian := Upstart
+
+daemonUser in Linux := normalizedName.value         // user which will execute the application
+
+daemonGroup in Linux := (daemonUser in Linux).value // group which will execute the application
