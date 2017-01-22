@@ -42,7 +42,7 @@ public class StackExchangeSchemaBuilder extends SchemaBuilder {
 
         //columns for post table
         ColumnDef           post_id                = this.createNewColumnDef("id", "INT");
-        ColumnDef           post_type              = this.createNewColumnDef("type", "INT");
+        ColumnDef           post_type              = this.createNewColumnDef("type", "VARCHAR(255)");
         ColumnDef           post_title             = this.createNewColumnDef("title", "VARCHAR(255)");
         ColumnDef           post_acceptedAnswer    = this.createNewColumnDef("acceptedAnswer", "BOOLEAN");
         ColumnDef           post_parent_id         = this.createNewColumnDef("parent_id", "INT");
@@ -57,7 +57,7 @@ public class StackExchangeSchemaBuilder extends SchemaBuilder {
         ColumnDef           comment_user_id        = this.createNewColumnDef("user_id", "INT");
         ColumnDef           comment_post_id        = this.createNewColumnDef("post_id", "INT");
         ColumnDef           comment_score          = this.createNewColumnDef("score", "INT");
-        ColumnDef           comment_text           = this.createNewColumnDef("text", "VARcHAR(255)");
+        ColumnDef           comment_text           = this.createNewColumnDef("text", "VARCHAR(255)");
         ColumnDef           comment_day            = this.createNewColumnDef("day", "INT");
         ColumnDef           comment_month          = this.createNewColumnDef("month", "INT");
         ColumnDef           comment_year           = this.createNewColumnDef("year", "INT");
@@ -148,7 +148,7 @@ public class StackExchangeSchemaBuilder extends SchemaBuilder {
         post_day.setMetaValueSet(ColumnDef.META_VALUE_SET_DAY);
         post_month.setMetaValueSet(ColumnDef.META_VALUE_SET_MONTH);
         post_year.setMetaValueSet(ColumnDef.META_VALUE_SET_YEAR);
-        post_owner_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
+        post_owner_id.setMetaValueSet(ColumnDef.META_VALUE_SET_FOREIGN_KEY);
         post_type.setMetaValueSet(ColumnDef.META_VALUE_SET_POSTTYPE);
         post_title.setMetaValueSet(ColumnDef.META_VALUE_SET_TITLE);
 
@@ -317,7 +317,7 @@ public class StackExchangeSchemaBuilder extends SchemaBuilder {
 
         userTask.setName("Find Tim");
         userTask.setText("Find Tim");
-        userTask.setReferenceStatement("SELECT * FROM user WHERE user_displayName = 'Tim';");
+        userTask.setReferenceStatement("SELECT * FROM user WHERE displayName = 'Tim';");
         userTask.setDifficulty(1);
         taskList.add(userTask);
 

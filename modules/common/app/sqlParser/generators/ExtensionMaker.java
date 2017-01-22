@@ -77,6 +77,11 @@ public class ExtensionMaker {
                 staticExtension.getExtensionList().forEach(entityList::add);
             }
 
+            List<String> idList = new ArrayList<>();
+            for (Map<String, String> temp : entityList) {
+                idList.add(temp.get("id"));
+            }
+
             //variables used for combined keys
             Long comp = columnDefList
                     .stream()
@@ -91,6 +96,7 @@ public class ExtensionMaker {
             //goes through row given
             for (int i = 0 ; i < entityCount; i++) {
                 Map<String, String> entityMap = new LinkedHashMap<>();
+
                 int comCount = 0;
 
                 //goes through column and fills it whit an random attribute according to its MetaValueSet
@@ -109,7 +115,7 @@ public class ExtensionMaker {
                                 value = gen(firstname);
                                 break;
                             case ColumnDef.META_VALUE_SET_FOREIGN_KEY:
-                                int number = random(this.idOffset, this.minEntities);
+                                int number = randomBetween((this.idOffset + staticExtensionSize), this.minEntities);
                                 value = "" + number;
                                 if (columnDef.isPrimary()) {
                                     comMember[comCount] = number - idOffset;
@@ -138,7 +144,10 @@ public class ExtensionMaker {
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_ID:
-                                value = String.valueOf(idOffset + staticExtensionSize + i);
+                                while(idList.contains(""+i)){
+                                    i++;
+                                }
+                                value = String.valueOf(idOffset  + i);
                                 break;
                             case ColumnDef.META_VALUE_SET_ANIMAL:
                                 value = gen(animal);

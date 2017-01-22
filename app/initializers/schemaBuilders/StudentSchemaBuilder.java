@@ -138,7 +138,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         extensionDef = new ExtensionDef();
 
         List<Map<String, String>> extensionList = Arrays.asList(
-                ImmutableMap.of("id", "0", "firstname", "Tilo","lastname", "Balke","field", "informations systems","birthday", "1976-04-09")
+                ImmutableMap.of("id", "33", "firstname", "Tilo","lastname", "Balke","field", "informations systems","birthday", "1976-04-09")
         );
 
         extensionDef.setExtensionList(extensionList);
