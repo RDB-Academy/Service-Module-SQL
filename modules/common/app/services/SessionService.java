@@ -61,6 +61,7 @@ public class SessionService {
         session.save();
 
         ctx.session().put(SESSION_FIELD_NAME, session.getId());
+        ctx.response().setHeader(SESSION_FIELD_NAME, session.getId());
 
         return session;
     }
