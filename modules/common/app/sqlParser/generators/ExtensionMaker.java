@@ -78,9 +78,9 @@ public class ExtensionMaker {
             }
 
             List<String> idList = new ArrayList<>();
-            for (Map<String, String> temp : entityList) {
+            entityList.stream().forEach((temp) -> {
                 idList.add(temp.get("id"));
-            }
+            });
 
             //variables used for combined keys
             Long comp = columnDefList
