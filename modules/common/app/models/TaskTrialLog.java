@@ -82,7 +82,7 @@ public class TaskTrialLog extends BaseModel {
     }
 
     public String getSubmittedAt() {
-        return submittedAt.format(DateTimeFormatter.ISO_DATE);
+        return submittedAt.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     public void setSubmittedAt(LocalDateTime submittedAt) {

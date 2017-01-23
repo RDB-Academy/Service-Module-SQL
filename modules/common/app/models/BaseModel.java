@@ -32,7 +32,7 @@ public abstract class BaseModel extends Model {
 
     @JsonGetter("createdAt")
     public String getCreatedAtFormat() {
-        return createdAt.format(DateTimeFormatter.ISO_DATE);
+        return createdAt.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @JsonIgnore
@@ -47,7 +47,7 @@ public abstract class BaseModel extends Model {
 
     @JsonGetter("modifiedAt")
     public String getModifiedAtFormat() {
-        return modifiedAt.format(DateTimeFormatter.ISO_DATE);
+        return (modifiedAt != null) ? modifiedAt.format(DateTimeFormatter.ISO_DATE_TIME) : null;
     }
 
     @JsonIgnore
