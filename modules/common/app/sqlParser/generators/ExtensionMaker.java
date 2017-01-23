@@ -70,17 +70,25 @@ public class ExtensionMaker {
             staticExtension = tableDef.getExtensionDef();
 
             entityList      = new ArrayList<>();
-            entityCount     = randomBetween(this.minEntities, this.maxEntities);
+
 
             if(staticExtension != null) {
                 staticExtensionSize = staticExtension.getExtensionList().size();
                 staticExtension.getExtensionList().forEach(entityList::add);
             }
 
-            List<String> idList = new ArrayList<>();
+            entityCount     = randomBetween((this.minEntities + staticExtensionSize), this.maxEntities);
+
+            List<String> usedIdList = new ArrayList<>();
             entityList.stream().forEach((temp) -> {
-                idList.add(temp.get("id"));
+                usedIdList.add(temp.get("id"));
             });
+            List<String> idList = new ArrayList<>();
+            for(int i = 0 ; i < entityCount; i++){
+                if(!usedIdList.contains(""+i)){
+                    idList.add(""+i);
+                }
+            }
 
             //variables used for combined keys
             Long comp = columnDefList
@@ -94,7 +102,7 @@ public class ExtensionMaker {
             boolean[][][] com3  = new boolean[entityCount][entityCount][entityCount];
 
             //goes through row given
-            for (int i = 0 ; i < entityCount; i++) {
+            for (int i = 0 ; i < entityCount - staticExtensionSize; i++) {
                 Map<String, String> entityMap = new LinkedHashMap<>();
 
                 int comCount = 0;
@@ -144,10 +152,7 @@ public class ExtensionMaker {
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_ID:
-                                while(idList.contains(""+i)){
-                                    i++;
-                                }
-                                value = String.valueOf(idOffset  + i);
+                                value = idList.get(i);
                                 break;
                             case ColumnDef.META_VALUE_SET_ANIMAL:
                                 value = gen(animal);
@@ -210,7 +215,9 @@ public class ExtensionMaker {
                                 value = gen(plant);
                                 break;
                             case ColumnDef.META_VALUE_SET_GRADE:
-                                value =  String.valueOf(random(10, 41) / 10);
+                                float ran = random(10, 41);
+                                float grade = ran /10;
+                                value =  String.valueOf(grade);
                                 break;
                             case ColumnDef.META_VALUE_SET_LOCATION:
                                 value = gen(country);

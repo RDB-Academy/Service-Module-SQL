@@ -49,7 +49,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
 
         ColumnDef           studentExam_student_id     = this.createNewColumnDef("student_id", "INT");
         ColumnDef           studentExam_exam_id        = this.createNewColumnDef("exam_id", "INT");
-        ColumnDef           studentExam_grade          = this.createNewColumnDef("grade", "INT");
+        ColumnDef           studentExam_grade          = this.createNewColumnDef("grade", "FLOAT");
         ForeignKey          studentExam_student        = this.createForeignKey("FK_StudentExam_Student");
         ForeignKey          studentExam_exam           = this.createForeignKey("FK_StudentExam_Exam");
         ForeignKeyRelation  studentExam_student_rel    = this.createForeignKeyRelation(studentExam_student_id, student_student_id);
@@ -138,7 +138,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         extensionDef = new ExtensionDef();
 
         List<Map<String, String>> extensionList = Arrays.asList(
-                ImmutableMap.of("id", "33", "firstname", "Tilo","lastname", "Balke","field", "informations systems","birthday", "1976-04-09")
+                ImmutableMap.of("id", "33", "firstname", "Tilo","lastname", "Balke","field", "information systems","birthday", "1976-04-09")
         );
 
         extensionDef.setExtensionList(extensionList);
@@ -157,13 +157,26 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(1);
+        task.setDifficulty(2);
         task.setText("What is the best grade in any exam.");
-        task.setReferenceStatement("SELECT max(grade) FROM exam;");
+        task.setReferenceStatement("SELECT min(grade) FROM student_exam;");
         taskList.add(task);
 
         task = new Task();
         task.setDifficulty(3);
+        task.setText("Please give the id, firstname and lastname of all students that took an exam.");
+        task.setReferenceStatement("SELECT s.id,s.lastname,s.firstname FROM student AS s JOIN student_exam AS se ON s.id = se.student_id");
+        taskList.add(task);
+
+        task = new Task();
+        task.setDifficulty(4);
+        task.setText("Which students(id,firstname,lastname) got the best available grads?");
+        task.setReferenceStatement("SELECT s.id, s.lastname, s.firstname FROM student AS s JOIN student_exam AS se ON s.id = se.student_id \n" +
+                "WHERE se.grade = (SELECT min(grade) FROM student_exam);");
+        taskList.add(task);
+
+        task = new Task();
+        task.setDifficulty(5);
         task.setText("Find all professors who aren't involved with any exam.");
         task.setReferenceStatement("select p.id\n" +
                 "from exam as e\n" +
@@ -172,13 +185,13 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(2);
+        task.setDifficulty(5);
         task.setText("Find all students by ids, who are born in november");
         task.setReferenceStatement("SELECT id FROM student WHERE birthday like '%-11-%';");
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(3);
+        task.setDifficulty(5);
         task.setText("Give me the firstname and lastname of the professor, who is overseeing the most exams.");
         task.setReferenceStatement("select p.firstname, p.lastname\n" +
                 "from professor as p\n" +

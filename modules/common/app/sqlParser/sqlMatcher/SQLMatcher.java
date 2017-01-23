@@ -37,8 +37,6 @@ public class SQLMatcher {
             );
         }
 
-        isCorrect = true;
-
         for (SQLResultColumn refResultColumn : refResultSet.getColumns()) {
 
             boolean columnValid = false;
@@ -58,8 +56,10 @@ public class SQLMatcher {
                     hintMessage = "Missing Column: " + refResultColumn.getAlias() + "("+ refResultColumn.getType()+ ")";
                     break;
                 }
-                hintMessage = (refResultColumn.getAlias() + " has not been filled adequately.");
+                hintMessage = "Query is not correct yet.";
                 break;
+            }else{
+                isCorrect = true;
             }
         }
 
