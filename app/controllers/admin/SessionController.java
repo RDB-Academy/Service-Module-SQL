@@ -54,9 +54,7 @@ public class SessionController extends Controller{
     }
 
     @Security.Authenticated(Authenticated.class)
-    public CompletionStage<Result> logout() {
-        return CompletableFuture
-                .supplyAsync(this.sessionService::logout, this.httpExecutionContext.current())
-                .thenApply((Boolean status) -> redirect(routes.SessionController.login()));
+    public Result logout() {
+        return redirect(routes.SessionController.login());
     }
 }

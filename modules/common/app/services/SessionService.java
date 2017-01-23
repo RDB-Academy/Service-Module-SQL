@@ -60,19 +60,17 @@ public class SessionService {
 
         session.save();
 
-        ctx.session().put(SESSION_FIELD_NAME, session.getId());
+        ctx.response().setHeader(SESSION_FIELD_NAME, session.getId());
 
         return session;
     }
 
     public Session getSession(Http.Context ctx) {
-        // Old Method
-        String sessionId = ctx.session().get(SESSION_FIELD_NAME);
+        String sessionId = null;
 
-        // new Method
-        String[] authKey = ctx.request().headers().get(SESSION_FIELD_NAME);
-        if(authKey != null && authKey.length == 1 && !authKey[0].isEmpty()) {
-            sessionId = authKey[0];
+        String[] authKeyHeader = ctx.request().headers().get(SESSION_FIELD_NAME);
+        if(authKeyHeader != null && authKeyHeader.length == 1 && !authKeyHeader[0].isEmpty()) {
+            sessionId = authKeyHeader[0];
         }
 
         if(sessionId == null || sessionId.isEmpty()) {
@@ -112,14 +110,8 @@ public class SessionService {
 
     public Session login(Form<LoginForm> loginForm) {
         Session session = this.setAdminSession(Http.Context.current());
-        Http.Context.current().session().put(SESSION_FIELD_NAME, session.getId());
         Http.Context.current().response().setHeader(SESSION_FIELD_NAME, session.getId());
         return session;
-    }
-
-    public boolean logout() {
-        Http.Context.current().session().clear();
-        return true;
     }
 
     public Form<LoginForm> getLoginForm() {
@@ -138,5 +130,13 @@ public class SessionService {
 
     public void save(Session session) {
         session.save();
+    }
+
+    public boolean logout() {
+        Session session = this.getSession(Http.Context.current());
+
+        //session.invalidate();
+
+        return true;
     }
 }

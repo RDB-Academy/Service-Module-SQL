@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author fabiomazzone
@@ -80,8 +81,8 @@ public class TaskTrialLog extends BaseModel {
         this.errorMessage = errorMessage;
     }
 
-    public LocalDateTime getSubmittedAt() {
-        return submittedAt;
+    public String getSubmittedAt() {
+        return submittedAt.format(DateTimeFormatter.ISO_DATE);
     }
 
     public void setSubmittedAt(LocalDateTime submittedAt) {
