@@ -17,6 +17,7 @@ import services.SessionService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
@@ -38,10 +39,6 @@ public class SchemaDefController extends Controller {
         this.schemaDefService = schemaDefService;
         this.httpExecutionContext = httpExecutionContext;
         this.sessionService = sessionService;
-    }
-
-    public Result test() {
-        return ok();
     }
 
     @Security.Authenticated(AdminAuthenticator.class)
@@ -70,6 +67,9 @@ public class SchemaDefController extends Controller {
     }
 
     public CompletionStage<Result> read(Long id) {
+        request().headers().forEach((k, v) -> {
+            System.out.println(k + " - " + Arrays.toString(v));
+        });
         return CompletableFuture
                 .supplyAsync(() -> this.schemaDefService.read(id), this.httpExecutionContext.current())
                 .thenApply(schemaDef -> {

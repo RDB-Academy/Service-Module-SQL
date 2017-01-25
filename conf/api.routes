@@ -13,7 +13,6 @@ PATCH   /task-trials/:id            controllers.api.TaskTrialController.update(i
 
 
 ## model.SchemaDef
-HEAD    /schema-defs                controllers.api.SchemaDefController.test()
 POST    /schema-defs                controllers.api.SchemaDefController.create()
 GET     /schema-defs                controllers.api.SchemaDefController.readAll()
 GET     /schema-defs/:id            controllers.api.SchemaDefController.read(id: Long)
