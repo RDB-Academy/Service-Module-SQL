@@ -67,9 +67,6 @@ public class SchemaDefController extends Controller {
     }
 
     public CompletionStage<Result> read(Long id) {
-        request().headers().forEach((k, v) -> {
-            System.out.println(k + " - " + Arrays.toString(v));
-        });
         return CompletableFuture
                 .supplyAsync(() -> this.schemaDefService.read(id), this.httpExecutionContext.current())
                 .thenApply(schemaDef -> {

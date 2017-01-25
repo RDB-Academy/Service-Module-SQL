@@ -21,12 +21,12 @@ loadEmberProject := {
   Seq("sh", "loadEmberProject.sh")!
 }
 
-lazy val dev = taskKey[Unit]("Deploy FrontEnt to this Project")
+/*lazy val dev = taskKey[Unit]("Deploy FrontEnt to this Project")
 
 dev := {
   println("Run Activator with FrontEnd")
   loadEmberProject.value
-}
+}*/
 
 
 libraryDependencies ++= Seq(

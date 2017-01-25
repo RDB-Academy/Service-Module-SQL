@@ -30,7 +30,3 @@ GET     /foreign-keys/:id           controllers.api.ForeignKeyController.read(id
 
 ## model.ForeignKeyRelation
 GET     /foreign-key-relations/:id  controllers.api.ForeignKeyRelationController.read(id: Long)
-
-## Stop from General Redirecting
-GET     /*file                      controllers.HomeController.notFoundView(file: String)
-

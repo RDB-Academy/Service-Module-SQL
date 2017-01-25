@@ -17,8 +17,3 @@ GET     /parserDel/:id              controllers.TestController.parserDelete(id :
 
 # API
 ->      /api                        api.Routes
-
-
-# Web
-GET     /                           controllers.Assets.at(path= "/public/dist", file="/index.html")
-GET     /*file                      controllers.HomeController.webApp(file: String)
