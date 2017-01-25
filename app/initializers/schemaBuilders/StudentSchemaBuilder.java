@@ -4,10 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
 import models.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ronja on 24.11.16.
@@ -129,6 +126,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         studentExamSchema.addForeignKey(exam_professor);
 
         professor.setExtensionDef(this.buildProfessorExtension());
+        exam.setExtensionDef(this.buildExamExtension());
 
         return studentExamSchema;
     }
@@ -146,33 +144,69 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         return extensionDef;
     }
 
+    private ExtensionDef buildExamExtension() {
+        ExtensionDef extensionDef;
+        extensionDef = new ExtensionDef();
+
+        Map<String, String> ext1 = new LinkedHashMap<>();
+        ext1.put("id", "21");
+        ext1.put("name", "RDB");
+        ext1.put("professor_id", "33");
+        ext1.put("day", "2");
+        ext1.put("month", "3");
+        ext1.put("year", "2016");
+
+        Map<String, String> ext2 = new LinkedHashMap<>();
+        ext2.put("id", "60");
+        ext2.put("name", "DW");
+        ext2.put("professor_id", "33");
+        ext2.put("day", "11");
+        ext2.put("month", "9");
+        ext2.put("year", "2016");
+        List<Map<String, String>> extensionList = Arrays.asList(
+                ext1,
+                ext2
+
+        );
+
+        extensionDef.setExtensionList(extensionList);
+
+        return extensionDef;
+    }
+
     @Override
     protected List<Task> buildTasks() {
         List<Task> taskList = new ArrayList<>();
 
         Task task = new Task();
-        task.setDifficulty(1);
-        task.setText("Find the professor with lastname Balke.");
+        task.setDifficulty(2);
+        task.setText("Find the professor(id) with lastname Balke.");
         task.setReferenceStatement("SELECT id FROM professor WHERE lastname = 'Balke';");
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(2);
-        task.setText("What is the best grade in any exam.");
+        task.setDifficulty(1);
+        task.setText("Select lastname, field in the table professor.");
+        task.setReferenceStatement("SELECT lastname, field FROM professor;");
+        taskList.add(task);
+
+        task = new Task();
+        task.setDifficulty(5);
+        task.setText("What is the best grade of all the exams.");
         task.setReferenceStatement("SELECT min(grade) FROM student_exam;");
         taskList.add(task);
 
         task = new Task();
         task.setDifficulty(3);
-        task.setText("Please give the id, firstname and lastname of all students that took an exam.");
+        task.setText("Please give the id, firstname and lastname of all students that took at least one exam.");
         task.setReferenceStatement("SELECT s.id,s.lastname,s.firstname FROM student AS s JOIN student_exam AS se ON s.id = se.student_id");
         taskList.add(task);
 
         task = new Task();
         task.setDifficulty(4);
-        task.setText("Which students(id,firstname,lastname) got the best available grads?");
+        task.setText("Which students(id,firstname,lastname) took an exam overseen by professor Balke?");
         task.setReferenceStatement("SELECT s.id, s.lastname, s.firstname FROM student AS s JOIN student_exam AS se ON s.id = se.student_id \n" +
-                "WHERE se.grade = (SELECT min(grade) FROM student_exam);");
+                "JOIN exam as e ON se.exam_id = e.id WHERE e.professor_id = (SELECT id FROM professor WHERE lastname = 'Balke');");
         taskList.add(task);
 
         task = new Task();
