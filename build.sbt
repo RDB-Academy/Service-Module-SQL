@@ -41,7 +41,7 @@ maintainer in Linux := "Fabio Mazzone<fabio.mazzone@me.com>"
 
 packageSummary in Linux := "SQL.Academy"
 
-debianPackageDependencies in Debian ++= Seq("nginx", "mysql-server")
+// debianPackageDependencies in Debian ++= Seq("nginx", "mysql-server")
 
 serverLoading in Debian := Upstart
 
