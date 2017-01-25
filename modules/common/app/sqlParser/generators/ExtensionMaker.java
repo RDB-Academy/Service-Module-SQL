@@ -70,11 +70,24 @@ public class ExtensionMaker {
             staticExtension = tableDef.getExtensionDef();
 
             entityList      = new ArrayList<>();
-            entityCount     = randomBetween(this.minEntities, this.maxEntities);
+
 
             if(staticExtension != null) {
                 staticExtensionSize = staticExtension.getExtensionList().size();
                 staticExtension.getExtensionList().forEach(entityList::add);
+            }
+
+            entityCount     = randomBetween((this.minEntities + staticExtensionSize), this.maxEntities);
+
+            List<String> usedIdList = new ArrayList<>();
+            entityList.stream().forEach((temp) -> {
+                usedIdList.add(temp.get("id"));
+            });
+            List<String> idList = new ArrayList<>();
+            for(int i = 0 ; i < entityCount; i++){
+                if(!usedIdList.contains(""+i)){
+                    idList.add(""+i);
+                }
             }
 
             //variables used for combined keys
@@ -89,8 +102,9 @@ public class ExtensionMaker {
             boolean[][][] com3  = new boolean[entityCount][entityCount][entityCount];
 
             //goes through row given
-            for (int i = 0 ; i < entityCount; i++) {
+            for (int i = 0 ; i < entityCount - staticExtensionSize; i++) {
                 Map<String, String> entityMap = new LinkedHashMap<>();
+
                 int comCount = 0;
 
                 //goes through column and fills it whit an random attribute according to its MetaValueSet
@@ -109,7 +123,7 @@ public class ExtensionMaker {
                                 value = gen(firstname);
                                 break;
                             case ColumnDef.META_VALUE_SET_FOREIGN_KEY:
-                                int number = random(this.idOffset, this.minEntities);
+                                int number = randomBetween((this.idOffset + staticExtensionSize), this.minEntities);
                                 value = "" + number;
                                 if (columnDef.isPrimary()) {
                                     comMember[comCount] = number - idOffset;
@@ -138,7 +152,7 @@ public class ExtensionMaker {
                                 }
                                 break;
                             case ColumnDef.META_VALUE_SET_ID:
-                                value = String.valueOf(idOffset + staticExtensionSize + i);
+                                value = idList.get(i);
                                 break;
                             case ColumnDef.META_VALUE_SET_ANIMAL:
                                 value = gen(animal);
@@ -201,7 +215,9 @@ public class ExtensionMaker {
                                 value = gen(plant);
                                 break;
                             case ColumnDef.META_VALUE_SET_GRADE:
-                                value =  String.valueOf(random(10, 41) / 10);
+                                float ran = random(10, 41);
+                                float grade = ran /10;
+                                value =  String.valueOf(grade);
                                 break;
                             case ColumnDef.META_VALUE_SET_LOCATION:
                                 value = gen(country);

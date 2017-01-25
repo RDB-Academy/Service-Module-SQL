@@ -4,10 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
 import models.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ronja on 24.11.16.
@@ -30,13 +27,13 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         ColumnDef           student_student_id         = this.createNewColumnDef("id", "INT");
         ColumnDef           student_student_firstname  = this.createNewColumnDef("firstname", "VARCHAR(255)");
         ColumnDef           student_student_lastname   = this.createNewColumnDef("lastname", "VARCHAR(255)");
-        ColumnDef           student_student_birthday   = this.createNewColumnDef("birthday", "Date");
+        ColumnDef           student_student_date_of_birth   = this.createNewColumnDef("date_of_birth", "Date");
 
         ColumnDef           professor_professor_id         = this.createNewColumnDef("id", "INT");
         ColumnDef           professor_professor_firstname  = this.createNewColumnDef("firstname", "VARCHAR(255)");
         ColumnDef           professor_professor_lastname   = this.createNewColumnDef("lastname", "VARCHAR(255)");
         ColumnDef           professor_professor_field      = this.createNewColumnDef("field", "VARCHAR(255)");
-        ColumnDef           professor_professor_birthday   = this.createNewColumnDef("birthday", "Date");
+        ColumnDef           professor_professor_date_of_birth   = this.createNewColumnDef("date_of_birth", "Date");
 
         ColumnDef           exam_exam_id               = this.createNewColumnDef("id", "INT");
         ColumnDef           exam_exam_professor_id        = this.createNewColumnDef("professor_id", "INT");
@@ -49,7 +46,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
 
         ColumnDef           studentExam_student_id     = this.createNewColumnDef("student_id", "INT");
         ColumnDef           studentExam_exam_id        = this.createNewColumnDef("exam_id", "INT");
-        ColumnDef           studentExam_grade          = this.createNewColumnDef("grade", "INT");
+        ColumnDef           studentExam_grade          = this.createNewColumnDef("grade", "FLOAT");
         ForeignKey          studentExam_student        = this.createForeignKey("FK_StudentExam_Student");
         ForeignKey          studentExam_exam           = this.createForeignKey("FK_StudentExam_Exam");
         ForeignKeyRelation  studentExam_student_rel    = this.createForeignKeyRelation(studentExam_student_id, student_student_id);
@@ -60,19 +57,19 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         student_student_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         student_student_firstname.setMetaValueSet(ColumnDef.META_VALUE_SET_FIRSTNAME);
         student_student_lastname.setMetaValueSet(ColumnDef.META_VALUE_SET_LASTNAME);
-        student_student_birthday.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
-        student_student_birthday.setMinValueSet(1980);
-        student_student_birthday.setMaxValueSet(1996);
+        student_student_date_of_birth.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
+        student_student_date_of_birth.setMinValueSet(1980);
+        student_student_date_of_birth.setMaxValueSet(1996);
 
         professor_professor_id.setPrimary(true);
         professor_professor_id.setNotNull(true);
         professor_professor_id.setMetaValueSet(ColumnDef.META_VALUE_SET_ID);
         professor_professor_firstname.setMetaValueSet(ColumnDef.META_VALUE_SET_FIRSTNAME);
         professor_professor_lastname.setMetaValueSet(ColumnDef.META_VALUE_SET_LASTNAME);
-        professor_professor_birthday.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
+        professor_professor_date_of_birth.setMetaValueSet(ColumnDef.META_VALUE_SET_DATE);
         professor_professor_field.setMetaValueSet(ColumnDef.META_VALUE_SET_STUDY);
-        professor_professor_birthday.setMinValueSet(1970);
-        professor_professor_birthday.setMaxValueSet(1988);
+        professor_professor_date_of_birth.setMinValueSet(1970);
+        professor_professor_date_of_birth.setMaxValueSet(1988);
 
         exam_exam_id.setPrimary(true);
         exam_exam_id.setNotNull(true);
@@ -95,13 +92,13 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         student.addColumnDef(student_student_id);
         student.addColumnDef(student_student_firstname);
         student.addColumnDef(student_student_lastname);
-        student.addColumnDef(student_student_birthday);
+        student.addColumnDef(student_student_date_of_birth);
 
         professor.addColumnDef(professor_professor_id);
         professor.addColumnDef(professor_professor_firstname);
         professor.addColumnDef(professor_professor_lastname);
         professor.addColumnDef(professor_professor_field);
-        professor.addColumnDef(professor_professor_birthday);
+        professor.addColumnDef(professor_professor_date_of_birth);
 
         exam.addColumnDef(exam_exam_id);
         exam.addColumnDef(exam_exam_name);
@@ -129,6 +126,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         studentExamSchema.addForeignKey(exam_professor);
 
         professor.setExtensionDef(this.buildProfessorExtension());
+        exam.setExtensionDef(this.buildExamExtension());
 
         return studentExamSchema;
     }
@@ -138,7 +136,37 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         extensionDef = new ExtensionDef();
 
         List<Map<String, String>> extensionList = Arrays.asList(
-                ImmutableMap.of("id", "0", "firstname", "Tilo","lastname", "Balke","field", "informations systems","birthday", "1976-04-09")
+                ImmutableMap.of("id", "33", "firstname", "Tilo","lastname", "Balke","field", "information systems","date_of_birth", "1976-04-09")
+        );
+
+        extensionDef.setExtensionList(extensionList);
+
+        return extensionDef;
+    }
+
+    private ExtensionDef buildExamExtension() {
+        ExtensionDef extensionDef;
+        extensionDef = new ExtensionDef();
+
+        Map<String, String> ext1 = new LinkedHashMap<>();
+        ext1.put("id", "21");
+        ext1.put("name", "RDB");
+        ext1.put("professor_id", "33");
+        ext1.put("day", "2");
+        ext1.put("month", "3");
+        ext1.put("year", "2016");
+
+        Map<String, String> ext2 = new LinkedHashMap<>();
+        ext2.put("id", "60");
+        ext2.put("name", "DW");
+        ext2.put("professor_id", "33");
+        ext2.put("day", "11");
+        ext2.put("month", "9");
+        ext2.put("year", "2016");
+        List<Map<String, String>> extensionList = Arrays.asList(
+                ext1,
+                ext2
+
         );
 
         extensionDef.setExtensionList(extensionList);
@@ -151,19 +179,38 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         List<Task> taskList = new ArrayList<>();
 
         Task task = new Task();
-        task.setDifficulty(1);
-        task.setText("Find the professor with lastname Balke.");
+        task.setDifficulty(2);
+        task.setText("Find the professor(id) with lastname Balke.");
         task.setReferenceStatement("SELECT id FROM professor WHERE lastname = 'Balke';");
         taskList.add(task);
 
         task = new Task();
         task.setDifficulty(1);
-        task.setText("What is the best grade in any exam.");
-        task.setReferenceStatement("SELECT max(grade) FROM exam;");
+        task.setText("Select lastname, field in the table professor.");
+        task.setReferenceStatement("SELECT lastname, field FROM professor;");
+        taskList.add(task);
+
+        task = new Task();
+        task.setDifficulty(5);
+        task.setText("What is the best grade of all the exams.");
+        task.setReferenceStatement("SELECT min(grade) FROM student_exam;");
         taskList.add(task);
 
         task = new Task();
         task.setDifficulty(3);
+        task.setText("Please give the id, firstname and lastname of all students that took at least one exam.");
+        task.setReferenceStatement("SELECT s.id,s.lastname,s.firstname FROM student AS s JOIN student_exam AS se ON s.id = se.student_id");
+        taskList.add(task);
+
+        task = new Task();
+        task.setDifficulty(4);
+        task.setText("Which students(id,firstname,lastname) took an exam supervised by professor Balke?");
+        task.setReferenceStatement("SELECT s.id, s.lastname, s.firstname FROM student AS s JOIN student_exam AS se ON s.id = se.student_id \n" +
+                "JOIN exam as e ON se.exam_id = e.id WHERE e.professor_id = (SELECT id FROM professor WHERE lastname = 'Balke');");
+        taskList.add(task);
+
+        task = new Task();
+        task.setDifficulty(5);
         task.setText("Find all professors who aren't involved with any exam.");
         task.setReferenceStatement("select p.id\n" +
                 "from exam as e\n" +
@@ -172,13 +219,13 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(2);
+        task.setDifficulty(5);
         task.setText("Find all students by ids, who are born in november");
-        task.setReferenceStatement("SELECT id FROM student WHERE birthday like '%-11-%';");
+        task.setReferenceStatement("SELECT id FROM student WHERE date_of_birth like '%-11-%';");
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(3);
+        task.setDifficulty(5);
         task.setText("Give me the firstname and lastname of the professor, who is overseeing the most exams.");
         task.setReferenceStatement("select p.firstname, p.lastname\n" +
                 "from professor as p\n" +

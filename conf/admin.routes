@@ -3,8 +3,6 @@
 ## Home
 GET     /                           controllers.admin.HomeController.index()
 
-->      /api                        admin.api.Routes
-
 ## Login
 GET     /login                      controllers.admin.SessionController.login()
 POST    /login                      controllers.admin.SessionController.authenticate()

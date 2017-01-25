@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.WhenModified;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
@@ -24,8 +25,14 @@ public abstract class BaseModel extends Model {
         this.createdAt = LocalDateTime.now();
     }
 
+    @JsonIgnore
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonGetter("createdAt")
+    public String getCreatedAtFormat() {
+        return createdAt.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @JsonIgnore
@@ -33,12 +40,20 @@ public abstract class BaseModel extends Model {
         return formatter.DateFormatter.fromNow(this.createdAt);
     }
 
+    @JsonIgnore
     public LocalDateTime getModifiedAt() {
         return modifiedAt;
+    }
+
+    @JsonGetter("modifiedAt")
+    public String getModifiedAtFormat() {
+        return (modifiedAt != null) ? modifiedAt.format(DateTimeFormatter.ISO_DATE_TIME) : null;
     }
 
     @JsonIgnore
     public String getModifiedAtFromNow() {
         return formatter.DateFormatter.fromNow(this.modifiedAt);
     }
+
+
 }

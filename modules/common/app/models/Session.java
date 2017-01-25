@@ -65,4 +65,8 @@ public class Session extends BaseModel {
     public void setTaskTrial(TaskTrial taskTrial) {
         this.taskTrial = taskTrial;
     }
+
+    public boolean isAdmin() {
+        return this.username != null && this.username.equals("admin");
+    }
 }
