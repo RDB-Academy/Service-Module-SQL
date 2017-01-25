@@ -204,7 +204,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
 
         task = new Task();
         task.setDifficulty(4);
-        task.setText("Which students(id,firstname,lastname) took an exam overseen by professor Balke?");
+        task.setText("Which students(id,firstname,lastname) took an exam supervised by professor Balke?");
         task.setReferenceStatement("SELECT s.id, s.lastname, s.firstname FROM student AS s JOIN student_exam AS se ON s.id = se.student_id \n" +
                 "JOIN exam as e ON se.exam_id = e.id WHERE e.professor_id = (SELECT id FROM professor WHERE lastname = 'Balke');");
         taskList.add(task);
