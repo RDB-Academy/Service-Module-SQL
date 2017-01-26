@@ -15,7 +15,6 @@ import java.util.concurrent.CompletionStage;
 /**
  * @author fabiomazzone
  */
-@Security.Authenticated(Authenticated.class)
 public class SchemaDefController extends Controller {
     private final SchemaDefService schemaDefService;
     private final HttpExecutionContext httpExecutionContext;

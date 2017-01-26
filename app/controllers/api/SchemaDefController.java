@@ -60,7 +60,7 @@ public class SchemaDefController extends Controller {
         return CompletableFuture
                 .supplyAsync(this.schemaDefService::readAll, this.httpExecutionContext.current())
                 .thenApply(schemaDefList ->
-                        ok(Json.toJson(schemaDefList.parallelStream()
+                        ok(Json.toJson(schemaDefList.stream()
                                 .map(this::transform)
                                 .collect(Collectors.toList())))
                 );

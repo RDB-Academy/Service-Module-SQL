@@ -24,12 +24,12 @@ class DevelopmentInitializer {
     
     private void init() {
         List<SchemaBuilder> schemaBuilders = Arrays.asList(
-                //new HeroSchemaBuilder(),
-                new StudentSchemaBuilder()
-                /**new LibrarySchemaBuilder(),
+                new HeroSchemaBuilder(),
+                new StudentSchemaBuilder(),
+                new LibrarySchemaBuilder(),
                 new FootballSchemaBuilder(),
                 new BasketballSchemaBuilder(),
-                new StackExchangeSchemaBuilder()**/
+                new StackExchangeSchemaBuilder()
         );
 
         List<SchemaDef> schemaDefList = schemaBuilders.parallelStream()
