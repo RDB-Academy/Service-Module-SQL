@@ -25,6 +25,9 @@ public class SchemaDef extends BaseModel {
     private String name;
 
     @JsonIgnore
+    private boolean available = true;
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
     private List<TableDef> tableDefList;
 
@@ -50,6 +53,14 @@ public class SchemaDef extends BaseModel {
 
     public void setName(String name) {
         this.name = name.trim();
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public List<TableDef> getTableDefList() {

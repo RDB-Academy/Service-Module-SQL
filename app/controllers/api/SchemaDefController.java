@@ -61,7 +61,7 @@ public class SchemaDefController extends Controller {
                 .supplyAsync(this.schemaDefService::readAll, this.httpExecutionContext.current())
                 .thenApply(schemaDefList ->
                         ok(Json.toJson(schemaDefList.stream()
-                                .map(this::transform)
+                                .map(this::transformMin)
                                 .collect(Collectors.toList())))
                 );
     }
@@ -93,7 +93,27 @@ public class SchemaDefController extends Controller {
                 });
     }
 
-    public ObjectNode transform(SchemaDef schemaDef) {
+    private ObjectNode transformMin(SchemaDef schemaDef) {
+        ObjectNode schemaDefNode = Json.newObject();
+        ObjectNode reactionNode = Json.newObject();
+
+        reactionNode.put("+1", 2131);
+        reactionNode.put("-1", 1555);
+        reactionNode.put("self", "+1");
+
+        schemaDefNode.put("id", schemaDef.getId());
+        schemaDefNode.put("name", schemaDef.getName());
+        schemaDefNode.put("available", schemaDef.isAvailable());
+
+        schemaDefNode.set("reactions", reactionNode);
+
+        schemaDefNode.put("createdAt", schemaDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+
+        return schemaDefNode;
+    }
+
+    private ObjectNode transform(SchemaDef schemaDef) {
         ObjectNode schemaDefNode = Json.newObject();
 
         ArrayNode tableDefIds = Json.newArray();
