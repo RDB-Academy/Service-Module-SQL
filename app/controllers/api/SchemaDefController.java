@@ -17,7 +17,6 @@ import services.SessionService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
@@ -61,7 +60,7 @@ public class SchemaDefController extends Controller {
                 .supplyAsync(this.schemaDefService::readAll, this.httpExecutionContext.current())
                 .thenApply(schemaDefList ->
                         ok(Json.toJson(schemaDefList.stream()
-                                .map(this::transformMin)
+                                .map(this::transformBase)
                                 .collect(Collectors.toList())))
                 );
     }
@@ -75,7 +74,7 @@ public class SchemaDefController extends Controller {
                     }
                     Session session = this.sessionService.getSession(Http.Context.current());
                     if (session != null && session.isAdmin()) {
-                        ok(transform(schemaDef));
+                        return ok(transform(schemaDef));
                     }
                     return ok(Json.toJson(schemaDef));
                 });
@@ -93,19 +92,24 @@ public class SchemaDefController extends Controller {
                 });
     }
 
-    private ObjectNode transformMin(SchemaDef schemaDef) {
-        ObjectNode schemaDefNode = Json.newObject();
+    private ObjectNode reactionNode() {
         ObjectNode reactionNode = Json.newObject();
 
         reactionNode.put("+1", 2131);
         reactionNode.put("-1", 1555);
         reactionNode.put("self", "+1");
 
+        return reactionNode;
+    }
+
+    private ObjectNode transformBase(SchemaDef schemaDef) {
+        ObjectNode schemaDefNode = Json.newObject();
+
         schemaDefNode.put("id", schemaDef.getId());
         schemaDefNode.put("name", schemaDef.getName());
         schemaDefNode.put("available", schemaDef.isAvailable());
 
-        schemaDefNode.set("reactions", reactionNode);
+        schemaDefNode.set("reactions", reactionNode());
 
         schemaDefNode.put("createdAt", schemaDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
         schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
@@ -113,26 +117,32 @@ public class SchemaDefController extends Controller {
         return schemaDefNode;
     }
 
+    private ObjectNode transformTableDefBase(TableDef tableDef) {
+        ObjectNode tableDefNode = Json.newObject();
+
+        tableDefNode.put("id", tableDef.getId());
+        tableDefNode.put("name", tableDef.getName());
+
+        return tableDefNode;
+    }
+
     private ObjectNode transform(SchemaDef schemaDef) {
-        ObjectNode schemaDefNode = Json.newObject();
+        ObjectNode schemaDefNode = transformBase(schemaDef);
+        ObjectNode relationNode = Json.newObject();
 
         ArrayNode tableDefIds = Json.newArray();
         ArrayNode foreignKeyIds = Json.newArray();
         ArrayNode taskIds = Json.newArray();
 
-        schemaDef.getTableDefList().parallelStream().map(TableDef::getId).forEach(tableDefIds::add);
-        schemaDef.getForeignKeyList().parallelStream().map(ForeignKey::getId).forEach(foreignKeyIds::add);
-        schemaDef.getTaskList().parallelStream().map(Task::getId).forEach(taskIds::add);
+        schemaDef.getTableDefList().stream().map(this::transformTableDefBase).forEach(tableDefIds::add);
+        schemaDef.getForeignKeyList().stream().map(ForeignKey::getId).forEach(foreignKeyIds::add);
+        schemaDef.getTaskList().stream().map(Task::getId).forEach(taskIds::add);
 
-        schemaDefNode.put("id", schemaDef.getId());
-        schemaDefNode.put("name", schemaDef.getName());
+        relationNode.set("tableDefList", tableDefIds);
+        relationNode.set("foreignKeyList", foreignKeyIds);
+        relationNode.set("taskList", taskIds);
 
-        schemaDefNode.set("tableDefList", tableDefIds);
-        schemaDefNode.set("foreignKeyList", foreignKeyIds);
-        schemaDefNode.set("taskList", taskIds);
-
-        schemaDefNode.put("createdAt", schemaDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
-        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        schemaDefNode.set("relations", relationNode);
 
         return schemaDefNode;
     }
