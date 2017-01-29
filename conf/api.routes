@@ -16,6 +16,7 @@ PATCH   /task-trials/:id            controllers.api.TaskTrialController.update(i
 POST    /schema-defs                controllers.api.SchemaDefController.create()
 GET     /schema-defs                controllers.api.SchemaDefController.readAll()
 GET     /schema-defs/:id            controllers.api.SchemaDefController.read(id: Long)
+PATCH   /schema-defs/:id            controllers.api.SchemaDefController.update(id: Long)
 DELETE  /schema-defs/:id            controllers.api.SchemaDefController.delete(id: Long)
 
 

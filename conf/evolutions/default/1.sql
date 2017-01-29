@@ -41,6 +41,7 @@ create table schema_def (
   id                            bigint auto_increment not null,
   created_at                    timestamp,
   name                          varchar(255) not null,
+  active                        boolean,
   available                     boolean,
   modified_at                   timestamp not null,
   constraint uq_schema_def_name unique (name),

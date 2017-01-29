@@ -1,9 +1,12 @@
 package services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import models.SchemaDef;
 import models.TableDef;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
+import play.mvc.Http;
 import repository.SchemaDefRepository;
 
 import javax.inject.Inject;
@@ -73,24 +76,29 @@ public class SchemaDefService extends Service {
     }
 
     public Form<SchemaDef> update(Long id) {
-        SchemaDef schemaDef = this.read(id);
-        Form<SchemaDef> schemaDefForm = this.getForm().bindFromRequest();
+        SchemaDef schemaDef             = this.read(id);
+        Form<SchemaDef> schemaDefForm   = this.getForm().bindFromRequest();
 
         if(schemaDef == null) {
             schemaDefForm.reject(Service.formErrorNotFound, "SchemaDef Not Found");
             return schemaDefForm;
         }
 
-        if(schemaDefForm.hasErrors()) {
-            return schemaDefForm;
+        schemaDefForm.discardErrors();
+
+        JsonNode schemaDefPatchNode = Http.Context.current().request().body().asJson();
+
+        if(schemaDefPatchNode.has("name") && schemaDefPatchNode.get("name").isTextual()) {
+            String name = schemaDefPatchNode.get("name").asText();
+            if (!name.isEmpty()) {
+                schemaDef.setName(name);
+            }
         }
 
-        if(schemaDefForm.get().getName() == null || schemaDefForm.get().getName().isEmpty()) {
-            schemaDefForm.reject("Name", "SchemaDef must be named");
-            return schemaDefForm;
+        if(schemaDefPatchNode.has("available") && schemaDefPatchNode.get("available").isBoolean()) {
+            boolean available  = schemaDefPatchNode.get("available").asBoolean();
+            schemaDef.setAvailable(available);
         }
-
-        schemaDef.setName(schemaDefForm.get().getName());
 
         this.schemaDefRepository.save(schemaDef);
 

@@ -25,7 +25,10 @@ public class SchemaDef extends BaseModel {
     private String name;
 
     @JsonIgnore
-    private boolean available = true;
+    private boolean active = true;
+
+    @JsonIgnore
+    private boolean available;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
@@ -55,12 +58,21 @@ public class SchemaDef extends BaseModel {
         this.name = name.trim();
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public boolean isAvailable() {
         return available;
     }
 
     public void setAvailable(boolean available) {
         this.available = available;
+        this.active = available;
     }
 
     public List<TableDef> getTableDefList() {

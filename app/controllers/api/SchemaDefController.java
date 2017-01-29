@@ -80,6 +80,19 @@ public class SchemaDefController extends Controller {
                 });
     }
 
+    public CompletionStage<Result> update(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> this.schemaDefService.update(id), this.httpExecutionContext.current())
+                .thenApply(schemaDefForm -> {
+                   if(schemaDefForm.hasErrors()) {
+                       Logger.warn(schemaDefForm.errorsAsJson().toString());
+                       return badRequest(schemaDefForm.errorsAsJson());
+                   }
+                   SchemaDef schemaDef = this.schemaDefService.read(id);
+                   return ok(transform(schemaDef));
+                });
+    }
+
     @Security.Authenticated(AdminAuthenticator.class)
     public CompletionStage<Result> delete(Long id) {
         return CompletableFuture
@@ -107,6 +120,7 @@ public class SchemaDefController extends Controller {
 
         schemaDefNode.put("id", schemaDef.getId());
         schemaDefNode.put("name", schemaDef.getName());
+        schemaDefNode.put("active", schemaDef.isActive());
         schemaDefNode.put("available", schemaDef.isAvailable());
 
         schemaDefNode.set("reactions", reactionNode());
