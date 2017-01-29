@@ -120,10 +120,9 @@ public class SchemaDefController extends Controller {
 
         schemaDefNode.put("id", schemaDef.getId());
         schemaDefNode.put("name", schemaDef.getName());
-        schemaDefNode.put("active", schemaDef.isActive());
         schemaDefNode.put("available", schemaDef.isAvailable());
 
-        schemaDefNode.set("reactions", reactionNode());
+        // schemaDefNode.set("reactions", reactionNode());
 
         schemaDefNode.put("createdAt", schemaDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
         schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
