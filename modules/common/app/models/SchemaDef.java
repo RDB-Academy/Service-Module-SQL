@@ -25,7 +25,7 @@ public class SchemaDef extends BaseModel {
     private String name;
 
     @JsonIgnore
-    private boolean available;
+    private boolean available = true;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "schemaDef")
