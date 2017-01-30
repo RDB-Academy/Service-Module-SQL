@@ -5,15 +5,14 @@ name := """rdb-academy-sql"""
 
 version := "0.1-alpha"
 
-lazy val common = (project in file("modules/common")).enablePlugins(PlayJava, PlayEbean)
+scalaVersion := "2.11.8"
+
+lazy val commonModule = (project in file("modules/common")).enablePlugins(PlayJava, PlayEbean)
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayJava, DebianPlugin)
-  .dependsOn(common)
-  .aggregate(common)
-
-
-scalaVersion := "2.11.8"
+  .dependsOn(commonModule)
+  .aggregate(commonModule)
 
 lazy val loadEmberProject = taskKey[Unit]("Test")
 loadEmberProject := {
