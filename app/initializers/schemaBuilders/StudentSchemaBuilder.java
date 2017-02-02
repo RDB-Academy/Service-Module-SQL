@@ -179,7 +179,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         List<Task> taskList = new ArrayList<>();
 
         Task task = new Task();
-        task.setDifficulty(2);
+        task.setDifficulty(1);
         task.setText("Find the professor(id) with lastname Balke.");
         task.setReferenceStatement("SELECT id FROM professor WHERE lastname = 'Balke';");
         taskList.add(task);
@@ -191,26 +191,26 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(5);
+        task.setDifficulty(2);
         task.setText("What is the best grade of all the exams.");
         task.setReferenceStatement("SELECT min(grade) FROM student_exam;");
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(3);
+        task.setDifficulty(2);
         task.setText("Please give the id, firstname and lastname of all students that took at least one exam.");
         task.setReferenceStatement("SELECT s.id,s.lastname,s.firstname FROM student AS s JOIN student_exam AS se ON s.id = se.student_id");
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(4);
+        task.setDifficulty(3);
         task.setText("Which students(id,firstname,lastname) took an exam supervised by professor Balke?");
         task.setReferenceStatement("SELECT s.id, s.lastname, s.firstname FROM student AS s JOIN student_exam AS se ON s.id = se.student_id \n" +
                 "JOIN exam as e ON se.exam_id = e.id WHERE e.professor_id = (SELECT id FROM professor WHERE lastname = 'Balke');");
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(5);
+        task.setDifficulty(4);
         task.setText("Find all professors who aren't involved with any exam.");
         task.setReferenceStatement("select p.id\n" +
                 "from exam as e\n" +
@@ -219,7 +219,7 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         taskList.add(task);
 
         task = new Task();
-        task.setDifficulty(5);
+        task.setDifficulty(2);
         task.setText("Find all students by ids, who are born in november");
         task.setReferenceStatement("SELECT id FROM student WHERE date_of_birth like '%-11-%';");
         taskList.add(task);
