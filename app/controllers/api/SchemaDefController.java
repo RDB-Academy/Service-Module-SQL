@@ -104,7 +104,7 @@ public class SchemaDefController extends Controller {
                     return ok();
                 });
     }
-    
+
     private ObjectNode transformBase(SchemaDef schemaDef) {
         ObjectNode schemaDefNode = Json.newObject();
 
