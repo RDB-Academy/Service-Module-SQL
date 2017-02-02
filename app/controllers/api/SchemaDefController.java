@@ -104,17 +104,7 @@ public class SchemaDefController extends Controller {
                     return ok();
                 });
     }
-
-    private ObjectNode reactionNode() {
-        ObjectNode reactionNode = Json.newObject();
-
-        reactionNode.put("+1", 2131);
-        reactionNode.put("-1", 1555);
-        reactionNode.put("self", "+1");
-
-        return reactionNode;
-    }
-
+    
     private ObjectNode transformBase(SchemaDef schemaDef) {
         ObjectNode schemaDefNode = Json.newObject();
 
