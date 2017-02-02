@@ -56,6 +56,7 @@ public class ExtensionMaker {
 
     public List<String> buildStatements() {
         Map<String, List<Map<String, String>>>  extensionByTableMap = new LinkedHashMap<>();
+        Map<String, List<String>>  idTableMap = new LinkedHashMap<>();
 
         //goes through every given table
         for (TableDef tableDef : schemaDef.getTableDefList()) {
@@ -71,7 +72,6 @@ public class ExtensionMaker {
 
             entityList      = new ArrayList<>();
 
-
             if(staticExtension != null) {
                 staticExtensionSize = staticExtension.getExtensionList().size();
                 staticExtension.getExtensionList().forEach(entityList::add);
@@ -79,6 +79,7 @@ public class ExtensionMaker {
 
             entityCount     = randomBetween((this.minEntities + staticExtensionSize), this.maxEntities);
 
+            System.out.println("Start: " + tableDef.getName());
             List<String> usedIdList = new ArrayList<>();
             entityList.stream().forEach((temp) -> {
                 usedIdList.add(temp.get("id"));
@@ -89,6 +90,12 @@ public class ExtensionMaker {
                     idList.add(""+i);
                 }
             }
+            //List of all used ids
+            List<String> fullIdList = new ArrayList<>();
+            fullIdList.addAll(idList);
+            fullIdList.addAll(usedIdList);
+            idTableMap.put(tableDef.getName(), fullIdList);
+
 
             //variables used for combined keys
             Long comp = columnDefList
@@ -124,7 +131,7 @@ public class ExtensionMaker {
                                 break;
                             case ColumnDef.META_VALUE_SET_FOREIGN_KEY:
                                 int number = randomBetween((this.idOffset + staticExtensionSize), this.minEntities);
-                                value = "" + number;
+                                value = idTableMap.get(columnDef.getForeignKeyRelationsSource().get(0).getTargetColumn().getTableDef().getName()).get(number);
                                 if (columnDef.isPrimary()) {
                                     comMember[comCount] = number - idOffset;
                                     comCount++;

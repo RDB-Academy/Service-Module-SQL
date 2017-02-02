@@ -137,9 +137,7 @@ public class ColumnDef extends BaseModel {
         return foreignKeyRelationsSource;
     }
 
-    public List<ForeignKeyRelation> getForeignKeyRelationsTarget() {
-        return foreignKeyRelationsTarget;
-    }
+    public List<ForeignKeyRelation> getForeignKeyRelationsTarget() { return foreignKeyRelationsTarget; }
 
     public int getMetaValueSet() {
         return metaValueSet;

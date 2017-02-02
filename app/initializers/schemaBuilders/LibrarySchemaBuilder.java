@@ -93,16 +93,16 @@ public class LibrarySchemaBuilder extends SchemaBuilder {
         Task task = new Task();
         task.setText("List all customers by their ID and the amount of books they have purchased.");
         task.setReferenceStatement("SELECT customer_id, count(book_id) FROM customer_book GROUP BY customer_id ORDER BY count(book_id) DESC;");
-        task.setDifficulty(3);
+        task.setDifficulty(2);
         taskList.add(task);
 
         task = new Task();
         task.setText("Which customers (id,firstname,lastname) have bought more than 2 books.");
-        task.setReferenceStatement("SELECT customer_id, firstname, lastname\n" +
+        task.setReferenceStatement("Select id, firstname, lastname FROM customer as c Join (SELECT customer_id\n" +
                 " FROM customer_book \n" +
                 " GROUP BY customer_id\n" +
-                " HAVING count(book_id) > 1;");
-        task.setDifficulty(3);
+                " HAVING count(book_id) > 1) as co ON c.id=co.customer_id;");
+        task.setDifficulty(4);
         taskList.add(task);
 
         task = new Task();
