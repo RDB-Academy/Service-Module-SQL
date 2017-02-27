@@ -49,9 +49,6 @@ public class SessionController extends Controller {
         return CompletableFuture
                 .supplyAsync(this.sessionService::logout, this.httpExecutionContext.current())
                 .thenApply((status) -> {
-                    if(request().accepts(Http.MimeTypes.TEXT)) {
-                        redirect(controllers.admin.routes.SessionController.login());
-                    }
                     return ok("{}");
                 });
     }

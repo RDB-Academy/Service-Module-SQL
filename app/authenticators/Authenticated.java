@@ -1,10 +1,8 @@
 package authenticators;
 
-import controllers.routes;
 import models.Session;
 import play.Logger;
 import play.libs.Json;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -34,9 +32,7 @@ public class Authenticated extends Security.Authenticator {
     @Override
     public Result onUnauthorized(Http.Context ctx) {
         Logger.info("Unauthorized Action");
-        if(ctx.request().accepts(Http.MimeTypes.HTML)) {
-            return redirect(controllers.admin.routes.SessionController.login());
-        } else if (ctx.request().accepts(Http.MimeTypes.JSON)){
+        if (ctx.request().accepts(Http.MimeTypes.JSON)){
             return unauthorized(Json.toJson("{}"));
         }
         return unauthorized();

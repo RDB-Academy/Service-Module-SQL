@@ -7,13 +7,6 @@
 GET     /ser                        controllers.TestController.ser()
 GET     /test/                      controllers.TestController.test()
 GET     /table/                     controllers.TestController.testTableMaker()
-GET     /parserCre                  controllers.TestController.parserCreate()
-GET     /parserGet/:id              controllers.TestController.parserGet(id :Long)
-GET     /parserDel/:id              controllers.TestController.parserDelete(id :Long)
-
-# Admin
-->      /admin                      admin.Routes
-->      /admin/                     admin.Routes
 
 # API
 ->      /api                        api.Routes
