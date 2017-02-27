@@ -65,12 +65,10 @@ public class TableMaker {
     }
 
     private String breakDownColumnDef(ColumnDef columnDef) {
-        String create = " "
+        return " "
                 + columnDef.getName() + " "
                 + columnDef.getDataType()
                 + ((columnDef.isNotNull()) ? " NOT NULL" : " ");
-
-        return create;
     }
 
     private String addPrimaryKeys(List<String> primaryKeys) {

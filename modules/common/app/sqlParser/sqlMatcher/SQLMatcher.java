@@ -12,7 +12,7 @@ public class SQLMatcher {
 
     public static SQLResult match(SQLResultSet userResultSet, SQLResultSet refResultSet) {
         boolean     isCorrect       = false;
-        String      errorMessage    = null;
+        String      errorMessage;
         String      hintMessage     = null;
 
         if(userResultSet.getErrorMessage() != null) {

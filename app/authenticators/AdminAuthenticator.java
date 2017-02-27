@@ -12,7 +12,7 @@ import javax.inject.Inject;
  *  @author Fabio Mazzone
  */
 public class AdminAuthenticator extends Security.Authenticator {
-    private SessionService sessionService;
+    private final SessionService sessionService;
 
     @Inject
     public AdminAuthenticator(SessionService sessionService) {

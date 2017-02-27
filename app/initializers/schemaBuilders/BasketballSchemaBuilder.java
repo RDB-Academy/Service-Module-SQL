@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by carl on 21.12.16.
+ * @author Carl Schiller
  */
 public class BasketballSchemaBuilder  extends SchemaBuilder {
 

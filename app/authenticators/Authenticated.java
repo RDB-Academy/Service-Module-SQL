@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * @author fabiomazzone
  */
 public class Authenticated extends Security.Authenticator {
-    private SessionService sessionService;
+    private final SessionService sessionService;
 
     @Inject
     public Authenticated(SessionService sessionService) {

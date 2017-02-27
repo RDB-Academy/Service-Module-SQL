@@ -3,7 +3,6 @@ package services;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.SchemaDef;
 import models.TableDef;
-import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
@@ -29,15 +28,11 @@ public class SchemaDefService extends Service {
         this.formFactory = formFactory;
     }
 
-
     /**
-     * This function returns a new Creation Form for a new schemaDef
-     * @return a new Creation Form for a new schemaDef
+     * Returns a new SchemaDefModel
+     *
+     * @return the new created SchemaDefModel
      */
-    public Form<SchemaDef> createAsForm() {
-        return this.formFactory.form(SchemaDef.class);
-    }
-
     public Form<SchemaDef> create() {
         Form<SchemaDef> schemaDefForm = this.getForm().bindFromRequest();
 
@@ -63,16 +58,6 @@ public class SchemaDefService extends Service {
 
     public List<SchemaDef> readAll() {
         return this.schemaDefRepository.getAll();
-    }
-
-    public Form<SchemaDef> readAsForm(Long id) {
-        SchemaDef schemaDef = this.read(id);
-
-        if(schemaDef == null) {
-            return null;
-        }
-
-        return this.formFactory.form(SchemaDef.class).fill(schemaDef);
     }
 
     public Form<SchemaDef> update(Long id) {

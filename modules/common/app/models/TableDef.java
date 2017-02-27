@@ -49,7 +49,7 @@ public class TableDef extends BaseModel {
         this.name = name;
     }
 
-    public SchemaDef getSchemaDef() {
+    private SchemaDef getSchemaDef() {
         return schemaDef;
     }
 

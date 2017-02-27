@@ -21,7 +21,7 @@ public abstract class BaseModel extends Model {
     @WhenModified
     private LocalDateTime modifiedAt;
 
-    public BaseModel() {
+    BaseModel() {
         this.createdAt = LocalDateTime.now();
     }
 

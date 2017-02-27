@@ -135,8 +135,8 @@ public class StudentSchemaBuilder extends SchemaBuilder {
         ExtensionDef extensionDef;
         extensionDef = new ExtensionDef();
 
-        List<Map<String, String>> extensionList = Arrays.asList(
-                ImmutableMap.of("id", "33", "firstname", "Tilo","lastname", "Balke","field", "information systems","date_of_birth", "1976-04-09")
+        List<Map<String, String>> extensionList = Collections.singletonList(
+                ImmutableMap.of("id", "33", "firstname", "Tilo", "lastname", "Balke", "field", "information systems", "date_of_birth", "1976-04-09")
         );
 
         extensionDef.setExtensionList(extensionList);

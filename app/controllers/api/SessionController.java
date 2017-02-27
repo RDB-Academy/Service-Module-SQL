@@ -6,7 +6,6 @@ import play.data.Form;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.Result;
 import services.SessionService;
 
@@ -48,8 +47,6 @@ public class SessionController extends Controller {
     public CompletionStage<Result> logout() {
         return CompletableFuture
                 .supplyAsync(this.sessionService::logout, this.httpExecutionContext.current())
-                .thenApply((status) -> {
-                    return ok("{}");
-                });
+                .thenApply((status) -> ok("{}"));
     }
 }

@@ -2,7 +2,6 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
@@ -72,7 +71,7 @@ public class ForeignKey extends BaseModel {
 
     @JsonGetter("foreignKeyRelations")
     public List<Long> getForeignKeyRelationIds() {
-        return foreignKeyRelationList.stream().map(foreignKeyRelation -> foreignKeyRelation.getId()).collect(Collectors.toList());
+        return foreignKeyRelationList.stream().map(ForeignKeyRelation::getId).collect(Collectors.toList());
     }
 
     @JsonGetter("schemaDef")

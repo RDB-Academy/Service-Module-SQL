@@ -1,8 +1,5 @@
 package controllers;
 
-import models.Task;
-import models.TaskTrial;
-import sqlParser.connection.DBConnection;
 import sqlParser.connection.DBConnectionFactory;
 import sqlParser.generators.ExtensionMaker;
 
@@ -26,10 +23,6 @@ import java.util.Random;
  */
 public class TestController extends Controller {
     private final SchemaDefRepository   schemaDefRepository;
-    private final DBConnectionFactory DBConnectionFactory;
-    private final TaskTrialService taskTrialService;
-    private final TaskTrialRepository   taskTrialRepository;
-    private final TaskRepository        taskRepository;
 
     @Inject
     public TestController(
@@ -40,10 +33,10 @@ public class TestController extends Controller {
             TaskRepository taskRepository) {
 
         this.schemaDefRepository = schemaDefRepository;
-        this.DBConnectionFactory = DBConnectionFactory;
-        this.taskTrialService = taskTrialService;
-        this.taskTrialRepository = taskTrialRepository;
-        this.taskRepository = taskRepository;
+        sqlParser.connection.DBConnectionFactory DBConnectionFactory1 = DBConnectionFactory;
+        TaskTrialService taskTrialService1 = taskTrialService;
+        TaskTrialRepository taskTrialRepository1 = taskTrialRepository;
+        TaskRepository taskRepository1 = taskRepository;
     }
 
     public Result ser() {
@@ -55,17 +48,13 @@ public class TestController extends Controller {
             System.out.println(schemaDef.getName());
             schemaDef.getTableDefList().forEach(tableDef -> {
                 System.out.println("  - " + tableDef.getName());
-                tableDef.getColumnDefList().forEach(columnDef -> {
-                    System.out.println("    - " + columnDef.getName());
-                });
+                tableDef.getColumnDefList().forEach(columnDef -> System.out.println("    - " + columnDef.getName()));
                 System.out.println();
 
                 if (tableDef.getExtensionDef() != null) {
-                    tableDef.getExtensionDef().getExtensionList().forEach(entity -> {
-                        entity.forEach((k, v) -> {
-                            System.out.println("    - " + k + "=" + v);
-                        });
-                    });
+                    tableDef.getExtensionDef().getExtensionList().forEach(entity -> entity.forEach((k, v) -> {
+                        System.out.println("    - " + k + "=" + v);
+                    }));
                     System.out.println();
                 }
             });

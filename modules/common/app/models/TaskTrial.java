@@ -75,7 +75,7 @@ public class TaskTrial extends BaseModel {
         this.session = session;
     }
 
-    public List<TaskTrialLog> getTaskTrialLogList() {
+    private List<TaskTrialLog> getTaskTrialLogList() {
         return taskTrialLogList;
     }
 

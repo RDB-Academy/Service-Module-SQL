@@ -114,7 +114,7 @@ public class SessionService {
         return session;
     }
 
-    public Form<LoginForm> getLoginForm() {
+    private Form<LoginForm> getLoginForm() {
         return this.formFactory.form(LoginForm.class);
     }
 

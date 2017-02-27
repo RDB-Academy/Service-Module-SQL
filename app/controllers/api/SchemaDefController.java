@@ -33,13 +33,19 @@ public class SchemaDefController extends Controller {
     @Inject
     public SchemaDefController(
             SchemaDefService schemaDefService,
-            HttpExecutionContext httpExecutionContext, SessionService sessionService) {
+            HttpExecutionContext httpExecutionContext,
+            SessionService sessionService) {
 
         this.schemaDefService = schemaDefService;
         this.httpExecutionContext = httpExecutionContext;
         this.sessionService = sessionService;
     }
 
+    /**
+     * API Endpoint for POST /api/schemaDef
+     *
+     * @return returns the status of the action
+     */
     @Security.Authenticated(AdminAuthenticator.class)
     public CompletionStage<Result> create() {
         return CompletableFuture
