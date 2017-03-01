@@ -1,9 +1,12 @@
 package controllers.api;
 
+import models.Session;
+import models.TaskTrial;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.SessionService;
 import services.TaskTrialService;
 
 import javax.inject.Inject;
@@ -14,27 +17,43 @@ import java.util.concurrent.CompletionStage;
  * @author invisible
  */
 public class TaskTrialController extends Controller {
-    private final TaskTrialService taskTrialService;
     private final HttpExecutionContext httpExecutionContext;
+    private final SessionService sessionService;
+    private final TaskTrialService taskTrialService;
 
     @Inject
     public TaskTrialController(
-            TaskTrialService taskTrialService,
-            HttpExecutionContext httpExecutionContext){
+            HttpExecutionContext    httpExecutionContext,
+            SessionService          sessionService,
+            TaskTrialService        taskTrialService){
 
-        this.taskTrialService = taskTrialService;
         this.httpExecutionContext = httpExecutionContext;
+        this.sessionService = sessionService;
+        this.taskTrialService = taskTrialService;
+
     }
 
-    public CompletionStage<Result> create() {
-        return CompletableFuture
-                .supplyAsync(this.taskTrialService::create, this.httpExecutionContext.current())
-                .thenApply(taskTrial -> {
-                    if(taskTrial == null) {
-                        return internalServerError();
-                    }
-                    return ok(Json.toJson(taskTrial));
-                });
+    /**
+     * API Endpoint
+     *  POST /taskTrial
+     *
+     * @return returns an status code with a message
+     */
+    public Result create() {
+        Session session = this.sessionService.getSession(request());
+        if(session == null) {
+            return unauthorized();
+        }
+
+        if(session.isAdmin()) {
+
+        }
+        TaskTrial taskTrial = this.taskTrialService.create();
+
+        if(taskTrial == null) {
+            return internalServerError();
+        }
+        return ok(Json.toJson(taskTrial));
     }
 
     public CompletionStage<Result> read(Long id) {

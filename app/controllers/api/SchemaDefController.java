@@ -1,6 +1,7 @@
 package controllers.api;
 
 import authenticators.AdminAuthenticator;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
@@ -17,6 +18,7 @@ import services.SessionService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
@@ -61,14 +63,18 @@ public class SchemaDefController extends Controller {
     }
 
     @Security.Authenticated(AdminAuthenticator.class)
-    public CompletionStage<Result> readAll() {
-        return CompletableFuture
-                .supplyAsync(this.schemaDefService::readAll, this.httpExecutionContext.current())
-                .thenApply(schemaDefList ->
-                        ok(Json.toJson(schemaDefList.stream()
-                                .map(this::transformBase)
-                                .collect(Collectors.toList())))
-                );
+    public Result readAll() {
+        Session session = this.sessionService.getSession(request());
+
+        if(session == null) {
+            return unauthorized();
+        }
+
+        List<SchemaDef> schemaDefList = this.schemaDefService.readAll();
+
+        List<JsonNode> jsonNodeList = schemaDefList.stream().map(this::transformBase).collect(Collectors.toList());
+
+        return ok(Json.toJson(jsonNodeList));
     }
 
     public CompletionStage<Result> read(Long id) {

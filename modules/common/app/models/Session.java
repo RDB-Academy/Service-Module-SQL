@@ -69,4 +69,8 @@ public class Session extends BaseModel {
     public boolean isAdmin() {
         return this.username != null && this.username.equals("admin");
     }
+
+    public boolean isValid() {
+        return true;
+    }
 }

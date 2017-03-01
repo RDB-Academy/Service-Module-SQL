@@ -51,7 +51,7 @@ public class TaskTrialService {
         Session     session;
         TaskTrial   taskTrial;
 
-        session = this.sessionService.getSession(Http.Context.current());
+        session = this.sessionService.getSession(Http.Context.current().request());
         if(session == null) {
             session = this.sessionService.createSession(Http.Context.current());
         }

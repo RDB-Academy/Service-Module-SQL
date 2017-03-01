@@ -4,6 +4,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
 import play.Configuration;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
@@ -12,6 +13,7 @@ import repository.SessionRepository;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 
 /**
  * @author fabiomazzone
@@ -65,6 +67,31 @@ public class SessionService {
         return session;
     }
 
+    /**
+     * returns a session object to the given request
+     *
+     * @param request the request
+     * @return returns the session object if a valid session matches the request, else returns null
+     */
+    public Session getSession(@NotNull  Http.Request request) {
+        Session session;
+        String  sessionKey = request.getHeader(SESSION_FIELD_NAME);
+
+        // Check Session Key
+        if(sessionKey == null || sessionKey.isEmpty()) {
+            return null;
+        }
+
+        // Get Session by Key & check a session was found
+        session = this.sessionRepository.getById(sessionKey);
+        if(session == null || !session.isValid()) {
+            return null;
+        }
+
+        return session;
+    }
+
+    @Deprecated
     public Session getSession(Http.Context ctx) {
         String sessionId = null;
 
