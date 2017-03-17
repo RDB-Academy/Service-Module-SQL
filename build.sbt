@@ -14,19 +14,8 @@ lazy val root = (project in file("."))
   .dependsOn(commonModule)
   .aggregate(commonModule)
 
-lazy val loadEmberProject = taskKey[Unit]("Test")
-loadEmberProject := {
-  import sys.process._
-  Seq("sh", "loadEmberProject.sh")!
-}
-
-/*lazy val dev = taskKey[Unit]("Deploy FrontEnt to this Project")
-
-dev := {
-  println("Run Activator with FrontEnd")
-  loadEmberProject.value
-}*/
-
+javacOptions := Seq("-Xlint:deprecation")
+scalacOptions := Seq("-unchecked", "-deprecation")
 
 libraryDependencies ++= Seq(
   cache,
