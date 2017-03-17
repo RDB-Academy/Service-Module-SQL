@@ -4,7 +4,6 @@ import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
 import play.Configuration;
-import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
@@ -13,7 +12,6 @@ import repository.SessionRepository;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
 
 /**
  * @author fabiomazzone
@@ -73,7 +71,7 @@ public class SessionService {
      * @param request the request
      * @return returns the session object if a valid session matches the request, else returns null
      */
-    public Session getSession(@NotNull  Http.Request request) {
+    public Session getSession(@NotNull Http.Request request) {
         Session session;
         String  sessionKey = request.getHeader(SESSION_FIELD_NAME);
 
@@ -85,28 +83,6 @@ public class SessionService {
         // Get Session by Key & check a session was found
         session = this.sessionRepository.getById(sessionKey);
         if(session == null || !session.isValid()) {
-            return null;
-        }
-
-        return session;
-    }
-
-    @Deprecated
-    public Session getSession(Http.Context ctx) {
-        String sessionId = null;
-
-        String[] authKeyHeader = ctx.request().headers().get(SESSION_FIELD_NAME);
-        if(authKeyHeader != null && authKeyHeader.length == 1 && !authKeyHeader[0].isEmpty()) {
-            sessionId = authKeyHeader[0];
-        }
-
-        if(sessionId == null || sessionId.isEmpty()) {
-            return null;
-        }
-
-        Session session = sessionRepository.getById(sessionId);
-
-        if (session == null) {
             return null;
         }
 
@@ -151,8 +127,19 @@ public class SessionService {
      * @return returns true if this is a authenticated Session
      */
     public boolean isLoggedIn(@NotNull Http.Context ctx) {
-        Session session = this.getSession(ctx);
+        Session session = this.getSession(ctx.request());
         return session != null && !(session.getUsername() == null || session.getUsername().isEmpty());
+    }
+
+    /**
+     * this functions checks if the current session is an admin-session
+     *
+     * @param session a valid session object
+     * @return returns true if is admin or false
+     */
+    public boolean isAdmin(@NotNull Session session) {
+        // ToDo
+        return session.getUsername() != null && session.getUsername().equals("admin");
     }
 
     public void save(Session session) {
@@ -160,7 +147,7 @@ public class SessionService {
     }
 
     public boolean logout() {
-        Session session = this.getSession(Http.Context.current());
+        Session session = this.getSession(Http.Context.current().request());
 
         //session.invalidate();
 

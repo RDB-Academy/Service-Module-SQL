@@ -45,7 +45,7 @@ public class TaskTrialController extends Controller {
             return unauthorized();
         }
 
-        if(session.isAdmin()) {
+        if(sessionService.isAdmin(session)) {
 
         }
         TaskTrial taskTrial = this.taskTrialService.create();

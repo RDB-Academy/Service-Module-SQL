@@ -1,50 +1,24 @@
 package repository;
 
-import com.avaje.ebean.Model;
-import com.google.inject.Singleton;
+import com.google.inject.ImplementedBy;
 import models.Task;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
+ * Interface for Task database interactions
+ *
  * @author fabiomazzone
  */
-@Singleton
-public class TaskRepository {
-    private Model.Finder<Long, Task> find = new Model.Finder<>(Task.class);
+@ImplementedBy(TaskRepositoryEbean.class)
+public interface TaskRepository {
 
-    public List<Task> getAll() {
-        return this.find.all();
-    }
+    List<Task> getAll();
 
-    public List<Task> getTaskListByDifficulty(int difficulty) {
-        List<Task> taskList = find.where().eq("difficulty", difficulty).findList();
+    Task getById(Long id);
 
-        while((taskList == null || taskList.size() == 0) && difficulty > 0) {
-            difficulty--;
-            taskList = find.where().eq("difficulty", difficulty).findList();
-        }
+    List<Task> getTaskListByDifficulty(int difficulty);
 
-        if(taskList == null || taskList.size() == 0) {
-            taskList = find.all();
-        }
-
-        return taskList;
-    }
-    /**
-     *
-     * @param id ID of the Task Object
-     * @return returns the Task Object or Null
-     */
-    @Nullable
-    public Task getById(Long id) {
-        return this.find.byId(id);
-    }
-
-    public void save(Task task) {
-        task.save();
-    }
-
-
+    void save(Task task);
 }
+

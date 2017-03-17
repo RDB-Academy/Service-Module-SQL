@@ -1,18 +1,22 @@
 package repository;
 
-import com.avaje.ebean.Model;
+import com.google.inject.ImplementedBy;
 import models.Session;
 
-import javax.inject.Singleton;
+import javax.validation.constraints.NotNull;
 
 /**
- * @author fabiomazzone
+ * Interfaces for Session database access
+ *
+ * @author Fabio Mazzone
  */
-@Singleton
-public class SessionRepository {
-    private Model.Finder<String, Session> find = new Model.Finder<>(Session.class);
-
-    public Session getById(String sessionId) {
-        return find.byId(sessionId);
-    }
+@ImplementedBy(SessionRepositoryEbean.class)
+public interface SessionRepository {
+    /**
+     * select session entity by id
+     * @param sessionId a session Id
+     * @return returns a session object or null
+     */
+    Session getById(@NotNull String sessionId);
 }
+

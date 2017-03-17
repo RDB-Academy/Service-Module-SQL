@@ -84,8 +84,8 @@ public class SchemaDefController extends Controller {
                     if(schemaDef == null) {
                         return notFound();
                     }
-                    Session session = this.sessionService.getSession(Http.Context.current());
-                    if (session != null && session.isAdmin()) {
+                    Session session = this.sessionService.getSession(Http.Context.current().request());
+                    if (session != null && sessionService.isAdmin(session)) {
                         return ok(transform(schemaDef));
                     }
                     return ok(Json.toJson(schemaDef));

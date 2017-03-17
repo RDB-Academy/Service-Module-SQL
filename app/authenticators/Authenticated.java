@@ -23,7 +23,7 @@ public class Authenticated extends Security.Authenticator {
 
     @Override
     public String getUsername(Http.Context ctx) {
-        Session session = this.sessionService.getSession(ctx);
+        Session session = this.sessionService.getSession(ctx.request());
         if(session == null) return null;
         return (session.getUsername() != null
                 && session.getUsername().equals("admin")) ? session.getUsername() : null;

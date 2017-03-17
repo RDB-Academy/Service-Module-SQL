@@ -58,9 +58,9 @@ public class TaskController extends Controller {
                     if(task == null) {
                         return notFound();
                     }
-                    Session session = this.sessionService.getSession(Http.Context.current());
+                    Session session = this.sessionService.getSession(Http.Context.current().request());
 
-                    if(session != null && session.isAdmin()) {
+                    if(session != null && sessionService.isAdmin(session)) {
                         return ok(transform(task));
                     }
                     return ok(Json.toJson(task));

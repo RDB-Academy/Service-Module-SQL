@@ -21,8 +21,8 @@ public class AdminAuthenticator extends Security.Authenticator {
 
     @Override
     public String getUsername(Http.Context ctx) {
-        Session session = this.sessionService.getSession(ctx);
-        return (session != null && session.isAdmin())? session.getUsername() : null;
+        Session session = this.sessionService.getSession(ctx.request());
+        return (session != null && sessionService.isAdmin(session))? session.getUsername() : null;
     }
 
     @Override

@@ -43,8 +43,8 @@ public class ForeignKeyRelationController extends Controller {
                     if(foreignKeyRelation == null) {
                         return notFound();
                     }
-                    Session session = this.sessionService.getSession(Http.Context.current());
-                    if(session != null && session.isAdmin()) {
+                    Session session = this.sessionService.getSession(Http.Context.current().request());
+                    if(session != null && sessionService.isAdmin(session)) {
                         return ok(transform(foreignKeyRelation));
                     }
                     return ok(Json.toJson(foreignKeyRelation));
