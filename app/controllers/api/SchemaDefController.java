@@ -1,6 +1,7 @@
 package controllers.api;
 
-import authenticators.AdminAuthenticator;
+import authenticators.ActiveSessionAuthenticator;
+import authenticators.AdminSessionAuthenticator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -8,7 +9,6 @@ import models.*;
 import play.Logger;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -27,20 +27,19 @@ import java.util.stream.Collectors;
  * @author fabiomazzone
  */
 @Singleton
-public class SchemaDefController extends Controller {
+public class SchemaDefController extends RootController {
     private final SchemaDefService schemaDefService;
     private final HttpExecutionContext httpExecutionContext;
-    private final SessionService sessionService;
 
     @Inject
     public SchemaDefController(
             SchemaDefService schemaDefService,
             HttpExecutionContext httpExecutionContext,
             SessionService sessionService) {
+        super(sessionService);
 
         this.schemaDefService = schemaDefService;
         this.httpExecutionContext = httpExecutionContext;
-        this.sessionService = sessionService;
     }
 
     /**
@@ -48,7 +47,7 @@ public class SchemaDefController extends Controller {
      *
      * @return returns the status of the action
      */
-    @Security.Authenticated(AdminAuthenticator.class)
+    @Security.Authenticated(AdminSessionAuthenticator.class)
     public CompletionStage<Result> create() {
         return CompletableFuture
                 .supplyAsync(this.schemaDefService::create, this.httpExecutionContext.current())
@@ -62,21 +61,22 @@ public class SchemaDefController extends Controller {
                 });
     }
 
-    @Security.Authenticated(AdminAuthenticator.class)
+    @Security.Authenticated(AdminSessionAuthenticator.class)
     public Result readAll() {
-        Session session = this.sessionService.getSession(request());
-
-        if(session == null) {
-            return unauthorized();
-        }
-
-        List<SchemaDef> schemaDefList = this.schemaDefService.readAll();
-
-        List<JsonNode> jsonNodeList = schemaDefList.stream().map(this::transformBase).collect(Collectors.toList());
+        List<SchemaDef> schemaDefList   = this.schemaDefService.readAll();
+        List<JsonNode>  jsonNodeList    = schemaDefList
+                .stream()
+                .map(
+                        this::transformBase
+                )
+                .collect(
+                        Collectors.toList()
+                );
 
         return ok(Json.toJson(jsonNodeList));
     }
 
+    @Security.Authenticated(ActiveSessionAuthenticator.class)
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.schemaDefService.read(id), this.httpExecutionContext.current())
@@ -84,7 +84,10 @@ public class SchemaDefController extends Controller {
                     if(schemaDef == null) {
                         return notFound();
                     }
-                    Session session = this.sessionService.getSession(Http.Context.current().request());
+                    String sessionId = Http.Context.current()
+                                    .request()
+                                    .getHeader(SessionService.SESSION_FIELD_NAME);
+                    Session session = this.sessionService.findActiveSessionById(sessionId);
                     if (session != null && sessionService.isAdmin(session)) {
                         return ok(transform(schemaDef));
                     }
@@ -92,6 +95,7 @@ public class SchemaDefController extends Controller {
                 });
     }
 
+    @Security.Authenticated(AdminSessionAuthenticator.class)
     public CompletionStage<Result> update(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.schemaDefService.update(id), this.httpExecutionContext.current())
@@ -105,7 +109,7 @@ public class SchemaDefController extends Controller {
                 });
     }
 
-    @Security.Authenticated(AdminAuthenticator.class)
+    @Security.Authenticated(AdminSessionAuthenticator.class)
     public CompletionStage<Result> delete(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.schemaDefService.delete(id), this.httpExecutionContext.current())

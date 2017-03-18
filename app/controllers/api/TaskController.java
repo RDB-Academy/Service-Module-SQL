@@ -1,13 +1,12 @@
 package controllers.api;
 
-import authenticators.AdminAuthenticator;
+import authenticators.AdminSessionAuthenticator;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 import models.Session;
 import models.Task;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -24,23 +23,23 @@ import java.util.stream.Collectors;
  * @author fabiomazzone
  */
 @Singleton
-public class TaskController extends Controller {
+public class TaskController extends RootController {
     private final TaskService taskService;
     private final HttpExecutionContext httpExecutionContext;
-    private final SessionService sessionService;
 
     @Inject
     public TaskController(
             TaskService taskService,
             HttpExecutionContext httpExecutionContext,
-            SessionService sessionService) {
+            SessionService sessionService)
+    {
+        super(sessionService);
 
         this.taskService = taskService;
         this.httpExecutionContext = httpExecutionContext;
-        this.sessionService = sessionService;
     }
 
-    @Security.Authenticated(AdminAuthenticator.class)
+    @Security.Authenticated(AdminSessionAuthenticator.class)
     public CompletionStage<Result> readAll() {
         return CompletableFuture
                 .supplyAsync(this.taskService::readAll, this.httpExecutionContext.current())
@@ -58,7 +57,7 @@ public class TaskController extends Controller {
                     if(task == null) {
                         return notFound();
                     }
-                    Session session = this.sessionService.getSession(Http.Context.current().request());
+                    Session session = this.getSession(Http.Context.current().request());
 
                     if(session != null && sessionService.isAdmin(session)) {
                         return ok(transform(task));

@@ -15,4 +15,9 @@ public class SessionRepositoryEbean implements SessionRepository {
     public Session getById(String sessionId) {
         return find.byId(sessionId);
     }
+
+    @Override
+    public void save(Session session) {
+        find.db().save(session);
+    }
 }

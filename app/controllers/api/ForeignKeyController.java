@@ -1,5 +1,6 @@
 package controllers.api;
 
+import authenticators.ActiveSessionAuthenticator;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.ForeignKey;
@@ -7,9 +8,9 @@ import models.ForeignKeyRelation;
 import models.Session;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.mvc.Security;
 import services.ForeignKeyService;
 import services.SessionService;
 
@@ -23,21 +24,22 @@ import java.util.concurrent.CompletionStage;
  * @author Sören
  */
 @Singleton
-public class ForeignKeyController extends Controller {
+public class ForeignKeyController extends RootController {
     private final ForeignKeyService foreignKeyService;
     private final HttpExecutionContext httpExecutionContext;
-    private final SessionService sessionService;
 
     @Inject
     public ForeignKeyController(
             ForeignKeyService foreignKeyService,
-            HttpExecutionContext httpExecutionContext, SessionService sessionService) {
+            HttpExecutionContext httpExecutionContext,
+            SessionService sessionService) {
+        super(sessionService);
 
         this.foreignKeyService = foreignKeyService;
         this.httpExecutionContext = httpExecutionContext;
-        this.sessionService = sessionService;
     }
 
+    @Security.Authenticated(ActiveSessionAuthenticator.class)
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.foreignKeyService.read(id), this.httpExecutionContext.current())
@@ -45,7 +47,7 @@ public class ForeignKeyController extends Controller {
                     if(foreignKey == null) {
                         return notFound();
                     }
-                    Session session = this.sessionService.getSession(Http.Context.current().request());
+                    Session session = this.getSession(Http.Context.current().request());
                     if(session != null && sessionService.isAdmin(session)) {
                         return ok(transform(foreignKey));
                     }

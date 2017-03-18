@@ -8,7 +8,6 @@ import models.Session;
 import models.TableDef;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import services.SessionService;
@@ -23,19 +22,19 @@ import java.util.concurrent.CompletionStage;
  * @author invisible
  */
 @Singleton
-public class TableDefController extends Controller {
+public class TableDefController extends RootController {
     private final TableDefService tableDefService;
     private final HttpExecutionContext httpExecutionContext;
-    private final SessionService sessionService;
 
     @Inject
     public TableDefController(
             TableDefService tableDefService,
-            HttpExecutionContext httpExecutionContext, SessionService sessionService) {
+            HttpExecutionContext httpExecutionContext,
+            SessionService sessionService) {
+        super(sessionService);
 
         this.tableDefService = tableDefService;
         this.httpExecutionContext = httpExecutionContext;
-        this.sessionService = sessionService;
     }
 
 
@@ -46,7 +45,7 @@ public class TableDefController extends Controller {
                     if(tableDef == null) {
                         return notFound();
                     }
-                    Session session = this.sessionService.getSession(Http.Context.current().request());
+                    Session session = this.getSession(Http.Context.current().request());
                     if(session != null && sessionService.isAdmin(session)) {
                         return ok(transform(tableDef));
                     }

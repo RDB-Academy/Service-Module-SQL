@@ -1,13 +1,14 @@
 package controllers.api;
 
+import authenticators.ActiveSessionAuthenticator;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.ForeignKeyRelation;
 import models.Session;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.mvc.Security;
 import services.ForeignKeyRelationService;
 import services.SessionService;
 
@@ -21,21 +22,23 @@ import java.util.concurrent.CompletionStage;
  * @author invisible
  */
 @Singleton
-public class ForeignKeyRelationController extends Controller {
+public class ForeignKeyRelationController extends RootController {
     private final ForeignKeyRelationService foreignKeyRelationService;
     private final HttpExecutionContext httpExecutionContext;
-    private final SessionService sessionService;
 
     @Inject
     public ForeignKeyRelationController(
             ForeignKeyRelationService foreignKeyRelationService,
-            HttpExecutionContext httpExecutionContext, SessionService sessionService) {
+            HttpExecutionContext httpExecutionContext,
+            SessionService sessionService)
+    {
+        super(sessionService);
 
         this.foreignKeyRelationService = foreignKeyRelationService;
         this.httpExecutionContext = httpExecutionContext;
-        this.sessionService = sessionService;
     }
 
+    @Security.Authenticated(ActiveSessionAuthenticator.class)
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.foreignKeyRelationService.read(id), this.httpExecutionContext.current())
@@ -43,7 +46,7 @@ public class ForeignKeyRelationController extends Controller {
                     if(foreignKeyRelation == null) {
                         return notFound();
                     }
-                    Session session = this.sessionService.getSession(Http.Context.current().request());
+                    Session session = this.getSession(Http.Context.current().request());
                     if(session != null && sessionService.isAdmin(session)) {
                         return ok(transform(foreignKeyRelation));
                     }

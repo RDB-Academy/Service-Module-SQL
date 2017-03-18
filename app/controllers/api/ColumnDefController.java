@@ -1,14 +1,15 @@
 package controllers.api;
 
+import authenticators.ActiveSessionAuthenticator;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 import models.ColumnDef;
 import models.Session;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.mvc.Security;
 import services.ColumnDefService;
 import services.SessionService;
 
@@ -21,22 +22,23 @@ import java.util.concurrent.CompletionStage;
  * @author invisible
  */
 @Singleton
-public class ColumnDefController extends Controller {
+public class ColumnDefController extends RootController {
     private final ColumnDefService columnDefService;
     private final HttpExecutionContext httpExecutionContext;
-    private final SessionService sessionService;
 
     @Inject
     public ColumnDefController(
             ColumnDefService columnDefService,
-            HttpExecutionContext httpExecutionContext, SessionService sessionService) {
+            HttpExecutionContext httpExecutionContext,
+            SessionService sessionService)
+    {
+        super(sessionService);
 
         this.columnDefService = columnDefService;
         this.httpExecutionContext = httpExecutionContext;
-        this.sessionService = sessionService;
     }
 
-
+    @Security.Authenticated(ActiveSessionAuthenticator.class)
     public CompletionStage<Result> read(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> this.columnDefService.read(id), this.httpExecutionContext.current())
@@ -44,7 +46,7 @@ public class ColumnDefController extends Controller {
                     if(columnDef == null) {
                         return notFound();
                     }
-                    Session session = this.sessionService.getSession(Http.Context.current().request());
+                    Session session = this.getSession(Http.Context.current().request());
                     if(session != null && sessionService.isAdmin(session)) {
                         return ok(transform(columnDef));
                     }

@@ -18,5 +18,7 @@ public interface SessionRepository {
      * @return returns a session object or null
      */
     Session getById(@NotNull String sessionId);
+
+    void save(Session session);
 }
 

@@ -1,34 +1,34 @@
 package controllers.api;
 
+import authenticators.ActiveSessionAuthenticator;
+import authenticators.InactiveSessionAuthenticator;
 import forms.LoginForm;
 import models.Session;
 import play.data.Form;
 import play.libs.Json;
-import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
+import repository.SessionRepository;
 import services.SessionService;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 /**
  * @author fabiomazzone
  */
-public class SessionController extends Controller {
-    private final SessionService sessionService;
-    private final HttpExecutionContext httpExecutionContext;
-
+public class SessionController extends RootController {
+    private final SessionRepository sessionRepository;
     @Inject
     public SessionController(
             SessionService sessionService,
-            HttpExecutionContext httpExecutionContext) {
+            SessionRepository sessionRepository)
+    {
+        super(sessionService);
 
-        this.sessionService = sessionService;
-        this.httpExecutionContext = httpExecutionContext;
+        this.sessionRepository = sessionRepository;
     }
 
+    @Security.Authenticated(InactiveSessionAuthenticator.class)
     public Result login() {
         Form<LoginForm> loginForm = this.sessionService.validateLoginForm();
         if(loginForm.hasErrors()) {
@@ -44,9 +44,11 @@ public class SessionController extends Controller {
         return ok(Json.toJson(session));
     }
 
-    public CompletionStage<Result> logout() {
-        return CompletableFuture
-                .supplyAsync(this.sessionService::logout, this.httpExecutionContext.current())
-                .thenApply((status) -> ok("{}"));
+    @Security.Authenticated(ActiveSessionAuthenticator.class)
+    public Result logout() {
+        Session session = this.getSession(request());
+        this.sessionService.invalidate(session);
+        this.sessionRepository.save(session);
+        return ok();
     }
 }

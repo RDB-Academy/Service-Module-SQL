@@ -1,11 +1,12 @@
 package controllers.api;
 
+import authenticators.SessionAuthenticator;
 import models.Session;
 import models.TaskTrial;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import services.SessionService;
 import services.TaskTrialService;
 
@@ -16,21 +17,20 @@ import java.util.concurrent.CompletionStage;
 /**
  * @author invisible
  */
-public class TaskTrialController extends Controller {
+public class TaskTrialController extends RootController {
     private final HttpExecutionContext httpExecutionContext;
-    private final SessionService sessionService;
     private final TaskTrialService taskTrialService;
 
     @Inject
     public TaskTrialController(
             HttpExecutionContext    httpExecutionContext,
             SessionService          sessionService,
-            TaskTrialService        taskTrialService){
+            TaskTrialService        taskTrialService)
+    {
+        super(sessionService);
 
         this.httpExecutionContext = httpExecutionContext;
-        this.sessionService = sessionService;
         this.taskTrialService = taskTrialService;
-
     }
 
     /**
@@ -39,15 +39,15 @@ public class TaskTrialController extends Controller {
      *
      * @return returns an status code with a message
      */
+    @Security.Authenticated(SessionAuthenticator.class)
     public Result create() {
-        Session session = this.sessionService.getSession(request());
-        if(session == null) {
-            return unauthorized();
-        }
+        Session session = this.getSession(request());
+
 
         if(sessionService.isAdmin(session)) {
 
         }
+
         TaskTrial taskTrial = this.taskTrialService.create();
 
         if(taskTrial == null) {

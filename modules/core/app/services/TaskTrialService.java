@@ -5,6 +5,7 @@ import models.Session;
 import models.Task;
 import models.TaskTrial;
 import models.TaskTrialLog;
+import repository.SessionRepository;
 import sqlParser.connection.DBConnection;
 import sqlParser.connection.DBConnectionFactory;
 import sqlParser.SQLResult;
@@ -29,18 +30,22 @@ public class TaskTrialService {
     private final DBConnectionFactory DBConnectionFactory;
     private final SessionService sessionService;
     private final TaskRepository taskRepository;
+    private final SessionRepository sessionRepository;
 
     @Inject
     public TaskTrialService(
             TaskTrialRepository taskTrialRepository,
             DBConnectionFactory DBConnectionFactory,
             SessionService sessionService,
-            TaskRepository taskRepository) {
+            TaskRepository taskRepository,
+            SessionRepository sessionRepository)
+    {
 
         this.taskTrialRepository = taskTrialRepository;
         this.DBConnectionFactory = DBConnectionFactory;
         this.sessionService = sessionService;
         this.taskRepository = taskRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     /**
@@ -51,7 +56,8 @@ public class TaskTrialService {
         Session     session;
         TaskTrial   taskTrial;
 
-        session = this.sessionService.getSession(Http.Context.current().request());
+        String sessionId = Http.Context.current().request().getHeader(SessionService.SESSION_FIELD_NAME);
+        session = this.sessionService.findActiveSessionById(sessionId);
         if(session == null) {
             session = this.sessionService.createSession(Http.Context.current());
         }
@@ -93,7 +99,8 @@ public class TaskTrialService {
         session.setTaskTrial(taskTrial);
 
         this.taskTrialRepository.save(taskTrial);
-        this.sessionService.save(session);
+
+        this.sessionRepository.save(session);
 
         return taskTrial;
     }
