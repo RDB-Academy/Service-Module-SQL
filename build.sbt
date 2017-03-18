@@ -1,5 +1,5 @@
 import Dependencies._
-import com.typesafe.sbt.packager.archetypes.ServerLoader.Upstart
+import com.typesafe.sbt.packager.archetypes.ServerLoader.Systemd
 import sbt.Keys.{javacOptions, scalacOptions}
 
 lazy val commonSettings = Seq(
@@ -15,10 +15,10 @@ lazy val commonSettings = Seq(
   scalacOptions := Seq("-unchecked", "-deprecation")
 )
 
-lazy val coreModule = (project in file("modules/common"))
+lazy val coreModule = (project in file("modules/core"))
   .settings(commonSettings: _*)
   .settings(
-    name := """core module""",
+    name := "core module",
 
     libraryDependencies ++= Seq(
       userAgentUtils
@@ -32,7 +32,7 @@ lazy val coreModule = (project in file("modules/common"))
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(
-    name := """sql-module""",
+    name := "sql-module",
 
     libraryDependencies ++= Seq(
       cache,
@@ -47,11 +47,11 @@ name in Debian := "rdb-academy-sql"
 
 maintainer in Linux := "Fabio Mazzone<fabio.mazzone@me.com>"
 
-packageSummary in Linux := "SQL.Academy"
+packageSummary in Linux := "RDB Academy SQL Module"
 
 // debianPackageDependencies in Debian ++= Seq("nginx", "mysql-server")
 
-serverLoading in Debian := Upstart
+serverLoading in Debian := Systemd
 
 daemonUser in Linux := normalizedName.value         // user which will execute the application
 
