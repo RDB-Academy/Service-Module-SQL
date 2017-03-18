@@ -7,6 +7,10 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT",
   scalaVersion := "2.11.8",
 
+  maintainer := "Fabio Mazzone<fabio.mazzone@me.com>",
+
+  resolvers += Resolver.mavenLocal,
+
   libraryDependencies ++= Seq(
     mockito
   ),
@@ -34,6 +38,10 @@ lazy val root = (project in file("."))
   .settings(
     name := "sql-module",
 
+    packageSummary := "RDB Academy SQL Module",
+
+    serverLoading in Debian := Systemd,
+
     libraryDependencies ++= Seq(
       cache,
       javaWs
@@ -45,13 +53,7 @@ lazy val root = (project in file("."))
 
 name in Debian := "rdb-academy-sql"
 
-maintainer in Linux := "Fabio Mazzone<fabio.mazzone@me.com>"
-
-packageSummary in Linux := "RDB Academy SQL Module"
-
 // debianPackageDependencies in Debian ++= Seq("nginx", "mysql-server")
-
-serverLoading in Debian := Systemd
 
 daemonUser in Linux := normalizedName.value         // user which will execute the application
 

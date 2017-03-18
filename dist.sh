@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-./bin/activator dist debian:packageBin
+
+sbt dist debian:packageBin
