@@ -1,4 +1,3 @@
-/// packageSummary
 import Dependencies._
 import com.typesafe.sbt.packager.archetypes.ServerLoader.Upstart
 import sbt.Keys.{javacOptions, scalacOptions}
@@ -33,7 +32,7 @@ lazy val coreModule = (project in file("modules/common"))
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(
-    name := """rdb-academy-sql""",
+    name := """sql-module""",
 
     libraryDependencies ++= Seq(
       cache,
