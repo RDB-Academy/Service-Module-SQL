@@ -10,7 +10,6 @@ public class SessionServiceTest {
 
     @Test
     public void testIsAdmin() {
-        System.out.println("Test");
         SessionRepository sessionRepository = mock(SessionRepository.class);
     }
 }
