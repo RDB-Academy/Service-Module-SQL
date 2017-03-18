@@ -1,13 +1,38 @@
-name := """Service-Module-SQL"""
+/// packageSummary
+import com.typesafe.sbt.packager.archetypes.ServerLoader.Upstart
 
-version := "1.0-SNAPSHOT"
+name := """rdb-academy-sql"""
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava)
+version := "0.1-alpha"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
+
+lazy val commonModule = (project in file("modules/common")).enablePlugins(PlayJava, PlayEbean)
+
+lazy val root = (project in file("."))
+  .enablePlugins(PlayJava, DebianPlugin)
+  .dependsOn(commonModule)
+  .aggregate(commonModule)
+
+javacOptions := Seq("-Xlint:deprecation")
+scalacOptions := Seq("-unchecked", "-deprecation")
 
 libraryDependencies ++= Seq(
-  javaJdbc,
   cache,
-  javaWs
+  javaWs,
+  "org.mockito" % "mockito-core" % "2.7.17"
 )
+
+name in Debian := "rdb-academy-sql"
+
+maintainer in Linux := "Fabio Mazzone<fabio.mazzone@me.com>"
+
+packageSummary in Linux := "SQL.Academy"
+
+// debianPackageDependencies in Debian ++= Seq("nginx", "mysql-server")
+
+serverLoading in Debian := Upstart
+
+daemonUser in Linux := normalizedName.value         // user which will execute the application
+
+daemonGroup in Linux := (daemonUser in Linux).value // group which will execute the application

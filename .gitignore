@@ -1,8 +1,27 @@
-logs
-target
+# OS
+.DS_Store
+
+# IDE
 /.idea
 /.idea_modules
+
+logs
+target
 /.classpath
 /.project
 /.settings
 /RUNNING_PID
+test.db.mv.db
+test.db.trace.db
+app-2.11/
+project/project/
+test-2.11/
+test/resources/
+
+# SQL Parser
+/tmp
+
+# Front-End
+Front-End/
+public/dist
+Service-Module-SQL.iml
