@@ -73,16 +73,16 @@ public class SessionService {
      */
     public Session getSession(@NotNull Http.Request request) {
         Session session;
-        String  sessionKey = request.getHeader(SESSION_FIELD_NAME);
+        String sessionKey = request.getHeader(SESSION_FIELD_NAME);
 
         // Check Session Key
-        if(sessionKey == null || sessionKey.isEmpty()) {
+        if (sessionKey == null || sessionKey.isEmpty()) {
             return null;
         }
 
         // Get Session by Key & check a session was found
         session = this.sessionRepository.getById(sessionKey);
-        if(session == null || !session.isValid()) {
+        if (session == null || !session.isValid()) {
             return null;
         }
 
@@ -90,12 +90,12 @@ public class SessionService {
     }
 
     public Form<LoginForm> validateLoginForm() {
-        Form<LoginForm>     loginForm;
-        String              adminPassword;
-        LoginForm           login;
+        Form<LoginForm> loginForm;
+        String adminPassword;
+        LoginForm login;
 
-        loginForm       = this.getLoginForm().bindFromRequest();
-        adminPassword   = this.configuration.getString("sqlModule.adminPassword");
+        loginForm = this.getLoginForm().bindFromRequest();
+        adminPassword = this.configuration.getString("sqlModule.adminPassword");
 
         if (loginForm.hasErrors()) {
             return loginForm;
@@ -123,6 +123,7 @@ public class SessionService {
 
     /**
      * This function Checks if the Session contains a UserName
+     *
      * @param ctx the current Http.Context
      * @return returns true if this is a authenticated Session
      */
