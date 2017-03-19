@@ -7,11 +7,14 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
 import play.Logger;
+import play.data.Form;
+import play.data.FormFactory;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import repository.SchemaDefRepository;
 import services.SchemaDefService;
 import services.SessionService;
 
@@ -29,16 +32,23 @@ import java.util.stream.Collectors;
 @Singleton
 public class SchemaDefController extends RootController {
     private final SchemaDefService schemaDefService;
+    private final SchemaDefRepository schemaDefRepository;
+    private final FormFactory formFactory;
     private final HttpExecutionContext httpExecutionContext;
 
     @Inject
     public SchemaDefController(
             SchemaDefService schemaDefService,
+            SchemaDefRepository schemaDefRepository,
             HttpExecutionContext httpExecutionContext,
-            SessionService sessionService) {
+            FormFactory formFactory,
+            SessionService sessionService)
+    {
         super(sessionService);
 
         this.schemaDefService = schemaDefService;
+        this.schemaDefRepository = schemaDefRepository;
+        this.formFactory = formFactory;
         this.httpExecutionContext = httpExecutionContext;
     }
 
@@ -48,17 +58,20 @@ public class SchemaDefController extends RootController {
      * @return returns the status of the action
      */
     @Security.Authenticated(AdminSessionAuthenticator.class)
-    public CompletionStage<Result> create() {
-        return CompletableFuture
-                .supplyAsync(this.schemaDefService::create, this.httpExecutionContext.current())
-                .thenApply(schemaDefForm -> {
-                    if(schemaDefForm.hasErrors()) {
-                        Logger.warn(schemaDefForm.errorsAsJson().toString());
-                        return badRequest(schemaDefForm.errorsAsJson());
-                    }
-                    SchemaDef schemaDef = this.schemaDefService.read(schemaDefForm.get().getId());
-                    return ok(transform(schemaDef));
-                });
+    public Result create()
+    {
+        Form<SchemaDef> schemaDefForm = formFactory.form(SchemaDef.class).bindFromRequest();
+
+        schemaDefForm = this.schemaDefService.create(schemaDefForm);
+
+        if(schemaDefForm.hasErrors())
+        {
+            Logger.warn(schemaDefForm.errorsAsJson().toString());
+            return badRequest(schemaDefForm.errorsAsJson());
+        }
+
+        SchemaDef schemaDef = this.schemaDefRepository.getById(schemaDefForm.get().getId());
+        return ok(transform(schemaDef));
     }
 
     @Security.Authenticated(AdminSessionAuthenticator.class)

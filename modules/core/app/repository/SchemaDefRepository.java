@@ -1,31 +1,19 @@
 package repository;
 
-import com.avaje.ebean.Model;
-import com.google.inject.Singleton;
+import com.google.inject.ImplementedBy;
 import models.SchemaDef;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * @author fabiomazzone
+ * @author Fabio Mazzone
  */
-@Singleton
-public class SchemaDefRepository {
-    private Model.Finder<Long, SchemaDef> find = new Model.Finder<>(SchemaDef.class);
-
-    public List<SchemaDef> getAll() {
-        return this.find.all();
-    }
-
-    public SchemaDef getById(Long id) {
-        return this.find.byId(id);
-    }
-
-    public SchemaDef getByName(String name) {
-        return this.find.where().eq("name", name).findUnique();
-    }
-
-    public void save(SchemaDef schemaDef) {
-        schemaDef.save();
-    }
+@ImplementedBy(SchemaDefRepositoryEbean.class)
+public interface SchemaDefRepository {
+    List<SchemaDef> getAll();
+    SchemaDef getById(@NotNull Long id);
+    SchemaDef getByName(@NotNull String name);
+    void save(@NotNull SchemaDef schemaDef);
 }
+

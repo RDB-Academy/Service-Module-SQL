@@ -10,6 +10,7 @@ import repository.SchemaDefRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -33,16 +34,15 @@ public class SchemaDefService extends Service {
      *
      * @return the new created SchemaDefModel
      */
-    public Form<SchemaDef> create() {
-        Form<SchemaDef> schemaDefForm = this.getForm().bindFromRequest();
-
-        if (schemaDefForm.hasErrors()) {
+    public Form<SchemaDef> create(@NotNull Form<SchemaDef> schemaDefForm) {
+        if(schemaDefForm.hasErrors())
+        {
             return schemaDefForm;
         }
-
         SchemaDef schemaDef = schemaDefForm.get();
 
-        if(schemaDefRepository.getByName(schemaDef.getName()) != null) {
+        if(schemaDefRepository.getByName(schemaDef.getName()) != null)
+        {
             schemaDefForm.reject("name", "name already taken");
             return schemaDefForm;
         }
