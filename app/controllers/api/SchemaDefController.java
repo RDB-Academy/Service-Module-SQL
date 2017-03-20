@@ -3,14 +3,11 @@ package controllers.api;
 import authenticators.ActiveSessionAuthenticator;
 import authenticators.AdminSessionAuthenticator;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
-import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -20,27 +17,23 @@ import services.SessionService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 /**
- * @author fabiomazzone
+ * @author Fabio Mazzone
  */
 @Singleton
-public class SchemaDefController extends RootController {
+public class SchemaDefController extends RootController
+{
     private final SchemaDefService schemaDefService;
     private final SchemaDefRepository schemaDefRepository;
     private final FormFactory formFactory;
-    private final HttpExecutionContext httpExecutionContext;
 
     @Inject
     public SchemaDefController(
             SchemaDefService schemaDefService,
             SchemaDefRepository schemaDefRepository,
-            HttpExecutionContext httpExecutionContext,
             FormFactory formFactory,
             SessionService sessionService)
     {
@@ -49,7 +42,6 @@ public class SchemaDefController extends RootController {
         this.schemaDefService = schemaDefService;
         this.schemaDefRepository = schemaDefRepository;
         this.formFactory = formFactory;
-        this.httpExecutionContext = httpExecutionContext;
     }
 
     /**
@@ -71,16 +63,17 @@ public class SchemaDefController extends RootController {
         }
 
         SchemaDef schemaDef = this.schemaDefRepository.getById(schemaDefForm.get().getId());
-        return ok(transform(schemaDef));
+        return ok(this.schemaDefService.transform(schemaDef));
     }
 
     @Security.Authenticated(AdminSessionAuthenticator.class)
-    public Result readAll() {
-        List<SchemaDef> schemaDefList   = this.schemaDefService.readAll();
+    public Result readAll()
+    {
+        List<SchemaDef> schemaDefList   = this.schemaDefRepository.getAll();
         List<JsonNode>  jsonNodeList    = schemaDefList
                 .stream()
                 .map(
-                        this::transformBase
+                        this.schemaDefService::transformBase
                 )
                 .collect(
                         Collectors.toList()
@@ -90,92 +83,69 @@ public class SchemaDefController extends RootController {
     }
 
     @Security.Authenticated(ActiveSessionAuthenticator.class)
-    public CompletionStage<Result> read(Long id) {
-        return CompletableFuture
-                .supplyAsync(() -> this.schemaDefService.read(id), this.httpExecutionContext.current())
-                .thenApply(schemaDef -> {
-                    if(schemaDef == null) {
-                        return notFound();
-                    }
-                    String sessionId = Http.Context.current()
-                                    .request()
-                                    .getHeader(SessionService.SESSION_FIELD_NAME);
-                    Session session = this.sessionService.findActiveSessionById(sessionId);
-                    if (session != null && sessionService.isAdmin(session)) {
-                        return ok(transform(schemaDef));
-                    }
-                    return ok(Json.toJson(schemaDef));
-                });
+    public Result read(Long id)
+    {
+        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
+
+        if(schemaDef == null)
+        {
+            return notFound();
+        }
+        String sessionId = Http.Context.current()
+                .request()
+                .getHeader(SessionService.SESSION_FIELD_NAME);
+        Session session = this.sessionService.findActiveSessionById(sessionId);
+        if (session != null && sessionService.isAdmin(session))
+        {
+            return ok(this.schemaDefService.transform(schemaDef));
+        }
+        return ok(Json.toJson(schemaDef));
     }
 
     @Security.Authenticated(AdminSessionAuthenticator.class)
-    public CompletionStage<Result> update(Long id) {
-        return CompletableFuture
-                .supplyAsync(() -> this.schemaDefService.update(id), this.httpExecutionContext.current())
-                .thenApply(schemaDefForm -> {
-                   if(schemaDefForm.hasErrors()) {
-                       Logger.warn(schemaDefForm.errorsAsJson().toString());
-                       return badRequest(schemaDefForm.errorsAsJson());
-                   }
-                   SchemaDef schemaDef = this.schemaDefService.read(id);
-                   return ok(transform(schemaDef));
-                });
+    public Result update(Long id)
+    {
+        SchemaDef schemaDef             = this.schemaDefRepository.getById(id);
+
+        if(schemaDef == null)
+        {
+            return notFound();
+        }
+
+        JsonNode schemaDefPatchNode = request().body().asJson();
+
+        if(schemaDefPatchNode.has("name") && schemaDefPatchNode.get("name").isTextual())
+        {
+            String name = schemaDefPatchNode.get("name").asText();
+            if (!name.isEmpty())
+            {
+                schemaDef.setName(name);
+            }
+        }
+
+        if(schemaDefPatchNode.has("available")
+                && schemaDefPatchNode.get("available").isBoolean())
+        {
+            boolean available  = schemaDefPatchNode.get("available").asBoolean();
+            schemaDef.setAvailable(available);
+        }
+
+        this.schemaDefRepository.save(schemaDef);
+
+        return ok(this.schemaDefService.transform(schemaDef));
     }
 
     @Security.Authenticated(AdminSessionAuthenticator.class)
-    public CompletionStage<Result> delete(Long id) {
-        return CompletableFuture
-                .supplyAsync(() -> this.schemaDefService.delete(id), this.httpExecutionContext.current())
-                .thenApply(schemaDefForm -> {
-                    if(schemaDefForm.hasErrors()) {
-                        return badRequest(schemaDefForm.errorsAsJson());
-                    }
-                    return ok();
-                });
-    }
+    public Result delete(Long id)
+    {
+        SchemaDef schemaDef = this.schemaDefRepository.getById(id);
 
-    private ObjectNode transformBase(SchemaDef schemaDef) {
-        ObjectNode schemaDefNode = Json.newObject();
+        if(schemaDef == null)
+        {
+            return notFound();
+        }
+        schemaDef.delete();
 
-        schemaDefNode.put("id", schemaDef.getId());
-        schemaDefNode.put("name", schemaDef.getName());
-        schemaDefNode.put("available", schemaDef.isAvailable());
-
-        // schemaDefNode.set("reactions", reactionNode());
-
-        schemaDefNode.put("createdAt", schemaDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
-        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
-
-        return schemaDefNode;
-    }
-
-    private ObjectNode transformTableDefBase(TableDef tableDef) {
-        ObjectNode tableDefNode = Json.newObject();
-
-        tableDefNode.put("id", tableDef.getId());
-        tableDefNode.put("name", tableDef.getName());
-
-        return tableDefNode;
-    }
-
-    private ObjectNode transform(SchemaDef schemaDef) {
-        ObjectNode schemaDefNode = transformBase(schemaDef);
-        ObjectNode relationNode = Json.newObject();
-
-        ArrayNode tableDefIds = Json.newArray();
-        ArrayNode foreignKeyIds = Json.newArray();
-        ArrayNode taskIds = Json.newArray();
-
-        schemaDef.getTableDefList().stream().map(this::transformTableDefBase).forEach(tableDefIds::add);
-        schemaDef.getForeignKeyList().stream().map(ForeignKey::getId).forEach(foreignKeyIds::add);
-        schemaDef.getTaskList().stream().map(Task::getId).forEach(taskIds::add);
-
-        relationNode.set("tableDefList", tableDefIds);
-        relationNode.set("foreignKeyList", foreignKeyIds);
-        relationNode.set("taskList", taskIds);
-
-        schemaDefNode.set("relations", relationNode);
-
-        return schemaDefNode;
+        return ok();
     }
 }

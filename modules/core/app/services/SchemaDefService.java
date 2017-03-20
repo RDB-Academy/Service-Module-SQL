@@ -1,17 +1,20 @@
 package services;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.ForeignKey;
 import models.SchemaDef;
 import models.TableDef;
+import models.Task;
 import play.data.Form;
 import play.data.FormFactory;
-import play.mvc.Http;
+import play.libs.Json;
 import repository.SchemaDefRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author fabiomazzone
@@ -52,82 +55,56 @@ public class SchemaDefService extends Service {
         return schemaDefForm.fill(schemaDef);
     }
 
-    public SchemaDef read(Long id) {
+    public SchemaDef read(Long id)
+    {
         return this.schemaDefRepository.getById(id);
     }
 
-    public List<SchemaDef> readAll() {
-        return this.schemaDefRepository.getAll();
+    public ObjectNode transformBase(SchemaDef schemaDef)
+    {
+        ObjectNode schemaDefNode = Json.newObject();
+
+        schemaDefNode.put("id", schemaDef.getId());
+        schemaDefNode.put("name", schemaDef.getName());
+        schemaDefNode.put("available", schemaDef.isAvailable());
+
+        // schemaDefNode.set("reactions", reactionNode());
+
+        schemaDefNode.put("createdAt", schemaDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        schemaDefNode.put("modifiedAt", schemaDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+
+        return schemaDefNode;
     }
 
-    public Form<SchemaDef> update(Long id) {
-        SchemaDef schemaDef             = this.read(id);
-        Form<SchemaDef> schemaDefForm   = this.getForm().bindFromRequest();
+    private ObjectNode transformTableDefBase(TableDef tableDef)
+    {
+        ObjectNode tableDefNode = Json.newObject();
 
-        if(schemaDef == null) {
-            schemaDefForm.reject(Service.formErrorNotFound, "SchemaDef Not Found");
-            return schemaDefForm;
-        }
+        tableDefNode.put("id", tableDef.getId());
+        tableDefNode.put("name", tableDef.getName());
 
-        schemaDefForm.discardErrors();
-
-        JsonNode schemaDefPatchNode = Http.Context.current().request().body().asJson();
-
-        if(schemaDefPatchNode.has("name") && schemaDefPatchNode.get("name").isTextual()) {
-            String name = schemaDefPatchNode.get("name").asText();
-            if (!name.isEmpty()) {
-                schemaDef.setName(name);
-            }
-        }
-
-        if(schemaDefPatchNode.has("available") && schemaDefPatchNode.get("available").isBoolean()) {
-            boolean available  = schemaDefPatchNode.get("available").asBoolean();
-            schemaDef.setAvailable(available);
-        }
-
-        this.schemaDefRepository.save(schemaDef);
-
-        return schemaDefForm;
+        return tableDefNode;
     }
 
-    public Form<SchemaDef> delete(Long id) {
-        SchemaDef schemaDef = this.read(id);
-        Form<SchemaDef> schemaDefForm = this.getForm();
+    public ObjectNode transform(SchemaDef schemaDef)
+    {
+        ObjectNode schemaDefNode = transformBase(schemaDef);
+        ObjectNode relationNode = Json.newObject();
 
-        if(schemaDef == null) {
-            schemaDefForm.reject(Service.formErrorNotFound, "SchemaDef Not Found");
-            return schemaDefForm;
-        }
+        ArrayNode tableDefIds = Json.newArray();
+        ArrayNode foreignKeyIds = Json.newArray();
+        ArrayNode taskIds = Json.newArray();
 
-        schemaDef.delete();
+        schemaDef.getTableDefList().stream().map(this::transformTableDefBase).forEach(tableDefIds::add);
+        schemaDef.getForeignKeyList().stream().map(ForeignKey::getId).forEach(foreignKeyIds::add);
+        schemaDef.getTaskList().stream().map(Task::getId).forEach(taskIds::add);
 
-        return schemaDefForm;
-    }
+        relationNode.set("tableDefList", tableDefIds);
+        relationNode.set("foreignKeyList", foreignKeyIds);
+        relationNode.set("taskList", taskIds);
 
-    private Form<SchemaDef> getForm() {
-        return this.formFactory.form(SchemaDef.class);
-    }
+        schemaDefNode.set("relations", relationNode);
 
-/* ****************************************************************************************************************** *\
-|  --- Not SchemaDef Related Stuff
-\* ****************************************************************************************************************** */
-
-    /**
-     * This action returns a new Form for an TableDef;
-     * @param id the id of the schemaDef object
-     *
-     * @return returns a new Form
-     */
-    public Form<TableDef> getCreateTableDefForm(long id) {
-        SchemaDef schemaDef = this.read(id);
-        TableDef tableDef = new TableDef();
-
-        if(schemaDef == null) {
-            return null;
-        }
-
-        tableDef.setSchemaDef(schemaDef);
-
-        return this.formFactory.form(TableDef.class).fill(tableDef);
+        return schemaDefNode;
     }
 }
