@@ -1,88 +1,62 @@
 package controllers.api;
 
 import authenticators.AdminSessionAuthenticator;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 import models.Session;
 import models.Task;
 import play.libs.Json;
-import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import repository.TaskRepository;
 import services.SessionService;
 import services.TaskService;
 
 import javax.inject.Inject;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * @author fabiomazzone
  */
 @Singleton
-public class TaskController extends RootController {
+public class TaskController extends RootController
+{
     private final TaskService taskService;
-    private final HttpExecutionContext httpExecutionContext;
+    private final TaskRepository taskRepository;
 
     @Inject
     public TaskController(
             TaskService taskService,
-            HttpExecutionContext httpExecutionContext,
+            TaskRepository taskRepository,
             SessionService sessionService)
     {
         super(sessionService);
 
         this.taskService = taskService;
-        this.httpExecutionContext = httpExecutionContext;
+        this.taskRepository = taskRepository;
     }
 
     @Security.Authenticated(AdminSessionAuthenticator.class)
-    public CompletionStage<Result> readAll() {
-        return CompletableFuture
-                .supplyAsync(this.taskService::readAll, this.httpExecutionContext.current())
-                .thenApply(taskList ->
-                        ok(Json.toJson(taskList.parallelStream()
-                                .map(this::transform)
-                                .collect(Collectors.toList())))
-                );
+    public Result readAll()
+    {
+        List<Task> taskList = this.taskRepository.getAll();
+        return ok(Json.toJson(taskList.parallelStream()
+                .map(this.taskService::transform)
+                .collect(Collectors.toList())));
     }
 
-    public CompletionStage<Result> read(Long id) {
-        return CompletableFuture
-                .supplyAsync(() -> taskService.read(id), this.httpExecutionContext.current())
-                .thenApply(task -> {
-                    if(task == null) {
-                        return notFound();
-                    }
-                    Session session = this.getSession(Http.Context.current().request());
+    public Result read(Long id) {
+        Task task = this.taskRepository.getById(id);
 
-                    if(session != null && sessionService.isAdmin(session)) {
-                        return ok(transform(task));
-                    }
-                    return ok(Json.toJson(task));
+        if(task == null) {
+            return notFound();
+        }
+        Session session = this.getSession(Http.Context.current().request());
 
-                });
-    }
-
-    private ObjectNode transform(Task task) {
-        ObjectNode taskNode = Json.newObject();
-
-        taskNode.put("id", task.getId());
-        taskNode.put("name", task.getName());
-
-        taskNode.put("schemaDefId", task.getSchemaDefId());
-        taskNode.put("schemaDefName", task.getSchemaDef().getName());
-
-        taskNode.put("text", task.getText());
-        taskNode.put("referenceStatement", task.getReferenceStatement());
-        taskNode.put("difficulty", task.getDifficulty());
-
-        taskNode.put("createdAt", task.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
-        taskNode.put("modifiedAt", task.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
-
-        return taskNode;
+        if(session != null && sessionService.isAdmin(session)) {
+            return ok(this.taskService.transform(task));
+        }
+        return ok(Json.toJson(task));
     }
 }

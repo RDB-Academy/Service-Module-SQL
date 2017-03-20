@@ -1,61 +1,33 @@
 package services;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.ColumnDef;
-import play.data.FormFactory;
-import repository.ColumnDefRepository;
-import play.data.Form;
+import play.libs.Json;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.format.DateTimeFormatter;
 
 /**
- * @author nicolenaczk
+ * @author Fabio Mazzone
  */
 @Singleton
 public class ColumnDefService {
-    private final ColumnDefRepository columnDefRepository;
-    private final FormFactory formFactory;
+    public ObjectNode transform(ColumnDef columnDef) {
+        ObjectNode columnDefNode = Json.newObject();
 
-    @Inject
-    public ColumnDefService (
-            ColumnDefRepository columnDefRepository,
-            FormFactory formFactory){
+        columnDefNode.put("id", columnDef.getId());
+        columnDefNode.put("name", columnDef.getName());
 
-        this.columnDefRepository = columnDefRepository;
-        this.formFactory = formFactory;
-    }
+        columnDefNode.put("tableDefId", columnDef.getTableDef().getId());
 
-    public ColumnDef read(Long id) {
-        return this.columnDefRepository.getById(id);
-    }
+        columnDefNode.put("dataType", columnDef.getDataType());
+        columnDefNode.put("isPrimaryKey", columnDef.isPrimary());
+        columnDefNode.put("isNotNull", columnDef.isNotNull());
+        columnDefNode.put("MetaValueSet", columnDef.getMetaValueSetName());
 
-    private Form<ColumnDef> getForm() {
+        columnDefNode.put("createdAt", columnDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        columnDefNode.put("modifiedAt", columnDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
-        return this.formFactory.form(ColumnDef.class);
-    }
-
-    public Form<ColumnDef> addColumn(Long id) {
-        ColumnDef columnDef = this.read(id);
-        Form<ColumnDef> columnDefForm = this.getForm().bindFromRequest();
-
-        if(columnDef == null) {
-            columnDefForm.reject(Service.formErrorNotFound, "ColumnDef not found");
-            return columnDefForm;
-        }
-
-        if(columnDefForm.hasErrors()) {
-            return columnDefForm;
-        }
-
-        if(columnDefForm.get().getName() == null || columnDefForm.get().getName().isEmpty()) {
-            columnDefForm.reject("Name", "ColumnDef must be named");
-            return columnDefForm;
-        }
-
-        columnDef.setName(columnDefForm.get().getName());
-
-        this.columnDefRepository.save(columnDef);
-
-        return columnDefForm;
+        return columnDefNode;
     }
 }

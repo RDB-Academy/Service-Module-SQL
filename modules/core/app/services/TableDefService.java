@@ -1,90 +1,38 @@
 package services;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.ColumnDef;
 import models.TableDef;
-import play.data.Form;
-import play.data.FormFactory;
-import repository.TableDefRepository;
+import play.libs.Json;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author fabiomazzone
  */
 @Singleton
-public class TableDefService extends Service {
-    private final TableDefRepository tableDefRepository;
-    private final FormFactory formFactory;
+public class TableDefService extends Service
+{
+    public ObjectNode transform(TableDef tableDef)
+    {
+        ObjectNode tableDefNode = Json.newObject();
 
-    @Inject
-    public TableDefService(
-            TableDefRepository tableDefRepository, FormFactory formFactory) {
+        ArrayNode columnIds = Json.newArray();
 
-        this.tableDefRepository = tableDefRepository;
-        this.formFactory = formFactory;
-    }
+        tableDef.getColumnDefList().parallelStream().map(ColumnDef::getId).forEach(columnIds::add);
 
-    public TableDef read(Long id) {
-        return this.tableDefRepository.getById(id);
-    }
+        tableDefNode.put("id", tableDef.getId());
+        tableDefNode.put("name", tableDef.getName());
 
-    public Form<TableDef> readAsForm(Long id) {
-        TableDef tableDef = this.read(id);
-        Form<TableDef> tableDefForm = getForm();
+        tableDefNode.put("schemaDefId", tableDef.getSchemaDefId());
 
-        if (tableDef == null) {
-            tableDefForm.reject(Service.formErrorNotFound, "TableDef not found");
-            return tableDefForm;
-        }
+        tableDefNode.set("columnDefList", columnIds);
 
-        return this.formFactory.form(TableDef.class).fill(tableDef);
-    }
+        tableDefNode.put("createdAt", tableDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        tableDefNode.put("modifiedAt", tableDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
-    public Form<TableDef> update(Long id) {
-        TableDef tableDef = this.read(id);
-        Form<TableDef> tableDefForm = this.getForm().bindFromRequest();
-
-        if(tableDef == null) {
-            tableDefForm.reject(Service.formErrorNotFound, "TableDef not found");
-            return tableDefForm;
-        }
-
-        if(tableDefForm.hasErrors()) {
-            return tableDefForm;
-        }
-
-        if(tableDefForm.get().getName() == null || tableDefForm.get().getName().isEmpty()) {
-            tableDefForm.reject("Name", "TableDef must be named");
-            return tableDefForm;
-        }
-
-        tableDef.setName(tableDefForm.get().getName());
-
-        this.tableDefRepository.save(tableDef);
-
-        return tableDefForm;
-    }
-
-    public Form<TableDef> delete(Long id) {
-        TableDef tableDef = this.read(id);
-        Form<TableDef> tableDefForm = getForm();
-
-        if(tableDef == null) {
-            tableDefForm.reject(Service.formErrorNotFound, "Table not Found");
-            return tableDefForm;
-        }
-
-        tableDef.delete();
-
-        return tableDefForm;
-    }
-
-
-    /**
-     * A Helper Function to create new TableDef Forms
-     * @return a new TableDef Form
-     */
-    private Form<TableDef> getForm() {
-        return this.formFactory.form(TableDef.class);
+        return tableDefNode;
     }
 }

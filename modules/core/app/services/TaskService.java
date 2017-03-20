@@ -1,12 +1,15 @@
 package services;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Task;
 import play.data.Form;
 import play.data.FormFactory;
+import play.libs.Json;
 import repository.TaskRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -22,11 +25,6 @@ public class TaskService extends Service {
 
         this.taskRepository = taskRepository;
         this.formFactory = formFactory;
-    }
-
-    public Form<Task> createAsForm() {
-
-        return this.formFactory.form(Task.class);
     }
 
     public Form<Task> create() {
@@ -53,71 +51,30 @@ public class TaskService extends Service {
         return this.taskRepository.getById(id);
     }
 
-    public Form<Task> readAsForm(Long id) {
-        Task task = this.read(id);
-
-        if (task == null) {
-            return null;
-        }
-
-        return this.formFactory.form(Task.class).fill(task);
-    }
-
     public List<Task> readAll() {
         return this.taskRepository.getAll();
     }
 
-    public Form<Task> createAsForm(Long id) {
-        Task task = this.read(id);
-
-        if (task == null) {
-            return null;
-        }
-
-        return this.formFactory.form(Task.class).fill(task);
-    }
-
-    public Form<Task> update(Long id) {
-        Task task = this.read(id);
-        Form<Task> taskForm = this.getForm().bindFromRequest();
-
-        if (task == null) {
-            taskForm.reject(Service.formErrorNotFound, "Task Not Found");
-            return taskForm;
-        }
-
-        if (taskForm.hasErrors()) {
-            return taskForm;
-        }
-
-        if (taskForm.get().getName() == null || taskForm.get().getName().isEmpty()) {
-            taskForm.reject("Name", "Task must be named");
-            return taskForm;
-        }
-
-        task.setName(taskForm.get().getName());
-
-        this.taskRepository.save(task);
-
-        return taskForm;
-    }
-
-    public Form<Task> delete(Long id) {
-
-        Task task = this.read(id);
-        Form<Task> taskForm = this.getForm();
-
-        if (task == null) {
-            taskForm.reject(Service.formErrorNotFound, "Task Not Found");
-            return taskForm;
-        }
-
-        task.delete();
-
-        return taskForm;
-    }
-
     private Form<Task> getForm() {
         return this.formFactory.form(Task.class);
+    }
+
+    public ObjectNode transform(Task task) {
+        ObjectNode taskNode = Json.newObject();
+
+        taskNode.put("id", task.getId());
+        taskNode.put("name", task.getName());
+
+        taskNode.put("schemaDefId", task.getSchemaDefId());
+        taskNode.put("schemaDefName", task.getSchemaDef().getName());
+
+        taskNode.put("text", task.getText());
+        taskNode.put("referenceStatement", task.getReferenceStatement());
+        taskNode.put("difficulty", task.getDifficulty());
+
+        taskNode.put("createdAt", task.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        taskNode.put("modifiedAt", task.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+
+        return taskNode;
     }
 }

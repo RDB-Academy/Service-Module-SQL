@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * @author fabiomazzone
+ * @author Fabio Mazzone
  */
 @Singleton
 public class ForeignKeyRelationService {
