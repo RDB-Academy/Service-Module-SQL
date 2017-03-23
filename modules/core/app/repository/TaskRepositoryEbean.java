@@ -43,7 +43,7 @@ public class TaskRepositoryEbean implements TaskRepository {
     }
 
     public void save(Task task) {
-        task.save();
+        this.find.db().save(task);
     }
 
 

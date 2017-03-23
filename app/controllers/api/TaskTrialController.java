@@ -17,7 +17,7 @@ import java.util.concurrent.CompletionStage;
 /**
  * @author invisible
  */
-public class TaskTrialController extends RootController {
+public class TaskTrialController extends BaseController {
     private final HttpExecutionContext httpExecutionContext;
     private final TaskTrialService taskTrialService;
 

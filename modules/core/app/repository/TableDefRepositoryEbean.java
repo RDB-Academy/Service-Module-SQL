@@ -10,18 +10,27 @@ import java.util.List;
  * @author fabiomazzone
  */
 @Singleton
-public class TableDefRepositoryEbean implements TableDefRepository{
+public class TableDefRepositoryEbean implements TableDefRepository
+{
     private Model.Finder<Long, TableDef> find = new Model.Finder<>(TableDef.class);
 
-    public List<TableDef> getAll() {
+    public List<TableDef> getAll()
+    {
         return this.find.all();
     }
 
-    public TableDef getById(Long id) {
+    public TableDef getById(Long id)
+    {
         return this.find.byId(id);
     }
 
-    public void save(TableDef tableDef) {
-        tableDef.save();
+    public void save(TableDef tableDef)
+    {
+        this.find.db().save(tableDef);
+    }
+
+    public void delete(TableDef tableDef)
+    {
+        this.find.db().delete(tableDef);
     }
 }

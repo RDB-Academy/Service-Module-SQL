@@ -21,6 +21,9 @@ abstract public class SessionAuthenticator extends Security.Authenticator {
     Session getSessionByRequest(@NotNull Http.Request request)
     {
         String sessionId = request.getHeader(SessionService.SESSION_FIELD_NAME);
+        if(sessionId == null) {
+            return null;
+        }
         return sessionService.findActiveSessionById(sessionId);
     }
 

@@ -10,16 +10,18 @@ import javax.validation.constraints.NotNull;
 /**
  * @author Fabio Mazzone
  */
-public abstract class RootController extends Controller {
+public abstract class BaseController extends Controller
+{
     protected final SessionService sessionService;
 
-    RootController(SessionService sessionService)
+    BaseController(SessionService sessionService)
     {
         this.sessionService = sessionService;
     }
 
-    Session getSession(@NotNull Http.Request request) {
-        String sessionId = request().getHeader(SessionService.SESSION_FIELD_NAME);
+    Session getSession(@NotNull Http.Request request)
+    {
+        String sessionId = request.getHeader(SessionService.SESSION_FIELD_NAME);
         if(sessionId != null && !sessionId.isEmpty()) {
             return sessionService.findActiveSessionById(sessionId);
         }

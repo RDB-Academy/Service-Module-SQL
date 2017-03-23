@@ -1,49 +1,29 @@
 package services;
 
-import forms.ForeignKeyRelationForm;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.ForeignKeyRelation;
-import play.data.Form;
-import play.data.FormFactory;
-import repository.ForeignKeyRelationRepository;
+import play.libs.Json;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Fabio Mazzone
  */
 @Singleton
-public class ForeignKeyRelationService {
-    private final ForeignKeyRelationRepository foreignKeyRelationRepository;
-    private final FormFactory formFactory;
+public class ForeignKeyRelationService
+{
+    public ObjectNode transform(ForeignKeyRelation foreignKeyRelation)
+    {
+        ObjectNode foreignKeyRelNode = Json.newObject();
 
-    @Inject
-    public ForeignKeyRelationService(ForeignKeyRelationRepository foreignKeyRelationRepository, FormFactory formFactory) {
-        this.foreignKeyRelationRepository = foreignKeyRelationRepository;
-        this.formFactory = formFactory;
-    }
+        foreignKeyRelNode.put("id", foreignKeyRelation.getId());
+        foreignKeyRelNode.put("foreignKey", foreignKeyRelation.getForeignKey().getId());
+        foreignKeyRelNode.put("sourceColumn", foreignKeyRelation.getSourceColumn().getId());
+        foreignKeyRelNode.put("targetColumn", foreignKeyRelation.getTargetColumn().getId());
+        foreignKeyRelNode.put("createdAt", foreignKeyRelation.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        foreignKeyRelNode.put("modifiedAt", foreignKeyRelation.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
-    public ForeignKeyRelation read(Long id) {
-        return foreignKeyRelationRepository.getById(id);
-    }
-
-    public Form<ForeignKeyRelation> readAsForm(Long id) {
-        ForeignKeyRelation foreignKeyRelation = this.read(id);
-        Form<ForeignKeyRelation> foreignKeyRelationForm = getForm();
-
-        if (foreignKeyRelation == null) {
-            foreignKeyRelationForm.reject(Service.formErrorNotFound, "ForeignKeyRelation not found");
-            return foreignKeyRelationForm;
-        }
-
-        return this.formFactory.form(ForeignKeyRelation.class).fill(foreignKeyRelation);
-    }
-
-    private Form<ForeignKeyRelation> getForm() {
-        return this.formFactory.form(ForeignKeyRelation.class);
-    }
-
-    public Form<ForeignKeyRelationForm> getSimpleForm() {
-        return this.formFactory.form(ForeignKeyRelationForm.class);
+        return foreignKeyRelNode;
     }
 }

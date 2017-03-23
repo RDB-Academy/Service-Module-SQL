@@ -1,60 +1,43 @@
 package services;
 
-import com.google.inject.Inject;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 import models.ForeignKey;
-import play.data.Form;
-import play.data.FormFactory;
-import repository.ForeignKeyRepository;
+import models.ForeignKeyRelation;
+import play.libs.Json;
+
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author fabiomazzone
  */
 @Singleton
 public class ForeignKeyService {
-    private final ForeignKeyRepository foreignKeyRepository;
-    private final FormFactory formFactory;
+    public ObjectNode transform(ForeignKey foreignKey)
+    {
+        ObjectNode foreignKeyNode = Json.newObject();
+        ArrayNode foreignKeyRelationArray = Json.newArray();
 
-    @Inject
-    public ForeignKeyService(ForeignKeyRepository foreignKeyRepository, FormFactory formFactory) {
-        
-        this.foreignKeyRepository = foreignKeyRepository;
-        this.formFactory = formFactory;
-    }
+        foreignKeyNode.put("id", foreignKey.getId());
+        foreignKeyNode.put("name", foreignKey.getName());
 
+        if(foreignKey.getForeignKeyRelationList().size() > 0) {
+            foreignKey.getForeignKeyRelationList().parallelStream().map(ForeignKeyRelation::getId).forEach(foreignKeyRelationArray::add);
 
-    public Form<ForeignKey> readAsForm(Long id) {
-        ForeignKey foreignKey = this.read(id);
-        Form<ForeignKey> foreignKeyForm = getForm();
+            ForeignKeyRelation foreignKeyRelation = foreignKey.getForeignKeyRelationList().get(0);
 
-        if (foreignKey == null) {
-            foreignKeyForm.reject(Service.formErrorNotFound, "ForeignKey not found");
-            return foreignKeyForm;
+            Long sourceColumn = foreignKeyRelation.getSourceColumn().getTableDef().getId();
+            Long targetColumn = foreignKeyRelation.getTargetColumn().getTableDef().getId();
+
+            foreignKeyNode.put("sourceTable", sourceColumn);
+            foreignKeyNode.put("targetTable", targetColumn);
         }
 
-        return this.formFactory.form(ForeignKey.class).fill(foreignKey);
-    }
+        foreignKeyNode.set("foreignKeyRelationList", foreignKeyRelationArray);
+        foreignKeyNode.put("createdAt", foreignKey.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        foreignKeyNode.put("modifiedAt", foreignKey.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
-    public ForeignKey read(Long id) {
-
-        return this.foreignKeyRepository.getById(id);
-    }
-
-    private Form<ForeignKey> getForm() {
-        return this.formFactory.form(ForeignKey.class);
-    }
-
-    public Form<ForeignKey> delete(Long id) {
-        ForeignKey foreignKey = this.read(id);
-        Form<ForeignKey> foreignKeyForm = getForm();
-
-        if(foreignKey == null) {
-            foreignKeyForm.reject(Service.formErrorNotFound, "ForeignKey not Found");
-            return foreignKeyForm;
-        }
-
-        foreignKey.delete();
-
-        return foreignKeyForm;
+        return foreignKeyNode;
     }
 }

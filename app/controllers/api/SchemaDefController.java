@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
  * @author Fabio Mazzone
  */
 @Singleton
-public class SchemaDefController extends RootController
+@Security.Authenticated(ActiveSessionAuthenticator.class)
+public class SchemaDefController extends BaseController
 {
     private final SchemaDefService schemaDefService;
     private final SchemaDefRepository schemaDefRepository;
@@ -52,17 +53,24 @@ public class SchemaDefController extends RootController
     @Security.Authenticated(AdminSessionAuthenticator.class)
     public Result create()
     {
-        Form<SchemaDef> schemaDefForm = formFactory.form(SchemaDef.class).bindFromRequest();
-
-        schemaDefForm = this.schemaDefService.create(schemaDefForm);
+        Form<SchemaDef> schemaDefForm = this.formFactory.form(SchemaDef.class).bindFromRequest();
 
         if(schemaDefForm.hasErrors())
         {
             Logger.warn(schemaDefForm.errorsAsJson().toString());
             return badRequest(schemaDefForm.errorsAsJson());
         }
+        SchemaDef schemaDef = schemaDefForm.get();
 
-        SchemaDef schemaDef = this.schemaDefRepository.getById(schemaDefForm.get().getId());
+        if(this.schemaDefRepository.getByName(schemaDef.getName()) != null)
+        {
+            schemaDefForm.reject("name", "name already taken");
+            Logger.warn(schemaDefForm.errorsAsJson().toString());
+            return badRequest(schemaDefForm.errorsAsJson());
+        }
+
+        this.schemaDefRepository.save(schemaDef);
+
         return ok(this.schemaDefService.transform(schemaDef));
     }
 
@@ -82,7 +90,6 @@ public class SchemaDefController extends RootController
         return ok(Json.toJson(jsonNodeList));
     }
 
-    @Security.Authenticated(ActiveSessionAuthenticator.class)
     public Result read(Long id)
     {
         SchemaDef schemaDef = this.schemaDefRepository.getById(id);

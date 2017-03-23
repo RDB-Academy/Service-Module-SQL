@@ -17,8 +17,7 @@ public class InactiveSessionAuthenticator extends SessionAuthenticator {
     @Override
     public String getUsername(Http.Context ctx) {
         Session session = this.getSessionByRequest(ctx.request());
-
-        if(this.sessionService.isActive(session)) {
+        if(session != null && this.sessionService.isActive(session)) {
             return null;
         }
         return "";

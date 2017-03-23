@@ -16,7 +16,7 @@ import javax.inject.Inject;
 /**
  * @author fabiomazzone
  */
-public class SessionController extends RootController {
+public class SessionController extends BaseController {
     private final SessionRepository sessionRepository;
     @Inject
     public SessionController(

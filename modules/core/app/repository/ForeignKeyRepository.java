@@ -1,8 +1,6 @@
 package repository;
 
-import com.avaje.ebean.Model;
 import com.google.inject.ImplementedBy;
-import com.google.inject.Singleton;
 import models.ForeignKey;
 
 import java.util.List;
@@ -10,7 +8,7 @@ import java.util.List;
 /**
  * @author Fabio Mazzone
  */
-@ImplementedBy(ForeignKeyRepository.class)
+@ImplementedBy(ForeignKeyRepositoryEbean.class)
 public interface ForeignKeyRepository {
     List<ForeignKey> getAll();
 

@@ -10,7 +10,6 @@ import repository.TaskRepository;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * @author fabiomazzone
@@ -51,9 +50,6 @@ public class TaskService extends Service {
         return this.taskRepository.getById(id);
     }
 
-    public List<Task> readAll() {
-        return this.taskRepository.getAll();
-    }
 
     private Form<Task> getForm() {
         return this.formFactory.form(Task.class);

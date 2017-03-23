@@ -1,6 +1,7 @@
 package controllers.api;
 
 import authenticators.ActiveSessionAuthenticator;
+import authenticators.AdminSessionAuthenticator;
 import com.google.inject.Singleton;
 import models.ColumnDef;
 import models.Session;
@@ -18,7 +19,8 @@ import javax.inject.Inject;
  * @author invisible
  */
 @Singleton
-public class ColumnDefController extends RootController
+@Security.Authenticated(ActiveSessionAuthenticator.class)
+public class ColumnDefController extends BaseController
 {
     private final ColumnDefRepository columnDefRepository;
     private final ColumnDefService columnDefService;
@@ -35,17 +37,36 @@ public class ColumnDefController extends RootController
         this.columnDefRepository = columnDefRepository;
     }
 
-    @Security.Authenticated(ActiveSessionAuthenticator.class)
+    @Security.Authenticated(AdminSessionAuthenticator.class)
+    public Result create()
+    {
+        return TODO;
+    }
+
     public Result read(Long id)
     {
         ColumnDef columnDef = this.columnDefRepository.getById(id);
-        if(columnDef == null) {
+        if(columnDef == null)
+        {
             return notFound();
         }
         Session session = this.getSession(Http.Context.current().request());
-        if(session != null && sessionService.isAdmin(session)) {
+        if(session != null && sessionService.isAdmin(session))
+        {
             return ok(this.columnDefService.transform(columnDef));
         }
         return ok(Json.toJson(columnDef));
+    }
+
+    @Security.Authenticated(AdminSessionAuthenticator.class)
+    public Result update(Long id)
+    {
+        return TODO;
+    }
+
+    @Security.Authenticated(AdminSessionAuthenticator.class)
+    public Result delete(Long id)
+    {
+        return TODO;
     }
 }

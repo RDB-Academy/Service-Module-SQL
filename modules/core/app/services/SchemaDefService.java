@@ -6,59 +6,17 @@ import models.ForeignKey;
 import models.SchemaDef;
 import models.TableDef;
 import models.Task;
-import play.data.Form;
-import play.data.FormFactory;
 import play.libs.Json;
-import repository.SchemaDefRepository;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.validation.constraints.NotNull;
 import java.time.format.DateTimeFormatter;
 
 /**
  * @author fabiomazzone
  */
 @Singleton
-public class SchemaDefService extends Service {
-    private final SchemaDefRepository schemaDefRepository;
-    private final FormFactory formFactory;
-
-    @Inject
-    public SchemaDefService(
-            SchemaDefRepository schemaDefRepository,
-            FormFactory formFactory) {
-        this.schemaDefRepository = schemaDefRepository;
-        this.formFactory = formFactory;
-    }
-
-    /**
-     * Returns a new SchemaDefModel
-     *
-     * @return the new created SchemaDefModel
-     */
-    public Form<SchemaDef> create(@NotNull Form<SchemaDef> schemaDefForm) {
-        if(schemaDefForm.hasErrors())
-        {
-            return schemaDefForm;
-        }
-        SchemaDef schemaDef = schemaDefForm.get();
-
-        if(schemaDefRepository.getByName(schemaDef.getName()) != null)
-        {
-            schemaDefForm.reject("name", "name already taken");
-            return schemaDefForm;
-        }
-
-        this.schemaDefRepository.save(schemaDef);
-
-        return schemaDefForm.fill(schemaDef);
-    }
-
-    public SchemaDef read(Long id)
-    {
-        return this.schemaDefRepository.getById(id);
-    }
+public class SchemaDefService extends Service
+{
 
     public ObjectNode transformBase(SchemaDef schemaDef)
     {

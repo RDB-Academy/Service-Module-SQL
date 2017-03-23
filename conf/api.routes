@@ -1,10 +1,16 @@
 # /api
+
+
+## Session Interface
 POST    /login                      controllers.api.SessionController.login()
 GET     /logout                     controllers.api.SessionController.logout()
 
-## model.Task
+## Task Interface
+POST    /tasks                      controllers.api.TaskController.create()
 GET     /tasks                      controllers.api.TaskController.readAll()
-GET     /tasks/:id                  controllers.api.TaskController.read(id :Long)
+GET     /tasks/:id                  controllers.api.TaskController.read(id: Long)
+PATCH   /tasks/:id                  controllers.api.TaskController.update(id: Long)
+DELETE  /tasks/:id                  controllers.api.TaskController.delete(id: Long)
 
 ## model.TaskTrial
 POST    /task-trials                controllers.api.TaskTrialController.create()
@@ -21,10 +27,18 @@ DELETE  /schema-defs/:id            controllers.api.SchemaDefController.delete(i
 
 
 ## model.TableDef
+POST    /table-defs                 controllers.api.TableDefController.create()
 GET     /table-defs/:id             controllers.api.TableDefController.read(id: Long)
+PATCH   /table-defs/:id             controllers.api.TableDefController.update(id: Long)
+DELETE  /table-defs/:id             controllers.api.TableDefController.delete(id: Long)
+
 
 ## model.ColumnDef
+POST    /column-defs                controllers.api.ColumnDefController.create()
 GET     /column-defs/:id            controllers.api.ColumnDefController.read(id: Long)
+PATCH   /column-defs/:id            controllers.api.ColumnDefController.update(id: Long)
+DELETE  /column-defs/:id            controllers.api.ColumnDefController.delete(id: Long)
+
 
 ## model.ForeignKey
 GET     /foreign-keys/:id           controllers.api.ForeignKeyController.read(id: Long)
