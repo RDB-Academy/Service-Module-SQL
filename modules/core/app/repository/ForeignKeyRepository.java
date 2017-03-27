@@ -9,11 +9,13 @@ import java.util.List;
  * @author Fabio Mazzone
  */
 @ImplementedBy(ForeignKeyRepositoryEbean.class)
-public interface ForeignKeyRepository {
+public interface ForeignKeyRepository
+{
     List<ForeignKey> getAll();
 
     ForeignKey getById(Long id);
 
     void save(ForeignKey foreignKey);
+    void delete(ForeignKey foreignKey);
 }
 

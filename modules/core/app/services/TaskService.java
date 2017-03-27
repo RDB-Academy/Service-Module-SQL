@@ -15,27 +15,34 @@ import java.time.format.DateTimeFormatter;
  * @author fabiomazzone
  */
 @Singleton
-public class TaskService extends Service {
+public class TaskService extends Service
+{
     private final TaskRepository taskRepository;
     private final FormFactory formFactory;
 
     @Inject
-    public TaskService(TaskRepository taskRepository, FormFactory formFactory) {
+    public TaskService(
+            TaskRepository taskRepository,
+            FormFactory formFactory)
+    {
 
         this.taskRepository = taskRepository;
         this.formFactory = formFactory;
     }
 
-    public Form<Task> create() {
+    public Form<Task> create()
+    {
         Form<Task> taskForm = this.getForm().bindFromRequest();
 
-        if (taskForm.hasErrors()) {
+        if (taskForm.hasErrors())
+        {
             return taskForm;
         }
 
         Task task = taskForm.get();
 
-        if (taskRepository.getById(task.getId()) != null) {
+        if (taskRepository.getById(task.getId()) != null)
+        {
             taskForm.reject("id", "task already exists");
             return taskForm;
         }
@@ -46,16 +53,19 @@ public class TaskService extends Service {
 
     }
 
-    public Task read(Long id) {
+    public Task read(Long id)
+    {
         return this.taskRepository.getById(id);
     }
 
 
-    private Form<Task> getForm() {
+    private Form<Task> getForm()
+    {
         return this.formFactory.form(Task.class);
     }
 
-    public ObjectNode transform(Task task) {
+    public ObjectNode transform(Task task)
+    {
         ObjectNode taskNode = Json.newObject();
 
         taskNode.put("id", task.getId());

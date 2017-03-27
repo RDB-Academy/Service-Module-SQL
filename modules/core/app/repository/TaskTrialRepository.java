@@ -10,7 +10,8 @@ import java.util.List;
  * @author Fabio Mazzone
  */
 @ImplementedBy(TaskTrialRepositoryEbean.class)
-public interface TaskTrialRepository {
+public interface TaskTrialRepository
+{
     TaskTrial create(Task task);
 
     List<TaskTrial> getAll();
@@ -18,5 +19,6 @@ public interface TaskTrialRepository {
     TaskTrial getById(Long id);
 
     void save(TaskTrial taskTrial);
+    void delete(TaskTrial taskTrial);
 }
 

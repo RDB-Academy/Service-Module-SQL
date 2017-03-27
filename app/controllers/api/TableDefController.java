@@ -5,6 +5,9 @@ import authenticators.AdminSessionAuthenticator;
 import com.google.inject.Singleton;
 import models.Session;
 import models.TableDef;
+import play.Logger;
+import play.data.Form;
+import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -16,6 +19,7 @@ import services.TableDefService;
 import javax.inject.Inject;
 
 /**
+ *
  * @author invisible
  */
 @Singleton
@@ -24,23 +28,42 @@ public class TableDefController extends BaseController
 {
     private final TableDefService tableDefService;
     private final TableDefRepository tableDefRepository;
+    private final FormFactory formFactory;
 
     @Inject
     public TableDefController(
             TableDefService tableDefService,
             TableDefRepository tableDefRepository,
-            SessionService sessionService)
+            SessionService sessionService,
+            FormFactory formFactory)
     {
         super(sessionService);
 
         this.tableDefService = tableDefService;
         this.tableDefRepository = tableDefRepository;
+        this.formFactory = formFactory;
     }
 
+    /**
+     *
+     *
+     * @return returns the new created TableDef or an error
+     */
     @Security.Authenticated(AdminSessionAuthenticator.class)
     public Result create()
     {
-        return TODO;
+        Form<TableDef> tableDefForm = this.formFactory.form(TableDef.class).bindFromRequest();
+
+        if(tableDefForm.hasErrors()) {
+            Logger.warn("TableDefForm has errors");
+            return badRequest(tableDefForm.errorsAsJson());
+        }
+
+        TableDef tableDef = tableDefForm.get();
+
+        this.tableDefRepository.save(tableDef);
+
+        return ok(Json.toJson(tableDef));
     }
 
     public Result read(Long id)
@@ -62,6 +85,23 @@ public class TableDefController extends BaseController
     @Security.Authenticated(AdminSessionAuthenticator.class)
     public Result update(Long id)
     {
+        TableDef        tableDef
+                = this.tableDefRepository.getById(id);
+        Form<TableDef>  tableDefForm
+                = this.formFactory.form(TableDef.class).bindFromRequest(
+                        request(), "name", "extensionDef");
+
+        if(tableDef == null)
+        {
+            return notFound();
+        }
+
+        if(tableDefForm.hasErrors())
+        {
+            Logger.warn(tableDefForm.errorsAsJson().toString());
+            return badRequest(tableDefForm.errorsAsJson());
+        }
+
         return TODO;
     }
 
@@ -76,6 +116,6 @@ public class TableDefController extends BaseController
 
         this.tableDefRepository.delete(tableDef);
 
-        return TODO;
+        return ok();
     }
 }

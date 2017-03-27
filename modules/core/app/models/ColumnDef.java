@@ -11,7 +11,8 @@ import java.util.List;
  * @author fabiomazzone
  */
 @Entity
-public class ColumnDef extends BaseModel {
+public class ColumnDef extends BaseModel
+{
 
     @Id
     private Long id;

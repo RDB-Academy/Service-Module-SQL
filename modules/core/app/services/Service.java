@@ -3,6 +3,7 @@ package services;
 /**
  * @author fabiomazzone
  */
-abstract class Service {
+abstract class Service
+{
     static final String formErrorNotFound = "Not Found";
 }

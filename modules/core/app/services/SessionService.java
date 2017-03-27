@@ -17,7 +17,8 @@ import javax.validation.constraints.NotNull;
  * @author fabiomazzone
  */
 @Singleton
-public class SessionService {
+public class SessionService
+{
     public static final String SESSION_FIELD_NAME = "auth-key";
 
     private final SessionRepository sessionRepository;
@@ -28,14 +29,15 @@ public class SessionService {
     public SessionService(
             SessionRepository sessionRepository,
             FormFactory formFactory,
-            Configuration configuration) {
-
+            Configuration configuration)
+    {
         this.sessionRepository = sessionRepository;
         this.formFactory = formFactory;
         this.configuration = configuration;
     }
 
-    private Session setAdminSession(Http.Context ctx) {
+    private Session setAdminSession(Http.Context ctx)
+    {
         Session session = new Session();
         session.save();
 
@@ -51,7 +53,8 @@ public class SessionService {
         return session;
     }
 
-    Session createSession(Http.Context ctx) {
+    Session createSession(Http.Context ctx)
+    {
         Session session = new Session();
         UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
         String connectedData = userAgent.toString() + ctx.request().remoteAddress();
@@ -71,15 +74,18 @@ public class SessionService {
      * @param sessionId the session identifier
      * @return returns the session object if the session is active , else it returns null
      */
-    public Session findActiveSessionById(@NotNull String sessionId) {
+    public Session findActiveSessionById(@NotNull String sessionId)
+    {
         Session session = this.sessionRepository.getById(sessionId);
-        if (session != null && this.isActive(session)) {
+        if (session != null && this.isActive(session))
+        {
             return session;
         }
         return null;
     }
 
-    public Form<LoginForm> validateLoginForm() {
+    public Form<LoginForm> validateLoginForm()
+    {
         Form<LoginForm> loginForm;
         String adminPassword;
         LoginForm login;
@@ -87,13 +93,15 @@ public class SessionService {
         loginForm = this.getLoginForm().bindFromRequest();
         adminPassword = this.configuration.getString("sqlModule.adminPassword");
 
-        if (loginForm.hasErrors()) {
+        if (loginForm.hasErrors())
+        {
             return loginForm;
         }
 
         login = loginForm.get();
 
-        if (!login.getPassword().equals(adminPassword)) {
+        if (!login.getPassword().equals(adminPassword))
+        {
             loginForm.reject("Wrong E-Mail or Password");
             return loginForm;
         }
@@ -101,13 +109,15 @@ public class SessionService {
         return loginForm;
     }
 
-    public Session login(Form<LoginForm> loginForm) {
+    public Session login(Form<LoginForm> loginForm)
+    {
         Session session = this.setAdminSession(Http.Context.current());
         Http.Context.current().response().setHeader(SESSION_FIELD_NAME, session.getId());
         return session;
     }
 
-    private Form<LoginForm> getLoginForm() {
+    private Form<LoginForm> getLoginForm()
+    {
         return this.formFactory.form(LoginForm.class);
     }
 
@@ -117,7 +127,8 @@ public class SessionService {
      * @param session the session object
      * @return returns true if this is a authenticated Session
      */
-    public boolean isActive(@NotNull Session session) {
+    public boolean isActive(@NotNull Session session)
+    {
         return session.getUsername() != null && !session.getUsername().isEmpty();
     }
 
@@ -127,12 +138,14 @@ public class SessionService {
      * @param session a active session object
      * @return returns true if is admin or false
      */
-    public boolean isAdmin(@NotNull Session session) {
+    public boolean isAdmin(@NotNull Session session)
+    {
         // ToDo
         return isActive(session) && session.getUsername().equals("admin");
     }
 
-    public void invalidate(Session session) {
+    public void invalidate(Session session)
+    {
         // ToDo
     }
 }

@@ -21,6 +21,7 @@ public class TableDef extends BaseModel {
     private String name;
 
     @JsonIgnore
+    @NotNull
     @ManyToOne(optional = false)
     private SchemaDef schemaDef;
 

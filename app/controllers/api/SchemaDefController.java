@@ -151,7 +151,7 @@ public class SchemaDefController extends BaseController
         {
             return notFound();
         }
-        schemaDef.delete();
+        this.schemaDefRepository.delete(schemaDef);
 
         return ok();
     }

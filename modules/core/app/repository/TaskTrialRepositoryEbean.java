@@ -14,29 +14,34 @@ import java.util.Random;
  * @author Fabio Mazzone
  */
 @Singleton
-public class TaskTrialRepositoryEbean implements TaskTrialRepository {
+public class TaskTrialRepositoryEbean implements TaskTrialRepository
+{
     private final Configuration configuration;
     private final Random random;
 
     private Model.Finder<Long, TaskTrial> find = new Model.Finder<>(TaskTrial.class);
 
     @Inject
-    public TaskTrialRepositoryEbean(Configuration configuration) {
+    public TaskTrialRepositoryEbean(Configuration configuration)
+    {
         this.configuration = configuration;
 
         this.random = new Random();
     }
 
 
-    public List<TaskTrial> getAll() {
+    public List<TaskTrial> getAll()
+    {
         return this.find.all();
     }
 
-    public TaskTrial getById(Long id) {
+    public TaskTrial getById(Long id)
+    {
         return this.find.byId(id);
     }
 
-    public TaskTrial create(Task task) {
+    public TaskTrial create(Task task)
+    {
         TaskTrial taskTrial;
 
         taskTrial   = new TaskTrial();
@@ -52,8 +57,15 @@ public class TaskTrialRepositoryEbean implements TaskTrialRepository {
         return taskTrial;
     }
 
-    public void save(TaskTrial taskTrial) {
+    public void save(TaskTrial taskTrial)
+    {
         this.find.db().save(taskTrial);
+    }
+
+    @Override
+    public void delete(TaskTrial taskTrial)
+    {
+        this.find.db().delete(taskTrial);
     }
 
     private String getDatabaseDriver() {

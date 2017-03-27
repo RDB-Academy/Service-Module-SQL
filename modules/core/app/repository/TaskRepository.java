@@ -11,8 +11,8 @@ import java.util.List;
  * @author fabiomazzone
  */
 @ImplementedBy(TaskRepositoryEbean.class)
-public interface TaskRepository {
-
+public interface TaskRepository
+{
     List<Task> getAll();
 
     Task getById(Long id);
@@ -20,5 +20,7 @@ public interface TaskRepository {
     List<Task> getTaskListByDifficulty(int difficulty);
 
     void save(Task task);
+
+    void delete(Task task);
 }
 

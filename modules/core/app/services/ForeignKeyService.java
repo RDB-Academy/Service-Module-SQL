@@ -13,7 +13,8 @@ import java.time.format.DateTimeFormatter;
  * @author fabiomazzone
  */
 @Singleton
-public class ForeignKeyService {
+public class ForeignKeyService
+{
     public ObjectNode transform(ForeignKey foreignKey)
     {
         ObjectNode foreignKeyNode = Json.newObject();

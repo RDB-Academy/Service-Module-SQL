@@ -9,15 +9,24 @@ import javax.inject.Singleton;
  * @author fabiomazzone
  */
 @Singleton
-public class SessionRepositoryEbean implements SessionRepository {
+public class SessionRepositoryEbean implements SessionRepository
+{
     private Model.Finder<String, Session> find = new Model.Finder<>(Session.class);
 
-    public Session getById(String sessionId) {
+    public Session getById(String sessionId)
+    {
         return find.byId(sessionId);
     }
 
     @Override
-    public void save(Session session) {
+    public void save(Session session)
+    {
         find.db().save(session);
+    }
+
+    @Override
+    public void delete(Session session)
+    {
+        this.find.db().delete(session);
     }
 }

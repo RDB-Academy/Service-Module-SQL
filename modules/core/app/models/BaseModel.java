@@ -14,7 +14,8 @@ import java.time.format.DateTimeFormatter;
  * The BaseModel
  */
 @MappedSuperclass
-public abstract class BaseModel extends Model {
+public abstract class BaseModel extends Model
+{
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
@@ -26,34 +27,38 @@ public abstract class BaseModel extends Model {
     }
 
     @JsonIgnore
-    public LocalDateTime getCreatedAt() {
+    public LocalDateTime getCreatedAt()
+    {
         return createdAt;
     }
 
     @JsonGetter("createdAt")
-    public String getCreatedAtFormat() {
+    public String getCreatedAtFormat()
+    {
         return createdAt.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @JsonIgnore
-    public String getCreatedAtFromNow() {
+    public String getCreatedAtFromNow()
+    {
         return formatter.DateFormatter.fromNow(this.createdAt);
     }
 
     @JsonIgnore
-    public LocalDateTime getModifiedAt() {
+    public LocalDateTime getModifiedAt()
+    {
         return modifiedAt;
     }
 
     @JsonGetter("modifiedAt")
-    public String getModifiedAtFormat() {
+    public String getModifiedAtFormat()
+    {
         return (modifiedAt != null) ? modifiedAt.format(DateTimeFormatter.ISO_DATE_TIME) : null;
     }
 
     @JsonIgnore
-    public String getModifiedAtFromNow() {
+    public String getModifiedAtFromNow()
+    {
         return formatter.DateFormatter.fromNow(this.modifiedAt);
     }
-
-
 }

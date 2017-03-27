@@ -35,6 +35,11 @@ public class ForeignKeyController extends BaseController
         this.foreignKeyRepository = foreignKeyRepository;
     }
 
+    public Result create()
+    {
+        return TODO;
+    }
+
     @Security.Authenticated(ActiveSessionAuthenticator.class)
     public Result read(Long id)
     {
@@ -50,5 +55,15 @@ public class ForeignKeyController extends BaseController
             return ok(this.foreignKeyService.transform(foreignKey));
         }
         return ok(Json.toJson(foreignKey));
+    }
+
+    public Result update(Long id)
+    {
+        return TODO;
+    }
+
+    public Result delete(Long id)
+    {
+        return TODO;
     }
 }

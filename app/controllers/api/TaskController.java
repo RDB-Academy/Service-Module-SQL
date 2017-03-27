@@ -87,6 +87,8 @@ public class TaskController extends BaseController
         {
             return notFound();
         }
-        return TODO;
+
+        this.taskRepository.delete(task);
+        return ok();
     }
 }

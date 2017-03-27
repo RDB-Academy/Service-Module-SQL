@@ -11,7 +11,8 @@ import javax.validation.constraints.NotNull;
  * @author Fabio Mazzone
  */
 @ImplementedBy(SessionRepositoryEbean.class)
-public interface SessionRepository {
+public interface SessionRepository
+{
     /**
      * select session entity by id
      * @param sessionId a session Id
@@ -20,5 +21,6 @@ public interface SessionRepository {
     Session getById(@NotNull String sessionId);
 
     void save(Session session);
+    void delete(Session session);
 }
 

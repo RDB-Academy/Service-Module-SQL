@@ -11,8 +11,10 @@ import java.time.format.DateTimeFormatter;
  * @author Fabio Mazzone
  */
 @Singleton
-public class ColumnDefService {
-    public ObjectNode transform(ColumnDef columnDef) {
+public class ColumnDefService
+{
+    public ObjectNode transform(ColumnDef columnDef)
+    {
         ObjectNode columnDefNode = Json.newObject();
 
         columnDefNode.put("id", columnDef.getId());
