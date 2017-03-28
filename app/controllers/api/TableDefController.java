@@ -3,6 +3,7 @@ package controllers.api;
 import authenticators.ActiveSessionAuthenticator;
 import authenticators.AdminSessionAuthenticator;
 import com.google.inject.Singleton;
+import models.SchemaDef;
 import models.Session;
 import models.TableDef;
 import play.Logger;
@@ -12,6 +13,7 @@ import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import repository.SchemaDefRepository;
 import repository.TableDefRepository;
 import services.SessionService;
 import services.TableDefService;
@@ -28,6 +30,7 @@ public class TableDefController extends BaseController
 {
     private final TableDefService tableDefService;
     private final TableDefRepository tableDefRepository;
+    private final SchemaDefRepository schemaDefRepository;
     private final FormFactory formFactory;
 
     @Inject
@@ -35,12 +38,14 @@ public class TableDefController extends BaseController
             TableDefService tableDefService,
             TableDefRepository tableDefRepository,
             SessionService sessionService,
+            SchemaDefRepository schemaDefRepository,
             FormFactory formFactory)
     {
         super(sessionService);
 
         this.tableDefService = tableDefService;
         this.tableDefRepository = tableDefRepository;
+        this.schemaDefRepository = schemaDefRepository;
         this.formFactory = formFactory;
     }
 
@@ -53,13 +58,23 @@ public class TableDefController extends BaseController
     public Result create()
     {
         Form<TableDef> tableDefForm = this.formFactory.form(TableDef.class).bindFromRequest();
+        TableDef tableDef = tableDefForm.get();
+
+        if(!tableDefForm.hasErrors()) {
+            Long SchemaDefId = tableDef.getSchemaDefId();
+            SchemaDef schemaDef = this.schemaDefRepository.getById(SchemaDefId);
+            if(schemaDef == null) {
+                tableDefForm.reject("SchemaDef not found");
+            } else {
+                tableDef.setSchemaDef(schemaDef);
+            }
+        }
 
         if(tableDefForm.hasErrors()) {
             Logger.warn("TableDefForm has errors");
+            Logger.warn(tableDefForm.errorsAsJson().toString());
             return badRequest(tableDefForm.errorsAsJson());
         }
-
-        TableDef tableDef = tableDefForm.get();
 
         this.tableDefRepository.save(tableDef);
 

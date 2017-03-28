@@ -2,6 +2,7 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import play.data.validation.Constraints;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,9 +22,14 @@ public class TableDef extends BaseModel {
     private String name;
 
     @JsonIgnore
-    @NotNull
     @ManyToOne(optional = false)
     private SchemaDef schemaDef;
+
+    @NotNull
+    @Transient
+    @JsonIgnore
+    @Constraints.Required
+    private Long schemaDefId;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableDef")
@@ -50,12 +56,25 @@ public class TableDef extends BaseModel {
         this.name = name;
     }
 
-    private SchemaDef getSchemaDef() {
+    public SchemaDef getSchemaDef() {
         return schemaDef;
+    }
+
+    @JsonGetter("schemaDef")
+    public Long getSchemaDefJsonId() {
+        return getSchemaDef().getId();
     }
 
     public void setSchemaDef(SchemaDef schemaDef) {
         this.schemaDef = schemaDef;
+    }
+
+    public Long getSchemaDefId() {
+        return schemaDefId;
+    }
+
+    public void setSchemaDefId(Long schemaDefId) {
+        this.schemaDefId = schemaDefId;
     }
 
     public List<ColumnDef> getColumnDefList() {
@@ -82,11 +101,6 @@ public class TableDef extends BaseModel {
         if(!this.columnDefList.contains(columnDef)) {
             this.columnDefList.add(columnDef);
         }
-    }
-
-    @JsonGetter("schemaDef")
-    public Long getSchemaDefId(){
-        return this.getSchemaDef().getId();
     }
 
     @JsonGetter("columnDefs")

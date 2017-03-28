@@ -41,6 +41,9 @@ public class SchemaDefService extends Service
         tableDefNode.put("id", tableDef.getId());
         tableDefNode.put("name", tableDef.getName());
 
+        tableDefNode.put("createdAt", tableDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        tableDefNode.put("modifiedAt", tableDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+
         return tableDefNode;
     }
 
@@ -49,15 +52,15 @@ public class SchemaDefService extends Service
         ObjectNode schemaDefNode = transformBase(schemaDef);
         ObjectNode relationNode = Json.newObject();
 
-        ArrayNode tableDefIds = Json.newArray();
+        ArrayNode tableDef = Json.newArray();
         ArrayNode foreignKeyIds = Json.newArray();
         ArrayNode taskIds = Json.newArray();
 
-        schemaDef.getTableDefList().stream().map(this::transformTableDefBase).forEach(tableDefIds::add);
+        schemaDef.getTableDefList().stream().map(this::transformTableDefBase).forEach(tableDef::add);
         schemaDef.getForeignKeyList().stream().map(ForeignKey::getId).forEach(foreignKeyIds::add);
         schemaDef.getTaskList().stream().map(Task::getId).forEach(taskIds::add);
 
-        relationNode.set("tableDefList", tableDefIds);
+        relationNode.set("tableDefList", tableDef);
         relationNode.set("foreignKeyList", foreignKeyIds);
         relationNode.set("taskList", taskIds);
 
