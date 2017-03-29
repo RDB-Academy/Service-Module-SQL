@@ -78,7 +78,7 @@ public class TableDefController extends BaseController
 
         this.tableDefRepository.save(tableDef);
 
-        return ok(Json.toJson(tableDef));
+        return ok(tableDefService.transformBase(tableDef));
     }
 
     public Result read(Long id)

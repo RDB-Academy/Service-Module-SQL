@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.ForeignKey;
 import models.SchemaDef;
-import models.TableDef;
 import models.Task;
 import play.libs.Json;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.format.DateTimeFormatter;
 
@@ -17,6 +17,12 @@ import java.time.format.DateTimeFormatter;
 @Singleton
 public class SchemaDefService extends Service
 {
+    private final TableDefService tableDefService;
+
+    @Inject
+    public SchemaDefService(TableDefService tableDefService) {
+        this.tableDefService = tableDefService;
+    }
 
     public ObjectNode transformBase(SchemaDef schemaDef)
     {
@@ -34,19 +40,6 @@ public class SchemaDefService extends Service
         return schemaDefNode;
     }
 
-    private ObjectNode transformTableDefBase(TableDef tableDef)
-    {
-        ObjectNode tableDefNode = Json.newObject();
-
-        tableDefNode.put("id", tableDef.getId());
-        tableDefNode.put("name", tableDef.getName());
-
-        tableDefNode.put("createdAt", tableDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
-        tableDefNode.put("modifiedAt", tableDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
-
-        return tableDefNode;
-    }
-
     public ObjectNode transform(SchemaDef schemaDef)
     {
         ObjectNode schemaDefNode = transformBase(schemaDef);
@@ -56,7 +49,7 @@ public class SchemaDefService extends Service
         ArrayNode foreignKeyIds = Json.newArray();
         ArrayNode taskIds = Json.newArray();
 
-        schemaDef.getTableDefList().stream().map(this::transformTableDefBase).forEach(tableDef::add);
+        schemaDef.getTableDefList().stream().map(tableDefService::transformBase).forEach(tableDef::add);
         schemaDef.getForeignKeyList().stream().map(ForeignKey::getId).forEach(foreignKeyIds::add);
         schemaDef.getTaskList().stream().map(Task::getId).forEach(taskIds::add);
 

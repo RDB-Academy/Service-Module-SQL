@@ -15,6 +15,20 @@ import java.time.format.DateTimeFormatter;
 @Singleton
 public class TableDefService extends Service
 {
+    public ObjectNode transformBase(TableDef tableDef)
+    {
+        ObjectNode tableDefNode = Json.newObject();
+
+        tableDefNode.put("id", tableDef.getId());
+        tableDefNode.put("name", tableDef.getName());
+        tableDefNode.put("schemaDefId", tableDef.getSchemaDef().getId());
+
+        tableDefNode.put("createdAt", tableDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        tableDefNode.put("modifiedAt", tableDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+
+        return tableDefNode;
+    }
+
     public ObjectNode transform(TableDef tableDef)
     {
         ObjectNode tableDefNode = Json.newObject();
