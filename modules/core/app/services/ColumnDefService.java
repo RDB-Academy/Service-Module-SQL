@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Singleton
 public class ColumnDefService
 {
-    public ObjectNode transform(ColumnDef columnDef)
+    public ObjectNode transformBase(ColumnDef columnDef)
     {
         ObjectNode columnDefNode = Json.newObject();
 
@@ -22,13 +22,20 @@ public class ColumnDefService
 
         columnDefNode.put("tableDefId", columnDef.getTableDef().getId());
 
+        columnDefNode.put("createdAt", columnDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        columnDefNode.put("modifiedAt", columnDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+
+        return columnDefNode;
+    }
+
+    public ObjectNode transform(ColumnDef columnDef)
+    {
+        ObjectNode columnDefNode = this.transformBase(columnDef);
+
         columnDefNode.put("dataType", columnDef.getDataType());
         columnDefNode.put("isPrimaryKey", columnDef.isPrimary());
         columnDefNode.put("isNotNull", columnDef.isNotNull());
         columnDefNode.put("MetaValueSet", columnDef.getMetaValueSetName());
-
-        columnDefNode.put("createdAt", columnDef.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
-        columnDefNode.put("modifiedAt", columnDef.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return columnDefNode;
     }
