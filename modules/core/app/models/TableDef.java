@@ -19,6 +19,7 @@ public class TableDef extends BaseModel {
     private Long id;
 
     @NotNull
+    @Constraints.MinLength(4)
     private String name;
 
     @JsonIgnore
