@@ -13,6 +13,11 @@ import java.time.format.DateTimeFormatter;
 @Singleton
 public class ColumnDefService
 {
+    /**
+     *
+     * @param columnDef
+     * @return
+     */
     public ObjectNode transformBase(ColumnDef columnDef)
     {
         ObjectNode columnDefNode = Json.newObject();
@@ -28,6 +33,11 @@ public class ColumnDefService
         return columnDefNode;
     }
 
+    /**
+     * 
+     * @param columnDef
+     * @return
+     */
     public ObjectNode transform(ColumnDef columnDef)
     {
         ObjectNode columnDefNode = this.transformBase(columnDef);

@@ -2,12 +2,14 @@ package services;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.ColumnDef;
 import models.TableDef;
 import play.libs.Json;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * @author fabiomazzone
@@ -43,10 +45,12 @@ public class TableDefService extends Service
     public ObjectNode transform(TableDef tableDef)
     {
         ObjectNode tableDefNode = this.transformBase(tableDef);
+        List<ColumnDef> columnDefList = tableDef.getColumnDefList();
+        columnDefList.sort(ColumnDef::compareTo);
 
         ArrayNode columnIds = Json.newArray();
 
-        tableDef.getColumnDefList().parallelStream().map(this.columnDefService::transformBase).forEach(columnIds::add);
+        columnDefList.stream().map(this.columnDefService::transformBase).forEach(columnIds::add);
 
         tableDefNode.set("columnDefList", columnIds);
 

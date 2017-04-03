@@ -11,7 +11,7 @@ import java.util.List;
  * @author fabiomazzone
  */
 @Entity
-public class ColumnDef extends BaseModel
+public class ColumnDef extends BaseModel implements Comparable<ColumnDef>
 {
 
     @Id
@@ -20,6 +20,9 @@ public class ColumnDef extends BaseModel
     @JsonIgnore
     @ManyToOne(optional = false)
     private TableDef tableDef;
+
+    @Transient
+    private Long tableDefId;
 
     @NotNull
     @Constraints.Required
@@ -97,6 +100,10 @@ public class ColumnDef extends BaseModel
 
     public void setTableDef(TableDef tableDef) {
         this.tableDef = tableDef;
+    }
+
+    public Long getTableDefId() {
+        return this.tableDefId;
     }
 
     public String getName() {
@@ -209,6 +216,23 @@ public class ColumnDef extends BaseModel
                 return "Lorem Ipsum";
             default:
                 return "NaN";
+        }
+    }
+
+    @Override
+    public int compareTo(@org.jetbrains.annotations.NotNull ColumnDef columnDef) {
+        if(this.isPrimary() && !columnDef.isPrimary()) {
+            return -1;
+        } else if(this.isPrimary() && columnDef.isPrimary()) {
+            return 0;
+        } else {
+            if(this.isNotNull() && !columnDef.isNotNull()) {
+                return -1;
+            } else if(this.isNotNull() && columnDef.isNotNull()) {
+                return 0;
+            } else {
+                return 1;
+            }
         }
     }
 }
