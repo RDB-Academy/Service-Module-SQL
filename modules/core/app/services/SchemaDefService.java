@@ -18,10 +18,15 @@ import java.time.format.DateTimeFormatter;
 public class SchemaDefService extends Service
 {
     private final TableDefService tableDefService;
+    private final ForeignKeyService foreignKeyService;
 
     @Inject
-    public SchemaDefService(TableDefService tableDefService) {
+    public SchemaDefService(
+            TableDefService tableDefService,
+            ForeignKeyService foreignKeyService
+    ) {
         this.tableDefService = tableDefService;
+        this.foreignKeyService = foreignKeyService;
     }
 
     public ObjectNode transformBase(SchemaDef schemaDef)
@@ -50,8 +55,12 @@ public class SchemaDefService extends Service
         ArrayNode taskIds = Json.newArray();
 
         schemaDef.getTableDefList().stream().map(tableDefService::transformBase).forEach(tableDef::add);
-        schemaDef.getForeignKeyList().stream().map(ForeignKey::getId).forEach(foreignKeyIds::add);
+        schemaDef.getForeignKeyList().stream().map(foreignKeyService::transformBase).forEach(foreignKeyIds::add);
         schemaDef.getTaskList().stream().map(Task::getId).forEach(taskIds::add);
+
+        schemaDefNode.put("tableCount", schemaDef.getTableDefList().size());
+        schemaDefNode.put("foreignKeyCount", schemaDef.getForeignKeyList().size());
+        schemaDefNode.put("tasksCount", schemaDef.getTaskList().size());
 
         relationNode.set("tableDefList", tableDef);
         relationNode.set("foreignKeyList", foreignKeyIds);

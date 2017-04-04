@@ -15,9 +15,32 @@ import java.time.format.DateTimeFormatter;
 @Singleton
 public class ForeignKeyService
 {
+    /**
+     *
+     * @param foreignKey
+     * @return
+     */
+    public ObjectNode transformBase(ForeignKey foreignKey) {
+        ObjectNode foreignKeyNode = Json.newObject();
+
+        foreignKeyNode.put("id", foreignKey.getId());
+        foreignKeyNode.put("name", foreignKey.getName());
+        foreignKeyNode.put("schemaDefId", foreignKey.getSchemaDef().getId());
+        foreignKeyNode.put("foreignKeyRelationListSize", foreignKey.getForeignKeyRelationList().size());
+        foreignKeyNode.put("createdAt", foreignKey.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+        foreignKeyNode.put("modifiedAt", foreignKey.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+
+        return foreignKeyNode;
+    }
+
+    /**
+     *
+     * @param foreignKey
+     * @return
+     */
     public ObjectNode transform(ForeignKey foreignKey)
     {
-        ObjectNode foreignKeyNode = Json.newObject();
+        ObjectNode foreignKeyNode = transformBase(foreignKey);
         ArrayNode foreignKeyRelationArray = Json.newArray();
 
         foreignKeyNode.put("id", foreignKey.getId());
