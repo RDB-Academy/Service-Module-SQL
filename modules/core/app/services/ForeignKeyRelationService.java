@@ -13,16 +13,23 @@ import java.time.format.DateTimeFormatter;
 @Singleton
 public class ForeignKeyRelationService
 {
-    public ObjectNode transform(ForeignKeyRelation foreignKeyRelation)
-    {
+    public ObjectNode transformBase(ForeignKeyRelation foreignKeyRelation) {
         ObjectNode foreignKeyRelNode = Json.newObject();
 
         foreignKeyRelNode.put("id", foreignKeyRelation.getId());
-        foreignKeyRelNode.put("foreignKey", foreignKeyRelation.getForeignKey().getId());
-        foreignKeyRelNode.put("sourceColumn", foreignKeyRelation.getSourceColumn().getId());
-        foreignKeyRelNode.put("targetColumn", foreignKeyRelation.getTargetColumn().getId());
+        foreignKeyRelNode.put("foreignKeyId", foreignKeyRelation.getForeignKey().getId());
+
         foreignKeyRelNode.put("createdAt", foreignKeyRelation.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
         foreignKeyRelNode.put("modifiedAt", foreignKeyRelation.getModifiedAt().format(DateTimeFormatter.ISO_DATE_TIME));
+
+        return foreignKeyRelNode;
+    }
+    public ObjectNode transform(ForeignKeyRelation foreignKeyRelation)
+    {
+        ObjectNode foreignKeyRelNode = transformBase(foreignKeyRelation);
+
+        foreignKeyRelNode.put("sourceColumn", foreignKeyRelation.getSourceColumn().getId());
+        foreignKeyRelNode.put("targetColumn", foreignKeyRelation.getTargetColumn().getId());
 
         return foreignKeyRelNode;
     }

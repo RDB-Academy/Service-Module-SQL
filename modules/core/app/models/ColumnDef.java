@@ -178,7 +178,6 @@ public class ColumnDef extends BaseModel implements Comparable<ColumnDef>
                 return "ID";
             case META_VALUE_SET_FOREIGN_KEY:
                 return "FK_ID";
-
             case META_VALUE_SET_NAME:
                 return "Name";
             case META_VALUE_SET_FIRSTNAME:
@@ -187,7 +186,6 @@ public class ColumnDef extends BaseModel implements Comparable<ColumnDef>
                 return "Last Name";
             case META_VALUE_SET_FULLNAME:
                 return "Full Name";
-
             case META_VALUE_SET_CITY:
                 return "City";
             case META_VALUE_SET_TITLE:
