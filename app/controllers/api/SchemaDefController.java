@@ -31,12 +31,20 @@ public class SchemaDefController extends BaseController
     private final SchemaDefRepository schemaDefRepository;
     private final FormFactory formFactory;
 
+    /**
+     * Constructor
+     *
+     * @param schemaDefService      a active SchemaDef Service object
+     * @param schemaDefRepository
+     * @param formFactory
+     * @param sessionService
+     */
     @Inject
     public SchemaDefController(
             SchemaDefService schemaDefService,
             SchemaDefRepository schemaDefRepository,
             FormFactory formFactory,
-            SessionService sessionService)
+            SessionService sessionService )
     {
         super(sessionService);
 
