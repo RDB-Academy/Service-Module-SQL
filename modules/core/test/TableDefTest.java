@@ -1,0 +1,49 @@
+import org.junit.*;
+import models.TableDef;
+import models.SchemaDef;
+
+import static org.junit.Assert.*;
+
+/**
+ * @author gabrielahlers
+ */
+
+public class TableDefTest {
+
+  @Test
+  public void testGetId() {
+    TableDef testTableDef = new TableDef();
+    //ToDo requires setId();
+    assertTrue("TableDefId", testTableDef.getId() == null); // has to be != null
+  }
+
+  @Test
+  public void testGetName() {
+    TableDef testTableDef = new TableDef();
+    testTableDef.setName("testTableDef");
+
+    assertEquals("getName", "testTableDef", testTableDef.getName());
+  }
+
+  @Test
+  public void testGetShemaDef() {
+    TableDef testTableDef = new TableDef();
+    SchemaDef testSchemaDef = new SchemaDef();
+
+    testTableDef.setSchemaDef(testSchemaDef);
+
+    assertEquals("schemaDef", testSchemaDef, testTableDef.getSchemaDef());
+
+  }
+
+  @Test
+  public void testGetSchemaDefId() {
+    TableDef testTableDef = new TableDef();
+
+    Long id = 1l;
+
+    testTableDef.setSchemaDefId(id);
+
+    assertEquals("schemaDefId", Long.valueOf(1), testTableDef.getSchemaDefId());
+  }
+ }

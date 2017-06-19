@@ -8,8 +8,11 @@ import static org.mockito.Mockito.mock;
  */
 public class SessionServiceTest {
 
-    @Test
-    public void testIsAdmin() {
-        SessionRepository sessionRepository = mock(SessionRepository.class);
-    }
+  //@Before
+  //SessionRepository testSessionRepository = mock(SessionRepository.class);
+
+  @Test
+  public void testIsAdmin() {
+
+  }
 }

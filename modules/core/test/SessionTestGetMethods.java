@@ -1,17 +1,13 @@
 import org.junit.*;
 import models.Session;
+import models.TaskTrial;
 
-import static org.mockito.Mockito.mock;
 import static org.junit.Assert.*;
 /**
  * @author gabrielahlers
  */
 
- public class SessionTestGetMethods {
-
-   @Before
-   public void setup() {
-   }
+public class SessionTestGetMethods {
 
    @Test
    public void testGetSessionId() {
@@ -24,7 +20,7 @@ import static org.junit.Assert.*;
    public void testGetAmbiguousSessionId() {
      Session testSession1 = new Session();
      Session testSession2 = new Session();
-     
+
      assertTrue(testSession1.getId() != testSession2.getId());
    }
 
@@ -42,7 +38,27 @@ import static org.junit.Assert.*;
        Session testSession = new Session();
        testSession.setUsername("testUser");
 
-       assertEquals("GetUserId", "testUser", testSession.getUsername());
+       assertEquals("GetUsername", "testUser", testSession.getUsername());
+   }
+
+   @Test
+   public void testGetConnectionInfo() {
+     Session testSession = new Session();
+     testSession.setConnectionInfo(1101);
+
+     assertEquals("getConnectionInfo", 1101, testSession.getConnectionInfo());
+   }
+
+   @Test
+   public void testGetTastTrial() {
+
+    Session testSession = new Session();
+    TaskTrial testTaskTrial = new TaskTrial();
+    testSession.setTaskTrial(testTaskTrial);
+
+    assertEquals("TaskTrial", testTaskTrial, testSession.getTaskTrial());
+
+
    }
 
 
