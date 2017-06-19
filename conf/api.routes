@@ -28,6 +28,7 @@ DELETE  /schema-defs/:id            controllers.api.SchemaDefController.delete(i
 
 ## model.TableDef
 POST    /table-defs                 controllers.api.TableDefController.create()
+GET     /table-defs                 controllers.api.TableDefController.readAll()
 GET     /table-defs/:id             controllers.api.TableDefController.read(id: Long)
 PATCH   /table-defs/:id             controllers.api.TableDefController.update(id: Long)
 DELETE  /table-defs/:id             controllers.api.TableDefController.delete(id: Long)

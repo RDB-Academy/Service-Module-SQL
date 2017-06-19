@@ -17,8 +17,13 @@ import repository.SchemaDefRepository;
 import repository.TableDefRepository;
 import services.SessionService;
 import services.TableDefService;
+import sun.rmi.runtime.Log;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -79,6 +84,19 @@ public class TableDefController extends BaseController
         this.tableDefRepository.save(tableDef);
 
         return ok(tableDefService.transformBase(tableDef));
+    }
+
+    public Result readAll() {
+        Map<String, List<String>> params =
+                extractParameters(TableDef.class, request().queryString());
+
+        Logger.debug("readAll");
+
+        params.forEach((key, val) -> {
+            Logger.debug(key + val);
+        });
+
+        return ok();
     }
 
     public Result read(Long id)
