@@ -11,7 +11,7 @@ import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.SchemaDefRepository;
+import repositories.SchemaDefRepository;
 import services.SchemaDefService;
 import services.SessionService;
 

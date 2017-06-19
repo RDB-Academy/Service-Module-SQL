@@ -5,7 +5,7 @@ import models.Task;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
-import repository.TaskRepository;
+import repositories.TaskRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

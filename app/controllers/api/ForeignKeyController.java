@@ -7,7 +7,7 @@ import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.ForeignKeyRepository;
+import repositories.ForeignKeyRepository;
 import services.ForeignKeyService;
 import services.SessionService;
 

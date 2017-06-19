@@ -8,7 +8,7 @@ import play.data.Form;
 import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.SessionRepository;
+import repositories.SessionRepository;
 import services.SessionService;
 
 import javax.inject.Inject;

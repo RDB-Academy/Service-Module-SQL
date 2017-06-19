@@ -5,15 +5,16 @@ import models.Session;
 import models.Task;
 import models.TaskTrial;
 import models.TaskTrialLog;
-import repository.SessionRepository;
+import repositories.SessionRepository;
+import repositories.TaskRepository;
+import repositories.TaskTrialRepository;
 import sqlParser.connection.DBConnection;
 import sqlParser.connection.DBConnectionFactory;
 import sqlParser.SQLResult;
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Http;
-import repository.TaskRepository;
-import repository.TaskTrialRepository;
+
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -6,7 +6,7 @@ import models.TaskTrial;
 import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.TaskTrialRepository;
+import repositories.TaskTrialRepository;
 import services.SessionService;
 import services.TaskTrialService;
 

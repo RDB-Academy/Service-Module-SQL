@@ -13,8 +13,8 @@ import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.SchemaDefRepository;
-import repository.TableDefRepository;
+import repositories.SchemaDefRepository;
+import repositories.TableDefRepository;
 import services.SessionService;
 import services.TableDefService;
 import sun.rmi.runtime.Log;
@@ -88,7 +88,7 @@ public class TableDefController extends BaseController
 
     public Result readAll() {
         Map<String, List<String>> params =
-                extractParameters(TableDef.class, request().queryString());
+                extractKnownParameters(TableDef.class, request().queryString());
 
         Logger.debug("readAll");
 

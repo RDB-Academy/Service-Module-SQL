@@ -1,4 +1,4 @@
-package repository;
+package repositories;
 
 import com.avaje.ebean.Model;
 import com.google.inject.Singleton;

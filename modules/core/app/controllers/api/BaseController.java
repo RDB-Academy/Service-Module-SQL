@@ -31,7 +31,14 @@ public abstract class BaseController extends Controller
         return null;
     }
 
-    protected Map<String, List<String>> extractParameters(
+    /**
+     * Extracts known parameters from inputParameters.
+     * Only keeps parameters existent as property in model.
+     * @param model model class to determine possible parameters
+     * @param inputParameters parameters from network call
+     * @return
+     */
+    protected Map<String, List<String>> extractKnownParameters(
             Class model, Map<String, String[]> inputParameters) {
         if (!BaseModel.class.isAssignableFrom(model)) {
             Logger.error("Wrong class");
@@ -40,8 +47,6 @@ public abstract class BaseController extends Controller
         Set<String> validKeys = new HashSet<>();
         Arrays.stream(model.getDeclaredFields()).forEach(field ->
                 validKeys.add(field.getName().toLowerCase()));
-
-        Logger.debug(Arrays.asList(validKeys.toArray()).toString());
 
         Map<String, List<String>> outputParameters = new HashMap<>();
         inputParameters.forEach((key, val) -> {

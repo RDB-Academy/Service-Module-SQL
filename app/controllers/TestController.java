@@ -9,9 +9,9 @@ import play.Logger;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import repository.SchemaDefRepository;
-import repository.TaskRepository;
-import repository.TaskTrialRepository;
+import repositories.SchemaDefRepository;
+import repositories.TaskRepository;
+import repositories.TaskTrialRepository;
 import services.TaskTrialService;
 
 import javax.inject.Inject;
