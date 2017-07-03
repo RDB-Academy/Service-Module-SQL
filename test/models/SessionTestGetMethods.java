@@ -57,8 +57,13 @@ public class SessionTestGetMethods {
     testSession.setTaskTrial(testTaskTrial);
 
     assertEquals("TaskTrial", testTaskTrial, testSession.getTaskTrial());
+   }
 
+   @Test
+   public void testIsValid() {
+     Session testSession = new Session();
 
+     assertTrue("SessionIsValid", testSession.isValid());
    }
 
 
