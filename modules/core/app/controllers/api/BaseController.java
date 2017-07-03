@@ -2,6 +2,7 @@ package controllers.api;
 
 import models.BaseModel;
 import models.Session;
+import models.UserProfile;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -29,6 +30,10 @@ public abstract class BaseController extends Controller
             return sessionService.findActiveSessionById(sessionId);
         }
         return null;
+    }
+
+    protected UserProfile getUserBaseProfile() {
+        return getSession(Http.Context.current().request()).getUserProfile();
     }
 
     /**

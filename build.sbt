@@ -47,7 +47,7 @@ lazy val root = (project in file("."))
       javaWs
     )
   )
-  .enablePlugins(PlayJava, DebianPlugin)
+  .enablePlugins(PlayJava, PlayEbean, DebianPlugin)
   .dependsOn(coreModule)
   .aggregate(coreModule)
 

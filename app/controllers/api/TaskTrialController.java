@@ -3,6 +3,7 @@ package controllers.api;
 import authenticators.ActiveSessionAuthenticator;
 import models.Session;
 import models.TaskTrial;
+import models.UserProfile;
 import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -48,7 +49,7 @@ public class TaskTrialController extends BaseController {
 
         }
 
-        TaskTrial taskTrial = this.taskTrialService.create();
+        TaskTrial taskTrial = this.taskTrialService.create((UserProfile) getUserBaseProfile());
 
         if(taskTrial == null)
         {
