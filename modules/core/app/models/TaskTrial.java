@@ -24,7 +24,7 @@ public class TaskTrial extends BaseModel {
 
     @JsonIgnore
     @ManyToOne(optional = false)
-    private Session             session;
+    private UserProfile     userProfile;
 
     @JsonIgnore
     @OneToMany(mappedBy = "taskTrial", cascade = CascadeType.ALL)
@@ -67,12 +67,12 @@ public class TaskTrial extends BaseModel {
         this.task = task;
     }
 
-    public Session getSession() {
-        return session;
+    public UserProfile getUserProfile() {
+        return userProfile;
     }
 
-    public void setSession(Session session) {
-        this.session = session;
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 
     private List<TaskTrialLog> getTaskTrialLogList() {

@@ -1,10 +1,11 @@
-package repository;
+package repositories;
 
 import com.avaje.ebean.Model;
 import com.google.inject.Singleton;
 import models.TableDef;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author fabiomazzone
@@ -13,6 +14,7 @@ import java.util.List;
 public class TableDefRepositoryEbean implements TableDefRepository
 {
     private Model.Finder<Long, TableDef> find = new Model.Finder<>(TableDef.class);
+    private QueryProvider<TableDef> queryProvider = new QueryProvider<TableDef>(this.find);
 
     public List<TableDef> getAll()
     {
@@ -22,6 +24,15 @@ public class TableDefRepositoryEbean implements TableDefRepository
     public TableDef getById(Long id)
     {
         return this.find.byId(id);
+    }
+
+    /**
+     *
+     * @param parameters Map matching the design for QueryProvider.filterOnParameters
+     * @return
+     */
+    public List<TableDef> getMatching(Map<String, List<String>> parameters) {
+        return this.queryProvider.filterOnParameters(parameters).findList();
     }
 
     public void save(TableDef tableDef)
@@ -34,3 +45,4 @@ public class TableDefRepositoryEbean implements TableDefRepository
         this.find.db().delete(tableDef);
     }
 }
+

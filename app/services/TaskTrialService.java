@@ -1,19 +1,16 @@
 package services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Session;
-import models.Task;
-import models.TaskTrial;
-import models.TaskTrialLog;
-import repository.SessionRepository;
+import models.*;
+import repositories.TaskRepository;
+import repositories.TaskTrialRepository;
 import sqlParser.connection.DBConnection;
 import sqlParser.connection.DBConnectionFactory;
 import sqlParser.SQLResult;
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Http;
-import repository.TaskRepository;
-import repository.TaskTrialRepository;
+
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,42 +26,27 @@ public class TaskTrialService
 {
     private final TaskTrialRepository taskTrialRepository;
     private final DBConnectionFactory DBConnectionFactory;
-    private final SessionService sessionService;
     private final TaskRepository taskRepository;
-    private final SessionRepository sessionRepository;
 
     @Inject
     public TaskTrialService(
             TaskTrialRepository taskTrialRepository,
             DBConnectionFactory DBConnectionFactory,
-            SessionService sessionService,
-            TaskRepository taskRepository,
-            SessionRepository sessionRepository)
+            TaskRepository taskRepository)
     {
         this.taskTrialRepository = taskTrialRepository;
         this.DBConnectionFactory = DBConnectionFactory;
-        this.sessionService = sessionService;
         this.taskRepository = taskRepository;
-        this.sessionRepository = sessionRepository;
     }
 
     /**
      * Create a new TaskTrial Object
      * @return returns the new TaskTrial Object
      */
-    public TaskTrial create()
-    {
-        Session     session;
+    public TaskTrial create(UserProfile userProfile) {
         TaskTrial   taskTrial;
 
-        String sessionId = Http.Context.current().request().getHeader(SessionService.SESSION_FIELD_NAME);
-        session = this.sessionService.findActiveSessionById(sessionId);
-        if(session == null)
-        {
-            session = this.sessionService.createSession(Http.Context.current());
-        }
-
-        taskTrial = session.getTaskTrial();
+        taskTrial = userProfile.getCurrentTaskTrial();
 
         if(taskTrial != null)
         {
@@ -105,12 +87,10 @@ public class TaskTrialService
         taskTrial = this.taskTrialRepository.create(task);
         taskTrial = this.DBConnectionFactory.createParser(taskTrial);
 
-        taskTrial.setSession(session);
-        session.setTaskTrial(taskTrial);
+        taskTrial.setUserProfile(userProfile);
+        userProfile.setCurrentTaskTrial(taskTrial);
 
         this.taskTrialRepository.save(taskTrial);
-
-        this.sessionRepository.save(session);
 
         return taskTrial;
     }

@@ -7,7 +7,7 @@ import play.Configuration;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
-import repository.SessionRepository;
+import repositories.SessionRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

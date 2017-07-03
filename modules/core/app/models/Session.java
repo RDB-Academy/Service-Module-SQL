@@ -23,8 +23,8 @@ public class Session extends BaseModel {
     private int connectionInfo;
 
     @JsonIgnore
-    @ManyToOne
-    private TaskTrial taskTrial;
+    @ManyToOne(optional = false)
+    private UserProfile userProfile;
 
     public Session() {
         this.id = UUID.randomUUID().toString();
@@ -58,12 +58,12 @@ public class Session extends BaseModel {
         return connectionInfo;
     }
 
-    public TaskTrial getTaskTrial() {
-        return taskTrial;
+    public UserProfile getUserProfile() {
+        return userProfile;
     }
 
-    public void setTaskTrial(TaskTrial taskTrial) {
-        this.taskTrial = taskTrial;
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 
     public boolean isValid() {

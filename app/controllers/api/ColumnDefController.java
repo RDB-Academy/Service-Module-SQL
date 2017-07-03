@@ -13,8 +13,8 @@ import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.ColumnDefRepository;
-import repository.TableDefRepository;
+import repositories.ColumnDefRepository;
+import repositories.TableDefRepository;
 import services.ColumnDefService;
 import services.SessionService;
 

@@ -8,7 +8,7 @@ import models.Task;
 import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
-import repository.TaskRepository;
+import repositories.TaskRepository;
 import services.SessionService;
 import services.TaskService;
 

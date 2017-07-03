@@ -2,7 +2,7 @@ package initializers;
 
 import initializers.schemaBuilders.*;
 import models.SchemaDef;
-import repository.SchemaDefRepository;
+import repositories.SchemaDefRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
