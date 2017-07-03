@@ -2,6 +2,7 @@ package controllers.api;
 
 import authenticators.ActiveSessionAuthenticator;
 import models.Session;
+import models.Task;
 import models.TaskTrial;
 import play.libs.Json;
 import play.mvc.Result;
@@ -11,12 +12,16 @@ import services.SessionService;
 import services.TaskTrialService;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.Map;
+import java.util.function.LongBinaryOperator;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author Fabio Mazzone
  */
-@Security.Authenticated(ActiveSessionAuthenticator.class)
+//@Security.Authenticated(ActiveSessionAuthenticator.class)
 public class TaskTrialController extends BaseController {
     private final TaskTrialService taskTrialService;
     private final TaskTrialRepository taskTrialRepository;
@@ -87,5 +92,34 @@ public class TaskTrialController extends BaseController {
         }
 
         return ok(Json.toJson(taskTrial));
+    }
+
+    public Result info() {
+        List<TaskTrial> taskTrialList = this.taskTrialRepository.getAll();
+        System.out.print("Size: "+taskTrialList.size());
+        for(int i= 0; i<taskTrialList.size();i++){
+            System.out.print(i+": " + taskTrialList.get(i));
+        }
+        System.out.print(taskTrialList);
+        Map<Task, List<TaskTrial>> mappedTaskTrialList = taskTrialList
+                .parallelStream()
+                .collect(
+                        Collectors.groupingBy(TaskTrial::getTask)
+                );
+        //System.out.print(mappedTaskTrialList);
+        mappedTaskTrialList.forEach((k, v) -> {
+
+            Map<Boolean, List<TaskTrial>> mappedTaskTrial1List = v
+                    .parallelStream()
+                    .collect(
+                            Collectors.groupingBy(TaskTrial::getIsFinished)
+                    );
+
+            mappedTaskTrial1List.forEach((k1, v1) -> {
+                int sum = v1.parallelStream().collect(Collectors.summingInt(TaskTrial::getTries));
+            });
+        });
+
+        return ok("Kahn: ");
     }
 }

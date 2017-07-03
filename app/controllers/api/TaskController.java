@@ -13,7 +13,10 @@ import services.SessionService;
 import services.TaskService;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -90,5 +93,19 @@ public class TaskController extends BaseController
 
         this.taskRepository.delete(task);
         return ok();
+    }
+
+    public Result info() {
+        List<Map<Integer, String>> difList = new ArrayList<>();
+        this.taskRepository.getAll().forEach(v -> {
+            Map<Integer, String> difMap = new LinkedHashMap<>();
+            difMap.put(
+                    v.getDifficulty(),
+                    v.getName()
+            );
+            difList.add(difMap);
+        });
+
+        return ok(Json.toJson(difList));
     }
 }

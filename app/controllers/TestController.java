@@ -1,5 +1,7 @@
 package controllers;
 
+import controllers.api.TaskTrialController;
+import services.SessionService;
 import sqlParser.connection.DBConnectionFactory;
 import sqlParser.generators.ExtensionMaker;
 
@@ -85,6 +87,19 @@ public class TestController extends Controller {
 
         return ok(Json.toJson(v));
     }
+    /*
+    public Result infoTest() {
+
+        SessionService sessionService = new SessionService();
+        TaskTrialRepository taskTrialRepository = new TaskTrialRepository();
+        TaskTrialService taskTrialService = new TaskTrialService();
+
+        TaskTrialController taskTrialController = new TaskTrialController(sessionService,taskTrialRepository,taskTrialService);
+
+        Result v = taskTrialController.info();
+
+        return ok(Json.toJson(v));
+    }*/
 
     public Result testTableMaker() {
         SchemaDef schemaDef = this.schemaDefRepository.getByName("HeroTeamSchema");

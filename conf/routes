@@ -6,6 +6,7 @@
 # Test Routes
 GET     /ser                        controllers.TestController.ser()
 GET     /test/                      controllers.TestController.test()
+GET     /infoTest/                  controllers.TestController.infoTest()
 GET     /table/                     controllers.TestController.testTableMaker()
 
 # API

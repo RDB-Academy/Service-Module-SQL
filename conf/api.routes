@@ -14,8 +14,10 @@ DELETE  /tasks/:id                  controllers.api.TaskController.delete(id: Lo
 
 ## model.TaskTrial
 POST    /task-trials                controllers.api.TaskTrialController.create()
+GET     /task-trials/info           controllers.api.TaskTrialController.info()
 GET     /task-trials/:id            controllers.api.TaskTrialController.read(id: Long)
 PATCH   /task-trials/:id            controllers.api.TaskTrialController.update(id: Long)
+
 
 
 ## model.SchemaDef
