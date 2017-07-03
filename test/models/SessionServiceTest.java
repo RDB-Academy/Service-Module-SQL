@@ -1,5 +1,5 @@
 import org.junit.Test;
-import repository.SessionRepository;
+import repositories.SessionRepository;
 
 import static org.mockito.Mockito.mock;
 

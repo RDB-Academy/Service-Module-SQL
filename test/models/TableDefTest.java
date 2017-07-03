@@ -1,6 +1,10 @@
+import java.util.List;
+import java.util.ArrayList;
 import org.junit.*;
 import models.TableDef;
 import models.SchemaDef;
+import models.ColumnDef;
+import models.ExtensionDef;
 
 import static org.junit.Assert.*;
 
@@ -46,4 +50,16 @@ public class TableDefTest {
 
     assertEquals("schemaDefId", Long.valueOf(1), testTableDef.getSchemaDefId());
   }
+
+  @Test
+  public void testGetColumnDefList() {
+    TableDef testTableDef = new TableDef();
+    List<ColumnDef> testColumnDef = new ArrayList();
+
+    testTableDef.setColumnDefList(testColumnDef);
+
+    assertEquals("ColumnDefList", testColumnDef, testTableDef.getColumnDefList());
+  }
+
+
  }
