@@ -1,7 +1,7 @@
 package repositories;
 
-import com.avaje.ebean.ExpressionList;
-import com.avaje.ebean.Model;
+import io.ebean.ExpressionList;
+import io.ebean.Finder;
 import models.BaseModel;
 
 import java.util.List;
@@ -17,11 +17,11 @@ class QueryProvider<T extends BaseModel> {
      *
      * @param find
      */
-    public QueryProvider(Model.Finder find) {
+    QueryProvider(Finder<Long, T> find) {
         this.find = find;
     }
 
-    private Model.Finder find;
+    private Finder<Long, T> find;
 
     /**
      * Generates a view on the data restricted by parameters
@@ -31,8 +31,9 @@ class QueryProvider<T extends BaseModel> {
      * @return
      */
     ExpressionList<T> filterOnParameters(
-            Map<String, List<String>> parameters) {
-        ExpressionList<T> expression = this.find.where();
+            Map<String, List<String>> parameters
+    ) {
+        ExpressionList<T> expression = this.find.query().where();
         try {
             for (String key : parameters.keySet()) {
                 String val = parameters.get(key).get(1);

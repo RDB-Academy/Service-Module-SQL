@@ -18,6 +18,7 @@ import services.SessionService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -72,7 +73,7 @@ public class SchemaDefController extends BaseController
 
         if(this.schemaDefRepository.getByName(schemaDef.getName()) != null)
         {
-            schemaDefForm.reject("name", "name already taken");
+            schemaDefForm.withError("name", "name already taken");
             Logger.warn(schemaDefForm.errorsAsJson().toString());
             return badRequest(schemaDefForm.errorsAsJson());
         }
@@ -106,12 +107,13 @@ public class SchemaDefController extends BaseController
         {
             return notFound();
         }
-        String sessionId = Http.Context.current()
+        Optional<String> sessionId = Http.Context.current()
                 .request()
-                .getHeader(SessionService.SESSION_FIELD_NAME);
-        Session session = this.sessionService.findActiveSessionById(sessionId);
-        if (session != null && sessionService.isAdmin(session))
-        {
+                .getHeaders()
+                .get(SessionService.SESSION_FIELD_NAME);
+
+        Optional<Session> session = sessionId.map(sessionService::findActiveSessionById);
+        if (session.isPresent() && sessionService.isAdmin(session.get())) {
             return ok(this.schemaDefService.transform(schemaDef));
         }
         return ok(Json.toJson(schemaDef));

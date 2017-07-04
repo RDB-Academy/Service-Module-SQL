@@ -27,6 +27,11 @@ public class SQLResultColumn {
         return name.equals(that.name) && type.equals(that.type) && data.equals(that.data);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     public String getAlias() {
         return alias;
     }

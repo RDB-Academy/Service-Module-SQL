@@ -1,7 +1,7 @@
 package repositories;
 
-import com.avaje.ebean.Model;
 import com.google.inject.Singleton;
+import io.ebean.Finder;
 import models.Task;
 
 import javax.annotation.Nullable;
@@ -13,7 +13,7 @@ import java.util.List;
 @Singleton
 public class TaskRepositoryEbean implements TaskRepository
 {
-    private Model.Finder<Long, Task> find = new Model.Finder<>(Task.class);
+    private Finder<Long, Task> find = new Finder<>(Task.class);
 
     public List<Task> getAll()
     {
@@ -22,11 +22,11 @@ public class TaskRepositoryEbean implements TaskRepository
 
     public List<Task> getTaskListByDifficulty(int difficulty)
     {
-        List<Task> taskList = find.where().eq("difficulty", difficulty).findList();
+        List<Task> taskList = find.query().where().eq("difficulty", difficulty).findList();
 
         while((taskList == null || taskList.size() == 0) && difficulty > 0) {
             difficulty--;
-            taskList = find.where().eq("difficulty", difficulty).findList();
+            taskList = find.query().where().eq("difficulty", difficulty).findList();
         }
 
         if(taskList == null || taskList.size() == 0) {

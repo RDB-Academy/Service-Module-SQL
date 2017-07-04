@@ -1,7 +1,7 @@
 package repositories;
 
-import com.avaje.ebean.Model;
 import com.google.inject.Singleton;
+import io.ebean.Finder;
 import models.TableDef;
 
 import java.util.List;
@@ -13,8 +13,8 @@ import java.util.Map;
 @Singleton
 public class TableDefRepositoryEbean implements TableDefRepository
 {
-    private Model.Finder<Long, TableDef> find = new Model.Finder<>(TableDef.class);
-    private QueryProvider<TableDef> queryProvider = new QueryProvider<TableDef>(this.find);
+    private Finder<Long, TableDef> find = new Finder<>(TableDef.class);
+    private QueryProvider<TableDef> queryProvider = new QueryProvider<>(this.find);
 
     public List<TableDef> getAll()
     {

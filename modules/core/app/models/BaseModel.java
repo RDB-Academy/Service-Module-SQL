@@ -1,9 +1,10 @@
 package models;
 
-import com.avaje.ebean.Model;
-import com.avaje.ebean.annotation.WhenModified;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.ebean.Model;
+import io.ebean.annotation.WhenModified;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;

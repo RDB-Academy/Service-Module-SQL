@@ -25,14 +25,11 @@ public abstract class BaseController extends Controller
 
     Session getSession(@NotNull Http.Request request)
     {
-        String sessionId = request.getHeader(SessionService.SESSION_FIELD_NAME);
-        if(sessionId != null && !sessionId.isEmpty()) {
-            return sessionService.findActiveSessionById(sessionId);
-        }
-        return null;
+        Optional<String> sessionId = request.getHeaders().get(SessionService.SESSION_FIELD_NAME);
+        return sessionId.map(sessionService::findActiveSessionById).orElse(null);
     }
 
-    protected UserProfile getUserBaseProfile() {
+    UserProfile getUserBaseProfile() {
         return getSession(Http.Context.current().request()).getUserProfile();
     }
 
@@ -43,25 +40,31 @@ public abstract class BaseController extends Controller
      * @param inputParameters parameters from network call
      * @return
      */
-    protected Map<String, List<String>> extractKnownParameters(
-            Class model, Map<String, String[]> inputParameters) {
+    Map<String, List<String>> extractKnownParameters(
+                    Class<? extends BaseModel> model,
+                    Map<String, String[]> inputParameters
+    ) {
         if (!BaseModel.class.isAssignableFrom(model)) {
             Logger.error("Wrong class");
         }
 
         Set<String> validKeys = new HashSet<>();
-        Arrays.stream(model.getDeclaredFields()).forEach(field ->
-                validKeys.add(field.getName().toLowerCase()));
+        Arrays.stream(
+                model.getDeclaredFields()
+            ).forEach(field ->
+                validKeys.add(field.getName().toLowerCase())
+            );
 
         Map<String, List<String>> outputParameters = new HashMap<>();
-        inputParameters.forEach((key, val) -> {
+
+        inputParameters.forEach((key, val) ->
+        {
             if (!validKeys.contains(key)) {
                 return;
             }
 
             String command = val[0];
             if (command.isEmpty()) {
-                return;
             } else if (command.startsWith("<")) {
                 List<String> targetValues = new ArrayList<>();
                 targetValues.add("lt");

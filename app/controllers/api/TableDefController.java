@@ -66,7 +66,7 @@ public class TableDefController extends BaseController
             Long SchemaDefId = tableDef.getSchemaDefId();
             SchemaDef schemaDef = this.schemaDefRepository.getById(SchemaDefId);
             if(schemaDef == null) {
-                tableDefForm.reject("SchemaDef not found");
+                tableDefForm.withGlobalError("SchemaDef not found");
             } else {
                 tableDef.setSchemaDef(schemaDef);
             }

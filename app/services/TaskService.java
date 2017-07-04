@@ -43,7 +43,7 @@ public class TaskService extends Service
 
         if (taskRepository.getById(task.getId()) != null)
         {
-            taskForm.reject("id", "task already exists");
+            taskForm.withError("id", "task already exists");
             return taskForm;
         }
 

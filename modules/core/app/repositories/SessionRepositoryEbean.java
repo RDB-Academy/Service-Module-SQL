@@ -1,6 +1,6 @@
 package repositories;
 
-import com.avaje.ebean.Model;
+import io.ebean.Finder;
 import models.Session;
 
 import javax.inject.Singleton;
@@ -11,7 +11,7 @@ import javax.inject.Singleton;
 @Singleton
 public class SessionRepositoryEbean implements SessionRepository
 {
-    private Model.Finder<String, Session> find = new Model.Finder<>(Session.class);
+    private Finder<String, Session> find = new Finder<>(Session.class);
 
     public Session getById(String sessionId)
     {

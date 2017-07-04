@@ -8,6 +8,7 @@ import play.mvc.Security;
 import services.SessionService;
 
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 abstract public class SessionAuthenticator extends Security.Authenticator {
     final SessionService sessionService;
@@ -20,11 +21,8 @@ abstract public class SessionAuthenticator extends Security.Authenticator {
 
     Session getSessionByRequest(@NotNull Http.Request request)
     {
-        String sessionId = request.getHeader(SessionService.SESSION_FIELD_NAME);
-        if(sessionId == null) {
-            return null;
-        }
-        return sessionService.findActiveSessionById(sessionId);
+        Optional<String> sessionId = request.getHeaders().get(SessionService.SESSION_FIELD_NAME);
+        return sessionId.map(sessionService::findActiveSessionById).orElse(null);
     }
 
     @Override

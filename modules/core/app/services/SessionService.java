@@ -3,15 +3,15 @@ package services;
 import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
-import play.Configuration;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
 import repositories.SessionRepository;
-
+import com.typesafe.config.Config;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 /**
  * @author fabiomazzone
@@ -23,47 +23,43 @@ public class SessionService
 
     private final SessionRepository sessionRepository;
     private final FormFactory formFactory;
-    private final Configuration configuration;
+    private final Config config;
 
     @Inject
     public SessionService(
             SessionRepository sessionRepository,
             FormFactory formFactory,
-            Configuration configuration)
+            Config config)
     {
         this.sessionRepository = sessionRepository;
         this.formFactory = formFactory;
-        this.configuration = configuration;
+        this.config = config;
     }
 
-    private Session setAdminSession(Http.Context ctx)
-    {
-        Session session = new Session();
+    private Session setAdminSession(Http.Context context) {
+        Session             session = new Session();
+
         session.save();
 
         session.setUserId(0L);
         session.setUsername("admin");
-        UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
-        String connectedData = userAgent.toString() + ctx.request().remoteAddress();
 
-        session.setConnectionInfo(connectedData.hashCode());
+        session.setConnectionInfo(getUserAgent(context.request()).hashCode());
 
         session.save();
 
         return session;
     }
 
-    Session createSession(Http.Context ctx)
+    Session createSession(Http.Context context)
     {
         Session session = new Session();
-        UserAgent userAgent = new UserAgent(ctx.request().getHeader(Http.HeaderNames.USER_AGENT));
-        String connectedData = userAgent.toString() + ctx.request().remoteAddress();
 
-        session.setConnectionInfo(connectedData.hashCode());
+        session.setConnectionInfo(getUserAgent(context.request()).hashCode());
 
         session.save();
 
-        ctx.response().setHeader(SESSION_FIELD_NAME, session.getId());
+        context.response().setHeader(SESSION_FIELD_NAME, session.getId());
 
         return session;
     }
@@ -84,6 +80,18 @@ public class SessionService
         return null;
     }
 
+    protected String getUserAgent(Http.Request request) {
+        Optional<String>        headerUserAgent;
+        Optional<UserAgent>     parsedUserAgent;
+        String                  formattedUserAgent;
+
+        headerUserAgent = request.header(Http.HeaderNames.USER_AGENT);
+        parsedUserAgent = headerUserAgent.map(UserAgent::new);
+        formattedUserAgent = parsedUserAgent.map(UserAgent::toString).orElse("");
+
+        return formattedUserAgent;
+    }
+
     public Form<LoginForm> validateLoginForm()
     {
         Form<LoginForm> loginForm;
@@ -91,7 +99,7 @@ public class SessionService
         LoginForm login;
 
         loginForm = this.getLoginForm().bindFromRequest();
-        adminPassword = this.configuration.getString("sqlModule.adminPassword");
+        adminPassword = this.config.getString("sqlModule.adminPassword");
 
         if (loginForm.hasErrors())
         {
@@ -102,7 +110,7 @@ public class SessionService
 
         if (!login.getPassword().equals(adminPassword))
         {
-            loginForm.reject("Wrong E-Mail or Password");
+            loginForm.withGlobalError("Wrong E-Mail or Password");
             return loginForm;
         }
 

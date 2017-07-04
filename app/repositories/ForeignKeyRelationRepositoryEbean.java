@@ -1,7 +1,7 @@
 package repositories;
 
-import com.avaje.ebean.Model;
 import com.google.inject.Singleton;
+import io.ebean.Finder;
 import models.ForeignKeyRelation;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 @Singleton
 public class ForeignKeyRelationRepositoryEbean implements ForeignKeyRelationRepository
 {
-    private Model.Finder<Long, ForeignKeyRelation> find = new Model.Finder<>(ForeignKeyRelation.class);
+    private Finder<Long, ForeignKeyRelation> find = new Finder<>(ForeignKeyRelation.class);
 
     public List<ForeignKeyRelation> getAll()
     {

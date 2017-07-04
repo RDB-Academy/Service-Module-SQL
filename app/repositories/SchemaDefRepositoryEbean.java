@@ -1,7 +1,7 @@
 package repositories;
 
-import com.avaje.ebean.Model;
 import com.google.inject.Singleton;
+import io.ebean.Finder;
 import models.SchemaDef;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 @Singleton
 public class SchemaDefRepositoryEbean implements SchemaDefRepository
 {
-    private Model.Finder<Long, SchemaDef> find = new Model.Finder<>(SchemaDef.class);
+    private Finder<Long, SchemaDef> find = new Finder<>(SchemaDef.class);
 
     public List<SchemaDef> getAll()
     {
@@ -26,7 +26,7 @@ public class SchemaDefRepositoryEbean implements SchemaDefRepository
 
     public SchemaDef getByName(String name)
     {
-        return this.find.where().eq("name", name).findUnique();
+        return this.find.query().where().eq("name", name).findUnique();
     }
 
     public void save(SchemaDef schemaDef)

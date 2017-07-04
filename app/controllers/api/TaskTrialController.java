@@ -54,7 +54,7 @@ public class TaskTrialController extends BaseController {
 
         }
 
-        TaskTrial taskTrial = this.taskTrialService.create((UserProfile) getUserBaseProfile());
+        TaskTrial taskTrial = this.taskTrialService.create(getUserBaseProfile());
 
         if(taskTrial == null)
         {

@@ -1,7 +1,7 @@
 package repositories;
 
-import com.avaje.ebean.Model;
 import com.google.inject.Singleton;
+import io.ebean.Finder;
 import models.ColumnDef;
 
 import java.util.List;
@@ -12,7 +12,8 @@ import java.util.List;
 @Singleton
 public class ColumnDefRepositoryEbean implements ColumnDefRepository
 {
-    private Model.Finder<Long, ColumnDef> find = new Model.Finder<>(ColumnDef.class);
+    private Finder<Long, ColumnDef> find = new Finder<>(ColumnDef.class);
+
     public List<ColumnDef> getAll()
     {
         return this.find.all();

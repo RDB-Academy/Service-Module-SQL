@@ -57,7 +57,7 @@ public class ColumnDefController extends BaseController
             Long TableDefId = columnDef.getTableDefId();
             TableDef tableDef = this.tableDefRepository.getById(TableDefId);
             if(tableDef == null) {
-                columnDefForm.reject("SchemaDef not found");
+                columnDefForm.withGlobalError("SchemaDef not found");
             } else {
                 columnDef.setTableDef(tableDef);
             }

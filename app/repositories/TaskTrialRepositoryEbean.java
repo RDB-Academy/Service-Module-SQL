@@ -1,10 +1,10 @@
 package repositories;
 
-import com.avaje.ebean.Model;
 import com.google.inject.Singleton;
+import com.typesafe.config.Config;
+import io.ebean.Finder;
 import models.Task;
 import models.TaskTrial;
-import play.Configuration;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -16,15 +16,15 @@ import java.util.Random;
 @Singleton
 public class TaskTrialRepositoryEbean implements TaskTrialRepository
 {
-    private final Configuration configuration;
+    private final Config config;
     private final Random random;
 
-    private Model.Finder<Long, TaskTrial> find = new Model.Finder<>(TaskTrial.class);
+    private Finder<Long, TaskTrial> find = new Finder<>(TaskTrial.class);
 
     @Inject
-    public TaskTrialRepositoryEbean(Configuration configuration)
+    public TaskTrialRepositoryEbean(Config config)
     {
-        this.configuration = configuration;
+        this.config = config;
 
         this.random = new Random();
     }
@@ -69,11 +69,11 @@ public class TaskTrialRepositoryEbean implements TaskTrialRepository
     }
 
     private String getDatabaseDriver() {
-        return this.configuration.getString("sqlParser.driver");
+        return this.config.getString("sqlParser.driver");
     }
 
     private String getDatabasePath() {
-        return this.configuration.getString("sqlParser.path");
+        return this.config.getString("sqlParser.path");
     }
 
     private String getDatabaseName(TaskTrial taskTrial) {
@@ -87,7 +87,7 @@ public class TaskTrialRepositoryEbean implements TaskTrialRepository
     }
 
     private String getDatabaseUrl(TaskTrial taskTrial) {
-        return this.configuration.getString("sqlParser.urlPrefix")
+        return this.config.getString("sqlParser.urlPrefix")
                 + taskTrial.databaseInformation.getPath()
                 + taskTrial.databaseInformation.getName();
     }
