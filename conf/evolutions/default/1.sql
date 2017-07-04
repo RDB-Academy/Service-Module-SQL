@@ -9,11 +9,11 @@ create table column_def (
   table_def_id                  bigint not null,
   name                          varchar(255) not null,
   data_type                     varchar(255) not null,
-  is_primary                    boolean not null,
-  is_not_null                   boolean not null,
+  is_primary                    boolean default false not null,
+  is_not_null                   boolean default false not null,
   meta_value_set                integer not null,
-  min_value_set                 integer,
-  max_value_set                 integer,
+  min_value_set                 integer not null,
+  max_value_set                 integer not null,
   modified_at                   timestamp not null,
   constraint pk_column_def primary key (id)
 );
@@ -41,7 +41,7 @@ create table schema_def (
   id                            bigint auto_increment not null,
   created_at                    timestamp,
   name                          varchar(255) not null,
-  available                     boolean,
+  available                     boolean default false not null,
   modified_at                   timestamp not null,
   constraint uq_schema_def_name unique (name),
   constraint pk_schema_def primary key (id)
@@ -52,7 +52,7 @@ create table session (
   created_at                    timestamp,
   user_id                       bigint,
   username                      varchar(255),
-  connection_info               integer,
+  connection_info               integer not null,
   user_profile_id               bigint not null,
   modified_at                   timestamp not null,
   constraint pk_session primary key (id)
@@ -85,13 +85,13 @@ create table task_trial (
   created_at                    timestamp,
   task_id                       bigint not null,
   user_profile_id               bigint not null,
-  is_available                  boolean,
+  is_available                  boolean default false not null,
   seed                          bigint,
   url                           varchar(255),
   path                          varchar(255),
   name                          varchar(255),
   driver                        varchar(255),
-  is_finished                   boolean,
+  is_finished                   boolean default false not null,
   modified_at                   timestamp not null,
   constraint pk_task_trial primary key (id)
 );
@@ -101,7 +101,7 @@ create table task_trial_log (
   created_at                    timestamp,
   task_trial_id                 bigint not null,
   statement                     varchar(255),
-  is_correct                    boolean,
+  is_correct                    boolean default false not null,
   hint_message                  varchar(255),
   error_message                 varchar(255),
   submitted_at                  timestamp,

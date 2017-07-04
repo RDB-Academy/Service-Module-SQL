@@ -14,11 +14,15 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     guice,
     mockito,
-    "com.h2database" % "h2" % "1.4.193"
+    "com.h2database" % "h2" % "1.4.193",
+    "org.assertj" % "assertj-core" % "3.6.2" % Test,
+    "org.awaitility" % "awaitility" % "2.0.0" % Test
   ),
 
   javacOptions := Seq("-Xlint:all"),
-  scalacOptions := Seq("-unchecked", "-deprecation")
+  scalacOptions := Seq("-unchecked", "-deprecation"),
+
+  testOptions in Test := Seq(Tests.Argument(TestFrameworks.JUnit, "-a", "-v"))
 )
 
 lazy val coreModule = (project in file("modules/core"))
@@ -40,14 +44,14 @@ lazy val root = (project in file("."))
   .settings(
     name := "sql-module",
 
-    packageSummary := "RDB Academy SQL Module"
+    packageSummary := "RDB Academy SQL Module",
 
     // serverLoading in Debian := Systemd,
 
-    //libraryDependencies ++= Seq(
-    //  ehcache
-    //  javaWs
-    //)
+    libraryDependencies ++= Seq(
+      ehcache,
+      ws
+    )
   )
   .enablePlugins(PlayJava, PlayEbean, DebianPlugin, SystemdPlugin)
   .dependsOn(coreModule)

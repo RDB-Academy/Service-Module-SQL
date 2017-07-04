@@ -1,10 +1,9 @@
+package models;
+
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 import org.junit.*;
-import models.TableDef;
-import models.SchemaDef;
-import models.ColumnDef;
-import models.ExtensionDef;
 
 import static org.junit.Assert.*;
 
@@ -13,7 +12,6 @@ import static org.junit.Assert.*;
  */
 
 public class TableDefTest {
-
   @Test
   public void testGetId() {
     TableDef testTableDef = new TableDef();
@@ -44,7 +42,7 @@ public class TableDefTest {
   public void testGetSchemaDefId() {
     TableDef testTableDef = new TableDef();
 
-    Long id = 1l;
+    Long id = 1L;
 
     testTableDef.setSchemaDefId(id);
 
@@ -54,7 +52,7 @@ public class TableDefTest {
   @Test
   public void testGetColumnDefList() {
     TableDef testTableDef = new TableDef();
-    List<ColumnDef> testColumnDef = new ArrayList();
+    List<ColumnDef> testColumnDef = new ArrayList<>();
 
     testTableDef.setColumnDefList(testColumnDef);
 
