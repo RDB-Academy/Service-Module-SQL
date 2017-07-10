@@ -55,7 +55,6 @@ public class ErrorHandler extends DefaultHttpErrorHandler {
 
     @Override
     protected CompletionStage<Result> onNotFound(Http.RequestHeader request, String message) {
-        Logger.debug(request.host());
         switch (getSubdomain(request.host())) {
             case "sql":
                 return this.sqlTrainerServiceErrorHandler.onNotFound(request, message);

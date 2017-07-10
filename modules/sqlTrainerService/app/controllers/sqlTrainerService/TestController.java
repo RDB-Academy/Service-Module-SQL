@@ -40,7 +40,7 @@ public class TestController extends Controller {
     }
 
     public Result index() {
-        return ok();
+        return ok("test");
     }
     public Result ser() {
         List<SchemaDef> schemaDefList;
