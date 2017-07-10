@@ -1,8 +1,9 @@
 package initializers;
 
 import initializers.schemaBuilders.*;
-import models.SchemaDef;
-import repositories.SchemaDefRepository;
+import models.sqlTrainerService.SchemaDef;
+import play.Logger;
+import repositories.sqlTrainerService.SchemaDefRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,6 +32,8 @@ class DevelopmentInitializer {
                 new BasketballSchemaBuilder(),
                 new StackExchangeSchemaBuilder()
         );
+
+        Logger.debug("SchemaBuilder");
 
         List<SchemaDef> schemaDefList = schemaBuilders.parallelStream()
                 .filter(x -> !x.schemaExist(this.storedSchemaDefList))

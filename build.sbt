@@ -1,66 +1,21 @@
-import Dependencies._
-import com.typesafe.sbt.packager.archetypes.systemloader.SystemdPlugin
-import sbt.Keys.{javacOptions, scalacOptions}
+Common.appSettings(messagesFilesFrom = Seq("common", "sqlTrainerService", "userService"))
 
-lazy val commonSettings = Seq(
-  organization := "de.academy",
-  version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.2",
+lazy val commonModule = (project in file("modules/common"))
+  .enablePlugins(PlayJava, PlayEbean)
 
-  maintainer := "Fabio Mazzone<fabio.mazzone@me.com>",
+lazy val userService = (project in file("modules/userService"))
+  .enablePlugins(PlayJava, PlayEbean)
+  .dependsOn(commonModule)
+  .aggregate(commonModule)
 
-  resolvers += Resolver.mavenLocal,
-
-  libraryDependencies ++= Seq(
-    guice,
-    mockito,
-    "com.h2database" % "h2" % "1.4.193",
-    "org.assertj" % "assertj-core" % "3.6.2" % Test,
-    "org.awaitility" % "awaitility" % "2.0.0" % Test
-  ),
-
-  javacOptions := Seq("-Xlint:all"),
-  scalacOptions := Seq("-unchecked", "-deprecation"),
-
-  testOptions in Test := Seq(Tests.Argument(TestFrameworks.JUnit, "-a", "-v"))
-)
-
-lazy val coreModule = (project in file("modules/core"))
-  .settings(commonSettings: _*)
-  .settings(
-    name := "core module",
-
-    libraryDependencies ++= Seq(
-      userAgentUtils
-    )
-  )
-  .enablePlugins(
-    PlayEbean,
-    PlayJava
-  )
+lazy val sqlTrainerService = (project in file("modules/sqlTrainerService"))
+  .enablePlugins(PlayJava, PlayEbean)
+  .dependsOn(commonModule)
+  .aggregate(commonModule)
 
 lazy val root = (project in file("."))
-  .settings(commonSettings: _*)
-  .settings(
-    name := "sql-module",
+  .enablePlugins(PlayJava, PlayEbean)
+  .dependsOn(userService, sqlTrainerService, commonModule)
+  .aggregate(userService, sqlTrainerService, commonModule)
 
-    packageSummary := "RDB Academy SQL Module",
-
-    // serverLoading in Debian := Systemd,
-
-    libraryDependencies ++= Seq(
-      ehcache,
-      ws
-    )
-  )
-  .enablePlugins(PlayJava, PlayEbean, DebianPlugin, SystemdPlugin)
-  .dependsOn(coreModule)
-  .aggregate(coreModule)
-
-name in Debian := "rdb-academy-sql"
-
-debianPackageDependencies in Debian ++= Seq("nginx", "mysql-server")
-
-daemonUser in Linux := normalizedName.value         // user which will execute the application
-
-daemonGroup in Linux := (daemonUser in Linux).value // group which will execute the application
+libraryDependencies ++= Common.commonDependencies

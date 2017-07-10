@@ -2,7 +2,8 @@ package initializers.schemaBuilders;
 
 import com.google.common.collect.ImmutableMap;
 import initializers.SchemaBuilder;
-import models.*;
+import models.sqlTrainerService.*;
+import models.sqlTrainerService.submodels.ExtensionDef;
 
 import java.util.*;
 

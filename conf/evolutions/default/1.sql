@@ -50,9 +50,6 @@ create table schema_def (
 create table session (
   id                            varchar(255) not null,
   created_at                    timestamp,
-  user_id                       bigint,
-  username                      varchar(255),
-  connection_info               integer not null,
   user_profile_id               bigint not null,
   modified_at                   timestamp not null,
   constraint pk_session primary key (id)
@@ -84,7 +81,7 @@ create table task_trial (
   id                            bigint auto_increment not null,
   created_at                    timestamp,
   task_id                       bigint not null,
-  user_profile_id               bigint not null,
+  user_data_id                  bigint not null,
   is_available                  boolean default false not null,
   seed                          bigint,
   url                           varchar(255),
@@ -109,11 +106,21 @@ create table task_trial_log (
   constraint pk_task_trial_log primary key (id)
 );
 
-create table user_profile (
+create table user_data (
   id                            bigint auto_increment not null,
   created_at                    timestamp,
   current_task_trial_id         bigint,
   modified_at                   timestamp not null,
+  constraint uq_user_data_current_task_trial_id unique (current_task_trial_id),
+  constraint pk_user_data primary key (id)
+);
+
+create table user_profile (
+  id                            bigint auto_increment not null,
+  created_at                    timestamp,
+  current_session_id            varchar(255),
+  modified_at                   timestamp not null,
+  constraint uq_user_profile_current_session_id unique (current_session_id),
   constraint pk_user_profile primary key (id)
 );
 
@@ -144,14 +151,15 @@ create index ix_task_schema_def_id on task (schema_def_id);
 alter table task_trial add constraint fk_task_trial_task_id foreign key (task_id) references task (id) on delete restrict on update restrict;
 create index ix_task_trial_task_id on task_trial (task_id);
 
-alter table task_trial add constraint fk_task_trial_user_profile_id foreign key (user_profile_id) references user_profile (id) on delete restrict on update restrict;
-create index ix_task_trial_user_profile_id on task_trial (user_profile_id);
+alter table task_trial add constraint fk_task_trial_user_data_id foreign key (user_data_id) references user_data (id) on delete restrict on update restrict;
+create index ix_task_trial_user_data_id on task_trial (user_data_id);
 
 alter table task_trial_log add constraint fk_task_trial_log_task_trial_id foreign key (task_trial_id) references task_trial (id) on delete restrict on update restrict;
 create index ix_task_trial_log_task_trial_id on task_trial_log (task_trial_id);
 
-alter table user_profile add constraint fk_user_profile_current_task_trial_id foreign key (current_task_trial_id) references task_trial (id) on delete restrict on update restrict;
-create index ix_user_profile_current_task_trial_id on user_profile (current_task_trial_id);
+alter table user_data add constraint fk_user_data_current_task_trial_id foreign key (current_task_trial_id) references task_trial (id) on delete restrict on update restrict;
+
+alter table user_profile add constraint fk_user_profile_current_session_id foreign key (current_session_id) references session (id) on delete restrict on update restrict;
 
 
 # --- !Downs
@@ -183,14 +191,15 @@ drop index if exists ix_task_schema_def_id;
 alter table task_trial drop constraint if exists fk_task_trial_task_id;
 drop index if exists ix_task_trial_task_id;
 
-alter table task_trial drop constraint if exists fk_task_trial_user_profile_id;
-drop index if exists ix_task_trial_user_profile_id;
+alter table task_trial drop constraint if exists fk_task_trial_user_data_id;
+drop index if exists ix_task_trial_user_data_id;
 
 alter table task_trial_log drop constraint if exists fk_task_trial_log_task_trial_id;
 drop index if exists ix_task_trial_log_task_trial_id;
 
-alter table user_profile drop constraint if exists fk_user_profile_current_task_trial_id;
-drop index if exists ix_user_profile_current_task_trial_id;
+alter table user_data drop constraint if exists fk_user_data_current_task_trial_id;
+
+alter table user_profile drop constraint if exists fk_user_profile_current_session_id;
 
 drop table if exists column_def;
 
@@ -209,6 +218,8 @@ drop table if exists task;
 drop table if exists task_trial;
 
 drop table if exists task_trial_log;
+
+drop table if exists user_data;
 
 drop table if exists user_profile;
 

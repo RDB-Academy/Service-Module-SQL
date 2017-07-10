@@ -1,0 +1,4 @@
+## Session Interface
+GET     /                                       controllers.userService.ApplicationController.index()
+POST    /api/login                              controllers.userService.SessionController.login()
+GET     /api/logout                             controllers.userService.SessionController.logout()

@@ -1,7 +1,7 @@
 package initializers.schemaBuilders;
 
 import initializers.SchemaBuilder;
-import models.*;
+import models.sqlTrainerService.*;
 
 import java.util.ArrayList;
 import java.util.List;

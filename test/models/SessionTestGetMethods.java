@@ -1,8 +1,6 @@
 package models;
 
 import org.junit.*;
-import models.Session;
-import models.TaskTrial;
 
 import static org.junit.Assert.*;
 /**

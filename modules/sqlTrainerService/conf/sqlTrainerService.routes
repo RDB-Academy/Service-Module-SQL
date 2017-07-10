@@ -1,0 +1,47 @@
+# /api
+
+GET     /                                   controllers.sqlTrainerService.TestController.index()
+
+## Task Interface
+POST    /tasks                              controllers.sqlTrainerService.TaskController.create()
+GET     /tasks                              controllers.sqlTrainerService.TaskController.readAll()
+GET     /tasks/:id                          controllers.sqlTrainerService.TaskController.read(id: Long)
+PATCH   /tasks/:id                        controllers.sqlTrainerService.TaskController.update(id: Long)
+DELETE  /tasks/:id                        controllers.sqlTrainerService.TaskController.delete(id: Long)
+
+## model.TaskTrial
+POST    /task-trials                      controllers.sqlTrainerService.TaskTrialController.create()
+GET     /task-trials/info                 controllers.sqlTrainerService.TaskTrialController.info()
+GET     /task-trials/:id                  controllers.sqlTrainerService.TaskTrialController.read(id: Long)
+PATCH   /task-trials/:id                  controllers.sqlTrainerService.TaskTrialController.update(id: Long)
+
+
+
+## model.SchemaDef
+POST    /schema-defs                      controllers.sqlTrainerService.SchemaDefController.create()
+GET     /schema-defs                      controllers.sqlTrainerService.SchemaDefController.readAll()
+GET     /schema-defs/:id                  controllers.sqlTrainerService.SchemaDefController.read(id: Long)
+PATCH   /schema-defs/:id                  controllers.sqlTrainerService.SchemaDefController.update(id: Long)
+DELETE  /schema-defs/:id                  controllers.sqlTrainerService.SchemaDefController.delete(id: Long)
+
+
+## model.TableDef
+POST    /table-defs                       controllers.sqlTrainerService.TableDefController.create()
+GET     /table-defs                       controllers.sqlTrainerService.TableDefController.readAll()
+GET     /table-defs/:id                   controllers.sqlTrainerService.TableDefController.read(id: Long)
+PATCH   /table-defs/:id                   controllers.sqlTrainerService.TableDefController.update(id: Long)
+DELETE  /table-defs/:id                   controllers.sqlTrainerService.TableDefController.delete(id: Long)
+
+
+## model.ColumnDef
+POST    /column-defs                      controllers.sqlTrainerService.ColumnDefController.create()
+GET     /column-defs/:id                  controllers.sqlTrainerService.ColumnDefController.read(id: Long)
+PATCH   /column-defs/:id                  controllers.sqlTrainerService.ColumnDefController.update(id: Long)
+DELETE  /column-defs/:id                  controllers.sqlTrainerService.ColumnDefController.delete(id: Long)
+
+
+## model.ForeignKey
+GET     /foreign-keys/:id                 controllers.sqlTrainerService.ForeignKeyController.read(id: Long)
+
+## model.ForeignKeyRelation
+GET     /foreign-key-relations/:id        controllers.sqlTrainerService.ForeignKeyRelationController.read(id: Long)

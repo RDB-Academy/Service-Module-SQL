@@ -1,6 +1,6 @@
 package initializers;
 
-import models.*;
+import models.sqlTrainerService.*;
 
 import java.util.List;
 

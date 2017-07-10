@@ -1,0 +1,21 @@
+package repositories.sqlTrainerService;
+
+import com.google.inject.ImplementedBy;
+import models.sqlTrainerService.ForeignKey;
+
+import java.util.List;
+
+/**
+ * @author Fabio Mazzone
+ */
+@ImplementedBy(ForeignKeyRepositoryEbean.class)
+public interface ForeignKeyRepository
+{
+    List<ForeignKey> getAll();
+
+    ForeignKey getById(Long id);
+
+    void save(ForeignKey foreignKey);
+    void delete(ForeignKey foreignKey);
+}
+

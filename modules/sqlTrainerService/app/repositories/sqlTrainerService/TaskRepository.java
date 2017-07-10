@@ -1,0 +1,26 @@
+package repositories.sqlTrainerService;
+
+import com.google.inject.ImplementedBy;
+import models.sqlTrainerService.Task;
+
+import java.util.List;
+
+/**
+ * Interface for Task database interactions
+ *
+ * @author fabiomazzone
+ */
+@ImplementedBy(TaskRepositoryEbean.class)
+public interface TaskRepository
+{
+    List<Task> getAll();
+
+    Task getById(Long id);
+
+    List<Task> getTaskListByDifficulty(int difficulty);
+
+    void save(Task task);
+
+    void delete(Task task);
+}
+
