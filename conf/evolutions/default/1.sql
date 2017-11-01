@@ -112,6 +112,7 @@ create table task_trial_log (
 create table user_profile (
   id                            bigint auto_increment not null,
   created_at                    timestamp,
+  name                          varchar(255),
   current_task_trial_id         bigint,
   modified_at                   timestamp not null,
   constraint pk_user_profile primary key (id)

@@ -12,11 +12,13 @@ public class UserProfile extends BaseModel {
     @Id
     private Long id;
 
+    private String name;
+
     @OneToMany(mappedBy = "userProfile", cascade =  CascadeType.ALL)
     private List<Session> sessionList;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Session currentSession;
+    //@OneToMany(cascade = CascadeType.ALL)
+    //private Session currentSession;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private TaskTrial currentTaskTrial;
@@ -32,7 +34,6 @@ public class UserProfile extends BaseModel {
         this.taskTrialList = new ArrayList<>();
     }
 
-
     public TaskTrial getCurrentTaskTrial() {
         return currentTaskTrial;
     }
@@ -41,5 +42,13 @@ public class UserProfile extends BaseModel {
         this.currentTaskTrial = currentTaskTrial;
 
         this.taskTrialList.add(currentTaskTrial);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -3,14 +3,18 @@ package services;
 import eu.bitwalker.useragentutils.UserAgent;
 import forms.LoginForm;
 import models.Session;
+import models.UserProfile;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Http;
 import repositories.SessionRepository;
 import com.typesafe.config.Config;
+import repositories.UserProfileRepository;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,16 +26,19 @@ public class SessionService
     public static final String SESSION_FIELD_NAME = "auth-key";
 
     private final SessionRepository sessionRepository;
+    private final UserProfileRepository userProfileRepository;
     private final FormFactory formFactory;
     private final Config config;
 
     @Inject
     public SessionService(
             SessionRepository sessionRepository,
+            UserProfileRepository userProfileRepository,
             FormFactory formFactory,
             Config config)
     {
         this.sessionRepository = sessionRepository;
+        this.userProfileRepository = userProfileRepository;
         this.formFactory = formFactory;
         this.config = config;
     }
@@ -39,15 +46,23 @@ public class SessionService
     private Session setAdminSession(Http.Context context) {
         Session             session = new Session();
 
-        session.save();
+        List<UserProfile> profileList = userProfileRepository.getAll();
+
+        System.out.println("Data: " + profileList.size());
+
+        for (UserProfile profile : profileList) {
+            System.out.println(profile.getName());
+        }
+
+        UserProfile adminProfile = profileList.get(0);
+
+        System.out.println("test" + adminProfile);
 
         session.setUserId(0L);
         session.setUsername("admin");
-
+        session.setUserProfile(adminProfile);
         session.setConnectionInfo(getUserAgent(context.request()).hashCode());
-
         session.save();
-
         return session;
     }
 

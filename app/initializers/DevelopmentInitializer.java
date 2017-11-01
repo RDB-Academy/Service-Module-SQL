@@ -2,7 +2,9 @@ package initializers;
 
 import initializers.schemaBuilders.*;
 import models.SchemaDef;
+import models.UserProfile;
 import repositories.SchemaDefRepository;
+import repositories.UserProfileRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -13,16 +15,26 @@ import java.util.stream.Collectors;
 @Singleton
 class DevelopmentInitializer {
     private SchemaDefRepository schemaDefRepository;
+    private UserProfileRepository userProfileRepository;
     private List<SchemaDef> storedSchemaDefList;
 
     @Inject
-    public DevelopmentInitializer(SchemaDefRepository schemaDefRepository) {
+    public DevelopmentInitializer(
+            SchemaDefRepository schemaDefRepository,
+            UserProfileRepository userProfileRepository) {
+
         this.schemaDefRepository = schemaDefRepository;
+        this.userProfileRepository = userProfileRepository;
+
         this.storedSchemaDefList = this.schemaDefRepository.getAll();
         this.init();
     }
     
     private void init() {
+        UserProfile adminProfile = new UserProfile();
+
+        adminProfile.setName("AdminProfile");
+
         List<SchemaBuilder> schemaBuilders = Arrays.asList(
                 new HeroSchemaBuilder(),
                 new StudentSchemaBuilder(),
@@ -39,6 +51,8 @@ class DevelopmentInitializer {
 
         schemaDefList.parallelStream()
                 .forEach(this.schemaDefRepository::save);
+
+        this.userProfileRepository.save(adminProfile);
     }
 }
 
